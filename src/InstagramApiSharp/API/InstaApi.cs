@@ -89,7 +89,7 @@ namespace InstagramApiSharp.API
         private ILiveProcessor _liveProcessor;
         private IDiscoverProcessor _discoverProcessor;
         private IAccountProcessor _accountProcessor;
-
+        private IVideoCallProcessor _videoCallProcessor;
 
         ITVProcessor _tvProcessor;
         HelperProcessor _helperProcessor;
@@ -167,7 +167,7 @@ namespace InstagramApiSharp.API
         ///     <para>It's related to https://instagram.com/accounts/ </para>
         /// </summary>
         public IWebProcessor WebProcessor => _webProcessor;
-
+        public IVideoCallProcessor VideoCallProcessor => _videoCallProcessor;
         #endregion Processors
 
         #region Constructor
@@ -2778,6 +2778,7 @@ namespace InstagramApiSharp.API
             _businessProcessor = new BusinessProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
             _shoppingProcessor = new ShoppingProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
             _webProcessor = new WebProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
+            _videoCallProcessor = new VideoCallProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
 
         }
 

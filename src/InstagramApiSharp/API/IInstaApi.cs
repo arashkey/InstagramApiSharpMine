@@ -113,6 +113,7 @@ namespace InstagramApiSharp.API
         ///     <para>It's related to https://instagram.com/accounts/ </para>
         /// </summary>
         IWebProcessor WebProcessor { get; }
+        IVideoCallProcessor VideoCallProcessor { get; }
 
         /// <summary>
         ///     Session handler
