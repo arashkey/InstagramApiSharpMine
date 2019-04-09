@@ -2294,5 +2294,14 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
+        public static Uri GetVideoCallNtpClockUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, $"/video_call/ntp_clock/", out var instaUri))
+                throw new Exception("Cant create URI for GetVideoCallNtpClockUri");
+
+            return instaUri
+                .AddQueryParameter("client_time", DateTime.UtcNow.ToUnixTimeMiliSeconds().ToString());
+        }
+
     }
 }

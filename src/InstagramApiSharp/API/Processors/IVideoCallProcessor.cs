@@ -15,5 +15,11 @@ namespace InstagramApiSharp.API.Processors
 {
     public interface IVideoCallProcessor 
     {
+        /// <summary>
+        ///     1
+        /// </summary>
+        Task<IResult<InstaVideoCallNtpClock>> GetNtpClockAsync();
+
+
     }
 }

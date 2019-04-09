@@ -45,5 +45,46 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+
+
+
+        /// <summary>
+        ///     First
+        /// </summary>
+        public async Task<IResult<InstaVideoCallNtpClock>> GetNtpClockAsync()
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetVideoCallNtpClockUri();
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaVideoCallNtpClock>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaVideoCallNtpClock>(json);
+
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaVideoCallNtpClock), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaVideoCallNtpClock>(exception);
+            }
+        }
+
+
+
+
+
+
+
     }
 }
