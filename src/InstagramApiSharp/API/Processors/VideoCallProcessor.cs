@@ -224,6 +224,49 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
+        /// <summary>
+        ///     5
+        /// </summary>
+        public async Task<IResult<InstaVideoCallAdd>> AddVideoCallToDirectAsync(string threadId, long videoCallId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetAddVideoCallToDirectUri(threadId);
+                //{
+                //  "video_call_id": "18053591845053696",
+                //  "_csrftoken": "SAR8V58g7jORGU1bVykRYoxTkKbHNCoN",
+                //  "_uid": "8651542203",
+                //  "_uuid": "6324ecb2-e663-4dc8-a3a1-289c699cc876"
+                //}
+                var data = new JObject
+                {
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"video_call_id", videoCallId.ToString()},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
 
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaVideoCallAdd>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaVideoCallAdd>(json);
+
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaVideoCallAdd), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaVideoCallAdd>(exception);
+            }
+        }
     }
 }

@@ -34,6 +34,9 @@ namespace InstagramApiSharp.API.Processors
         ///     4
         /// </summary>
         Task<IResult<InstaVideoCallInfo>> GetInfoAsync(long videoCallId);
-
+        /// <summary>
+        ///     5
+        /// </summary>
+        Task<IResult<InstaVideoCallAdd>> AddVideoCallToDirectAsync(string threadId, long videoCallId);
     }
 }

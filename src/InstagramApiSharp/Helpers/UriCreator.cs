@@ -2327,5 +2327,12 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
+        public static Uri GetAddVideoCallToDirectUri(string threadId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, $"/direct_v2/threads/{threadId}/add_video_call/", out var instaUri))
+                throw new Exception("Cant create URI for GetAddVideoCallToDirectUri");
+
+            return instaUri;
+        }
     }
 }
