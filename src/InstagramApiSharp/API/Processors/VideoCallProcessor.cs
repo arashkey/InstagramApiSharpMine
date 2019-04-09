@@ -192,7 +192,37 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
+        /// <summary>
+        ///     4
+        /// </summary>
+        public async Task<IResult<InstaVideoCallInfo>> GetInfoAsync(long videoCallId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetVideoCallInfoUri(videoCallId);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
 
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaVideoCallInfo>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaVideoCallInfo>(json);
+
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaVideoCallInfo), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaVideoCallInfo>(exception);
+            }
+        }
 
 
     }
