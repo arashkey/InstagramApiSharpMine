@@ -23,6 +23,10 @@ namespace InstagramApiSharp.API
     internal static class InstaApiConstants
     {
         #region Main
+        public const string HEADER_PIGEON_SESSION_ID = "X-Pigeon-Session-Id";
+        public const string HEADER_PIGEON_RAWCLINETTIME = "X-Pigeon-Rawclienttime";
+
+
 
         public const string ACCEPT_ENCODING = "gzip, deflate, sdch";
         public const string API = "/api";

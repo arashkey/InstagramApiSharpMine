@@ -2654,7 +2654,7 @@ namespace InstagramApiSharp.API
             }
 
             if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version86;
+                data.InstaApiVersion = InstaApiVersionType.Version87;
             _apiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
             _httpHelper = new HttpHelper(_apiVersion);
@@ -2672,6 +2672,7 @@ namespace InstagramApiSharp.API
                 _deviceInfo = data.DeviceInfo;
             _user = data.UserSession;
 
+
             //Load Stream Edit 
             _httpRequestProcessor.RequestMessage.Username = data.UserSession.UserName;
             _httpRequestProcessor.RequestMessage.Password = data.UserSession.Password;
@@ -2687,7 +2688,7 @@ namespace InstagramApiSharp.API
             }
 
             if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version86;
+                data.InstaApiVersion = InstaApiVersionType.Version87;
             _apiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
             _httpHelper = new HttpHelper(_apiVersion);
@@ -2707,6 +2708,7 @@ namespace InstagramApiSharp.API
                 _deviceInfo = stateData.DeviceInfo;
             _user = stateData.UserSession;
 
+
             //Load Stream Edit 
             _httpRequestProcessor.RequestMessage.Username = stateData.UserSession.UserName;
             _httpRequestProcessor.RequestMessage.Password = stateData.UserSession.Password;
@@ -2722,7 +2724,7 @@ namespace InstagramApiSharp.API
             }
 
             if (stateData.InstaApiVersion == null)
-                stateData.InstaApiVersion = InstaApiVersionType.Version86;
+                stateData.InstaApiVersion = InstaApiVersionType.Version87;
             _apiVersionType = stateData.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
             _httpHelper = new HttpHelper(_apiVersion);

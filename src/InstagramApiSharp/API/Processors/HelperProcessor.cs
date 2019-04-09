@@ -1176,7 +1176,7 @@ namespace InstagramApiSharp.API.Processors
             {
                 var instaUri = UriCreator.GetMediaUploadFinishUri();
                 var retryContext = GetRetryContext();
-                var pigeonSessionId = Guid.NewGuid().ToString();
+                //var pigeonSessionId = Guid.NewGuid().ToString();
 
                 //{
                 //  "timezone_offset": "16200",
@@ -1219,8 +1219,8 @@ namespace InstagramApiSharp.API.Processors
                 //X-IG-Bandwidth-TotalBytes-B: 0
                 //X-IG-Bandwidth-TotalTime-MS: 0
                 //retry_context: {"num_reupload":0,"num_step_auto_retry":0,"num_step_manual_retry":0}
-                request.Headers.Add("X-Pigeon-Session-Id", pigeonSessionId);
-                request.Headers.Add("X-Pigeon-Rawclienttime", DateTime.UtcNow.ToUnixTime().ToString());
+                //request.Headers.Add("X-Pigeon-Session-Id", pigeonSessionId);
+                //request.Headers.Add("X-Pigeon-Rawclienttime", DateTime.UtcNow.ToUnixTime().ToString());
                 request.Headers.Add("retry_context", retryContext);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -1234,7 +1234,7 @@ namespace InstagramApiSharp.API.Processors
                 var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
 
                 
-                return obj.Status.ToLower() == "ok" ? await ConfigureVoice(progress, upProgress, audio, uploadId, recipients, threadId, pigeonSessionId) : Result.UnExpectedResponse<bool>(response, json);
+                return obj.Status.ToLower() == "ok" ? await ConfigureVoice(progress, upProgress, audio, uploadId, recipients, threadId/*, pigeonSessionId*/) : Result.UnExpectedResponse<bool>(response, json);
 
             }
             catch (HttpRequestException httpException)
@@ -1256,7 +1256,7 @@ namespace InstagramApiSharp.API.Processors
 
 
         private async Task<IResult<bool>> ConfigureVoice(Action<InstaUploaderProgress> progress, InstaUploaderProgress upProgress,
-            InstaAudioUpload audio, string uploadId, string recipients, string threadId, string pigeonSessionId)
+            InstaAudioUpload audio, string uploadId, string recipients, string threadId/*, string pigeonSessionId*/)
         {
             try
             {
@@ -1295,8 +1295,8 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("thread_ids", $"[{threadId}]");
 
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Add("X-Pigeon-Session-Id", pigeonSessionId);
-                request.Headers.Add("X-Pigeon-Rawclienttime", DateTime.UtcNow.ToUnixTime().ToString());
+                //request.Headers.Add("X-Pigeon-Session-Id", pigeonSessionId);
+                //request.Headers.Add("X-Pigeon-Rawclienttime", DateTime.UtcNow.ToUnixTime().ToString());
                 request.Headers.Add("retry_context", retryContext);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();

@@ -543,7 +543,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
             }
         };
 
-        static Random rnd = new Random();
+        static readonly Random rnd = new Random();
         private static AndroidDevice LastDevice;
         public static AndroidDevice GetRandomAndroidDevice()
         {
@@ -553,6 +553,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
             device.PhoneGuid = Guid.NewGuid();
             device.DeviceGuid = Guid.NewGuid();
             device.DeviceId = ApiRequestMessage.GenerateDeviceIdFromGuid(device.DeviceGuid);
+            device.PigeonSessionId = Guid.NewGuid();
             if (LastDevice != null)
                 if (device.DeviceId == LastDevice.DeviceId)
                     goto TryLabel;

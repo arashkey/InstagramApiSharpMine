@@ -26,8 +26,10 @@ namespace InstagramApiSharp.Helpers
             request.Headers.Add(InstaApiConstants.HEADER_IG_CONNECTION_TYPE, InstaApiConstants.IG_CONNECTION_TYPE);
             request.Headers.Add(InstaApiConstants.HEADER_USER_AGENT, userAgent);
             request.Headers.Add(InstaApiConstants.HEADER_IG_APP_ID, InstaApiConstants.IG_APP_ID);
-            request.Properties.Add(new KeyValuePair<string, object>(InstaApiConstants.HEADER_XGOOGLE_AD_IDE,
-                deviceInfo.GoogleAdId.ToString()));
+            request.Headers.Add(InstaApiConstants.HEADER_PIGEON_SESSION_ID, deviceInfo.PigeonSessionId.ToString());
+            request.Headers.Add(InstaApiConstants.HEADER_PIGEON_RAWCLINETTIME, DateTime.UtcNow.ToUnixTime().ToString());
+            //request.Properties.Add(new KeyValuePair<string, object>(InstaApiConstants.HEADER_XGOOGLE_AD_IDE,
+            //    deviceInfo.GoogleAdId.ToString()));
             return request;
         }
         public HttpRequestMessage GetDefaultRequest(HttpMethod method, Uri uri, AndroidDevice deviceInfo, Dictionary<string, string> data)
