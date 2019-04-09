@@ -2303,5 +2303,21 @@ namespace InstagramApiSharp.Helpers
                 .AddQueryParameter("client_time", DateTime.UtcNow.ToUnixTimeMiliSeconds().ToString());
         }
 
+        public static Uri GetVideoCallJoinUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, $"/video_call/join/", out var instaUri))
+                throw new Exception("Cant create URI for GetVideoCallJoinUri");
+
+            return instaUri;
+        }
+
+        public static Uri GetVideoCallConfirmUri(long videoCallId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, $"/video_call/{videoCallId}/confirm/", out var instaUri))
+                throw new Exception("Cant create URI for GetVideoCallConfirmUri");
+
+            return instaUri;
+        }
+
     }
 }

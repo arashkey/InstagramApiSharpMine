@@ -19,7 +19,15 @@ namespace InstagramApiSharp.API.Processors
         ///     1
         /// </summary>
         Task<IResult<InstaVideoCallNtpClock>> GetNtpClockAsync();
+        /*/// <summary>
+        ///     2 NOT COMPELETE
+        /// </summary>
+        Task<IResult<InstaVideoCallJoin>> JoinAsync();*/
 
+        /*/// <summary>
+        ///     3 NOT COMPELETE
+        /// </summary>
+        Task<IResult<bool>> ConfirmAsync(long videoCallId);*/
 
     }
 }
