@@ -2334,5 +2334,12 @@ namespace InstagramApiSharp.Helpers
 
             return instaUri;
         }
+        public static Uri GetVideoCallLeaveUri(long videoCallId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, $"/video_call/{videoCallId}/leave/", out var instaUri))
+                throw new Exception("Cant create URI for GetVideoCallLeaveUri");
+
+            return instaUri;
+        }
     }
 }
