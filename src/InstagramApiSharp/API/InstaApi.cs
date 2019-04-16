@@ -20,7 +20,10 @@ using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+#pragma warning disable IDE1006	
 #pragma warning disable IDE0060	
+#pragma warning disable IDE0044	
+#pragma warning disable IDE0051	
 
 namespace InstagramApiSharp.API
 {
@@ -2728,7 +2731,7 @@ namespace InstagramApiSharp.API
             }
 
             if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version88;
+                data.InstaApiVersion = InstaApiVersionType.Version89;
             _apiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
             _httpHelper = new HttpHelper(_apiVersion);
@@ -2762,7 +2765,7 @@ namespace InstagramApiSharp.API
             }
 
             if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version88;
+                data.InstaApiVersion = InstaApiVersionType.Version89;
             _apiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
             _httpHelper = new HttpHelper(_apiVersion);
@@ -2798,7 +2801,7 @@ namespace InstagramApiSharp.API
             }
 
             if (stateData.InstaApiVersion == null)
-                stateData.InstaApiVersion = InstaApiVersionType.Version88;
+                stateData.InstaApiVersion = InstaApiVersionType.Version89;
             _apiVersionType = stateData.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
             _httpHelper = new HttpHelper(_apiVersion);
