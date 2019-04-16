@@ -71,7 +71,7 @@ namespace InstagramApiSharp.API
         public const string USER_AGENT =
                                     "Instagram {6} Android ({7}/{8}; {0}; {1}; {2}; {3}; {4}; {5}; en_US; {9})";
         public const string USER_AGENT_DEFAULT =
-        "Instagram 44.0.0.9.93 Android (24/7.0; 640dpi; 1440x2560; samsung; SM-G935F; hero2lte; samsungexynos8890; en_US; 107092322)";
+        "Instagram 89.0.0.21.101 Android (24/7.0; 640dpi; 1440x2560; samsung; SM-G935F; hero2lte; samsungexynos8890; en_US; 150338067)";
         public static readonly JArray SupportedCapabalities = new JArray
         {
             new JObject
@@ -79,7 +79,8 @@ namespace InstagramApiSharp.API
                 {"name","SUPPORTED_SDK_VERSIONS"},
                 {"value","13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0," +
                     "21.0,22.0,23.0,24.0,25.0,26.0,27.0,28.0,29.0,30.0,31.0,32.0,33.0," +
-                    "34.0,35.0,36.0,37.0,38.0,39.0,40.0,41.0,42.0,43.0,44.0,45.0,46.0,47.0,48.0,49.0,50.0,51.0,52.0,53.0"}
+                    "34.0,35.0,36.0,37.0,38.0,39.0,40.0,41.0,42.0,43.0,44.0,45.0,46.0," +
+                    "47.0,48.0,49.0,50.0,51.0,52.0,53.0,54.0,55.0,56.0,57.0,58.0,59.0,60.0"}
             },
             new JObject
             {
@@ -102,6 +103,28 @@ namespace InstagramApiSharp.API
                 {"value","WORLD_TRACKER_ENABLED"}
             }
         };
+
+        public const string CONFIGS = "ig_android_explore_grid_viewpoint,ig_android_dogfooding,ig_android_bloks_data_release," +
+            "ig_launcher_explore_navigation_redesign_android,ig_launcher_ig_android_network_stack_cap_api_request_qe," +
+            "ig_android_memory_manager_holdout,ig_direct_e2e_send_waterfall_sample_rate_config," +
+            "ig_launcher_ig_explore_remove_topic_channel_tooltip_experiment_android,ig_qe_value_consistency_checker," +
+            "ig_android_critical_path_manager,ig_android_qp_waterfall_logging,ig_android_bloks_demos,ig_android_video_playback," +
+            "ig_android_bug_report_screen_record,ig_android_upload_heap_on_oom,ig_launcher_ig_explore_post_chaining_pill_android_v0," +
+            "ig_synchronous_account_switch,ig_android_qp_keep_promotion_during_cooldown,ig_android_request_cap_tuning_with_bandwidth," +
+            "ig_android_request_compression_launcher,ig_android_feed_attach_report_logs,ig_android_insights_welcome_dialog_tooltip," +
+            "ig_android_qp_surveys_v1,ig_launcher_ig_android_network_request_cap_tuning_qe,ig_android_react_native_ota_kill_switch," +
+            "ig_android_gps_improvements_launcher,ig_android_notification_setting_sync,ig_android_scroll_aware_cta," +
+            "ig_launcher_ig_android_network_stack_cap_video_request_qe,ig_launcher_ig_explore_post_chaining_hide_comments_android_v0," +
+            "ig_android_explore_startup_prefetch_launcher,ig_android_extra_native_debugging_info,ig_android_insights_top_account_dialog_tooltip," +
+            "ig_contact_invites_netego_killswitch,ig_android_update_items_header_height_launcher,ig_android_uri_parser_cache_launcher," +
+            "ig_android_bitmap_strong_ref_cache_layer_launcher,ig_android_employee_options,ig_story_insights_entry," +
+            "ig_launcher_ig_explore_verified_badge_android,ig_android_direct_gifs_killswitch,ig_android_global_scheduler_direct," +
+            "ig_android_global_scheduler_infra,ig_android_cold_start_class_preloading,ig_android_rageshake_redesign," +
+            "ig_camera_android_attributed_effects_endpoint_api_query_config,ig_launcher_ig_android_network_stack_queue_undefined_request_qe," +
+            "ig_android_rage_shake_whitelist,ig_android_qp_xshare_to_fb,ig_launcher_force_switch_on_dialog,ig_android_betamap_cold_start," +
+            "ig_android_async_view_model_launcher,ig_launcher_ig_explore_video_chaining_container_module_android,ig_android_newsfeed_recyclerview," +
+            "ig_android_executor_limit_per_group_config,ig_delink_lasso_accounts,ig_android_feed_report_ranking_issue," +
+            "ig_android_shopping_django_product_search,ig_launcher_ig_android_reactnative_realtime_ota,ig_canvas_ad_pixel";
 
         public static string ACCEPT_LANGUAGE = "en-US";
 
@@ -597,6 +620,8 @@ namespace InstagramApiSharp.API
         public const string QE_EXPOSE = API_SUFFIX + "/qe/expose/";
 
         public const string CHALLENGE = API_SUFFIX + "/challenge/";
+
+        public const string LAUNCHER_SYNC = API_SUFFIX + "/launcher/sync/";
 
         #endregion Other endpoints constants
 

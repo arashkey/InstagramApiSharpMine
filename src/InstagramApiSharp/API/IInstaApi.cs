@@ -517,6 +517,7 @@ namespace InstagramApiSharp.API
         ///     <see cref="InstaCurrentUser" />
         /// </returns>
         Task<IResult<InstaCurrentUser>> GetCurrentUserAsync();
+        Task<IResult<bool>> LauncherSyncAsync();
 
         #endregion Authentication, challenge functions
 

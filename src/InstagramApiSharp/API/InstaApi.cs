@@ -65,7 +65,7 @@ namespace InstagramApiSharp.API
             internal set { _isUserAuthenticated = value; _userAuthValidate.IsUserAuthenticated = value; }
         }
         /// <summary>
-        ///     Current HttpClient
+        ///     Current <see cref="HttpClient"/>
         /// </summary>
         public HttpClient HttpClient { get => _httpRequestProcessor.Client; }
         /// <summary>
@@ -2540,7 +2540,40 @@ namespace InstagramApiSharp.API
                 return Result.Fail(exception, default(string));
             }
         }
+        public async Task<IResult<bool>> LauncherSyncAsync()
+        {
+            try
+            {
+                var data = new JObject
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"id", _user.LoggedInUser.Pk.ToString()},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"configs", InstaApiConstants.CONFIGS},
+                };
+                var uri = UriCreator.GetLauncherSyncUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
 
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                return Result.Success(true);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(bool));
+            }
+        }
         #endregion Other public functions
 
         #region Giphy

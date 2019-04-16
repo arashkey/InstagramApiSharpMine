@@ -2341,5 +2341,12 @@ namespace InstagramApiSharp.Helpers
 
             return instaUri;
         }
+
+        public static Uri GetLauncherSyncUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.LAUNCHER_SYNC, out var instaUri))
+                throw new Exception("Cant create URI for launcher sync");
+            return instaUri;
+        }
     }
 }
