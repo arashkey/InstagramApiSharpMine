@@ -300,6 +300,12 @@ namespace InstagramApiSharp.API
         /// <param name="data">Data to post</param>
         Task<IResult<string>> SendSignedPostRequestAsync(System.Uri uri, Newtonsoft.Json.Linq.JObject data);
         /// <summary>
+        ///     Send signed post request (include signed signature) 
+        /// </summary>
+        /// <param name="uri">Desire uri (must include https://i.instagram.com/api/v...) </param>
+        /// <param name="data">Data to post</param>
+        Task<IResult<string>> SendSignedPostRequestV2Async(System.Uri uri, Newtonsoft.Json.Linq.JObject data);
+        /// <summary>
         ///     Send post request
         /// </summary>
         /// <param name="uri">Desire uri (must include https://i.instagram.com/api/v...) </param>

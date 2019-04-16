@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452;uap10.0;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>uap10.0</TargetFrameworks>
     <VersionPrefix>2.0.0</VersionPrefix>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <AssemblyName>InstagramApiSharp</AssemblyName>
@@ -34,7 +34,7 @@ Support:
 - and many more.
 
 See example projects and wiki pages to find out how this library works.</Description>
-    <Authors>Ramtin Jokar, Ali NGame1</Authors>
+    <Authors>Ramtin Jokar</Authors>
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
@@ -179,7 +179,7 @@ v1.3.3.0
         <TargetFramework>netstandard2.0;netstandard1.3</TargetFramework>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-      <TargetFrameworks>netstandard2.0;net452;uap10.0;netstandard1.3</TargetFrameworks>
+      <TargetFrameworks>uap10.0</TargetFrameworks>
     </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
@@ -217,7 +217,7 @@ v1.3.3.0
   
   <ItemGroup Condition=" '$(TargetFramework)' == 'uap10.0' ">
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform " Version="6.1.9" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
@@ -226,7 +226,7 @@ v1.3.3.0
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
   <ItemGroup>

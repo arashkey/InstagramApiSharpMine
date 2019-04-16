@@ -12,7 +12,6 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
     }
     public class ApiRequestMessage
     {
-        static readonly Random Rnd = new Random();
         [JsonProperty("phone_id")]
         public string PhoneId { get; set; }
         [JsonProperty("username")]
@@ -30,7 +29,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         [JsonProperty("password")]
         public string Password { get; set; }
         [JsonProperty("login_attempt_count")]
-        public string LoginAttemptCount { get; set; } = "1";
+        public string LoginAttemptCount { get; set; } = "0";
         public static ApiRequestMessage CurrentDevice { get; private set; }
         internal string GetMessageString()
         {
@@ -79,7 +78,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
                 CsrtToken = csrfToken,
                 DeviceId = DeviceId,
                 Guid = Guid,
-                LoginAttemptCount = "1",
+                LoginAttemptCount = "0",
                 Password = Password,
                 PhoneId = PhoneId,
                 Username = Username,
