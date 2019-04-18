@@ -7,6 +7,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using InstagramApiSharp.Enums;
 using InstagramApiSharp.API.Versions;
+using System.Net;
+using System.IO;
+using System.Text;
+using System.IO.Compression;
+using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 namespace InstagramApiSharp.Helpers
 {
     internal class HttpHelper
@@ -20,7 +27,34 @@ namespace InstagramApiSharp.Helpers
         public HttpRequestMessage GetDefaultRequest(HttpMethod method, Uri uri, AndroidDevice deviceInfo)
         {
             var userAgent = deviceInfo.GenerateUserAgent(_apiVersion);
-            var request = new HttpRequestMessage(method, uri);
+
+            //var ver = HttpVersion.Version10;
+
+            ////-1
+            ////1
+            ////-1
+            ////-1
+            ////0
+            ////-1
+            //Console.WriteLine(ver.Build);
+            //Console.WriteLine(ver.Major);
+            //Console.WriteLine(ver.MajorRevision);
+            //Console.WriteLine(ver.MinorRevision);
+            //Console.WriteLine(ver.Minor);
+
+            //Console.WriteLine(ver.Revision);
+
+
+
+
+            var version = new Version(1, 0);
+            var request = new HttpRequestMessage(method, uri)
+            {
+                //#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472|| NETSTANDARD1_3 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6 || NETSTANDARD2_0 || NETSTANDARD2_1 || NETSTANDARD2_2 || NETSTANDARD2_3
+                //#else
+                Version = version
+                //#endif
+            };
             request.Headers.Add(InstaApiConstants.HEADER_ACCEPT_LANGUAGE, InstaApiConstants.ACCEPT_LANGUAGE);
             request.Headers.Add(InstaApiConstants.HEADER_IG_CAPABILITIES, _apiVersion.Capabilities);
             request.Headers.Add(InstaApiConstants.HEADER_IG_CONNECTION_TYPE, InstaApiConstants.IG_CONNECTION_TYPE);
@@ -36,6 +70,34 @@ namespace InstagramApiSharp.Helpers
         {
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(data);
+            return request;
+        }
+        public async Task<HttpRequestMessage> GetDefaultGZipRequestAsync(HttpMethod method, Uri uri, AndroidDevice deviceInfo, Dictionary<string, string> data)
+        {
+            var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
+            var text = string.Empty;
+            foreach (var item in data)
+                text += $"{item.Key}={item.Value}&";
+            text = text.TrimEnd('&');
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(text);
+            MemoryStream ms = new MemoryStream();
+            using (GZipStream gzip = new GZipStream(ms, CompressionMode.Compress, true))
+                await gzip.WriteAsync(jsonBytes, 0, jsonBytes.Length);
+            ms.Position = 0;
+            byte[] compressed = new byte[ms.Length];
+
+            await ms.ReadAsync(compressed, 0, compressed.Length);
+            MemoryStream outStream = new MemoryStream(compressed);
+
+            //StreamContent content = new StreamContent(outStream);
+            var bytes = outStream.ToArray();
+            var content = new ByteArrayContent(bytes);
+            content.Headers.Add("Content-Encoding", "gzip");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded") { CharSet= "UTF-8" };
+            content.Headers.ContentLength = bytes.Length;
+            request.Content = content;
+            //request.Content = new FormUrlEncodedContent(data);
+            //request.Content.Headers.Add("Content-Encoding", "gzip");
             return request;
         }
         /// <summary>
@@ -70,8 +132,6 @@ namespace InstagramApiSharp.Helpers
                 InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
             return request;
         }
-
-
         public HttpRequestMessage GetSignedRequest(HttpMethod method,
             Uri uri,
             AndroidDevice deviceInfo,
@@ -139,6 +199,48 @@ namespace InstagramApiSharp.Helpers
             request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
             request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
                 InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
+            return request;
+        }
+
+        public async Task<HttpRequestMessage> GetSignedGZipRequestAsync(HttpMethod method, Uri uri, AndroidDevice deviceInfo, Dictionary<string, string> data)
+        {
+            return await GetSignedGZipRequest(method, uri, deviceInfo, data);
+        }
+        public async Task<HttpRequestMessage> GetSignedGZipRequestAsync(HttpMethod method, Uri uri, AndroidDevice deviceInfo, Dictionary<string, int> data)
+        {
+            return await GetSignedGZipRequest(method, uri, deviceInfo, data);
+        }
+        public async Task<HttpRequestMessage> GetSignedGZipRequestAsync(HttpMethod method, Uri uri, AndroidDevice deviceInfo, Dictionary<string, object> data)
+        {
+            return await GetSignedGZipRequest(method, uri, deviceInfo, data);
+        }
+        public async Task<HttpRequestMessage> GetSignedGZipRequestAsync(HttpMethod method, Uri uri, AndroidDevice deviceInfo, JObject data)
+        {
+            return await GetSignedGZipRequest(method, uri, deviceInfo, data);
+        }
+        async Task<HttpRequestMessage> GetSignedGZipRequest(HttpMethod method, Uri uri, AndroidDevice deviceInfo, object data)
+        {
+            var hash = CryptoHelper.CalculateHash(_apiVersion.SignatureKey,
+                JsonConvert.SerializeObject(data));
+            var payload = JsonConvert.SerializeObject(data);
+            var signature = $"{InstaApiConstants.HEADER_IG_SIGNATURE}={hash}.{payload}&" +
+                $"{InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION}={InstaApiConstants.IG_SIGNATURE_KEY_VERSION}";
+            var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(signature);
+            MemoryStream ms = new MemoryStream();
+            using (GZipStream gzip = new GZipStream(ms, CompressionMode.Compress, true))
+                await gzip.WriteAsync(jsonBytes, 0, jsonBytes.Length);
+            ms.Position = 0;
+            byte[] compressed = new byte[ms.Length];
+
+            await ms.ReadAsync(compressed, 0, compressed.Length);
+            MemoryStream outStream = new MemoryStream(compressed);
+            var bytes = outStream.ToArray();
+            var content = new ByteArrayContent(bytes);
+            content.Headers.Add("Content-Encoding", "gzip");
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded") { CharSet = "UTF-8" };
+            content.Headers.ContentLength = bytes.Length;
+            request.Content = content;
             return request;
         }
 

@@ -65,12 +65,13 @@ namespace InstagramApiSharp.API.Processors
                         return Result.Fail(feeds.Info, (InstaExploreFeed)null);
                 }
                 var feedResponse = feeds.Value;
+                exploreFeed = Convert(feedResponse);
                 paginationParameters.NextMaxId = feedResponse.MaxId;
                 paginationParameters.RankToken = feedResponse.RankToken;
 
                 while (feedResponse.MoreAvailable
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
-                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                       && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
                     var nextFeed = await GetExploreFeed(paginationParameters);
                     if (!nextFeed.Succeeded)
@@ -111,7 +112,7 @@ namespace InstagramApiSharp.API.Processors
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaExploreFeed), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, exploreFeed, ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
@@ -168,7 +169,7 @@ namespace InstagramApiSharp.API.Processors
                 paginationParameters.PagesLoaded++;
                 while (mediaResponse.MoreAvailable
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
-                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                       && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
                     var result = await GetAnyFeeds(UriCreator.GetUserLikeFeedUri(paginationParameters.NextMaxId));
                     if (!result.Succeeded)
@@ -247,7 +248,7 @@ namespace InstagramApiSharp.API.Processors
                 paginationParameters.PagesLoaded++;
                 while (mediaResponse.MoreAvailable
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
-                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                       && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
                     var result = await GetAnyFeeds(UriCreator.GetSavedFeedUri(paginationParameters?.NextMaxId));
                     if (!result.Succeeded)
@@ -317,7 +318,7 @@ namespace InstagramApiSharp.API.Processors
 
                 while (feedResponse.MoreAvailable
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
-                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                       && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
                     var nextFeed = await GetTagFeed(tag, paginationParameters);
                     if (!nextFeed.Succeeded)
@@ -335,7 +336,7 @@ namespace InstagramApiSharp.API.Processors
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaTagFeed), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, tagFeed, ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
@@ -377,7 +378,7 @@ namespace InstagramApiSharp.API.Processors
 
                 while (feedResponse.MoreAvailable
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
-                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                       && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
                     var nextFeed = await GetUserTimelineFeed(paginationParameters);
                     if (!nextFeed.Succeeded)
@@ -396,7 +397,7 @@ namespace InstagramApiSharp.API.Processors
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaFeed), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, feed, ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
@@ -434,12 +435,12 @@ namespace InstagramApiSharp.API.Processors
                         return Result.Fail(feeds.Info, (InstaTopicalExploreFeed)null);
                 }
                 var feedResponse = feeds.Value;
+                topicalExploreFeed = Convert(feedResponse);
                 paginationParameters.NextMaxId = feedResponse.MaxId;
                 paginationParameters.RankToken = feedResponse.RankToken;
-
                 while (feedResponse.MoreAvailable
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
-                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                       && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
                     var nextFeed = await GetTopicalExploreFeed(paginationParameters, clusterId);
                     if (!nextFeed.Succeeded)
@@ -467,7 +468,7 @@ namespace InstagramApiSharp.API.Processors
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaTopicalExploreFeed), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, topicalExploreFeed, ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
@@ -527,7 +528,7 @@ namespace InstagramApiSharp.API.Processors
                 paginationParameters.PagesLoaded++;
                 activityFeed.NextMaxId = paginationParameters.NextMaxId = feedPage.NextMaxId;
                 while (!string.IsNullOrEmpty(nextId)
-                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                       && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
                     var nextFollowingFeed = await GetFollowingActivityWithMaxIdAsync(nextId);
                     if (!nextFollowingFeed.Succeeded)
@@ -586,17 +587,38 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var userFeedUri = UriCreator.GetUserFeedUri(paginationParameters?.NextMaxId);
+                //feed_view_info=[{"media_id":"2024298326417288823_6037543806","version":16,"media_pct":0.91481483,"time_info":{"10":3781,"25":3781,"50":3781,"75":3781}},{"media_id":"2024119139502591070_1431315412","version":16,"media_pct":1.0,"time_info":{"10":305961,"25":305961,"50":305961,"75":305961}}]&
+                //phone_id=3dc84281-dd5a-45a3-a0a8-bc32a2dd9038&
+                //reason=cold_start_fetch&
+                //battery_level=100&
+                //timezone_offset=16200&
+                //_csrftoken=W5ytQfOkKy8muctQwMjJMHo7ZADC8nsf&
+                //client_session_id=e0e97f07-c020-4bc0-b543-9782964d3450&
+                //device_id=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //is_pull_to_refresh=0&
+                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //is_charging=0&
+                //is_async_ads_in_headload_enabled=0&
+                //rti_delivery_backend=0&
+                //is_async_ads_double_request=0&
+                //will_sound_on=0&
+                //bloks_versioning_id=9177416ad0d982b98aff8a27db37a3c5c7f9b28c990cd68d18fc31477670bb89&
+                //is_async_ads_rti=0
 
                 var data = new Dictionary<string, string>
                 {
                     {"is_prefetch", "0"},
                     {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"device_id", _deviceInfo.PhoneGuid.ToString()},
+                    {"device_id", _deviceInfo.DeviceGuid.ToString()},
                     {"phone_id", _deviceInfo.RankToken.ToString()},
                     {"client_session_id", Guid.NewGuid().ToString()},
                     {"timezone_offset", _instaApi.GetTimezoneOffset().ToString()},
-                    {"rti_delivery_backend", "0"}
+                    {"battery_level", "100"},
+                    {"is_charging", "0"},
+                    {"rti_delivery_backend", "0"},
+                    {"is_async_ads_double_request", "0"},
+                    {"is_async_ads_rti", "0"},
                 };
 
                 if (seenMediaIds != null)
@@ -607,15 +629,19 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("reason", "pull_to_refresh");
                     data.Add("is_pull_to_refresh", "1");
                 }
-                else
+                else //reason=cold_start_fetch&
+                {
                     data.Add("reason", "warm_start_fetch");
+                    data.Add("is_pull_to_refresh", "0");
+                }
 
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, userFeedUri, _deviceInfo, data);
+                var request = await _httpHelper.GetDefaultGZipRequestAsync(HttpMethod.Post, userFeedUri, _deviceInfo, data);
                 request.Headers.Add("X-Ads-Opt-Out", "0");
                 request.Headers.Add("X-Google-AD-ID", _deviceInfo.GoogleAdId.ToString());
                 request.Headers.Add("X-DEVICE-ID", _deviceInfo.DeviceGuid.ToString());
 
                 var response = await _httpRequestProcessor.SendAsync(request);
+                //response.EnsureSuccessStatusCode();
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)

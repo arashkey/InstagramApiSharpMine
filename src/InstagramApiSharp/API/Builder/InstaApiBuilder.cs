@@ -5,6 +5,7 @@ using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Logger;
 using InstagramApiSharp.Enums;
 using InstagramApiSharp.Classes.SessionHandlers;
+using System.Net;
 
 namespace InstagramApiSharp.API.Builder
 {
@@ -13,7 +14,11 @@ namespace InstagramApiSharp.API.Builder
         private IRequestDelay _delay = RequestDelay.Empty();
         private AndroidDevice _device;
         private HttpClient _httpClient;
-        private HttpClientHandler _httpHandler = new HttpClientHandler();
+        private HttpClientHandler _httpHandler = new HttpClientHandler()
+        {
+            UseProxy = false,
+            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+        };
         private IHttpRequestProcessor _httpRequestProcessor;
         private IInstaLogger _logger;
         private ApiRequestMessage _requestMessage;
@@ -37,7 +42,11 @@ namespace InstagramApiSharp.API.Builder
             if (_user == null)
                 _user = UserSessionData.Empty;
 
-            if (_httpHandler == null) _httpHandler = new HttpClientHandler();
+            if (_httpHandler == null) _httpHandler = new HttpClientHandler
+            {
+                UseProxy = false,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
 
             if (_httpClient == null)
                 _httpClient = new HttpClient(_httpHandler) { BaseAddress = new Uri(InstaApiConstants.INSTAGRAM_URL) };

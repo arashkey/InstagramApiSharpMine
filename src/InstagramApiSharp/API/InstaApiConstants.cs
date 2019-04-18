@@ -176,7 +176,7 @@ namespace InstagramApiSharp.API
         public const string ACCOUNTS_VALIDATE_SIGNUP_SMS_CODE = API_SUFFIX + "/accounts/validate_signup_sms_code/";
         public const string ACCOUNTS_VERIFY_SMS_CODE = API_SUFFIX + "/accounts/verify_sms_code/";
         public const string CHANGE_PASSWORD = API_SUFFIX + "/accounts/change_password/";
-        public const string CURRENTUSER = API_SUFFIX + "/accounts/current_user?edit=true";
+        public const string CURRENTUSER = API_SUFFIX + "/accounts/current_user/?edit=true";
         public const string SET_ACCOUNT_PRIVATE = API_SUFFIX + "/accounts/set_private/";
         public const string SET_ACCOUNT_PUBLIC = API_SUFFIX + "/accounts/set_public/";
         public const string ACCOUNTS_CONVERT_TO_PERSONAL = API_SUFFIX + "/accounts/convert_to_personal/";
@@ -205,11 +205,11 @@ namespace InstagramApiSharp.API
 
         #region Collection endpoints constants
 
-        public const string COLLECTION_CREATE_MODULE = API_SUFFIX + "collection_create";
+        public const string COLLECTION_CREATE_MODULE = API_SUFFIX + "/collection_create/";
         public const string CREATE_COLLECTION = API_SUFFIX + "/collections/create/";
         public const string DELETE_COLLECTION = API_SUFFIX + "/collections/{0}/delete/";
         public const string EDIT_COLLECTION = API_SUFFIX + "/collections/{0}/edit/";
-        public const string FEED_SAVED_ADD_TO_COLLECTION_MODULE = "feed_saved_add_to_collection";
+        public const string FEED_SAVED_ADD_TO_COLLECTION_MODULE = "feed_saved_add_to_collection/";
         public const string GET_LIST_COLLECTIONS = API_SUFFIX + "/collections/list/";
 
         #endregion Collection endpoints constants
@@ -293,7 +293,7 @@ namespace InstagramApiSharp.API
         
         #region FBSearch endpoints constants
 
-        public const string FBSEARCH_CLEAR_SEARCH_HISTORY = API_SUFFIX + "/fbsearch/clear_search_history";
+        public const string FBSEARCH_CLEAR_SEARCH_HISTORY = API_SUFFIX + "/fbsearch/clear_search_history/";
         public const string FBSEARCH_GET_HIDDEN_SEARCH_ENTITIES = API_SUFFIX + "/fbsearch/get_hidden_search_entities/";
         /// <summary>
         /// post data:
@@ -337,11 +337,11 @@ namespace InstagramApiSharp.API
         public const string FEED_SAVED = API_SUFFIX + "/feed/saved/";
         public const string GET_COLLECTION = API_SUFFIX + "/feed/collection/{0}/";
         public const string GET_STORY_TRAY = API_SUFFIX + "/feed/reels_tray/";
-        public const string GET_TAG_FEED = API_SUFFIX + "/feed/tag/{0}";
+        public const string GET_TAG_FEED = API_SUFFIX + "/feed/tag/{0}/";
         public const string GET_USER_STORY = API_SUFFIX + "/feed/user/{0}/reel_media/";
         public const string GET_USER_TAGS = API_SUFFIX + "/usertags/{0}/feed/";
         public const string LIKE_FEED = API_SUFFIX + "/feed/liked/";
-        public const string TIMELINEFEED = API_SUFFIX + "/feed/timeline";
+        public const string TIMELINEFEED = API_SUFFIX + "/feed/timeline/";
         public const string USER_REEL_FEED = API_SUFFIX + "/feed/user/{0}/reel_media/";
         public const string USEREFEED = API_SUFFIX + "/feed/user/";
 
@@ -581,7 +581,7 @@ namespace InstagramApiSharp.API
         public const string ACCOUNTS_LOOKUP_PHONE = API_SUFFIX + "/users/lookup_phone/";
         public const string GET_USER_INFO_BY_ID = API_SUFFIX + "/users/{0}/info/";
         public const string GET_USER_INFO_BY_USERNAME = API_SUFFIX + "/users/{0}/usernameinfo/";
-        public const string SEARCH_USERS = API_SUFFIX + "/users/search";
+        public const string SEARCH_USERS = API_SUFFIX + "/users/search/";
         public const string USERS_CHECK_EMAIL = API_SUFFIX + "/users/check_email/";
         public const string USERS_CHECK_USERNAME = API_SUFFIX + "/users/check_username/";
         public const string USERS_LOOKUP = API_SUFFIX + "/users/lookup/";
@@ -628,8 +628,8 @@ namespace InstagramApiSharp.API
         #region Web endpoints constants
 
         public static string WEB_ADDRESS = "https://www.instagram.com";
-        public static string WEB_ACCOUNTS = "/accounts";
-        public static string WEB_ACCOUNT_DATA = WEB_ACCOUNTS + "/access_tool";
+        public static string WEB_ACCOUNTS = "/accounts/";
+        public static string WEB_ACCOUNT_DATA = WEB_ACCOUNTS + "access_tool";
         public static string WEB_CURRENT_FOLLOW_REQUESTS = WEB_ACCOUNT_DATA + "/current_follow_requests";
         public static string WEB_FORMER_EMAILS = WEB_ACCOUNT_DATA + "/former_emails";
         public static string WEB_FORMER_PHONES = WEB_ACCOUNT_DATA + "/former_phones";
