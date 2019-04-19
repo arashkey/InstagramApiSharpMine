@@ -288,9 +288,10 @@ namespace InstagramApiSharp.API
         public const string DISCOVER_FETCH_SUGGESTION_DETAILS = API_SUFFIX + "/discover/fetch_suggestion_details/?target_id={0}&chained_ids={1}";
         public const string DISCOVER_TOP_LIVE = API_SUFFIX + "/discover/top_live/";
         public const string DISCOVER_TOP_LIVE_STATUS = API_SUFFIX + "/discover/top_live_status/";
+        public const string DISCOVER_DISMISS_SUGGESTION = API_SUFFIX + "/discover/dismiss_suggestion/";
 
         #endregion Discover endpoints constants
-        
+
         #region FBSearch endpoints constants
 
         public const string FBSEARCH_CLEAR_SEARCH_HISTORY = API_SUFFIX + "/fbsearch/clear_search_history/";

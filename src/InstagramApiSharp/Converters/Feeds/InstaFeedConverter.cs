@@ -1,6 +1,7 @@
 ﻿using System;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.Converters
 {
@@ -12,24 +13,73 @@ namespace InstagramApiSharp.Converters
         {
             if (SourceObject?.Items == null)
                 throw new ArgumentNullException("InstaFeedResponse or its Items");
-            var feed = new InstaFeed();
-            foreach (var instaUserFeedItemResponse in SourceObject.Items)
+            var feed = new InstaFeed
             {
-                if (instaUserFeedItemResponse?.Type != 0) continue;
-                var feedItem = ConvertersFabric.Instance.GetSingleMediaConverter(instaUserFeedItemResponse).Convert();
-                feed.Medias.Add(feedItem);
-            }
-            foreach (var suggestedItemResponse in SourceObject.SuggestedUsers)
-            {
-                try
+                MoreAvailable = SourceObject.MoreAvailable,
+                NextMaxId = SourceObject.NextMaxId
+            };
+            if (SourceObject.Items?.Count > 0)
+                foreach (var instaUserFeedItemResponse in SourceObject.Items)
                 {
-                    var suggestedItem = ConvertersFabric.Instance.GetSuggestionItemConverter(suggestedItemResponse).Convert();
-                    feed.SuggestedUserItems.Add(suggestedItem);
+                    if (instaUserFeedItemResponse?.Type != 0) continue;
+                    var feedItem = ConvertersFabric.Instance.GetSingleMediaConverter(instaUserFeedItemResponse).Convert();
+                    feed.Medias.Add(feedItem);
                 }
-                catch { }
+            if (SourceObject.SuggestedUsers?.Count > 0)
+                foreach (var suggestedItemResponse in SourceObject.SuggestedUsers)
+                {
+                    try
+                    {
+                        var suggestedItem = ConvertersFabric.Instance.GetSuggestionItemConverter(suggestedItemResponse).Convert();
+                        feed.SuggestedUserItems.Add(suggestedItem);
+                    }
+                    catch { }
+                }
+            if (SourceObject.Posts?.Count >0)
+            {
+                foreach (var item in SourceObject.Posts)
+                {
+                    try
+                    {
+                        var post = new InstaPost
+                        {
+                            Type = item.Type
+                        };
+                        switch (item.Type)
+                        {
+                            case InstaFeedsType.EndOfFeedDemarcator:
+                                if (item.EndOfFeedDemarcator != null)
+                                    post.EndOfFeedDemarcator = item.EndOfFeedDemarcator;
+                                break;
+                            case InstaFeedsType.SuggestedUsers:
+                                foreach (var user in item.SuggestedUserItems)
+                                    try
+                                    {
+                                        if (user != null)
+                                            post.SuggestedUserItems.Add(ConvertersFabric.Instance.GetSuggestionItemConverter(user).Convert());
+                                    }
+                                    catch { }
+                                break;
+                            case InstaFeedsType.Media:
+                                //default:
+                                if (item.Media != null)
+                                    post.Media = ConvertersFabric.Instance.GetSingleMediaConverter(item.Media).Convert();
+                                break;
+                            case InstaFeedsType.Hashtag:
+                                foreach (var hashtag in item.Hashtags)
+                                    try
+                                    {
+                                        if (hashtag != null)
+                                            post.Hashtags.Add(hashtag);
+                                    }
+                                    catch { }
+                                break;
+                        }
+                        feed.Posts.Add(post);
+                    }
+                    catch { }
+                }
             }
-
-            feed.NextMaxId = SourceObject.NextMaxId;
             return feed;
         }
     }

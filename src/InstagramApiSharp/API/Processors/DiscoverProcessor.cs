@@ -86,6 +86,41 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
+
+        public async Task<IResult<bool>> DismissHashtagSuggestionAsync(string targetIdHashtagIdOrStoryId, string type = "tag")
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetDiscoverDismissSuggestionUri();
+                //target_id=17843414107037737&_csrftoken=ZQTYzgTNIJmByJSAQjKpxz2WpTDOl6TT&type=tag&_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876
+                var data = new Dictionary<string, string>
+                {
+                    {"target_id", targetIdHashtagIdOrStoryId},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"type", type},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
+                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
         /// <summary>
         ///     Get discover user chaining list 
         /// </summary>

@@ -2348,5 +2348,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for launcher sync");
             return instaUri;
         }
+        public static Uri GetDiscoverDismissSuggestionUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DISCOVER_DISMISS_SUGGESTION, out var instaUri))
+                throw new Exception("Cant create URI for discover dismiss suggestion");
+            return instaUri;
+        }
     }
 }

@@ -9,12 +9,20 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaSuggestionItem
+    public class InstaSuggestionItem : INotifyPropertyChanged
     {
+        private string _followText = "Follow";
+        public string FollowText { get { return _followText; } set { _followText = value; OnPropertyChanged("FollowText"); } } 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string memberName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
         public InstaUserShort User { get; set; }
 
         public string Algorithm { get; set; }

@@ -1,53 +1,52 @@
-﻿/*
- * Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https://t.me/ramtinak ]
- * 
- * Github source: https://github.com/ramtinak/InstagramApiSharp
- * Nuget package: https://www.nuget.org/packages/InstagramApiSharp
- * 
- * IRANIAN DEVELOPERS
- */
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using InstagramApiSharp.Classes.ResponseWrappers;
+using Newtonsoft.Json;
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaSectionMedia
+    public class InstaHashtagMedia
     {
-        public List<InstaMedia> Medias { get; set; } = new List<InstaMedia>();
-
-        public List<InstaRelatedHashtag> RelatedHashtags { get; set; } = new List<InstaRelatedHashtag>();
-
-        public bool MoreAvailable { get; set; }
-
-        public string NextMaxId { get; set; }
-
-        public int NextPage { get; set; }
-
-        public List<long> NextMediaIds { get; set; } = new List<long>();
-
-        public bool AutoLoadMoreEnabled { get; set; }
+        [JsonProperty("pk")]
+        public long Pk { get; set; }
+        [JsonProperty("title")]
+        public string Title { get; set; }
+        [JsonProperty("subtitle")]
+        public string Subtitle { get; set; }
+        [JsonProperty("hashtag")]
+        public InstaHashtagMediaHashtag Hashtag { get; set; }
+        [JsonProperty("media_infos")]
+        public List<InstaHashtagMediaInfo> MediaInfos { get; set; } = new List<InstaHashtagMediaInfo>();
+        [JsonProperty("show_profile_pic")]
+        public bool ShowProfilePicture { get; set; }
+        [JsonProperty("context_type")]
+        public string ContextType { get; set; }
     }
 
-    /*public class InstaHashtagMedia
+    public class InstaHashtagMediaHashtag
     {
-        public string LayoutType { get; set; }
-
-        public List<InstaMedia> Medias { get; set; } = new List<InstaMedia>();
-
-        public string FeedType { get; set; }
-
-        public InstaHashtagMediaExploreItemInfo ExploreItemInfo { get; set; }
+        [JsonProperty("id")]
+        public long Id { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        [JsonProperty("media_count")]
+        public int MediaCount { get; set; }
+        [JsonProperty("follow_status")]
+        public int FollowStatus { get; set; }
+        [JsonProperty("profile_pic_url")]
+        public string ProfilePicture { get; set; }
+        public Uri ProfilePictureUri => new Uri(ProfilePicture);
     }
-    public class InstaHashtagMediaExploreItemInfo
+
+    public class InstaHashtagMediaInfo
     {
-        public int NumBolumns { get; set; }
+        [JsonProperty("id")]
+        public long Id { get; set; }
+        [JsonProperty("media_type")]
+        public InstaMediaType MediaType { get; set; }
+        [JsonProperty("image_versions2")] public InstaImageCandidatesResponse Images { get; set; }
+        [JsonProperty("original_width")] public string Width { get; set; }
+        [JsonProperty("original_height")] public string Height { get; set; }
+    }
 
-        public int TotalNumBolumns { get; set; }
-
-        public int AspectYatio { get; set; }
-
-        public bool Autoplay { get; set; }
-    }*/
 }
