@@ -574,6 +574,7 @@ namespace InstagramApiSharp.API
         public const string TAG_STORY = API_SUFFIX + "/tags/{0}/story/";
         public const string TAG_SUGGESTED = API_SUFFIX + "/tags/suggested/";
         public const string TAG_UNFOLLOW = API_SUFFIX + "/tags/unfollow/{0}/";
+        public const string TAG_MEDIA_REPORT = API_SUFFIX + "/tags/hashtag_media_report/";
 
         #endregion Tags endpoints constants
 

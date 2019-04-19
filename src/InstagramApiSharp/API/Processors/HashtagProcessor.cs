@@ -414,6 +414,49 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail(exception, tags);
             }
         }
+
+        public async Task<IResult<bool>> ReportHashtagMediaAsync(string tagname, string hashtagId, string mediaId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetHashtagMediaReportUri();
+                //{
+                //  "_csrftoken": "ZQTYzgTNIJmByJSAQjKpxz2WpTDOl6TT",
+                //  "tag": "clothes",
+                //  "_uid": "11292195227",
+                //  "h_id": "17843715367043347",
+                //  "m_pk": "2025661917850670839_8144764178",
+                //  "_uuid": "6324ecb2-e663-4dc8-a3a1-289c699cc876"
+                //}
+                var data = new JObject
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"tag", tagname},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"h_id", hashtagId},
+                    {"m_pk", mediaId},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
+                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
         /// <summary>
         ///     Unfollow a hashtag
         /// </summary>

@@ -2354,5 +2354,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for discover dismiss suggestion");
             return instaUri;
         }
+        public static Uri GetHashtagMediaReportUri() 
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.TAG_MEDIA_REPORT, out var instaUri))
+                throw new Exception("Cant create URI for hashtag media report");
+            return instaUri;
+        }
     }
 }

@@ -71,6 +71,8 @@ namespace InstagramApiSharp.API.Processors
         ///     List of hashtags
         /// </returns>
         Task<IResult<InstaHashtagSearch>> SearchHashtagAsync(string query, IEnumerable<long> excludeList = null, string rankToken = null);
+
+        Task<IResult<bool>> ReportHashtagMediaAsync(string tagname, string hashtagId, string mediaId);
         /// <summary>
         ///     Unfollow a hashtag
         /// </summary>
