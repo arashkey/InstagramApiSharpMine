@@ -2360,5 +2360,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for hashtag media report");
             return instaUri;
         }
+        public static Uri GetExploreReportUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DISCOVER_EXPLORE_REPORT, out var instaUri))
+                throw new Exception("Cant create URI for discover explore report");
+            return instaUri;
+        }
     }
 }

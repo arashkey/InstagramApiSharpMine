@@ -105,5 +105,11 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("product_tags")] public InstaProductTagsContainerResponse ProductTags { get; set; }
 
         [JsonProperty("direct_reply_to_author_enabled")] public bool? DirectReplyToAuthorEnabled { get; set; }
+
+        [JsonProperty("explore_source_token")] public string ExploreSourceToken { get; set; } 
+        [JsonProperty("explore_context")] public string ExploreContext { get; set; }  
+        [JsonProperty("explore")] public InstaMediaExplore Explore { get; set; }
+        [JsonProperty("mezql_token")] public string MezqlToken { get; set; }
+        [JsonProperty("connection_id")] public string ConnectionId { get; set; } 
     }
 }

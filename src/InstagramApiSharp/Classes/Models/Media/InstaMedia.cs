@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
+using Newtonsoft.Json;
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaMedia : INotifyPropertyChanged
@@ -102,5 +102,20 @@ namespace InstagramApiSharp.Classes.Models
         public List<InstaProductTag> ProductTags { get; set; } = new List<InstaProductTag>();
 
         public bool DirectReplyToAuthorEnabled { get; set; }
+
+        public string ExploreSourceToken { get; set; }
+        public string ExploreContext { get; set; }
+        public InstaMediaExplore Explore { get; set; }
+        public string MezqlToken { get; set; }
+        public string ConnectionId { get; set; }
     }
+    public class InstaMediaExplore
+    {
+        [JsonProperty("explanation")]
+        public string Explanation { get; set; }
+        [JsonProperty("actor_id")]
+        public long? ActorId { get; set; }
+        [JsonProperty("source_token")]
+        public string SourceToken { get; set; }
+    } 
 }

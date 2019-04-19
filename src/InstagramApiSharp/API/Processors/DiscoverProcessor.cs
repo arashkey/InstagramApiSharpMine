@@ -121,6 +121,36 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
+        public async Task<IResult<bool>> ExploreReportAsync(string userId, string mediaId, string exploreSourceToken)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetExploreReportUri()
+                    .AddQueryParameter("a_pk", userId)
+                    .AddQueryParameter("m_pk", mediaId)
+                    .AddQueryParameter("source_token", exploreSourceToken)
+                    .AddQueryParameter("container_module", "explore_event_viewer");
+                //?a_pk=1704178204&m_pk=2025699102446024525_1704178204&source_token=CeEDVs7Ugbr5nbF68k7WySkmTophkiOlV34whPfns8qL0FOhFdZ6CdcRCYTBf9SN&container_module=explore_event_viewer
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);//{"explore_report_status": "OK", "status": "ok"}
+                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
         /// <summary>
         ///     Get discover user chaining list 
         /// </summary>

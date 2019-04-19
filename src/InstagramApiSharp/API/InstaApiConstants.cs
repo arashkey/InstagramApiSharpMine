@@ -289,6 +289,7 @@ namespace InstagramApiSharp.API
         public const string DISCOVER_TOP_LIVE = API_SUFFIX + "/discover/top_live/";
         public const string DISCOVER_TOP_LIVE_STATUS = API_SUFFIX + "/discover/top_live_status/";
         public const string DISCOVER_DISMISS_SUGGESTION = API_SUFFIX + "/discover/dismiss_suggestion/";
+        public const string DISCOVER_EXPLORE_REPORT = API_SUFFIX + "/discover/explore_report/";
 
         #endregion Discover endpoints constants
 
