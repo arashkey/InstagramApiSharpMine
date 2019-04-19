@@ -87,7 +87,7 @@ namespace InstagramApiSharp.API.Processors
         }
 
 
-        public async Task<IResult<bool>> DismissHashtagSuggestionAsync(string targetIdHashtagIdOrStoryId, string type = "tag")
+        public async Task<IResult<bool>> DismissSuggestionAsync(string targetIdHashtagIdOrStoryId, string type = "tag") 
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try

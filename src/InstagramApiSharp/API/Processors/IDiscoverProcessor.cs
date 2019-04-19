@@ -24,7 +24,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         Task<IResult<bool>> ClearRecentSearchsAsync();
 
-        Task<IResult<bool>> DismissHashtagSuggestionAsync(string targetIdHashtagIdOrStoryId, string type = "tag");
+        Task<IResult<bool>> DismissSuggestionAsync(string targetIdHashtagIdOrStoryId, string type = "tag");
 
         /// <summary>
         ///     Get discover user chaining list 
