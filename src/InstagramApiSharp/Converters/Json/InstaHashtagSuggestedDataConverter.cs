@@ -31,10 +31,23 @@ namespace InstagramApiSharp.Converters.Json
         {
             var token = JToken.Load(reader);
             var container = token["tags"];
+            var hashtags = token["hashtags"];
             var tags = token.ToObject<InstaHashtagSearchResponse>();
             if (container != null && container.Any())
             {
                 foreach (var item in container)
+                {
+                    try
+                    {
+                        tags.Tags.Add(item.ToObject<InstaHashtagResponse>());
+                    }
+                    catch { }
+                }
+            }
+
+            if(hashtags != null && hashtags.Any())
+            {
+                foreach (var item in hashtags)
                 {
                     try
                     {

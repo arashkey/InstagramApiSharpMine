@@ -11,6 +11,12 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IHashtagProcessor
     {
+
+        /// <summary>
+        ///     Pagination nadare, koskhol bazi dar nayaria
+        /// </summary>
+        Task<IResult<InstaHashtagSearch>> GetPostsHashtagsAsync(string mediaId);
+
         /// <summary>
         ///     Follow a hashtag
         /// </summary>

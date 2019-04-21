@@ -103,19 +103,21 @@ namespace InstagramApiSharp.Classes.Models
 
         public bool DirectReplyToAuthorEnabled { get; set; }
 
+
+
+
         public string ExploreSourceToken { get; set; }
         public string ExploreContext { get; set; }
         public InstaMediaExplore Explore { get; set; }
         public string MezqlToken { get; set; }
         public string ConnectionId { get; set; }
+        public bool IsSeen { get; set; }
+        public bool IsEof { get; set; }
+        public string InventorySource { get; set; }
+        public InstaFollowHashtagInfo FollowHashtagInfo { get; set; }
+
+        private bool _dontShowHashtagLikeThis = false;
+        public bool DontShowHashtagLikeThis { get { return _dontShowHashtagLikeThis; } set { _dontShowHashtagLikeThis = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DontShowHashtagLikeThis")); } }
+
     }
-    public class InstaMediaExplore
-    {
-        [JsonProperty("explanation")]
-        public string Explanation { get; set; }
-        [JsonProperty("actor_id")]
-        public long? ActorId { get; set; }
-        [JsonProperty("source_token")]
-        public string SourceToken { get; set; }
-    } 
 }

@@ -74,6 +74,9 @@ namespace InstagramApiSharp.Converters
                                     }
                                     catch { }
                                 break;
+                            case InstaFeedsType.StoriesNetego:
+                                post.StoriesNetego = item.StoriesNetego;
+                                break;
                         }
                         feed.Posts.Add(post);
                     }

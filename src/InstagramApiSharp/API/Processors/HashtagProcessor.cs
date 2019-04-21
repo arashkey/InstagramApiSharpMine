@@ -42,6 +42,42 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+
+        /// <summary>
+        ///     Pagination nadare, koskhol bazi dar nayaria
+        /// </summary>
+        public async Task<IResult<InstaHashtagSearch>> GetPostsHashtagsAsync(string mediaId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            var tags = new InstaHashtagSearch();
+            try
+            {
+                var userUri = UriCreator.GetMediaTagsUri(mediaId);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, userUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaHashtagSearch>(response, json);
+
+                var tagsResponse = JsonConvert.DeserializeObject<InstaHashtagSearchResponse>(json,
+                    new InstaHashtagSuggestedDataConverter());
+
+                tags = ConvertersFabric.Instance.GetHashTagsSearchConverter(tagsResponse).Convert();
+                return Result.Success(tags);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaHashtagSearch), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, tags);
+            }
+        }
+
         /// <summary>
         ///     Follow a hashtag
         /// </summary>

@@ -118,7 +118,7 @@ namespace InstagramApiSharp.API.Versions
                          AppApiVersionCode = "150338067",
                          AppVersion = "89.0.0.21.101",
                          Capabilities = "3brTvw==",
-                         SignatureKey = "19ce5f445dbfd9d29c59dc2a78c616a7fc090a8e018b9267bc4240a30244c53b"
+                         SignatureKey = "937463b5272b5d60e9d20f0f8d7d192193dd95095a3ad43725d494300a5ea5fc"
                     }
                 }
             };

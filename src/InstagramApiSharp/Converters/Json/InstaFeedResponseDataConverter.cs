@@ -124,7 +124,15 @@ namespace InstagramApiSharp.Converters.Json
                             feed.Posts.Add(post);
                         }
                     }
-
+                    if (item["stories_netego"] != null)
+                    {
+                        var storiesNetego = item["stories_netego"].ToObject<InstaStoriesNetego>();
+                        feed.Posts.Add(new InstaPostResponse
+                        {
+                            StoriesNetego = storiesNetego,
+                            Type = InstaFeedsType.StoriesNetego
+                        });
+                    }
                 }
             }
             else

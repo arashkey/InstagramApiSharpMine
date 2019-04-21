@@ -47,11 +47,18 @@ namespace InstagramApiSharp.Converters
                 VideoDuration = SourceObject.VideoDuration ?? 0,
                 HasViewerSaved = SourceObject.HasViewerSaved,
                 DirectReplyToAuthorEnabled = SourceObject.DirectReplyToAuthorEnabled ?? false,
+
+
+
                 Explore = SourceObject.Explore,
                 ExploreContext = SourceObject.ExploreContext,
                 ExploreSourceToken = SourceObject.ExploreSourceToken,
                 ConnectionId = SourceObject.ConnectionId,
-                MezqlToken = SourceObject.MezqlToken
+                MezqlToken = SourceObject.MezqlToken,
+                IsEof = SourceObject.IsEof ?? false,
+                IsSeen = SourceObject.IsSeen ?? false,
+                FollowHashtagInfo = SourceObject.FollowHashtagInfo,
+                InventorySource = SourceObject.InventorySource
             };
             if (!string.IsNullOrEmpty(SourceObject.TakenAtUnixLike))
                 media.TakenAt = DateTimeHelper.UnixTimestampToDateTime(SourceObject.TakenAtUnixLike);

@@ -20,5 +20,11 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("media_count")] public long MediaCount { get; set; }
 
         [JsonProperty("profile_pic_url")] public string ProfilePicUrl { get; set; }
+
+        [JsonProperty("follow_status")] public long? FollowStatus { get; set; }
+        [JsonProperty("following")] public long? Following { get; set; }
+        [JsonProperty("non_violating")] public long? NonViolating { get; set; }
+        [JsonProperty("allow_following")] public bool? AllowFollowing { get; set; }
+
     }
 }

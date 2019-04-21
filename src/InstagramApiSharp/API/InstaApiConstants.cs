@@ -87,11 +87,11 @@ namespace InstagramApiSharp.API
                 {"name","FACE_TRACKER_VERSION"},
                 {"value","12"}
             },
-            new JObject
-            {
-                {"name","segmentation"},
-                {"value","segmentation_enabled"}
-            },
+            //new JObject
+            //{
+            //    {"name","segmentation"},
+            //    {"value","segmentation_enabled"}
+            //},
             new JObject
             {
                 {"name","COMPRESSION"},
@@ -99,8 +99,13 @@ namespace InstagramApiSharp.API
             },
             new JObject
             {
-                {"name","WORLD_TRACKER"},
-                {"value","WORLD_TRACKER_ENABLED"}
+                {"name","world_tracker"},
+                {"value","world_tracker_enabled"}
+            },
+            new JObject
+            {
+                {"name","gyroscope"},
+                {"value","gyroscope_enabled"}
             }
         };
 
@@ -527,6 +532,10 @@ namespace InstagramApiSharp.API
         public const string MEDIA_STORY_COUNTDOWNS = API_SUFFIX + "/media/story_countdowns/";
         public const string MEDIA_FOLLOW_COUNTDOWN = API_SUFFIX + "/media/{0}/follow_story_countdown/";
         public const string MEDIA_UNFOLLOW_COUNTDOWN = API_SUFFIX + "/media/{0}/unfollow_story_countdown/";
+
+
+
+        public const string MEDIA_TAG = API_SUFFIX + "/media/{0}/tags/";
 
         #endregion Media endpoints constants
 

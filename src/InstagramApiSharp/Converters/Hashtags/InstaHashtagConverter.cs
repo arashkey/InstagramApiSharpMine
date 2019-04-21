@@ -16,8 +16,17 @@ namespace InstagramApiSharp.Converters
                 Id = SourceObject.Id,
                 Name = SourceObject.Name,
                 MediaCount = SourceObject.MediaCount,
-                ProfilePicUrl = SourceObject.ProfilePicUrl
+                ProfilePicUrl = SourceObject.ProfilePicUrl,
+                AllowFollowing = SourceObject.AllowFollowing ?? true,
+                Following = System.Convert.ToBoolean(SourceObject.Following ?? 0),
+                NonViolating = System.Convert.ToBoolean(SourceObject.NonViolating ?? 1),
             };
+            try
+            {
+                hashtag.FollowStatus = System.Convert.ToBoolean(SourceObject.FollowStatus ?? 0);
+
+            }
+            catch { }
             return hashtag;
         }
     }

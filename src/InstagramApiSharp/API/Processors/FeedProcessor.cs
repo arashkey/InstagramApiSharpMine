@@ -605,6 +605,26 @@ namespace InstagramApiSharp.API.Processors
                 //bloks_versioning_id=9177416ad0d982b98aff8a27db37a3c5c7f9b28c990cd68d18fc31477670bb89&
                 //is_async_ads_rti=0
 
+
+
+                //is_prefetch=0&
+                //feed_view_info=[{"media_id":"2026497898557919758_6896480833","version":16,"media_pct":0.91481483,"time_info":{"10":6184,"25":6184,"50":6184,"75":6184}},{"media_id":"2025784634076753589_8430142851","version":16,"media_pct":0.91481483,"time_info":{"10":7801,"25":7801,"50":7801,"75":4927}}]&
+                //phone_id=3dc84281-dd5a-45a3-a0a8-bc32a2dd9038&
+                //reason=cold_start_fetch&
+                //battery_level=90&
+                //timezone_offset=16200&
+                //_csrftoken=SAR8V58g7jORGU1bVykRYoxTkKbHNCoN&
+                //client_session_id=e64be6e6-45e1-43ba-b9e5-864a0482dca4&
+                //device_id=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //is_pull_to_refresh=0&
+                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //is_charging=0&
+                //is_async_ads_in_headload_enabled=0&
+                //rti_delivery_backend=0&
+                //is_async_ads_double_request=0&
+                //will_sound_on=0
+                //&bloks_versioning_id=9177416ad0d982b98aff8a27db37a3c5c7f9b28c990cd68d18fc31477670bb89&
+                //is_async_ads_rti=0
                 var data = new Dictionary<string, string>
                 {
                     {"is_prefetch", "0"},
@@ -619,6 +639,7 @@ namespace InstagramApiSharp.API.Processors
                     {"rti_delivery_backend", "0"},
                     {"is_async_ads_double_request", "0"},
                     {"is_async_ads_rti", "0"},
+                    {"will_sound_on", "0"}
                 };
 
                 if (seenMediaIds != null)
@@ -631,7 +652,8 @@ namespace InstagramApiSharp.API.Processors
                 }
                 else //reason=cold_start_fetch&
                 {
-                    data.Add("reason", "warm_start_fetch");
+                    data.Add("reason", "cold_start_fetch");
+                    //data.Add("reason", "warm_start_fetch");
                     data.Add("is_pull_to_refresh", "0");
                 }
 

@@ -1,5 +1,6 @@
 ﻿using InstagramApiSharp.Enums;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace InstagramApiSharp.Classes.Models
@@ -30,9 +31,12 @@ namespace InstagramApiSharp.Classes.Models
         }
         public InstaFeedsType Type { get; set; }
         public InstaMedia Media { get; set; }
-        public List<InstaStory> Stories { get; set; } = new List<InstaStory>();
+        
+        public ObservableCollection<InstaReelFeed> Stories { get; set; } = new ObservableCollection<InstaReelFeed>();
+        //public List<InstaStory> Stories { get; set; } = new List<InstaStory>();
         public List<InstaSuggestionItem> SuggestedUserItems { get; set; } = new List<InstaSuggestionItem>();
         public InstaAllCatchedUp EndOfFeedDemarcator { get; set; }
         public List<InstaHashtagMedia> Hashtags { get; set; } = new List<InstaHashtagMedia>();
+        public InstaStoriesNetego StoriesNetego { get; set; }
     }
 }

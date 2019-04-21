@@ -343,7 +343,60 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaHighlightShortList>(exception);
             }
         }
+        public async Task<IResult<InstaUserStoriesFeeds>> GetUsersStoriesAsHighlightsAsync(params string[] usersIds)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetReelMediaUri();
 
+                var data = new JObject
+                {
+                    {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None)},
+                    {"source", "feed_timeline"},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"user_ids", new JArray(usersIds)}
+                };
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK) return Result.UnExpectedResponse<InstaUserStoriesFeeds>(response, json);
+
+
+                var obj = JsonConvert.DeserializeObject<InstaUserStoriesFeedsResponse>(json,
+                    new InstaUserStoriesFeedsDataConverter());
+
+                if(obj != null)
+                {
+                    var reels = new InstaUserStoriesFeeds();
+                    foreach (var item in obj.Items)
+                    {
+                        try
+                        {
+                            reels.Items.Add(ConvertersFabric.Instance.GetReelFeedConverter(item).Convert());
+                        }
+                        catch { }
+                    }
+                    return Result.Success(reels);
+                }
+
+                return Result.Fail<InstaUserStoriesFeeds>("No reels found");
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaUserStoriesFeeds), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaUserStoriesFeeds>(exception);
+            }
+        }
         /// <summary>
         ///     Get highlights archive medias
         ///     <para>Note: get highlight id from <see cref="IStoryProcessor.GetHighlightsArchiveAsync"/></para>
@@ -444,7 +497,18 @@ namespace InstagramApiSharp.API.Processors
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
-            { 
+            {
+                //supported_capabilities_new=[{}]&
+                //reason=cold_start&
+                //_csrftoken=SAR8V58g7jORGU1bVykRYoxTkKbHNCoN&
+                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //preloaded_reel_ids=8651542203,7470273225,7293779140,4137323183,4728340654,5412390834,3935014064,9129640961,5702637159,8233674376&
+                //preloaded_reel_timestamp=1555780890,1555765386,1555654998,1555608277,1555582894,1555572328,1555275303,1554736759,1554732984,1554732411
+
+
+
+
+
                 var storyFeedUri = UriCreator.GetStoryFeedUri();
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, storyFeedUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
