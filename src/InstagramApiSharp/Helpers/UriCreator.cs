@@ -2373,6 +2373,12 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for media hashtags");
             return instaUri;
         }
+        public static Uri GetDiscoverSurfaceWithSuUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DISCOVER_SURFACE_WITH_SU, out var instaUri))
+                throw new Exception("Cant create URI for discover surface with su");
+            return instaUri;
+        } 
 
     }
 }

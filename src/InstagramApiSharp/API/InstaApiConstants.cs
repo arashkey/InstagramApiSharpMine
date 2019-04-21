@@ -296,6 +296,10 @@ namespace InstagramApiSharp.API
         public const string DISCOVER_DISMISS_SUGGESTION = API_SUFFIX + "/discover/dismiss_suggestion/";
         public const string DISCOVER_EXPLORE_REPORT = API_SUFFIX + "/discover/explore_report/";
 
+
+        public const string DISCOVER_SURFACE_WITH_SU = API_SUFFIX + "/discover/surface_with_su/";
+
+
         #endregion Discover endpoints constants
 
         #region FBSearch endpoints constants

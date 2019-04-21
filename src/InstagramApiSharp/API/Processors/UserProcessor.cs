@@ -43,6 +43,68 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+
+
+        public async Task<IResult<InstaMutualUsers>> GetMutualFriendsOrSuggestionAsync(long userId)
+        {
+            var mutual = new InstaMutualUsers();
+            try
+            {
+                var instaUri = UriCreator.GetDiscoverSurfaceWithSuUri();
+                //module=profile_social_context&
+                //target_id=5848910291&
+                //_csrftoken=ZQTYzgTNIJmByJSAQjKpxz2WpTDOl6TT&
+                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //mutual_followers_limit=12
+
+                var data = new Dictionary<string, string>
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"target_id", userId.ToString()},
+                    {"module", "profile_social_context"},
+                    {"mutual_followers_limit", "72"}
+                };
+                var request = await _httpHelper.GetDefaultGZipRequestAsync(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaMutualUsers>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaMutualUsersResponse>(json);
+
+                if (obj != null)
+                {
+                    if (obj.MutualFollowers?.Count > 0)
+                    {
+                        foreach (var item in obj.MutualFollowers)
+                            mutual.MutualFollowers.Add(ConvertersFabric.Instance.GetUserShortFriendshipConverter(item).Convert());
+                    }
+                    if (obj.SuggestedUsers?.Count > 0)
+                    {
+                        foreach (var item in obj.SuggestedUsers)
+                            mutual.SuggestedUsers.Add(ConvertersFabric.Instance.GetSuggestionItemConverter(item).Convert());
+                    }
+                    mutual.ShowSeeAllFollowersButton = obj.ShowSeeAllFollowersButton ?? false;
+
+                    return Result.Success(mutual);
+
+                }
+                else
+                    return Result.Fail("Nothings found...", mutual);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, mutual, ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, mutual);
+            }
+        }
         #region public parts
         /// <summary>
         ///     Accept user friendship requst.
