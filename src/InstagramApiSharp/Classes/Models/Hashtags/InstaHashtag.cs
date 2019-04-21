@@ -5,7 +5,7 @@
         public long Id { get; set; }
         public string Name { get; set; }
         public long MediaCount { get; set; }
-        public string ProfilePicUrl { get; set; }
+        public string ProfilePicture { get; set; }
 
         public bool FollowStatus { get; set; }
         public bool Following { get; set; }
