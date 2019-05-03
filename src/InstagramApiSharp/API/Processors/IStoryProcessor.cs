@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
@@ -87,6 +88,11 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaHighlightSingleFeed>> GetHighlightMediasAsync(string highlightId);
 
         /// <summary>
+        ///     Get user story feed with POST method requests (new API)
+        /// </summary>
+        Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(bool refresh = false, string[] preloadedReelIds = null);
+
+        /// <summary>
         ///     Get user story feed (stories from users followed by current user).
         /// </summary>
         Task<IResult<InstaStoryFeed>> GetStoryFeedAsync();
@@ -116,6 +122,11 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="userId">User identifier (PK)</param>
         Task<IResult<InstaReelFeed>> GetUserStoryFeedAsync(long userId);
 
+        /// <summary>
+        ///     Seen multiple stories
+        /// </summary>
+        /// <param name="storiesWithTakenAt">Story media identifier with taken at unix times</param>
+        Task<IResult<bool>> MarkMultipleStoriesAsSeenAsync(Dictionary<string, long> storiesWithTakenAt);
         /// <summary>
         ///     Seen story
         /// </summary>

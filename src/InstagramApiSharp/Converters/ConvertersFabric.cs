@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.Models.Business;
-using InstagramApiSharp.Classes.Models.Hashtags;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Classes.ResponseWrappers.Business;
 using InstagramApiSharp.Classes.ResponseWrappers.Web;

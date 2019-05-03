@@ -26,7 +26,7 @@ namespace InstagramApiSharp.Converters.Users
                 Status = SourceObject.Status,
                 IsBackup = SourceObject.IsBackup
             };
-            if (SourceObject.Users != null && SourceObject.Users.Any())
+            if (SourceObject.Users?.Count > 0)
             {
                 foreach (var u in SourceObject.Users)
                 {

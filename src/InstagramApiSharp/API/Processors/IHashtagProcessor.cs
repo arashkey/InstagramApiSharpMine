@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Classes.Models.Hashtags;
 
 namespace InstagramApiSharp.API.Processors
 {

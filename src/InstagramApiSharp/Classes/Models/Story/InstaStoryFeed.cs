@@ -1,5 +1,4 @@
-﻿using InstagramApiSharp.Classes.Models.Hashtags;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.Models
 {

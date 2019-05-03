@@ -58,7 +58,13 @@ namespace InstagramApiSharp.Converters
                 IsEof = SourceObject.IsEof ?? false,
                 IsSeen = SourceObject.IsSeen ?? false,
                 FollowHashtagInfo = SourceObject.FollowHashtagInfo,
-                InventorySource = SourceObject.InventorySource
+                InventorySource = SourceObject.InventorySource,
+                CarouselMediaCount = SourceObject.CarouselMediaCount ?? 0,
+                CanSeeInsightsAsBrand = SourceObject.CanSeeInsightsAsBrand ?? false,
+                UnifyTagDisplay = SourceObject.UnifyTagDisplay ?? false,
+                InlineComposerDisplayCondition= SourceObject.InlineComposerDisplayCondition ,
+                InlineComposerImpTriggerTime = SourceObject.InlineComposerImpTriggerTime ?? 0
+
             };
             if (!string.IsNullOrEmpty(SourceObject.TakenAtUnixLike))
                 media.TakenAt = DateTimeHelper.UnixTimestampToDateTime(SourceObject.TakenAtUnixLike);

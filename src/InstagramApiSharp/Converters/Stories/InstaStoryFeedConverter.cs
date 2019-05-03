@@ -23,15 +23,15 @@ namespace InstagramApiSharp.Converters
                 StoryRankingToken = SourceObject.StoryRankingToken
             };
 
-            if (SourceObject.Tray != null && SourceObject.Tray.Any())
+            if (SourceObject.Tray?.Count > 0)
             {
                 foreach (var itemResponse in SourceObject.Tray)
                 {
                     var reel = itemResponse.ToObject<InstaReelFeedResponse>();
-                    if (reel.Id.ToLower().StartsWith("tag:"))
-                        feed.HashtagStories.Add(ConvertersFabric.Instance
-                            .GetHashtagStoryConverter(itemResponse.ToObject<InstaHashtagStoryResponse>()).Convert());
-                    else
+                    //if (reel.Id.ToLower().StartsWith("tag:"))
+                    //    feed.HashtagStories.Add(ConvertersFabric.Instance
+                    //        .GetHashtagStoryConverter(itemResponse.ToObject<InstaHashtagStoryResponse>()).Convert());
+                    //else
                         feed.Items.Add(ConvertersFabric.Instance.GetReelFeedConverter(reel).Convert());
                 }
             }

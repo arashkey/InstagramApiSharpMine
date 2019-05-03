@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaStoryItem
-    {
+    { 
         public bool ShowOneTapTooltip { get; set; }
 
         public bool HasLiked { get; set; }
@@ -45,7 +45,7 @@ namespace InstagramApiSharp.Classes.Models
 
         public bool HasMoreComments { get; set; }
 
-        public List<InstaImage> ImageList { get; set; } = new List<InstaImage>();
+        public List<InstaImage> Images { get; set; } = new List<InstaImage>();
 
         public long LikeCount { get; set; }
 
@@ -53,7 +53,7 @@ namespace InstagramApiSharp.Classes.Models
 
         public string OrganicTrackingToken { get; set; }
 
-        public long MediaType { get; set; }
+        public InstaMediaType MediaType { get; set; }
 
         public long MaxNumVisiblePreviewComments { get; set; }
 
@@ -101,7 +101,7 @@ namespace InstagramApiSharp.Classes.Models
 
         public double VideoDuration { get; set; }
 
-        public List<InstaVideo> VideoList { get; set; } = new List<InstaVideo>();
+        public List<InstaVideo> Videos { get; set; } = new List<InstaVideo>();
 
         public List<InstaStoryPollItem> StoryPolls { get; set; } = new List<InstaStoryPollItem>();
 
@@ -122,5 +122,7 @@ namespace InstagramApiSharp.Classes.Models
         public List<InstaComment> PreviewComments { get; set; } = new List<InstaComment>();
 
         public List<InstaStoryCountdownItem> Countdowns { get; set; } = new List<InstaStoryCountdownItem>();
+
+        public bool CanReply { get; set; }
     }
 }

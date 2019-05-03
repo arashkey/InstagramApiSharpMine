@@ -29,7 +29,8 @@ namespace InstagramApiSharp.Converters
                 ProfilePicture = SourceObject.ProfilePicture,
                 ProfilePictureId = SourceObject.ProfilePictureId,
                 IsVerified = SourceObject.IsVerified,
-                ProfilePicUrl = SourceObject.ProfilePicture
+                ProfilePicUrl = SourceObject.ProfilePicture,
+                HasAnonymousProfilePicture = SourceObject.HasAnonymousProfilePicture ?? false
             };
             if (SourceObject.FriendshipStatus != null)
             {

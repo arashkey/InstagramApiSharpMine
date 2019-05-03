@@ -14,9 +14,9 @@ namespace InstagramApiSharp.Classes.Models
             ProfilePicture = instaUserShort.ProfilePicture;
             ProfilePictureId = instaUserShort.ProfilePictureId;
             IsVerified = instaUserShort.IsVerified;
+            HasAnonymousProfilePicture = instaUserShort.HasAnonymousProfilePicture;
         }
 
-        public bool HasAnonymousProfilePicture { get; set; }
         public string Biography { get; set; }
         public string ExternalUrl { get; set; }
         public List<InstaImage> HdProfileImages { get; set; } = new List<InstaImage>();

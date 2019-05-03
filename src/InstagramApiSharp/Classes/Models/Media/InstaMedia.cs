@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Newtonsoft.Json;
 namespace InstagramApiSharp.Classes.Models
@@ -119,5 +120,11 @@ namespace InstagramApiSharp.Classes.Models
         private bool _dontShowHashtagLikeThis = false;
         public bool DontShowHashtagLikeThis { get { return _dontShowHashtagLikeThis; } set { _dontShowHashtagLikeThis = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DontShowHashtagLikeThis")); } }
 
+
+        public long CarouselMediaCount { get; set; }
+        public bool CanSeeInsightsAsBrand { get; set; }
+        public bool UnifyTagDisplay { get; set; }
+        public string InlineComposerDisplayCondition { get; set; }
+        public long InlineComposerImpTriggerTime { get; set; }
     }
 }

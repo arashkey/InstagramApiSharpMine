@@ -209,7 +209,7 @@ namespace InstagramApiSharp.API
                 if (_waterfallIdReg == null || useNewWaterfall)
                     _waterfallIdReg = Guid.NewGuid().ToString();
 
-                var firstResponse = await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
                 var cookies =
                     _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                     .BaseAddress);
@@ -274,7 +274,7 @@ namespace InstagramApiSharp.API
             {
                 _deviceIdReg = ApiRequestMessage.GenerateDeviceId();
 
-                var firstResponse = await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
                 var cookies =
                     _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                     .BaseAddress);
@@ -667,8 +667,7 @@ namespace InstagramApiSharp.API
                 if (delay == null)
                     delay = TimeSpan.FromSeconds(2.5);
 
-                var firstResponse = await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
-                await firstResponse.Content.ReadAsStringAsync();
+                await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
                 var cookies =
                         _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                         .BaseAddress);
@@ -766,8 +765,7 @@ namespace InstagramApiSharp.API
                 var _phoneIdReg = Guid.NewGuid().ToString();
                 var _waterfallIdReg = Guid.NewGuid().ToString();
                 var _guidReg = Guid.NewGuid().ToString();
-                var firstResponse = await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
-                await firstResponse.Content.ReadAsStringAsync();
+                await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
 
                 var cookies =
                     _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
@@ -929,11 +927,7 @@ namespace InstagramApiSharp.API
                 bool needsRelogin = false;
                 ReloginLabel:
                 if (isNewLogin)
-                {
-                    var firstResponse = await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
-                    var html = await firstResponse.Content.ReadAsStringAsync();
-                    _logger?.LogResponse(firstResponse);
-                }
+                    await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
                 var cookies =
                     _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                         .BaseAddress);
@@ -1266,11 +1260,10 @@ namespace InstagramApiSharp.API
                     csrfToken = _user.CsrfToken;
                 else
                 {
-                    var firstResponse = await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                    await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
                     var cookies =
                         _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                             .BaseAddress);
-                    _logger?.LogResponse(firstResponse);
                     csrfToken = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
                     if (_user != null)
                         _user.CsrfToken = csrfToken;
@@ -1345,11 +1338,10 @@ namespace InstagramApiSharp.API
                     token = _user.CsrfToken;
                 else
                 {
-                    var firstResponse = await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                    await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
                     var cookies =
                         _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                             .BaseAddress);
-                    _logger?.LogResponse(firstResponse);
                     token = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
                     if (_user != null)
                         _user.CsrfToken = token;
@@ -1402,11 +1394,10 @@ namespace InstagramApiSharp.API
                     token = _user.CsrfToken;
                 else
                 {
-                    var firstResponse = await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                    await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
                     var cookies =
                         _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                             .BaseAddress);
-                    _logger?.LogResponse(firstResponse);
                     token = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
                     if (_user != null)
                         _user.CsrfToken = token;
@@ -1899,10 +1890,7 @@ namespace InstagramApiSharp.API
             try
             {
                 if (newToken)
-                {
-                    var firstResponse = await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
-                    await firstResponse.Content.ReadAsStringAsync();
-                }
+                    await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
                 else
                     System.Diagnostics.Debug.WriteLine("--------------------RELOGIN-------------------------");
                 var cookies =
@@ -2574,6 +2562,65 @@ namespace InstagramApiSharp.API
                 return Result.Fail(exception, default(bool));
             }
         }
+
+        public async Task<IResult<InstaBanyanSuggestions>> GetBanyanSuggestionsAsync()
+        {
+            var suggestions = new InstaBanyanSuggestions();
+            try
+            {
+                var uri = UriCreator.GetBanyanUri();
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, uri, _deviceInfo);
+
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaBanyanSuggestions>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaBanyanContainerResponse>(json);
+                if (obj != null && obj?.Entities != null)
+                {
+                    try
+                    {
+                        if (obj.Entities.Threads?.Count > 0)
+                        {
+                            foreach (var thread in obj.Entities.Threads)
+                            {
+                                try
+                                {
+                                    suggestions.Threads.Add(ConvertersFabric.Instance.GetDirectThreadConverter(thread).Convert());
+                                }
+                                catch { }
+                            }
+                        }
+                        if (obj.Entities.Users?.Count > 0)
+                        {
+                            foreach (var user in obj.Entities.Users)
+                            {
+                                try
+                                {
+                                    suggestions.Users.Add(ConvertersFabric.Instance.GetUserShortConverter(user).Convert());
+                                }
+                                catch { }
+                            }
+                        }
+                        return Result.Success(suggestions);
+                    }
+                    catch { }
+                }
+                return Result.Fail("Nothing found...", suggestions);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, suggestions, ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, suggestions);
+            }
+        }
         #endregion Other public functions
 
         #region Giphy
@@ -2764,7 +2811,7 @@ namespace InstagramApiSharp.API
             }
 
             if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version89;
+                data.InstaApiVersion = InstaApiVersionType.Version91;
             _apiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
             _httpHelper = new HttpHelper(_apiVersion);
@@ -2798,7 +2845,7 @@ namespace InstagramApiSharp.API
             }
 
             if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version89;
+                data.InstaApiVersion = InstaApiVersionType.Version91;
             _apiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
             _httpHelper = new HttpHelper(_apiVersion);
@@ -2834,7 +2881,7 @@ namespace InstagramApiSharp.API
             }
 
             if (stateData.InstaApiVersion == null)
-                stateData.InstaApiVersion = InstaApiVersionType.Version89;
+                stateData.InstaApiVersion = InstaApiVersionType.Version91;
             _apiVersionType = stateData.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
             _httpHelper = new HttpHelper(_apiVersion);

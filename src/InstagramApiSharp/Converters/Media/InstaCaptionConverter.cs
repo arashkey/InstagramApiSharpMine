@@ -18,7 +18,11 @@ namespace InstagramApiSharp.Converters
                 MediaId = SourceObject.MediaId,
                 Text = SourceObject.Text,
                 User = ConvertersFabric.Instance.GetUserShortConverter(SourceObject.User).Convert(),
-                UserId = SourceObject.UserId
+                UserId = SourceObject.UserId,
+                BitFlags = SourceObject.BitFlags ?? 0,
+                DidReportAsSpam = SourceObject.DidReportAsSpam ?? false,
+                ShareEnabled = SourceObject.ShareEnabled ?? false,
+                HasTranslation = SourceObject.HasTranslation ?? false
             };
             return caption;
         }

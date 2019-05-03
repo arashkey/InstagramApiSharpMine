@@ -118,5 +118,11 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("inventory_source")] public string InventorySource { get; set; }
         [JsonProperty("follow_hashtag_info")] public InstaFollowHashtagInfo FollowHashtagInfo { get; set; }
 
+        [JsonProperty("carousel_media_count")] public long? CarouselMediaCount { get; set; }
+        [JsonProperty("can_see_insights_as_brand")] public bool? CanSeeInsightsAsBrand { get; set; }
+        [JsonProperty("unify_tag_display")] public bool? UnifyTagDisplay { get; set; }
+        [JsonProperty("inline_composer_display_condition")] public string InlineComposerDisplayCondition { get; set; }
+        [JsonProperty("inline_composer_imp_trigger_time")] public long? InlineComposerImpTriggerTime { get; set; }
+
     }
 }

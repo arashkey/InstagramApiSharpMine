@@ -7,10 +7,17 @@
  * IRANIAN DEVELOPERS
  */
 
+using System.ComponentModel;
+
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaStoryFriendshipStatus
+    public class InstaStoryFriendshipStatus : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string memberName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
         public bool Following { get; set; }
 
         public bool FollowedBy { get; set; }

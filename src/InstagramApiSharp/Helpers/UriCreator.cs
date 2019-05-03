@@ -2378,7 +2378,12 @@ namespace InstagramApiSharp.Helpers
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DISCOVER_SURFACE_WITH_SU, out var instaUri))
                 throw new Exception("Cant create URI for discover surface with su");
             return instaUri;
-        } 
-
+        }
+        public static Uri GetBanyanUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.BANYAN, out var instaUri))
+                throw new Exception("Cant create URI for banyan");
+            return instaUri;
+        }
     }
 }

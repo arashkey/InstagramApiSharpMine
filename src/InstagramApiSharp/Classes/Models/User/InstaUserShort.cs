@@ -13,6 +13,7 @@ namespace InstagramApiSharp.Classes.Models
         public string ProfilePictureId { get; set; } = "unknown";
         public string UserName { get; set; }
         public string FullName { get; set; }
+        public bool HasAnonymousProfilePicture { get; set; }
 
         public static InstaUserShort Empty => new InstaUserShort {FullName = string.Empty, UserName = string.Empty};
 

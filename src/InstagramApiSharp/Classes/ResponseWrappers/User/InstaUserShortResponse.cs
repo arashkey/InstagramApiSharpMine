@@ -18,5 +18,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("is_private")] public bool IsPrivate { get; set; }
 
         [JsonProperty("pk")] public long Pk { get; set; }
+
+        [JsonProperty("has_anonymous_profile_picture")] public bool? HasAnonymousProfilePicture { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace InstagramApiSharp.Converters
             var shortConverter = ConvertersFabric.Instance.GetUserShortConverter(SourceObject);
             var user = new InstaUser(shortConverter.Convert())
             {
-                HasAnonymousProfilePicture = SourceObject.HasAnonymousProfilePicture,
+                HasAnonymousProfilePicture = SourceObject.HasAnonymousProfilePicture ?? false,
                 FollowersCount = SourceObject.FollowersCount,
                 FollowersCountByLine = SourceObject.FollowersCountByLine,
                 SearchSocialContext = SourceObject.SearchSocialContext,

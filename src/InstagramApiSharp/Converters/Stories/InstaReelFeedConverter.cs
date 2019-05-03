@@ -15,14 +15,15 @@ namespace InstagramApiSharp.Converters
             if (SourceObject == null) throw new ArgumentNullException($"Source object");
             var reelFeed = new InstaReelFeed
             {
-                CanReply = SourceObject.CanReply,
+                CanReply = SourceObject.CanReply ?? false,
                 ExpiringAt = DateTimeHelper.UnixTimestampToDateTime(SourceObject?.ExpiringAt ?? 0),
-                HasBestiesMedia = SourceObject.HasBestiesMedia,
                 Id = SourceObject.Id,
                 LatestReelMedia = SourceObject.LatestReelMedia ?? 0,
-                PrefetchCount = SourceObject.PrefetchCount,
+                PrefetchCount = SourceObject.PrefetchCount ?? 0,
                 Seen = SourceObject.Seen ?? 0,
-                User = ConvertersFabric.Instance.GetUserShortFriendshipFullConverter(SourceObject.User).Convert()
+                MediaCount = SourceObject.MediaCount ?? 0,
+                ReelType = SourceObject.ReelType,
+                Muted = SourceObject.Muted ?? false,
             };
             try
             {
@@ -30,7 +31,25 @@ namespace InstagramApiSharp.Converters
                     reelFeed.CanReshare = bool.Parse(SourceObject.CanReshare);
             }
             catch { }
-            if (SourceObject.Items != null && SourceObject.Items.Any())
+            try
+            {
+                if (!string.IsNullOrEmpty(SourceObject.HasBestiesMedia))
+                    reelFeed.HasBestiesMedia = bool.Parse(SourceObject.HasBestiesMedia);
+            }
+            catch { }
+            try
+            {
+                if (SourceObject.User != null)
+                    reelFeed.User = ConvertersFabric.Instance.GetUserShortFriendshipFullConverter(SourceObject.User).Convert();
+            }
+            catch { }
+            try
+            {
+                if (SourceObject.Owner != null)
+                    reelFeed.Owner = ConvertersFabric.Instance.GetHashtagOwnerConverter(SourceObject.Owner).Convert();
+            }
+            catch { }
+            if (SourceObject.Items?.Count > 0)
                 foreach (var item in SourceObject.Items)
                     try
                     {

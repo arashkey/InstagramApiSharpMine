@@ -29,7 +29,6 @@ namespace InstagramApiSharp.Converters
                 IsReelMedia = SourceObject.IsReelMedia,
                 LikeCount = SourceObject.LikeCount,
                 MaxNumVisiblePreviewComments = SourceObject.MaxNumVisiblePreviewComments,
-                MediaType = SourceObject.MediaType,
                 OriginalHeight = SourceObject.OriginalHeight,
                 OriginalWidth = SourceObject.OriginalWidth,
                 PhotoOfYou = SourceObject.PhotoOfYou,
@@ -51,9 +50,15 @@ namespace InstagramApiSharp.Converters
                 ViewerCount = SourceObject.ViewerCount ?? 0,
                 TotalViewerCount = SourceObject.TotalViewerCount ?? 0,
                 ViewerCursor = SourceObject.ViewerCursor,
-                HasSharedToFb = SourceObject.HasSharedToFb ?? 0
+                HasSharedToFb = SourceObject.HasSharedToFb ?? 0,
+                CanReply = SourceObject.CanReply ?? false
             };
 
+            try
+            {
+                instaStory.MediaType = (InstaMediaType)SourceObject.MediaType;
+            }
+            catch { }
             if (SourceObject.User != null)
                 instaStory.User = ConvertersFabric.Instance.GetUserShortConverter(SourceObject.User).Convert();
 
@@ -62,12 +67,12 @@ namespace InstagramApiSharp.Converters
 
             if (SourceObject.Images?.Candidates != null)
                 foreach (var image in SourceObject.Images.Candidates)
-                    instaStory.ImageList.Add(new InstaImage(image.Url, int.Parse(image.Width),
+                    instaStory.Images.Add(new InstaImage(image.Url, int.Parse(image.Width),
                         int.Parse(image.Height)));
 
             if (SourceObject.VideoVersions != null && SourceObject.VideoVersions.Any())
                 foreach (var video in SourceObject.VideoVersions)
-                    instaStory.VideoList.Add(new InstaVideo(video.Url, int.Parse(video.Width), int.Parse(video.Height),
+                    instaStory.Videos.Add(new InstaVideo(video.Url, int.Parse(video.Width), int.Parse(video.Height),
                         video.Type));
 
             if (SourceObject.ReelMentions != null && SourceObject.ReelMentions.Any())

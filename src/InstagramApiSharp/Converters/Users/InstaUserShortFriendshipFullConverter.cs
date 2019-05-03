@@ -29,7 +29,8 @@ namespace InstagramApiSharp.Converters.Users
                 ProfilePicture = SourceObject.ProfilePicture,
                 ProfilePictureId = SourceObject.ProfilePictureId,
                 IsVerified = SourceObject.IsVerified,
-                ProfilePicUrl = SourceObject.ProfilePicture
+                ProfilePicUrl = SourceObject.ProfilePicture,
+                HasAnonymousProfilePicture = SourceObject.HasAnonymousProfilePicture ?? false
             };
             if (SourceObject.FriendshipStatus != null)
                 user.FriendshipStatus = ConvertersFabric.Instance.GetFriendshipFullStatusConverter(SourceObject.FriendshipStatus).Convert();

@@ -324,7 +324,7 @@ namespace InstagramApiSharp.API.Processors
                 paginationParameters.NextMaxId = threadResponse.OldestCursor;
                 var pagesLoaded = 1;
 
-                while (threadResponse.HasOlder
+                while (threadResponse.HasOlder.HasValue
                       && !string.IsNullOrEmpty(threadResponse.OldestCursor)
                       && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {

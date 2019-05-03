@@ -37,9 +37,6 @@ namespace InstagramApiSharp.Classes
             LogHttpRequest(requestMessage);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);
-            //foreach (var item in requestMessage.Headers)
-            //    requestMessage.Content.Headers.Add(item.Key, item.Value);
-            //var response = await Client.PostAsync(requestMessage.RequestUri, requestMessage.Content);
             var response = await Client.SendAsync(requestMessage);
             LogHttpResponse(response);
             return response;
@@ -77,7 +74,6 @@ namespace InstagramApiSharp.Classes
             LogHttpRequest(requestMessage);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);
-            Client.DefaultRequestHeaders.ConnectionClose = true;
             var response = await Client.SendAsync(requestMessage, completionOption);
             LogHttpResponse(response);
             return await response.Content.ReadAsStringAsync();
@@ -89,7 +85,6 @@ namespace InstagramApiSharp.Classes
             _logger?.LogRequest(requestUri);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);
-            Client.DefaultRequestHeaders.ConnectionClose = true;
             var response = await Client.GetAsync(requestUri);
             LogHttpResponse(response);
             return await response.Content.ReadAsStringAsync();

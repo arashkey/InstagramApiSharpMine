@@ -11,9 +11,9 @@
             ProfilePicture = instaUserShort.ProfilePicture;
             ProfilePictureId = instaUserShort.ProfilePictureId;
             IsVerified = instaUserShort.IsVerified;
+            HasAnonymousProfilePicture = instaUserShort.HasAnonymousProfilePicture;
         }
 
-        public bool HasAnonymousProfilePicture { get; set; }
         public int FollowersCount { get; set; }
         public string FollowersCountByLine { get; set; }
         public string SocialContext { get; set; }

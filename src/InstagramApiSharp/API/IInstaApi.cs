@@ -518,6 +518,7 @@ namespace InstagramApiSharp.API
         /// </returns>
         Task<IResult<InstaCurrentUser>> GetCurrentUserAsync();
         Task<IResult<bool>> LauncherSyncAsync();
+        Task<IResult<InstaBanyanSuggestions>> GetBanyanSuggestionsAsync();
 
         #endregion Authentication, challenge functions
 

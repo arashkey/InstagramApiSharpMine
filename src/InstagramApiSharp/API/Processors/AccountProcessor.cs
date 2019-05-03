@@ -876,9 +876,10 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetAccountSecurityInfoUri();
                 var data = new JObject
                 {
-                    { "_csrftoken", _user.CsrfToken},
+                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"_uid", _user.LoggedInUser.Pk.ToString()}
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"device_id", _deviceInfo.DeviceId}
                 };
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -910,7 +911,7 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetDisableSmsTwoFactorUri();
                 var data = new JObject
                 {
-                    { "_csrftoken", _user.CsrfToken},
+                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()}
                 };
@@ -985,12 +986,12 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetEnableSmsTwoFactorUri();
                 var data = new JObject
                 {
-                    { "_csrftoken", _user.CsrfToken},
+                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    { "device_id", _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    { "phone_number", phoneNumber},
-                    { "verification_code", verificationCode}
+                    {"phone_number", phoneNumber},
+                    {"verification_code", verificationCode}
                 };
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -1022,7 +1023,7 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetAccountSendConfirmEmailUri();
                 var data = new JObject
                 {
-                    { "_csrftoken", _user.CsrfToken},
+                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"send_source", "edit_profile"}

@@ -12,6 +12,8 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
     }
     public class ApiRequestMessage
     {
+        [JsonProperty("country_codes")]
+        public string CountryCodes { get; set; } = "[{\"country_code\":\"1\",\"source\":[\"default\"]}]";
         [JsonProperty("phone_id")]
         public string PhoneId { get; set; }
         [JsonProperty("username")]
@@ -43,11 +45,12 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
                 CsrtToken = csrfToken,
                 DeviceId = DeviceId,
                 Guid = Guid,
-                LoginAttemptCount = "1",
+                LoginAttemptCount = "0",
                 Password = Password,
                 PhoneId = PhoneId,
                 Username = Username,
-                AdId = AdId
+                AdId = AdId,
+                CountryCodes = CountryCodes
             };
             var json = JsonConvert.SerializeObject(api);
             return json;
@@ -82,7 +85,8 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
                 Password = Password,
                 PhoneId = PhoneId,
                 Username = Username,
-                AdId = AdId
+                AdId = AdId,
+                CountryCodes = CountryCodes
             };
             var res = CryptoHelper.CalculateHash(signatureKey,
                 JsonConvert.SerializeObject(api));

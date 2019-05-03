@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Classes.Models.Hashtags;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Converters;
 using InstagramApiSharp.Converters.Json;

@@ -9,7 +9,6 @@
 
 using System;
 using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Classes.Models.Hashtags;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
 

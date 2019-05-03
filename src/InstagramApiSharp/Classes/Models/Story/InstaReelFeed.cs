@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaReelFeed
+    public class InstaReelFeed : INotifyPropertyChanged
     {
-        public long HasBestiesMedia { get; set; }
+        public bool HasBestiesMedia { get; set; }
 
         public long PrefetchCount { get; set; }
 
@@ -21,8 +22,22 @@ namespace InstagramApiSharp.Classes.Models
 
         public long LatestReelMedia { get; set; }
 
-        public long Seen { get; set; }
+        long _seen = -1;
+        public long Seen { get { return _seen; } set { _seen = value; OnPropertyChanged("Seen"); } }
 
         public InstaUserShortFriendshipFull User { get; set; }
+
+        public int MediaCount { get; set; }
+        public string ReelType { get; set; }
+        public bool IsHashtag => /*ReelType?.ToLower() == "mas_reel" && */Id.ToLower().StartsWith("tag:");
+        public InstaHashtagOwner Owner { get; set; }
+        public bool Muted { get; set; }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string memberName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
     }
 }
