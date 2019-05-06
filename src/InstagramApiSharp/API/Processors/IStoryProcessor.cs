@@ -196,9 +196,9 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="reelId">Reel id</param>
         /// <param name="storyMediaId">Story media id</param>
-        /// <param name="threadId">Thread id</param>
+        /// <param name="threadIds">Thread id</param>
         /// <param name="sharingType">Sharing type</param>
-        Task<IResult<InstaSharing>> ShareStoryAsync(string reelId, string storyMediaId, string threadId, string text, InstaSharingType sharingType = InstaSharingType.Video);
+        Task<IResult<bool>> ShareStoryAsync(string reelId, string storyMediaId, string[] threadIds, long[] recipients, string text, InstaSharingType sharingType = InstaSharingType.Video);
 
         /// <summary>
         ///     Reply to story
@@ -207,7 +207,8 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="storyMediaId">Media id (get it from <see cref="InstaMedia.InstaIdentifier"/>)</param>
         /// <param name="userId">Story owner user pk (get it from <see cref="InstaMedia.User.Pk"/>)</param>
         /// <param name="text">Text to send</param>
-        Task<IResult<bool>> ReplyToStoryAsync(string storyMediaId, long userId, string text);
+        /// <param name="sharingType">Sharing type</param>
+        Task<IResult<bool>> ReplyToStoryAsync(string storyMediaId, long userId, string text, InstaSharingType sharingType);
 
         /// <summary>
         ///     UnFollow countdown story

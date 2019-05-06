@@ -448,8 +448,18 @@ namespace InstagramApiSharp.Helpers
 
         public static Uri GetDeleteMediaUri(string mediaId, InstaMediaType mediaType)
         {
+            var type = "photo";
+            switch (mediaType)
+            {
+                case InstaMediaType.Video:
+                    type = "video";
+                    break;
+                case InstaMediaType.Carousel:
+                    type = InstaMediaType.Carousel.ToString();
+                    break;
+            }
             if (!Uri.TryCreate(BaseInstagramUri,
-                string.Format(InstaApiConstants.DELETE_MEDIA, mediaId, mediaType.ToString().ToUpper()), out var instaUri))
+                string.Format(InstaApiConstants.DELETE_MEDIA, mediaId, type.ToUpper()), out var instaUri))
                 throw new Exception("Can't create URI for deleting media");
             return instaUri;
         }
@@ -1060,8 +1070,15 @@ namespace InstagramApiSharp.Helpers
 
         public static Uri GetMediaShareUri(InstaMediaType mediaType)
         {
+            var type = "photo";
+            switch(mediaType)
+            {
+                case InstaMediaType.Video:
+                    type = "video";
+                    break;
+            }
             if (
-                !Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_BROADCAST_MEDIA_SHARE, mediaType.ToString().ToLower()),
+                !Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_BROADCAST_MEDIA_SHARE, type),
                     out var instaUri))
                 throw new Exception("Cant create URI for media share");
             return instaUri;
@@ -1151,9 +1168,9 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetRankRecipientsByUserUri(string username)
+        public static Uri GetRankRecipientsByUserUri(string username, string mode = "raven")
         {
-            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.GET_RANK_RECIPIENTS_BY_USERNAME, username), out var instaUri))
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.GET_RANK_RECIPIENTS_BY_USERNAME, username, mode), out var instaUri))
                 throw new Exception("Cant create URI for get rank recipients by username");
             return instaUri;
         }
@@ -1842,9 +1859,10 @@ namespace InstagramApiSharp.Helpers
             return new UriBuilder(instaUri) { Query = parameters }.Uri;
         }
 
-        public static Uri GetBroadcastReelShareUri()
+        public static Uri GetBroadcastReelShareUri(InstaSharingType sharingType)
         {
-            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DIRECT_BROADCAST_REEL_SHARE, out var instaUri))
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_BROADCAST_REEL_SHARE,
+                sharingType.ToString().ToLower()), out var instaUri))
                 throw new Exception("Cant create URI for direct broadcast reel share");
             return instaUri;
         }

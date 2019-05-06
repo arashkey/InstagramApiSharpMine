@@ -984,43 +984,49 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadId">Thread id</param>
         /// <param name="text">Text to send (optional</param>
         /// <param name="sharingType">Sharing type</param>
-        public async Task<IResult<InstaSharing>> ShareStoryAsync(string reelId, string storyMediaId, string threadId, string text, InstaSharingType sharingType = InstaSharingType.Video)
+        public async Task<IResult<bool>> ShareStoryAsync(string reelId, string storyMediaId, string[] threadIds, long[] recipients, string text, InstaSharingType sharingType = InstaSharingType.Video)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
                 var instaUri = UriCreator.GetStoryShareUri(sharingType.ToString().ToLower());
+                var guid = Guid.NewGuid().ToString();
                 var data = new JObject
                 {
                     {"action", "send_item"},
-                    {"thread_ids", $"[{threadId}]"},
-                    {"unified_broadcast_format", "1"},
+                    //{"unified_broadcast_format", "1"},
                     {"reel_id", reelId},
                     {"text", text ?? ""},
+                    {"client_context", guid},
                     {"story_media_id", storyMediaId},
                     {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"mutation_token", guid},
                 };
+                if (threadIds?.Length > 0)
+                    data.Add("thread_ids", $"[{threadIds.EncodeList(false)}]");
+                if (recipients?.Length > 0)
+                    data.Add("recipient_users", "[[" + recipients.EncodeList(false) + "]]");
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Add("Host", "i.instagram.com");
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
-                    return Result.UnExpectedResponse<InstaSharing>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaSharing>(json);
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
 
-                return Result.Success(obj);
+                return obj.IsSucceed ? Result.Success(true): Result.Fail("",false);
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaSharing), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaSharing>(exception);
+                return Result.Fail<bool>(exception);
             }
         }
 
@@ -1031,26 +1037,42 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="storyMediaId">Media id (get it from <see cref="InstaMedia.InstaIdentifier"/>)</param>
         /// <param name="userId">Story owner user pk (get it from <see cref="InstaMedia.User.Pk"/>)</param>
         /// <param name="text">Text to send</param>
-        public async Task<IResult<bool>> ReplyToStoryAsync(string storyMediaId, long userId, string text)
+        /// <param name="sharingType">Sharing type</param>
+        public async Task<IResult<bool>> ReplyToStoryAsync(string storyMediaId, long userId, string text, InstaSharingType sharingType)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var instaUri = UriCreator.GetBroadcastReelShareUri();
+                var instaUri = UriCreator.GetBroadcastReelShareUri(sharingType);
                 var clientContext = Guid.NewGuid().ToString();
+
+                //recipient_users=[[6798340126]]&
+                //action=send_item&
+                //client_context=2a4ff351-a7c7-4159-b385-e2dbbd729b04&
+                //media_id=2037333278700594436_6798340126&
+                //_csrftoken=4spGTGKweOwOkaiN9UBl4QIJbqQfMx7e&
+                //text=Nice&
+                //device_id=android-21c311d494a974fe&
+                //mutation_token=2a4ff351-a7c7-4159-b385-e2dbbd729b04&
+                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //entry=reel&
+                //reel_id=6798340126
                 var data = new Dictionary<string, string>
                 {
                     {"recipient_users", $"[[{userId}]]"},
                     {"action", "send_item"},
+                    {"entry", "reel"},
+                    {"reel_id", userId.ToString()},
                     {"client_context", clientContext},
+                    {"mutation_token", clientContext},
                     {"media_id", storyMediaId},
                     {"_csrftoken", _user.CsrfToken},
                     {"text", text ?? string.Empty},
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()}
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id", _deviceInfo.DeviceId}
                 };
 
-                var request =
-                    _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 

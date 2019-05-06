@@ -463,7 +463,7 @@ namespace InstagramApiSharp.API.Processors
                 if (string.IsNullOrEmpty(username))
                     instaUri = UriCreator.GetRankedRecipientsUri();
                 else
-                    instaUri = UriCreator.GetRankRecipientsByUserUri(username);
+                    instaUri = UriCreator.GetRankRecipientsByUserUri(username, "reshare");
 
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);

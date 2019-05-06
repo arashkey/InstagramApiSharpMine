@@ -2604,6 +2604,20 @@ namespace InstagramApiSharp.API
                                 catch { }
                             }
                         }
+                        if (suggestions.Threads?.Count > 0)
+                        {
+                            foreach (var thread in suggestions.Threads)
+                                suggestions.Items.Add(thread.Users.FirstOrDefault());
+                        }
+                        if (suggestions.Users?.Count > 0)
+                        {
+                            foreach (var user in suggestions.Users)
+                                suggestions.Items.Add(user);
+                        }
+
+                        //if (suggestions.Items?.Count > 0)
+                        //    suggestions.Items.Reverse();
+
                         return Result.Success(suggestions);
                     }
                     catch { }

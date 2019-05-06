@@ -1,9 +1,10 @@
 using System;
+using System.ComponentModel;
 
 namespace InstagramApiSharp.Classes.Models
 {
     [Serializable]
-    public class InstaUserShort
+    public class InstaUserShort : INotifyPropertyChanged
     {
         public bool IsVerified { get; set; }
         public bool IsPrivate { get; set; }
@@ -30,6 +31,25 @@ namespace InstagramApiSharp.Classes.Models
         public override int GetHashCode()
         {
             return Pk.GetHashCode();
+        }
+
+        private bool _selected = false;
+        public bool? Selected
+        {
+            get { return _selected; }
+            set { _selected = value ?? false; OnPropertyChanged("Selected"); }
+        }
+
+        private bool _closeButton = false;
+        public bool? CloseButton
+        {
+            get { return _closeButton; }
+            set { _closeButton = value ?? false; OnPropertyChanged("CloseButton"); }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string memberName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
         }
     }
 }
