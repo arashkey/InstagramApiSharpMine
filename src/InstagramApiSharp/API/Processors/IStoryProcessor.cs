@@ -12,6 +12,18 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IStoryProcessor
     {
+        Task<IResult<bool>> ReplyPhotoToStoryAsync(InstaImageUpload image, /*string storyMediaId,*/ long userId);
+        Task<IResult<bool>> ReplyPhotoToStoryAsync(Action<InstaUploaderProgress> progress, InstaImageUpload image, 
+            /*string storyMediaId,*/ long userId);
+
+
+
+
+
+
+
+
+
         /// <summary>
         ///     Respond to an story question
         /// </summary>

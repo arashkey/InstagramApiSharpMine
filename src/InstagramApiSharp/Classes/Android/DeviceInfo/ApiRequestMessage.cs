@@ -12,6 +12,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
     }
     public class ApiRequestMessage
     {
+        readonly static Random Rnd = new Random();
         [JsonProperty("country_codes")]
         public string CountryCodes { get; set; } = "[{\"country_code\":\"1\",\"source\":[\"default\"]}]";
         [JsonProperty("phone_id")]
@@ -121,6 +122,16 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         internal static string GenerateRandomUploadId()
         {
             return DateTime.UtcNow.ToUnixTimeMiliSeconds().ToString();
+        }
+        internal static string GenerateUnknownUploadId()
+        {
+            var mil = DateTime.UtcNow.ToUnixTimeMiliSeconds();
+            var sec = DateTime.UtcNow.ToUnixTime();
+            var s = mil + sec;
+            s += s;
+            s -= Rnd.Next(10000, 999999);
+            s += Rnd.Next(1000, 9999);
+            return ((int)s).ToString();
         }
         public static ApiRequestMessage FromDevice(AndroidDevice device)
         {

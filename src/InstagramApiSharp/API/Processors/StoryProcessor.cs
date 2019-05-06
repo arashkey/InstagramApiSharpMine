@@ -45,6 +45,107 @@ namespace InstagramApiSharp.API.Processors
             _httpHelper = httpHelper;
         }
 
+
+        public async Task<IResult<bool>> ReplyPhotoToStoryAsync(InstaImageUpload image, /*string storyMediaId,*/ long userId)
+        {
+            return await ReplyPhotoToStoryAsync(null, image, /*storyMediaId,*/ userId);
+        }
+        public async Task<IResult<bool>> ReplyPhotoToStoryAsync(Action<InstaUploaderProgress> progress, InstaImageUpload image,
+            /*string storyMediaId,*/ long userId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            var upProgress = new InstaUploaderProgress
+            {
+                Caption = string.Empty,
+                UploadState = InstaUploadState.Preparing
+            };
+            try
+            {
+                var uploadId = ApiRequestMessage.GenerateUnknownUploadId();
+                var uploadResult = await _instaApi.HelperProcessor.UploadSinglePhoto(progress, image, upProgress, uploadId, false, userId.ToString());
+                if (!uploadResult.Succeeded)
+                    Result.Fail(uploadResult.Info, false);
+                Random rnd = new Random();
+                var data = new JObject
+                {
+                    {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None)},
+                    {"allow_multi_configures", "1"},
+                    {"recipient_users", $"[[{userId}]]"},
+                    {"view_mode", "replayable"},
+                    {"thread_ids", "[]"},
+                    {"client_context", Guid.NewGuid().ToString()},
+                    {"camera_session_id", Guid.NewGuid().ToString()},
+                    {"reply_type", "story"},
+                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"client_shared_at", (long.Parse(ApiRequestMessage.GenerateUploadId())- rnd.Next(25,55)).ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"configure_mode", "2"},
+                    {"source_type", "3"},
+                    {"creation_surface", "camera"},
+                    {"capture_type", "normal"},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"client_timestamp", ApiRequestMessage.GenerateUploadId()},
+                    {"sampled", "true"},
+                    {"upload_id", uploadId},
+                    {
+                        "extra", JsonConvert.SerializeObject(new JObject
+                        {
+                            {"source_width", 0},
+                            {"source_height", 0}
+                        })
+                    },
+                    {
+                        "device", JsonConvert.SerializeObject(new JObject{
+                            {"manufacturer", _deviceInfo.HardwareManufacturer},
+                            {"model", _deviceInfo.DeviceModelIdentifier},
+                            {"android_release", _deviceInfo.AndroidVer.VersionNumber},
+                            {"android_version", _deviceInfo.AndroidVer.APILevel}
+                        })
+                    }
+                };
+                var instaUri = UriCreator.GetVideoStoryConfigureUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                request.Headers.Add("retry_context", HelperProcessor.GetRetryContext());
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, obj.Message, null);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                upProgress.UploadState = InstaUploadState.Error;
+                progress?.Invoke(upProgress);
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /// <summary>
         ///     Respond to an story question
         /// </summary>
@@ -1929,7 +2030,7 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"filter_type", "0"},
-                    {"timezone_offset", "16200"},
+                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"client_shared_at", (long.Parse(ApiRequestMessage.GenerateUploadId())- rnd.Next(25,55)).ToString()},
                     {"story_media_creation_date", (long.Parse(ApiRequestMessage.GenerateUploadId())- rnd.Next(50,70)).ToString()},
