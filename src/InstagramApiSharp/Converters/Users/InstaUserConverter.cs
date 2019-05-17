@@ -18,7 +18,8 @@ namespace InstagramApiSharp.Converters
                 FollowersCount = SourceObject.FollowersCount,
                 FollowersCountByLine = SourceObject.FollowersCountByLine,
                 SearchSocialContext = SourceObject.SearchSocialContext,
-                SocialContext = SourceObject.SocialContext
+                SocialContext = SourceObject.SocialContext,
+                LatestReelMedia = SourceObject.LatestReelMedia ?? 0
             };
 
             if (double.TryParse(SourceObject.MulualFollowersCount, out var mutualFollowers))

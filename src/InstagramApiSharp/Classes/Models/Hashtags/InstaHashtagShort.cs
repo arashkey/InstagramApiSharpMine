@@ -9,13 +9,14 @@
 
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaUserShortFriendshipFull : InstaUserShort
+    public class InstaHashtagShort
     {
-        private InstaFriendshipFullStatus _status;
-        public InstaFriendshipFullStatus FriendshipStatus
-        {
-            get { return _status; }
-            set { _status = value; OnPropertyChanged("FriendshipStatus"); }
-        }
+        public long Id { get; set; }
+
+        public string Name { get; set; }
+
+        public long MediaCount { get; set; }
+
+        public string ProfilePicture { get; set; }
     }
 }

@@ -26,10 +26,17 @@ namespace InstagramApiSharp.API.Processors
 
         Task<IResult<bool>> DismissSuggestionAsync(string targetIdHashtagIdOrStoryId, string type = "tag");
         Task<IResult<bool>> ExploreReportAsync(string userId, string mediaId, string exploreSourceToken);
+        Task<IResult<bool>> HideSearchEntityAsync(long userId);
+        Task<IResult<InstaDynamicSearch>> GetDynamicSearchesAsync();
         /// <summary>
         ///     Get discover user chaining list 
         /// </summary>
         Task<IResult<InstaUserChainingList>> GetChainingUsersAsync();
+        /// <summary>
+        ///     Get discover user chaining list for specific user
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        Task<IResult<InstaUserChainingList>> GetChainingUsersAsync(long userId);
 
         /// <summary>
         ///     Get recent searches

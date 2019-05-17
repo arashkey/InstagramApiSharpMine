@@ -7,34 +7,33 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
-using InstagramApiSharp.Helpers;
-using System.Linq;
+using InstagramApiSharp.Enums;
+using System;
 
 namespace InstagramApiSharp.Converters
 {
-    internal class InstaDiscoverRecentSearchesConverter : IObjectConverter<InstaDiscoverRecentSearches, InstaDiscoverRecentSearchesResponse>
+    internal class InstaDynamicSearchConverter : IObjectConverter<InstaDynamicSearch, InstaDynamicSearchResponse>
     {
-        public InstaDiscoverRecentSearchesResponse SourceObject { get; set; }
+        public InstaDynamicSearchResponse SourceObject { get; set; }
 
-        public InstaDiscoverRecentSearches Convert()
+        public InstaDynamicSearch Convert()
         {
             if (SourceObject == null) throw new ArgumentNullException($"Source object");
-            var recents = new InstaDiscoverRecentSearches();
-            if (SourceObject.Recent?.Count > 0)
+            var dynamicSearch = new InstaDynamicSearch();
+            if (SourceObject.Sections?.Count > 0)
             {
-                foreach (var search in SourceObject.Recent)
+                foreach (var section in SourceObject.Sections)
                 {
                     try
                     {
-                        recents.Recent.Add(ConvertersFabric.Instance.GetDiscoverRecentSearchesItemConverter(search).Convert());
+                        dynamicSearch.Sections.Add(ConvertersFabric.Instance.GetDynamicSearchSectionConverter(section).Convert());
                     }
                     catch { }
                 }
             }
-            return recents;
+            return dynamicSearch;
         }
     }
 }

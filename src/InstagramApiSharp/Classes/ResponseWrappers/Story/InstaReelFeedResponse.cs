@@ -5,6 +5,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 {
     public class InstaReelFeedResponse
     {
+        [JsonProperty("created_at")] public long? CreatedAt { get; set; }
         [JsonProperty("has_besties_media")] public string HasBestiesMedia { get; set; }
 
         [JsonProperty("prefetch_count")] public long? PrefetchCount { get; set; }

@@ -30,7 +30,12 @@ namespace InstagramApiSharp.Converters
                 ChildCommentCount = SourceObject.ChildCommentCount,
                 HasLikedComment = SourceObject.HasLikedComment,
                 HasMoreHeadChildComments = SourceObject.HasMoreHeadChildComments,
-                HasMoreTailChildComments = SourceObject.HasMoreTailChildComments
+                HasMoreTailChildComments = SourceObject.HasMoreTailChildComments,
+                NumTailChildComments = SourceObject.NumTailChildComments ?? 0,
+                ShareEnabled = SourceObject.ShareEnabled ?? false,
+                CommentIndex = SourceObject.CommentIndex ?? 0,
+                ParentCommentId = SourceObject.ParentCommentId ?? 0,
+                HasTranslation = SourceObject.HasTranslation ?? false
             };
             if (SourceObject.OtherPreviewUsers != null && SourceObject.OtherPreviewUsers.Any())
             {

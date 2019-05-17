@@ -21,5 +21,6 @@
         public int MutualFollowers { get; set; }
         public int UnseenCount { get; set; }
         public InstaFriendshipShortStatus FriendshipStatus { get; set; }
+        public long LatestReelMedia { get; set; }
     }
 }

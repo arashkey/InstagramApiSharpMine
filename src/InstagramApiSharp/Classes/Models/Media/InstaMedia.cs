@@ -33,21 +33,21 @@ namespace InstagramApiSharp.Classes.Models
         public string TrackingToken { get; set; }
 
         private int _likecount;
-        public int LikesCount { get { return _likecount; } set { _likecount = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("LikesCount")); } }
+        public int LikesCount { get { return _likecount; } set { _likecount = value; OnPropertyChanged("LikesCount"); } }
 
         public string NextMaxId { get; set; }
 
         public InstaCaption Caption { get; set; }
 
         private string _cmcount;
-        public string CommentsCount { get => _cmcount; set { _cmcount = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CommentsCount")); } }
+        public string CommentsCount { get => _cmcount; set { _cmcount = value; OnPropertyChanged("CommentsCount"); } }
 
         public bool IsCommentsDisabled { get; set; }
 
         public bool PhotoOfYou { get; set; }
 
         private bool _hasliked { get; set; }
-        public bool HasLiked { get { return _hasliked; } set { _hasliked = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasLiked")); } }
+        public bool HasLiked { get { return _hasliked; } set { _hasliked = value; OnPropertyChanged("HasLiked"); } }
 
         public List<InstaUserTag> UserTags { get; set; } = new List<InstaUserTag>();
 
@@ -68,7 +68,7 @@ namespace InstagramApiSharp.Classes.Models
         /// <summary>
         /// This property is for developer's personal use. 
         /// </summary>
-        public bool Play { get { return _play; } set { _play = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Play")); } }
+        public bool Play { get { return _play; } set { _play = value; OnPropertyChanged("Play"); } }
 
 
         public bool CommentLikesEnabled { get; set; }
@@ -88,7 +88,7 @@ namespace InstagramApiSharp.Classes.Models
         public bool CanViewerSave { get; set; }
 
         private bool _hasviewersaved;
-        public bool HasViewerSaved { get => _hasviewersaved; set { _hasviewersaved = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HasViewerSaved")); } }
+        public bool HasViewerSaved { get => _hasviewersaved; set { _hasviewersaved = value; OnPropertyChanged("HasViewerSaved"); } }
 
         public string Title { get; set; }
 
@@ -118,13 +118,21 @@ namespace InstagramApiSharp.Classes.Models
         public InstaFollowHashtagInfo FollowHashtagInfo { get; set; }
 
         private bool _dontShowHashtagLikeThis = false;
-        public bool DontShowHashtagLikeThis { get { return _dontShowHashtagLikeThis; } set { _dontShowHashtagLikeThis = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DontShowHashtagLikeThis")); } }
+        public bool DontShowHashtagLikeThis { get { return _dontShowHashtagLikeThis; } set { _dontShowHashtagLikeThis = value; OnPropertyChanged("DontShowHashtagLikeThis"); } }
 
+        private bool _showCap = false;
+        public bool ShowCap { get { return _showCap; } set { _showCap = value; OnPropertyChanged("ShowCap"); } }
 
         public long CarouselMediaCount { get; set; }
         public bool CanSeeInsightsAsBrand { get; set; }
         public bool UnifyTagDisplay { get; set; }
         public string InlineComposerDisplayCondition { get; set; }
         public long InlineComposerImpTriggerTime { get; set; }
+
+
+        private void OnPropertyChanged(string memberName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
     }
 }

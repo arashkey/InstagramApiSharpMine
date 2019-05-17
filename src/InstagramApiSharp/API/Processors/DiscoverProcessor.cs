@@ -151,14 +151,88 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<bool>(exception);
             }
         }
+
+        public async Task<IResult<bool>> HideSearchEntityAsync(long userId)
+        {
+            try
+            {
+                var instaUri = UriCreator.GetHideSearchEntitiesUri();
+
+                //_csrftoken=4spGTGKweOwOkaiN9UBl4QIJbqQfMx7e&
+                //user=[3235019832]&
+                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //section=chaining
+                var data = new Dictionary<string, string>
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"user", $"[{userId}]"},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"section", "chaining"},
+                };
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine(json);
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.Fail(obj.Message ?? string.Empty, false);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
+        public async Task<IResult<InstaDynamicSearch>> GetDynamicSearchesAsync()
+        {
+            try
+            {
+                var instaUri = UriCreator.GetDynamicSearchUri(InstaDiscoverSearchType.Blended);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaDynamicSearch>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaDynamicSearchResponse>(json);
+                return Result.Success(ConvertersFabric.Instance.GetDynamicSearchConverter(obj).Convert());
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaDynamicSearch), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaDynamicSearch>(exception);
+            }
+        }
         /// <summary>
         ///     Get discover user chaining list 
         /// </summary>
         public async Task<IResult<InstaUserChainingList>> GetChainingUsersAsync()
         {
+            return await GetChainingUsersAsync(_user.LoggedInUser.Pk);
+        }
+        /// <summary>
+        ///     Get discover user chaining list for specific user
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        public async Task<IResult<InstaUserChainingList>> GetChainingUsersAsync(long userId)
+        {
             try
             {
-                var instaUri = UriCreator.GetDiscoverChainingUri(_user.LoggedInUser.Pk);
+                var instaUri = UriCreator.GetDiscoverChainingUri(userId);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();

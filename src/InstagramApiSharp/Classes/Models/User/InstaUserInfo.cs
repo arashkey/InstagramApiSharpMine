@@ -4,6 +4,8 @@ namespace InstagramApiSharp.Classes.Models
 {
     public class InstaUserInfo
     {
+        public List<InstaUserChaining> ChainingSuggestions { get; set; } = new List<InstaUserChaining>();
+
         public long Pk { get; set; }
 
         public string Username { get; set; }

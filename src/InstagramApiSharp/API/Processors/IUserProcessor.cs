@@ -140,8 +140,9 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Get suggestion details
         /// </summary>
-        /// <param name="userIds">List of user ids (pk)</param>
-        Task<IResult<InstaSuggestionItemList>> GetSuggestionDetailsAsync(params long[] userIds);
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="chainedUserIds">List of chained user ids (pk)</param>
+        Task<IResult<InstaSuggestionItemList>> GetSuggestionDetailsAsync(long userId, long[] chainedUserIds = null);
 
         /// <summary>
         ///     Get suggestion users

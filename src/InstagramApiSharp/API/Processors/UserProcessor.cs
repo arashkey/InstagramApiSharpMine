@@ -513,15 +513,14 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Get suggestion details
         /// </summary>
-        /// <param name="userIds">List of user ids (pk)</param>
-        public async Task<IResult<InstaSuggestionItemList>> GetSuggestionDetailsAsync(params long[] userIds)
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="chainedUserIds">List of chained user ids (pk)</param>
+        public async Task<IResult<InstaSuggestionItemList>> GetSuggestionDetailsAsync(long userId, long[] chainedUserIds = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                if (userIds == null || userIds != null && !userIds.Any())
-                    throw new ArgumentException("At least one user id is require.");
-                var instaUri = UriCreator.GetDiscoverSuggestionDetailsUri(_user.LoggedInUser.Pk, userIds.ToList());
+                var instaUri = UriCreator.GetDiscoverSuggestionDetailsUri(userId, chainedUserIds.ToList());
 
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);

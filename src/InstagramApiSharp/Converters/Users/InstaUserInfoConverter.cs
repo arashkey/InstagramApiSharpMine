@@ -121,6 +121,15 @@ namespace InstagramApiSharp.Converters
                 }
                 catch { }
             }
+            try
+            {
+                if (SourceObject.User.ChainingSuggestions?.Count > 0)
+                {
+                    foreach (var sug in SourceObject.User.ChainingSuggestions)
+                        userInfo.ChainingSuggestions.Add(ConvertersFabric.Instance.GetSingleUserChainingConverter(sug).Convert());
+                }
+            }
+            catch { }
             if (SourceObject.User.HdProfilePicVersions != null && SourceObject.User.HdProfilePicVersions.Any())
             {
                 try

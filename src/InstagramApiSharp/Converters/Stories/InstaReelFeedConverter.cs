@@ -24,6 +24,7 @@ namespace InstagramApiSharp.Converters
                 MediaCount = SourceObject.MediaCount ?? 0,
                 ReelType = SourceObject.ReelType,
                 Muted = SourceObject.Muted ?? false,
+                CreatedAt = DateTimeHelper.UnixTimestampToDateTime(SourceObject?.CreatedAt ?? DateTime.UtcNow.ToUnixTime())
             };
             try
             {

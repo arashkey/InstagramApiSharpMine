@@ -1200,17 +1200,27 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var directSendMessageUri = UriCreator.GetDirectSendMessageUri();
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, directSendMessageUri, _deviceInfo);
-                var fields = new Dictionary<string, string> { { "text", text } };
+                var token = Guid.NewGuid().ToString();
+                var data = new Dictionary<string, string>
+                {
+                    {"mentioned_user_ids", "[]"},
+                    {"action", "send_item"},
+                    {"client_context", token},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"text", text},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"mutation_token", token},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()}
+                };
                 if (!string.IsNullOrEmpty(recipients))
-                    fields.Add("recipient_users", "[[" + recipients + "]]");
+                    data.Add("recipient_users", "[[" + recipients + "]]");
                 else
-                    fields.Add("recipient_users", "[]");
+                    data.Add("recipient_users", "[]");
 
                 if (!string.IsNullOrEmpty(threadIds))
-                    fields.Add("thread_ids", "[" + threadIds + "]");
+                    data.Add("thread_ids", "[" + threadIds + "]");
 
-                request.Content = new FormUrlEncodedContent(fields);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, directSendMessageUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 

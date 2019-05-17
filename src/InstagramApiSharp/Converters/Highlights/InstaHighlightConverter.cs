@@ -55,6 +55,15 @@ namespace InstagramApiSharp.Converters
 
                 highlight.Items.Add(hLight);
             }
+
+            if(SourceObject.TVChannel != null)
+            {
+                try
+                {
+                    highlight.TVChannel = ConvertersFabric.Instance.GetTVSelfChannelConverter(SourceObject.TVChannel).Convert();
+                }
+                catch { }
+            }
             return highlight;
         }
     }

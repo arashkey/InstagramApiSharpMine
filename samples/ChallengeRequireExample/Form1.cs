@@ -28,6 +28,7 @@ using System.Net;
 using System.Net.Sockets;
 using InstagramApiSharp;
 using InstagramApiSharp.Classes.SessionHandlers;
+using System.Net.Http;
 /////////////////////////////////////////////////////////////////////
 ////////////////////// IMPORTANT NOTE ///////////////////////////////
 // Please check wiki pages for more information:
@@ -83,7 +84,7 @@ namespace ChallengeRequireExample
         // Verify sms or email verification code for login.
 
         const string AppName = "Challenge Required";
-        const string StateFile = "state.bin";
+        const string StateFile = "stateXXXXXXXXXXXXXXXX.bin";
         readonly Size NormalSize = new Size(432, 164);
         readonly Size ChallengeSize = new Size(432, 604);
         private static IInstaApi InstaApi;
@@ -96,6 +97,8 @@ namespace ChallengeRequireExample
         private void Form1_Load(object sender, EventArgs e)
         {
             Size = NormalSize;
+            txtUser.Text = "rmt4006";
+            txtPass.Text = "njpytop298";
         }
 
         private async void LoginButton_Click(object sender, EventArgs e)
@@ -106,9 +109,25 @@ namespace ChallengeRequireExample
                 UserName = txtUser.Text,
                 Password = txtPass.Text
             };
+            var proxy = new WebProxy()
+            {
+                Address = new Uri($"http://5.56.133.24:1080"), //i.e: http://1.2.3.4.5:8080
+                                                               //BypassProxyOnLocal = false,
+                                                               //UseDefaultCredentials = false,
 
+                Credentials = new NetworkCredential(
+    userName: "rmt",
+    password: "0jokar")
+            };
+
+            // Now create a client handler which uses that proxy
+            var httpClientHandler = new HttpClientHandler()
+            {
+                Proxy = proxy,
+            };
             InstaApi = InstaApiBuilder.CreateBuilder()
                 .SetUser(userSession)
+                .UseHttpClientHandler(httpClientHandler)
                 .UseLogger(new DebugLogger(LogLevel.All))
                 .SetRequestDelay(RequestDelay.FromSeconds(0, 1))
                 // Session handler, set a file path to save/load your state/session data
@@ -117,6 +136,13 @@ namespace ChallengeRequireExample
             Text = $"{AppName} Connecting";
             //Load session
             LoadSession();
+
+
+
+            var abc = InstaApi.GetLoggedUser();
+            var pr = InstaApi.HttpRequestProcessor;
+
+
             if (!InstaApi.IsUserAuthenticated)
             {
                 var logInResult = await InstaApi.LoginAsync();

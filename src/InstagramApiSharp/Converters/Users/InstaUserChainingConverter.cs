@@ -30,7 +30,8 @@ namespace InstagramApiSharp.Converters.Users
                 ProfilePictureId = SourceObject.ProfilePictureId,
                 IsVerified = SourceObject.IsVerified,
                 ProfilePicUrl = SourceObject.ProfilePicture,
-                ProfileChainingSecondaryLabel = SourceObject.ProfileChainingSecondaryLabel
+                ProfileChainingSecondaryLabel = SourceObject.ProfileChainingSecondaryLabel,
+                SocialContext = SourceObject.SocialContext
             };
             if (SourceObject.ChainingInfo != null && !string.IsNullOrEmpty(SourceObject.ChainingInfo.Sources))
                 user.ChainingInfo = SourceObject.ChainingInfo.Sources;

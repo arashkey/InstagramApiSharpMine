@@ -20,6 +20,8 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public string Status { get; set; }
         [JsonProperty("tray")]
         public List<InstaHighlightFeedResponse> Items { get; set; } = new List<InstaHighlightFeedResponse>();
+
+        [JsonProperty("tv_channel")] public InstaTVSelfChannelResponse TVChannel { get; set; }
     }
     public class InstaHighlightReelResponse : InstaDefault
     {
@@ -34,6 +36,8 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
     }
     public class InstaHighlightFeedResponse
     {
+        [JsonProperty("created_at")]
+        public long? CreatedAt { get; set; }
         [JsonProperty("id")]
         public string Id { get; set; }
         [JsonProperty("latest_reel_media")]

@@ -830,11 +830,16 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetHighlightFeedsUri(long userId)
+        public static Uri GetHighlightFeedsUri(long userId, string phoneId)
         {
             if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.HIGHLIGHT_TRAY, userId), out var instaUri))
                 throw new Exception("Cant create URI for highlight feeds");
-            return instaUri;
+            return instaUri
+                .AddQueryParameter(InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None))
+               .AddQueryParameter("battery_level", "100")
+               .AddQueryParameter("is_charging", "0")
+               .AddQueryParameter("will_sound_on", "0")
+               .AddQueryParameter("phone_id", phoneId);
         }
 
         public static Uri GetHighlightsArchiveUri()
@@ -2401,6 +2406,18 @@ namespace InstagramApiSharp.Helpers
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.BANYAN, out var instaUri))
                 throw new Exception("Cant create URI for banyan");
+            return instaUri;
+        }
+        public static Uri GetHideSearchEntitiesUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.FBSEARCH_HIDE_SEARCH_ENTITIES, out var instaUri))
+                throw new Exception("Cant create URI for hide search entities");
+            return instaUri;
+        }
+        public static Uri GetDynamicSearchUri(InstaDiscoverSearchType searchType)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.FBSEARCH_DYNAMIC_SEARCH, searchType.ToString().ToLower()), out var instaUri))
+                throw new Exception("Cant create URI for fbsearch dynamic search");
             return instaUri;
         }
     }

@@ -32,7 +32,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("child_comment_count")] public int ChildCommentCount { get; set; }
 
-        //[JsonProperty("num_tail_child_comments")] public int NumTailChildComments { get; set; }
+        [JsonProperty("num_tail_child_comments")] public int? NumTailChildComments { get; set; }
 
         [JsonProperty("has_more_tail_child_comments")] public bool HasMoreTailChildComments { get; set; }
 
@@ -44,5 +44,10 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("other_preview_users")] public List<InstaUserShortResponse> OtherPreviewUsers { get; set; }
 
+
+        [JsonProperty("share_enabled")] public bool? ShareEnabled { get; set; }
+        [JsonProperty("comment_index")] public int? CommentIndex { get; set; }
+        [JsonProperty("parent_comment_id")] public long? ParentCommentId { get; set; }
+        [JsonProperty("has_translation")] public bool? HasTranslation { get; set; }
     }
 }

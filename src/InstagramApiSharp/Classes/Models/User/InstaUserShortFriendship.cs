@@ -14,6 +14,11 @@ namespace InstagramApiSharp.Classes.Models
     public class InstaUserShortFriendshipList : List<InstaUserShortFriendship> { }
     public class InstaUserShortFriendship : InstaUserShort
     {
-        public InstaFriendshipShortStatus FriendshipStatus { get; set; }
+        private InstaFriendshipShortStatus _status;
+        public InstaFriendshipShortStatus FriendshipStatus
+        {
+            get { return _status; }
+            set { _status = value; OnPropertyChanged("FriendshipStatus"); }
+        }
     }
 }

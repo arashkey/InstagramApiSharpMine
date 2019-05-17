@@ -1,0 +1,24 @@
+﻿/*
+ * Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https://t.me/ramtinak ]
+ * 
+ * Github source: https://github.com/ramtinak/InstagramApiSharp
+ * Nuget package: https://www.nuget.org/packages/InstagramApiSharp
+ * 
+ * IRANIAN DEVELOPERS
+ */
+
+using Newtonsoft.Json;
+
+namespace InstagramApiSharp.Classes.ResponseWrappers
+{
+    public class InstaHashtagShortResponse
+    {
+        [JsonProperty("id")] public long Id { get; set; }
+
+        [JsonProperty("name")] public string Name { get; set; }
+
+        [JsonProperty("media_count")] public long? MediaCount { get; set; }
+
+        [JsonProperty("profile_pic_url")] public string ProfilePicture { get; set; }
+    }
+}

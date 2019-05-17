@@ -7,7 +7,7 @@
  *        IRANIAN DEVELOPERS
  *        
  *        
- *               2018
+ *               2019
  *  
  *  
  */
@@ -25,7 +25,7 @@ namespace InstagramApiSharp.API
         #region New
 
         public const string BANYAN = API_SUFFIX + "/banyan/banyan/?views=[\"story_share_sheet\",\"reshare_share_sheet\"]";
-
+        public const string FBSEARCH_DYNAMIC_SEARCH = API_SUFFIX + "/fbsearch/nullstate_dynamic_sections/?type={0}";
 
         #endregion New
 
@@ -298,7 +298,7 @@ namespace InstagramApiSharp.API
         public const string DISCOVER_CHAINING = API_SUFFIX + "/discover/chaining/?target_id={0}";
         public const string DISCOVER_EXPLORE = API_SUFFIX + "/discover/explore/";
         public const string DISCOVER_TOPICAL_EXPLORE = API_SUFFIX + "/discover/topical_explore/";
-        public const string DISCOVER_FETCH_SUGGESTION_DETAILS = API_SUFFIX + "/discover/fetch_suggestion_details/?target_id={0}&chained_ids={1}";
+        public const string DISCOVER_FETCH_SUGGESTION_DETAILS = API_SUFFIX + "/discover/fetch_suggestion_details/?target_id={0}&chained_ids={1}&media_info_count=0&include_social_context=1&use_full_media_info=0";
         public const string DISCOVER_TOP_LIVE = API_SUFFIX + "/discover/top_live/";
         public const string DISCOVER_TOP_LIVE_STATUS = API_SUFFIX + "/discover/top_live_status/";
         public const string DISCOVER_DISMISS_SUGGESTION = API_SUFFIX + "/discover/dismiss_suggestion/";
@@ -314,11 +314,7 @@ namespace InstagramApiSharp.API
 
         public const string FBSEARCH_CLEAR_SEARCH_HISTORY = API_SUFFIX + "/fbsearch/clear_search_history/";
         public const string FBSEARCH_GET_HIDDEN_SEARCH_ENTITIES = API_SUFFIX + "/fbsearch/get_hidden_search_entities/";
-        /// <summary>
-        /// post data:
-        /// <para>section=suggested</para>
-        /// <para>user=["1 user id"]</para>
-        /// </summary>
+
         public const string FBSEARCH_HIDE_SEARCH_ENTITIES = API_SUFFIX + "/fbsearch/hide_search_entities/";
 
         /// <summary>
@@ -509,7 +505,7 @@ namespace InstagramApiSharp.API
         public const string MEDIA = "/media/";
         public const string MEDIA_ALBUM_CONFIGURE = API_SUFFIX + "/media/configure_sidecar/";
         public const string MEDIA_COMMENT_LIKERS = API_SUFFIX + "/media/{0}/comment_likers/";
-        public const string MEDIA_COMMENTS = API_SUFFIX + "/media/{0}/comments/?can_support_threading=true";
+        public const string MEDIA_COMMENTS = API_SUFFIX + "/media/{0}/comments/";//?can_support_threading=true";
         public const string MEDIA_CONFIGURE = API_SUFFIX + "/media/configure/";
         public const string MEDIA_CONFIGURE_VIDEO = API_SUFFIX + "/media/configure/?video=1";
         public const string MEDIA_UPLOAD_FINISH_VIDEO = API_SUFFIX + "/media/upload_finish/?video=1";

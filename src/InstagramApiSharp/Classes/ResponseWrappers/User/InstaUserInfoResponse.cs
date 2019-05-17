@@ -178,6 +178,6 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("page_name")] public string PageName { get; set; }
 
         [JsonProperty("page_id")] public long? PageId { get; set; }
-
+        [JsonProperty("chaining_suggestions")] public List<InstaUserChainingResponse> ChainingSuggestions { get; set; }
     }
 }

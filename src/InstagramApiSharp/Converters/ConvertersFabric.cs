@@ -985,5 +985,29 @@ namespace InstagramApiSharp.Converters
         {
             return new InstaVideoCallEventConverter { SourceObject = response };
         }
+
+        public IObjectConverter<InstaHashtagShort, InstaHashtagShortResponse> GetHashtagShortConverter(
+            InstaHashtagShortResponse response)
+        {
+            return new InstaHashtagShortConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaDiscoverRecentSearchesItem, InstaDiscoverRecentSearchesItemResponse> GetDiscoverRecentSearchesItemConverter(
+            InstaDiscoverRecentSearchesItemResponse response)
+        {
+            return new InstaDiscoverRecentSearchesItemConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaDynamicSearchSection, InstaDynamicSearchSectionResponse> GetDynamicSearchSectionConverter(
+            InstaDynamicSearchSectionResponse response)
+        {
+            return new InstaDynamicSearchSectionConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaDynamicSearch, InstaDynamicSearchResponse> GetDynamicSearchConverter(
+            InstaDynamicSearchResponse response)
+        {
+            return new InstaDynamicSearchConverter { SourceObject = response };
+        }
     }
 }

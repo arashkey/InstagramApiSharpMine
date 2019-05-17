@@ -8,6 +8,7 @@
  */
 
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace InstagramApiSharp.Classes.Models
 {
@@ -18,22 +19,29 @@ namespace InstagramApiSharp.Classes.Models
         internal string Status { get; set; }
 
         public List<InstaHighlightFeed> Items { get; set; } = new List<InstaHighlightFeed>();
+
+        public InstaTVSelfChannel TVChannel { get; set; }
     }
-    public class InstaHighlightSingleFeed : InstaHighlightFeed
+    public class InstaHighlightSingleFeed : InstaHighlightFeed { }
+    public class InstaHighlightFeed : INotifyPropertyChanged
     {
         public List<InstaStoryItem> Items { get; set; } = new List<InstaStoryItem>();
-    }
-    public class InstaHighlightFeed
-    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string memberName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
         public string HighlightId { get; set; }
 
         public int LatestReelMedia { get; set; }
 
-        public object Seen { get; set; }
+        object _seen = null;
+        public object Seen { get { return _seen; } set { _seen = value; OnPropertyChanged("Seen"); } }
         
         public bool CanReply { get; set; }
 
         public object CanReshare { get; set; }
+        public System.DateTime CreatedAt { get; set; }
 
         public string ReelType { get; set; }
 
@@ -43,8 +51,8 @@ namespace InstagramApiSharp.Classes.Models
 
         public int RankedPosition { get; set; }
 
-        public string Title { get; set; }
-
+        string _title = null;
+        public string Title { get { return _title; } set { _title = value; OnPropertyChanged("Title"); } }
         public int SeenRankedPosition { get; set; }
 
         public int PrefetchCount { get; set; }

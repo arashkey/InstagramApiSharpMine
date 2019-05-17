@@ -26,6 +26,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("chaining_info")] public InstaUserChainingInfoResponse ChainingInfo { get; set; }
 
         [JsonProperty("profile_chaining_secondary_label")] public string ProfileChainingSecondaryLabel { get; set; }
+        [JsonProperty("social_context")] public string SocialContext { get; set; }
     }
     public class InstaUserChainingInfoResponse
     {

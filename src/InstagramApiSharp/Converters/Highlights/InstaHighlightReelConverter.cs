@@ -10,6 +10,8 @@
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using System.Collections.Generic;
+using InstagramApiSharp.Helpers;
+using System;
 namespace InstagramApiSharp.Converters
 {
     internal class InstaHighlightReelConverter : IObjectConverter<InstaHighlightSingleFeed, InstaHighlightReelResponse>
@@ -32,7 +34,8 @@ namespace InstagramApiSharp.Converters
                 ReelType = SourceObject.Reel.ReelType,
                 Seen = SourceObject.Reel.Seen,
                 SeenRankedPosition = SourceObject.Reel.SeenRankedPosition,
-                Title = SourceObject.Reel.Title
+                Title = SourceObject.Reel.Title,
+                CreatedAt = DateTimeHelper.FromUnixTimeSeconds(SourceObject.Reel.CreatedAt ?? DateTime.UtcNow.ToUnixTime())
             };
 
             hLight.CoverMedia = new InstaHighlightCoverMedia
