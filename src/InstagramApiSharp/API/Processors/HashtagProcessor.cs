@@ -455,14 +455,6 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var instaUri = UriCreator.GetHashtagMediaReportUri();
-                //{
-                //  "_csrftoken": "ZQTYzgTNIJmByJSAQjKpxz2WpTDOl6TT",
-                //  "tag": "clothes",
-                //  "_uid": "11292195227",
-                //  "h_id": "17843715367043347",
-                //  "m_pk": "2025661917850670839_8144764178",
-                //  "_uuid": "6324ecb2-e663-4dc8-a3a1-289c699cc876"
-                //}
                 var data = new JObject
                 {
                     {"_csrftoken", _user.CsrfToken},

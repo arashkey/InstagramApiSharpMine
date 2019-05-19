@@ -600,15 +600,15 @@ namespace InstagramApiSharp.API.Processors
             {
                 //supported_capabilities_new=[{}]&
                 //reason=cold_start&
-                //_csrftoken=SAR8V58g7jORGU1bVykRYoxTkKbHNCoN&
-                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //_csrftoken=fghjf&
+                //_uuid=6rtrgt&
                 //preloaded_reel_ids=8651542203,7470273225,7293779140,4137323183,4728340654,5412390834,3935014064,9129640961,5702637159,8233674376&
                 //preloaded_reel_timestamp=1555780890,1555765386,1555654998,1555608277,1555582894,1555572328,1555275303,1554736759,1554732984,1554732411
 
                 //supported_capabilities_new=[{"name":"SUPPORTED_SDK_VERSIONS","value":"13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0,21.0,22.0,23.0,24.0,25.0,26.0,27.0,28.0,29.0,30.0,31.0,32.0,33.0,34.0,35.0,36.0,37.0,38.0,39.0,40.0,41.0,42.0,43.0,44.0,45.0,46.0,47.0,48.0,49.0,50.0,51.0,52.0,53.0,54.0,55.0,56.0,57.0,58.0,59.0,60.0,61.0"},{"name":"FACE_TRACKER_VERSION","value":"12"},{"name":"segmentation","value":"segmentation_enabled"},{"name":"COMPRESSION","value":"ETC2_COMPRESSION"},{"name":"world_tracker","value":"world_tracker_enabled"},{"name":"gyroscope","value":"gyroscope_enabled"}]&
                 //reason=pull_to_refresh&
-                //_csrftoken=4spGTGKweOwOkaiN9UBl4QIJbqQfMx7e&
-                //_uuid=c6a29f80-d663-4dc4-84e7-8a247a9de3f0&
+                //_csrftoken=defrghdf&
+                //_uuid=c6a2rtyhrt
                 //preloaded_reel_ids=8062492058,7641914022,1593584454,7748367602,7694284101,374897883,1341582726,6179437947,6798340126,3405354889&
                 //preloaded_reel_timestamp=1556806882,1556781054,1556760190,1556746331,1556698368,1556666696,1556644081,1556618908,1556614565,1556531878
 
@@ -660,8 +660,8 @@ namespace InstagramApiSharp.API.Processors
             {
                 //supported_capabilities_new=[{}]&
                 //reason=cold_start&
-                //_csrftoken=SAR8V58g7jORGU1bVykRYoxTkKbHNCoN&
-                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //_csrftoken=ttttttt&
+                //_uuid=aaaaaaaaaaaa&
                 //preloaded_reel_ids=8651542203,7470273225,7293779140,4137323183,4728340654,5412390834,3935014064,9129640961,5702637159,8233674376&
                 //preloaded_reel_timestamp=1555780890,1555765386,1555654998,1555608277,1555582894,1555572328,1555275303,1554736759,1554732984,1554732411
 

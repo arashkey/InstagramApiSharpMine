@@ -1851,12 +1851,15 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetSearchPlacesUri(int timezoneOffset, double lat, double lng, string query, string rankToken, List<long> excludeList)
+        public static Uri GetSearchPlacesUri(string query, string rankToken, List<long> excludeList, double? lat = null, double? lng = null)
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.FBSEARCH_PLACES, out var instaUri))
                 throw new Exception("Cant create URI for search places");
 
-            var parameters = $"timezone_offset={timezoneOffset}&lat={lat.ToString(CultureInfo.InvariantCulture)}&lng={lng.ToString(CultureInfo.InvariantCulture)}";
+            var parameters = $"timezone_offset={InstaApiConstants.TIMEZONE_OFFSET}&";
+
+            if(lat!= null && lng != null)
+                parameters += $"lat={lat.Value.ToString(CultureInfo.InvariantCulture)}&lng={lng.Value.ToString(CultureInfo.InvariantCulture)}";
 
             if (!string.IsNullOrEmpty(query))
                 parameters += $"&query={query}";

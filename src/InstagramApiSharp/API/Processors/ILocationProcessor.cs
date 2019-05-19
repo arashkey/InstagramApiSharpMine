@@ -87,6 +87,15 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaPlaceList" />
         /// </returns>
         Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, string query, PaginationParameters paginationParameters);
-
+        /// <summary>
+        ///     Search places in facebook
+        ///     <para>Note: This works for non-facebook accounts too!</para>
+        /// </summary>
+        /// <param name="query">Query to search (city, country or ...)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaPlaceList" />
+        /// </returns>
+        Task<IResult<InstaPlaceList>> SearchPlacesAsync(string query, PaginationParameters paginationParameters);
     }
 }

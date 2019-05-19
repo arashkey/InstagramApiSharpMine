@@ -28,33 +28,7 @@ namespace InstagramApiSharp.Helpers
         {
             var userAgent = deviceInfo.GenerateUserAgent(_apiVersion);
 
-            //var ver = HttpVersion.Version10;
-
-            ////-1
-            ////1
-            ////-1
-            ////-1
-            ////0
-            ////-1
-            //Console.WriteLine(ver.Build);
-            //Console.WriteLine(ver.Major);
-            //Console.WriteLine(ver.MajorRevision);
-            //Console.WriteLine(ver.MinorRevision);
-            //Console.WriteLine(ver.Minor);
-
-            //Console.WriteLine(ver.Revision);
-
-
-
-
-            var version = new Version(1, 0);
-            var request = new HttpRequestMessage(method, uri)
-            {
-                //#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472|| NETSTANDARD1_3 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6 || NETSTANDARD2_0 || NETSTANDARD2_1 || NETSTANDARD2_2 || NETSTANDARD2_3
-                //#else
-                //Version = version
-                //#endif
-            };
+            var request = new HttpRequestMessage(method, uri);
             request.Headers.Add(InstaApiConstants.HEADER_ACCEPT_LANGUAGE, InstaApiConstants.ACCEPT_LANGUAGE);
             request.Headers.Add(InstaApiConstants.HEADER_IG_CAPABILITIES, _apiVersion.Capabilities);
             request.Headers.Add(InstaApiConstants.HEADER_IG_CONNECTION_TYPE, InstaApiConstants.IG_CONNECTION_TYPE);

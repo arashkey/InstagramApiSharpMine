@@ -316,9 +316,74 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaPlaceList>(exception);
             }
         }
+        /// <summary>
+        ///     Search places in facebook
+        ///     <para>Note: This works for non-facebook accounts too!</para>
+        /// </summary>
+        /// <param name="query">Query to search (city, country or ...)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaPlaceList" />
+        /// </returns>
+        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(string query, PaginationParameters paginationParameters)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-        private async Task<IResult<InstaPlaceListResponse>> SearchPlaces(double latitude, 
-            double longitude, 
+                InstaPlaceList Convert(InstaPlaceListResponse placelistResponse)
+                {
+                    return ConvertersFabric.Instance.GetPlaceListConverter(placelistResponse).Convert();
+                }
+                var places = await SearchPlaces(query, paginationParameters);
+                if (!places.Succeeded)
+                    return Result.Fail(places.Info, default(InstaPlaceList));
+
+                var placesResponse = places.Value;
+                paginationParameters.NextMaxId = placesResponse.RankToken;
+                paginationParameters.ExcludeList = placesResponse.ExcludeList;
+                var pagesLoaded = 1;
+                while (placesResponse.HasMore != null
+                      && placesResponse.HasMore.Value
+                      && !string.IsNullOrEmpty(placesResponse.RankToken)
+                      && pagesLoaded < paginationParameters.MaximumPagesToLoad)
+                {
+                    var nextPlaces = await SearchPlaces(query, paginationParameters);
+
+                    if (!nextPlaces.Succeeded)
+                        return Result.Fail(nextPlaces.Info, Convert(nextPlaces.Value));
+
+                    placesResponse.RankToken = paginationParameters.NextMaxId = nextPlaces.Value.RankToken;
+                    placesResponse.HasMore = nextPlaces.Value.HasMore;
+                    placesResponse.Items.AddRange(nextPlaces.Value.Items);
+                    placesResponse.Status = nextPlaces.Value.Status;
+                    paginationParameters.ExcludeList = nextPlaces.Value.ExcludeList;
+                    pagesLoaded++;
+                }
+
+                return Result.Success(ConvertersFabric.Instance.GetPlaceListConverter(placesResponse).Convert());
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaPlaceList), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaPlaceList>(exception);
+            }
+        }
+
+        private async Task<IResult<InstaPlaceListResponse>> SearchPlaces(string query,
+            PaginationParameters paginationParameters)
+        {
+            return await SearchPlaces(null, null, query, paginationParameters);
+        }
+        private async Task<IResult<InstaPlaceListResponse>> SearchPlaces(double? latitude, 
+            double? longitude, 
             string query,
             PaginationParameters paginationParameters)
         {
@@ -327,8 +392,7 @@ namespace InstagramApiSharp.API.Processors
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                var instaUri = UriCreator.GetSearchPlacesUri(InstaApiConstants.TIMEZONE_OFFSET,
-                    latitude, longitude, query, paginationParameters.NextMaxId, paginationParameters.ExcludeList);
+                var instaUri = UriCreator.GetSearchPlacesUri(query, paginationParameters.NextMaxId, paginationParameters.ExcludeList, latitude, longitude);
 
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
