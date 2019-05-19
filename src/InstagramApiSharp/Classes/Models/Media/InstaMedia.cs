@@ -128,7 +128,7 @@ namespace InstagramApiSharp.Classes.Models
         public bool UnifyTagDisplay { get; set; }
         public string InlineComposerDisplayCondition { get; set; }
         public long InlineComposerImpTriggerTime { get; set; }
-
+        public InstaMediaIdList TopLikers { get; set; } = new InstaMediaIdList();
 
         private void OnPropertyChanged(string memberName)
         {

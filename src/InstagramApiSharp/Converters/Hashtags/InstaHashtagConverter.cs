@@ -15,7 +15,7 @@ namespace InstagramApiSharp.Converters
     internal class InstaHashtagConverter : IObjectConverter<InstaHashtag, InstaHashtagResponse>
     {
         public InstaHashtagResponse SourceObject { get; set; }
-
+         
         public InstaHashtag Convert()
         {
             if (SourceObject == null) throw new ArgumentNullException($"Source object");
@@ -28,6 +28,8 @@ namespace InstagramApiSharp.Converters
                 AllowFollowing = SourceObject.AllowFollowing ?? true,
                 Following = System.Convert.ToBoolean(SourceObject.Following ?? 0),
                 NonViolating = System.Convert.ToBoolean(SourceObject.NonViolating ?? 1),
+                FormattedMediaCount = SourceObject.FormattedMediaCount,
+                SearchResultSubtitle = SourceObject.SearchResultSubtitle
             };
             try
             {

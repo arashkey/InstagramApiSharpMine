@@ -275,7 +275,7 @@ namespace InstagramApiSharp.Helpers
         public static Uri GetChallengeRequireFirstUri(string apiPath, string guid, string deviceId)
         {
             if (!apiPath.EndsWith("/"))
-                apiPath = apiPath + "/";
+                apiPath += "/";
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.API_SUFFIX + apiPath +
                 $"?guid={guid}&device_id={deviceId}", out var instaUri))
                 throw new Exception("Cant create URI for challenge require url");
@@ -1278,20 +1278,26 @@ namespace InstagramApiSharp.Helpers
         public static Uri GetSearchTagUri(string tag, int count, IEnumerable<long> excludeList, string rankToken)
         {
             excludeList = excludeList ?? new List<long>();
-            var excludeListStr = $"[{string.Join(",", excludeList)}]";
+            var excludeListStr = string.Empty;
+
+            if(excludeList?.Count() > 0)
+                excludeListStr = $"[{string.Join(",", excludeList)}]";
+
             if (!Uri.TryCreate(BaseInstagramUri,
                 string.Format(InstaApiConstants.SEARCH_TAGS, tag, count),
                 out var instaUri))
                 throw new Exception("Cant create search tag URI");
             return instaUri
                 .AddQueryParameter("exclude_list", excludeListStr)
-                .AddQueryParameter("rank_token", rankToken);
+                .AddQueryParameter("rank_token", rankToken)
+                .AddQueryParameter(InstaApiConstants.HEADER_TIMEZONE, InstaApiConstants.TIMEZONE_OFFSET.ToString());
         }
 
         public static Uri GetSearchUserUri(string text, int count = 30)
         {
+            //TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow).TotalSeconds
             if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.USERS_SEARCH,
-                TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow).TotalSeconds, text, count), out var instaUri))
+                InstaApiConstants.TIMEZONE_OFFSET, text, count), out var instaUri))
                 throw new Exception("Cant create URI for search user");
             return instaUri;
         }
@@ -1625,7 +1631,7 @@ namespace InstagramApiSharp.Helpers
 
         public static Uri GetUserFollowersUri(long userPk, string rankToken, string searchQuery, bool mutualsfirst = false, string maxId = "")
         {
-            Uri instaUri = null;
+            Uri instaUri;
             if (!mutualsfirst)
             {
                 if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.FRIENDSHIPS_USER_FOLLOWERS, userPk, rankToken),

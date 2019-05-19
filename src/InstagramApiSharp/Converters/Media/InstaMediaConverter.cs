@@ -102,6 +102,10 @@ namespace InstagramApiSharp.Converters
             if (SourceObject.Location != null)
                 media.Location = ConvertersFabric.Instance.GetLocationConverter(SourceObject.Location).Convert();
 
+            if (SourceObject.TopLikers?.Count > 0)
+                foreach (var item in SourceObject.TopLikers)
+                    media.TopLikers.Add(item);
+
             if (SourceObject.Images?.Candidates == null) return media;
 
             foreach (var image in SourceObject.Images.Candidates)

@@ -180,7 +180,20 @@ namespace InstagramApiSharp
                 UserTags = userTags?.ToList()
             };
         }
-
+        public static InstaComment ConvertToComment(this InstaCommentShort commentShort)
+        {
+            return new InstaComment
+            {
+                ContentType = commentShort.ContentType,
+                User=  commentShort.User,
+                Pk = commentShort.Pk,
+                Text = commentShort.Text,
+                Type = commentShort.Type,
+                CreatedAt = commentShort.CreatedAt,
+                CreatedAtUtc = commentShort.CreatedAtUtc,
+                HasLikedComment = commentShort.HasLikedComment
+            };
+        }
         public static JObject ConvertToJson(this InstaStoryPollUpload poll)
         {
             var jArray = new JArray

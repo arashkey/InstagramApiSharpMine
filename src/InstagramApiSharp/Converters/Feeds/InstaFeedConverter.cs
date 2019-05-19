@@ -16,7 +16,11 @@ namespace InstagramApiSharp.Converters
             var feed = new InstaFeed
             {
                 MoreAvailable = SourceObject.MoreAvailable,
-                NextMaxId = SourceObject.NextMaxId
+                NextMaxId = SourceObject.NextMaxId,
+                ViewStateVersion = SourceObject.ViewStateVersion,
+                FeedPillText = SourceObject.FeedPillText,
+                ClientSessionId = SourceObject.ClientSessionId,
+                ClientFeedChangelistApplied = SourceObject.ClientFeedChangelistApplied ?? false
             };
             if (SourceObject.Items?.Count > 0)
                 foreach (var instaUserFeedItemResponse in SourceObject.Items)

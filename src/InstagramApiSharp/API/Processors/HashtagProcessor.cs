@@ -403,11 +403,10 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="query">Search query</param>
         /// <param name="excludeList">Array of numerical hashtag IDs (ie "17841562498105353") to exclude from the response, allowing you to skip tags from a previous call to get more results</param>
-        /// <param name="rankToken">The rank token from the previous page's response</param>
         /// <returns>
         ///     List of hashtags
         /// </returns>
-        public async Task<IResult<InstaHashtagSearch>> SearchHashtagAsync(string query, IEnumerable<long> excludeList, string rankToken)
+        public async Task<IResult<InstaHashtagSearch>> SearchHashtagAsync(string query, IEnumerable<long> excludeList)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var RequestHeaderFieldsTooLarge = (HttpStatusCode)431;
@@ -416,7 +415,7 @@ namespace InstagramApiSharp.API.Processors
 
             try
             {
-                var userUri = UriCreator.GetSearchTagUri(query, count, excludeList, rankToken);
+                var userUri = UriCreator.GetSearchTagUri(query, count, excludeList, _user.RankToken);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, userUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();

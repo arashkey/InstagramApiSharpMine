@@ -11,5 +11,7 @@
         public bool Following { get; set; }
         public bool NonViolating { get; set; }
         public bool AllowFollowing { get; set; }
+        public string FormattedMediaCount { get; set; }
+        public string SearchResultSubtitle { get; set; }
     }
 }

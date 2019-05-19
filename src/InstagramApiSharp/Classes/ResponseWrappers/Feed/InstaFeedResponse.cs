@@ -20,6 +20,10 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonIgnore]
         public List<InstaPostResponse> Posts { get; set; } = new List<InstaPostResponse>();
+        [JsonProperty("view_state_version")] public string ViewStateVersion { get; set; }
+        [JsonProperty("feed_pill_text")] public string FeedPillText { get; set; }
+        [JsonProperty("client_session_id")] public string ClientSessionId { get; set; }
+        [JsonProperty("client_feed_changelist_applied")] public bool? ClientFeedChangelistApplied { get; set; }
     }
     public class InstaPostResponse 
     {
@@ -31,6 +35,5 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public InstaAllCatchedUp EndOfFeedDemarcator { get; set; }
         public List<InstaHashtagMedia> Hashtags { get; set; } = new List<InstaHashtagMedia>();
         public InstaStoriesNetego StoriesNetego { get; set; }
-
     }
 }

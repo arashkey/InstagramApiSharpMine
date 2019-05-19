@@ -19,6 +19,10 @@ namespace InstagramApiSharp.Classes.Models
         public List<InstaSuggestionItem> SuggestedUserItems { get; set; } = new List<InstaSuggestionItem>();
 
         public List<InstaPost> Posts { get; set; } = new List<InstaPost>();
+        public string ViewStateVersion { get; set; }
+        public string FeedPillText { get; set; }
+        public string ClientSessionId { get; set; }
+        public bool ClientFeedChangelistApplied { get; set; }
     }
 
     

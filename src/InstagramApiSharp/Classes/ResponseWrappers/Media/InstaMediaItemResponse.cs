@@ -123,6 +123,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("unify_tag_display")] public bool? UnifyTagDisplay { get; set; }
         [JsonProperty("inline_composer_display_condition")] public string InlineComposerDisplayCondition { get; set; }
         [JsonProperty("inline_composer_imp_trigger_time")] public long? InlineComposerImpTriggerTime { get; set; }
+        [JsonProperty("top_likers")] public InstaMediaIdList TopLikers { get; set; }
 
     }
 }
