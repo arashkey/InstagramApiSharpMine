@@ -114,7 +114,10 @@ namespace InstagramApiSharp.API
         /// </summary>
         IWebProcessor WebProcessor { get; }
         IVideoCallProcessor VideoCallProcessor { get; }
-
+        /// <summary>
+        ///     Push notification helper processor
+        /// </summary>
+        IPushProcessor PushProcessor { get; }
         /// <summary>
         ///     Session handler
         /// </summary>

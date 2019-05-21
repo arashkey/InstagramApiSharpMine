@@ -554,6 +554,9 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
             device.DeviceGuid = Guid.NewGuid();
             device.DeviceId = ApiRequestMessage.GenerateDeviceIdFromGuid(device.DeviceGuid);
             device.PigeonSessionId = Guid.NewGuid();
+            device.PushDeviceGuid = Guid.NewGuid();
+            device.FamilyDeviceGuid = Guid.NewGuid();
+
             if (LastDevice != null)
                 if (device.DeviceId == LastDevice.DeviceId)
                     goto TryLabel;

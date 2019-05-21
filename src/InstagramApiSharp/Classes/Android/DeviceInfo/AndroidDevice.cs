@@ -11,6 +11,8 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         public Guid RankToken { get; set; } = Guid.NewGuid();
         public Guid AdId { get; set; } = Guid.NewGuid();
         public Guid PigeonSessionId { get; set; } = Guid.NewGuid();
+        public Guid PushDeviceGuid { get; set; } = Guid.NewGuid();
+        public Guid FamilyDeviceGuid { get; set; } = Guid.NewGuid();
 
         public AndroidVersion AndroidVer { get; set; } = AndroidVersion.GetRandomAndriodVersion();
 

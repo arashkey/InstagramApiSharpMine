@@ -101,6 +101,7 @@ namespace InstagramApiSharp.API
         IBusinessProcessor _businessProcessor;
         IShoppingProcessor _shoppingProcessor;
         IWebProcessor _webProcessor;
+        IPushProcessor _pushProcessor;
 
         /// <summary>
         ///     Live api functions.
@@ -173,6 +174,11 @@ namespace InstagramApiSharp.API
         /// </summary>
         public IWebProcessor WebProcessor => _webProcessor;
         public IVideoCallProcessor VideoCallProcessor => _videoCallProcessor;
+        /// <summary>
+        ///     Push notification helper processor
+        /// </summary>
+        public IPushProcessor PushProcessor => _pushProcessor;
+
         #endregion Processors
 
         #region Constructor
@@ -2952,6 +2958,7 @@ namespace InstagramApiSharp.API
             _shoppingProcessor = new ShoppingProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
             _webProcessor = new WebProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
             _videoCallProcessor = new VideoCallProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
+            _pushProcessor = new PushProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
 
         }
 

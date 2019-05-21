@@ -936,7 +936,7 @@ namespace InstagramApiSharp.Helpers
         public static Uri GetPushRegisterUri()
         {
             if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.PUSH_REGISTER), out var instaUri))
-                throw new Exception("Cant create URI for live heartbeat and get viewer count");
+                throw new Exception("Cant create URI for registering push notification");
             return instaUri;
         }
 

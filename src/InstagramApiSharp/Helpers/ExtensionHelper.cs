@@ -155,6 +155,17 @@ namespace InstagramApiSharp
 
             }
         }
+        public static string GetChannelDeviceType(this InstaPushChannelType type)
+        {
+            switch(type)
+            {
+                default:
+                case InstaPushChannelType.Mqtt:
+                    return "android_mqtt";
+                case InstaPushChannelType.Gcm:
+                    return "android_gcm";
+            }
+        }
         static Random Rnd = new Random();
         public static string GenerateRandomString(this int length)
         {

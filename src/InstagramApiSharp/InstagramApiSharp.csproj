@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452;netstandard1.3;uap10.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net46;netstandard1.3;uap10.0</TargetFrameworks>
     <VersionPrefix>2.0.0</VersionPrefix>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <AssemblyName>InstagramApiSharp</AssemblyName>
@@ -92,7 +92,7 @@ See example projects and wiki pages to find out how this library works.</Descrip
         <TargetFramework>netstandard2.0;netstandard1.3</TargetFramework>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-      <TargetFrameworks>netstandard2.0;net452;netstandard1.3;uap10.0</TargetFrameworks>
+      <TargetFrameworks>netstandard2.0;net46;netstandard1.3;uap10.0</TargetFrameworks>
     </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
@@ -107,7 +107,7 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <None Include="LICENSE.txt" Pack="true" Visible="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
   
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net452' OR  '$(TargetFramework)' == 'net471'">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' OR  '$(TargetFramework)' == 'net471'">
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
