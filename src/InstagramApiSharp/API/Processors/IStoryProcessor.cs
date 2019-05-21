@@ -12,17 +12,20 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IStoryProcessor
     {
+        /// <summary>
+        ///     Reply a photo to story
+        /// </summary>
+        /// <param name="image">Photo to send</param>
+        /// <param name="userId">User id/pk of story creator</param>
         Task<IResult<bool>> ReplyPhotoToStoryAsync(InstaImageUpload image, /*string storyMediaId,*/ long userId);
+        /// <summary>
+        ///     Reply a photo to story with progress
+        /// </summary>
+        /// <param name="progress">Progress</param>
+        /// <param name="image">Photo to send</param>
+        /// <param name="userId">User id/pk of story creator</param>
         Task<IResult<bool>> ReplyPhotoToStoryAsync(Action<InstaUploaderProgress> progress, InstaImageUpload image, 
             /*string storyMediaId,*/ long userId);
-
-
-
-
-
-
-
-
 
         /// <summary>
         ///     Respond to an story question
@@ -99,9 +102,13 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="highlightId">Highlight id (Get it from <see cref="IStoryProcessor.GetHighlightFeedsAsync(long)"/>)</param>
         Task<IResult<InstaHighlightSingleFeed>> GetHighlightMediasAsync(string highlightId);
 
+
         /// <summary>
         ///     Get user story feed with POST method requests (new API)
         /// </summary>
+        /// <param name="refresh">Refreshing?</param>
+        /// <param name="preloadedReelIds">Preloaded reel ids</param>
+        /// <returns></returns>
         Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(bool refresh = false, string[] preloadedReelIds = null);
 
         /// <summary>

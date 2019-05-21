@@ -10,7 +10,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Version>2.0.0.0</Version>
     <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <FileVersion>2.0.0.0</FileVersion>
@@ -38,7 +38,48 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
-    <PackageReleaseNotes>Pekh</PackageReleaseNotes>
+    <PackageReleaseNotes>v2.0.0
+- Updated to API Version 91.0.0.18.118 [api version and signature key]
+- [Add] SendVoiceAsync to MessagingProcessor
+- [Add] SendDirectAnimatedMediaAsync to MessagingProcessor
+- [Add] Giphy api (for animated media [gif files])
+- [Add] Pigeon to requests (requires to save the session after you logged in)
+- [Add] GZip compressor for some requests
+- [Add] LauncherSyncAsync (for logins)
+- [Add] DismissSuggestionAsync to DiscoverProcessor
+- [Add] ReportHashtagMediaAsync to HashtagProcessor
+- [Add] ExploreReportAsync to DiscoverProcessor
+- [Add] GetHashtagsPostsAsync to HashtagProcessor
+- [Add] GetUsersStoriesAsHighlightsAsync to StoryProcessor [for getting multiple users highlights/stories]
+- [Add] GetMutualFriendsOrSuggestionAsync to UserProcessor
+- [Add] GetBanyanSuggestionsAsync
+- [Add] GetStoryFeedWithPostMethodAsync to StoryProcessor
+- [Add] MarkMultipleStoriesAsSeenAsync to StoryProcessor
+- [Add] ReplyToStoryAsync [text message] to StoryProcessor
+- [Add] ReplyPhotoToStoryAsync to StoryProcessor
+- [Add] HideSearchEntityAsync to DiscoverProcessor
+- [Add] GetDynamicSearchesAsync to DiscoverProcessor
+- [Add] GetSuggestionDetailsAsync to UserProcessor
+- [Add] SearchPlacesAsync(string, PaginationParameters) to LocationProcessor
+- [Add] Some new properties to InstaDirectInboxThread class
+- [Add] Some new properties to InstaMedia class
+- [Add] Some new properties to InstaFeed class
+- [Add] InstaSectionMedia class
+- [Add] InstaPost class to UserTimeline response class
+- [Add] Url property to InstaMedia class
+- [Add] ChainingSuggestions property to InstaUserInfo class
+- [Update/Bugfix] SendDirectTextAsync
+- [Update] LogoutAsync
+- [Update] GetRecoveryOptionsAsync
+- [Update] SendRecoveryByEmailAsync
+- [Update] SendRecoveryByPhoneAsync
+- [Update] GetUserTimelineFeed
+- [Update] GetSecuritySettingsInfoAsync
+- [Update] TwoFactorEnableAsync
+- [Update] ShareStoryAsync
+- [Update] GetChainingUsersAsync
+- [Update] GetHighlightFeedsAsync
+- [Update] InstaHashtag class</PackageReleaseNotes>
     <Copyright>Ramtin Jokar</Copyright>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageTags>C#, Instagram, Insta, Client, Sharp, InstagramApiSharp, Client, Api, media, video, album, photo, igtv</PackageTags>

@@ -23,10 +23,27 @@ namespace InstagramApiSharp.API.Processors
         ///     Clear Recent searches
         /// </summary>
         Task<IResult<bool>> ClearRecentSearchsAsync();
-
+        /// <summary>
+        ///     Dismiss suggestions
+        /// </summary>
+        /// <param name="targetIdHashtagIdOrStoryId">Target id, hashtag id or story id</param>
+        /// <param name="type">Type of suggestions</param>
         Task<IResult<bool>> DismissSuggestionAsync(string targetIdHashtagIdOrStoryId, string type = "tag");
+        /// <summary>
+        ///     Report an media in Explore page
+        /// </summary>
+        /// <param name="userId">User Id/Pk (owner of the content)</param>
+        /// <param name="mediaId">Media Identifier</param>
+        /// <param name="exploreSourceToken">Explore source token (From <see cref="InstaMedia.ExploreSourceToken"/>)</param>
         Task<IResult<bool>> ExploreReportAsync(string userId, string mediaId, string exploreSourceToken);
+        /// <summary>
+        ///     Hide a search entity
+        /// </summary>
+        /// <param name="userId">User id/pk to hide</param>
         Task<IResult<bool>> HideSearchEntityAsync(long userId);
+        /// <summary>
+        ///     Get dynamic searches [supports hashtags and users]
+        /// </summary>
         Task<IResult<InstaDynamicSearch>> GetDynamicSearchesAsync();
         /// <summary>
         ///     Get discover user chaining list 

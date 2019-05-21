@@ -11,6 +11,10 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IUserProcessor
     {
+        /// <summary>
+        ///     Get mutual friends or suggestions for an specific id
+        /// </summary>
+        /// <param name="userId">User id/pk</param>
         Task<IResult<InstaMutualUsers>> GetMutualFriendsOrSuggestionAsync(long userId);
         /// <summary>
         ///     Accept user friendship requst.

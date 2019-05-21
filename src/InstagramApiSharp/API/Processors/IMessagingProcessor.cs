@@ -355,33 +355,49 @@ namespace InstagramApiSharp.API.Processors
 
         /// <summary>
         ///     Send voice to direct thread (single)
+        ///     <para>Only OGG or M4A files accepted by Instagram</para>
         /// </summary>
-        /// <param name="audio">Voice to upload</param>
+        /// <param name="audio">
+        ///     Voice to upload
+        ///     <para>Only OGG or M4A files accepted by Instagram</para>
+        /// </param>
         /// <param name="threadId">Thread id</param>
         /// <returns>Returns True is sent</returns>
         Task<IResult<bool>> SendDirectVoiceAsync(InstaAudioUpload audio, string threadId);
 
         /// <summary>
         ///     Send voice to direct thread (single) with progress
+        ///     <para>Only OGG or M4A files accepted by Instagram</para>
         /// </summary>
         /// <param name="progress">Progress action</param>
-        /// <param name="audio">Voice to upload</param>
+        /// <param name="audio">
+        ///     Voice to upload
+        ///     <para>Only OGG or M4A files accepted by Instagram</para>
+        /// </param>
         /// <param name="threadId">Thread id</param>
         /// <returns>Returns True is sent</returns>
         Task<IResult<bool>> SendDirectVoiceAsync(Action<InstaUploaderProgress> progress, InstaAudioUpload audio, string threadId);
 
         /// <summary>
         ///     Send video to user id (pk)
+        ///     <para>Only OGG or M4A files accepted by Instagram</para>
         /// </summary>
-        /// <param name="audio">Voice to upload</param>
+        /// <param name="audio">
+        ///     Voice to upload
+        ///     <para>Only OGG or M4A files accepted by Instagram</para>
+        /// </param>
         /// <param name="recipients">Recipients (user ids/pk)</param>
         Task<IResult<bool>> SendDirectVoiceToRecipientsAsync(InstaAudioUpload audio, params string[] recipients);
 
         /// <summary>
-        ///     Send voice to direct thread (single) with progress
+        ///     Send voice to user id (pk) with progress
+        ///     <para>Only OGG or M4A files accepted by Instagram</para>
         /// </summary>
         /// <param name="progress">Progress action</param>
-        /// <param name="audio">Voice to upload</param>
+        /// <param name="audio">
+        ///     Voice to upload
+        ///     <para>Only OGG or M4A files accepted by Instagram</para>
+        /// </param>
         /// <param name="recipients">Recipients (user ids/pk)</param>
         /// <returns>Returns True is sent</returns>
         Task<IResult<bool>> SendDirectVoiceToRecipientsAsync(Action<InstaUploaderProgress> progress, InstaAudioUpload audio, params string[] recipients);

@@ -3,7 +3,7 @@
  * 
  * Github source: https://github.com/ramtinak/InstagramApiSharp
  * Nuget package: https://www.nuget.org/packages/InstagramApiSharp
- * Update date: 01 October 2018
+ * Update date: 21 MAY 2019
  * IRANIAN DEVELOPERS
  */
 using InstagramApiSharp.API;
@@ -84,7 +84,7 @@ namespace ChallengeRequireExample
         // Verify sms or email verification code for login.
 
         const string AppName = "Challenge Required";
-        const string StateFile = "stateXXXXXXXXXXXXXXXX.bin";
+        const string StateFile = "state.bin";
         readonly Size NormalSize = new Size(432, 164);
         readonly Size ChallengeSize = new Size(432, 604);
         private static IInstaApi InstaApi;
@@ -97,8 +97,6 @@ namespace ChallengeRequireExample
         private void Form1_Load(object sender, EventArgs e)
         {
             Size = NormalSize;
-            txtUser.Text = "rmt4006";
-            txtPass.Text = "njpytop298";
         }
 
         private async void LoginButton_Click(object sender, EventArgs e)
@@ -109,15 +107,17 @@ namespace ChallengeRequireExample
                 UserName = txtUser.Text,
                 Password = txtPass.Text
             };
+            // Proxy part
             var proxy = new WebProxy()
             {
-                Address = new Uri($"http://5.56.133.24:1080"), //i.e: http://1.2.3.4.5:8080
-                                                               //BypassProxyOnLocal = false,
-                                                               //UseDefaultCredentials = false,
+                Address = new Uri($"http://1.2.3.4.5:8080"), //i.e: http://1.2.3.4.5:8080
+                //BypassProxyOnLocal = false,
+                //UseDefaultCredentials = false,
 
-                Credentials = new NetworkCredential(
-    userName: "rmt",
-    password: "0jokar")
+                //// Credentials if needed
+                //Credentials = new NetworkCredential(
+                //    userName: "rmt",
+                //    password: "0jokar")
             };
 
             // Now create a client handler which uses that proxy
@@ -125,23 +125,26 @@ namespace ChallengeRequireExample
             {
                 Proxy = proxy,
             };
+            // NOTE FOR PROXY: WEBPROXY class only supports HTTP proxies (not HTTPS)
+            // IF YOU NEED SOCKS OR HTTPS PROXIES, YOU NEED TO REFRENCE THESE PROJECT:
+            // https://github.com/MihaZupan/HttpToSocks5Proxy [SUPPORTS SOCKS5 PROXIES]
+            // https://github.com/Yozer/BetterHttpClient [SUPPORTS HTTPS/SOCKS PROXIES]
+            // a quick example:
+            // https://github.com/Yozer/BetterHttpClient/blob/1102325276fb2ee8b44cbc8d4974f85bbd63ba2f/UnitTestBetterHttpClient/UnitTestHttpClient.cs#L106-L152
+
             InstaApi = InstaApiBuilder.CreateBuilder()
                 .SetUser(userSession)
-                .UseHttpClientHandler(httpClientHandler)
                 .UseLogger(new DebugLogger(LogLevel.All))
                 .SetRequestDelay(RequestDelay.FromSeconds(0, 1))
                 // Session handler, set a file path to save/load your state/session data
-                .SetSessionHandler(new FileSessionHandler() {FilePath =  StateFile })
+                .SetSessionHandler(new FileSessionHandler { FilePath =  StateFile })
+
+                //// Setting up proxy if you needed
+                //.UseHttpClientHandler(httpClientHandler)
                 .Build();
             Text = $"{AppName} Connecting";
             //Load session
             LoadSession();
-
-
-
-            var abc = InstaApi.GetLoggedUser();
-            var pr = InstaApi.HttpRequestProcessor;
-
 
             if (!InstaApi.IsUserAuthenticated)
             {
@@ -465,7 +468,7 @@ namespace ChallengeRequireExample
                 return;
             if (!InstaApi.IsUserAuthenticated)
                 return;
-            InstaApi.SessionHandler.Save();
+            InstaApi.SessionHandler?.Save();
 
             //// Old save session 
             //var state = InstaApi.GetStateDataAsStream();

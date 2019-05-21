@@ -45,7 +45,7 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Pagination nadare, koskhol bazi dar nayaria
         /// </summary>
-        public async Task<IResult<InstaHashtagSearch>> GetPostsHashtagsAsync(string mediaId)
+        public async Task<IResult<InstaHashtagSearch>> GetHashtagsPostsAsync(string mediaId)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var tags = new InstaHashtagSearch();

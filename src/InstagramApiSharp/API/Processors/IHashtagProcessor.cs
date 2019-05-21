@@ -12,9 +12,10 @@ namespace InstagramApiSharp.API.Processors
     {
 
         /// <summary>
-        ///     Pagination nadare, koskhol bazi dar nayaria
+        ///     Get Hashtags posts
         /// </summary>
-        Task<IResult<InstaHashtagSearch>> GetPostsHashtagsAsync(string mediaId);
+        /// <param name="mediaId">Media Identifier</param>
+        Task<IResult<InstaHashtagSearch>> GetHashtagsPostsAsync(string mediaId);
 
         /// <summary>
         ///     Follow a hashtag
@@ -75,7 +76,12 @@ namespace InstagramApiSharp.API.Processors
         ///     List of hashtags
         /// </returns>
         Task<IResult<InstaHashtagSearch>> SearchHashtagAsync(string query, IEnumerable<long> excludeList = null);
-
+        /// <summary>
+        ///     Report an hashtag media
+        /// </summary>
+        /// <param name="tagname">Tag name</param>
+        /// <param name="hashtagId">Tag Id</param>
+        /// <param name="mediaId">Media identifier</param>
         Task<IResult<bool>> ReportHashtagMediaAsync(string tagname, string hashtagId, string mediaId);
         /// <summary>
         ///     Unfollow a hashtag
