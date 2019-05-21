@@ -12,7 +12,7 @@ namespace InstagramApiSharp.Enums
     public enum InstaApiVersionType
     {
         /// <summary>
-        ///     Default api version. v44.0.0.9.93 => No more consent required error.
+        ///     v44.0.0.9.93 => No more consent required error.
         /// </summary>
         Version44 = 0,
         /// <summary>
@@ -59,6 +59,10 @@ namespace InstagramApiSharp.Enums
         ///     Api version 91.0.0.18.118
         /// </summary>
         Version91 = 11,
+        /// <summary>
+        ///     Api version 94.0.0.22.116
+        /// </summary>
+        Version94 = 12,
 
     }
 }
