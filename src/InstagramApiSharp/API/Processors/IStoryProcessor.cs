@@ -28,6 +28,14 @@ namespace InstagramApiSharp.API.Processors
             /*string storyMediaId,*/ long userId);
 
         /// <summary>
+        ///     Answer to an story quiz
+        /// </summary>
+        /// <param name="storyPk">Story pk (<see cref="InstaStoryItem.Pk"/>)</param>
+        /// <param name="quizId">Quiz id (<see cref="InstaStoryQuizParticipant.QuizId"/>)</param>
+        /// <param name="answer">Your answer</param>
+        Task<IResult<bool>> AnswerToStoryQuizAsync(long storyPk, long quizId, int answer);
+
+        /// <summary>
         ///     Respond to an story question
         /// </summary>
         /// <param name="storyId">Story id (<see cref="InstaStoryItem.Id"/>)</param>

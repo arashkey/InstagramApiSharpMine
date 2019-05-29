@@ -2429,5 +2429,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for fbsearch dynamic search");
             return instaUri;
         }
+        public static Uri GetAnswerToStoryQuizUri(long storyItemPk, long quizId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.STORY_QUIZ_ANSWER, storyItemPk, quizId), out var instaUri))
+                throw new Exception("Cant create URI for answer to quiz");
+            return instaUri;
+        }
     }
 }
