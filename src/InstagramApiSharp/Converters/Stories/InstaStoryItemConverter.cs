@@ -136,6 +136,14 @@ namespace InstagramApiSharp.Converters
                 foreach (var countdown in SourceObject.Countdowns)
                     instaStory.Countdowns.Add(ConvertersFabric.Instance.GetStoryCountdownItemConverter(countdown).Convert());
 
+            if (SourceObject.StoryQuizs?.Count > 0)
+                foreach (var quiz in SourceObject.StoryQuizs)
+                    instaStory.StoryQuizs.Add(ConvertersFabric.Instance.GetStoryQuizItemConverter(quiz).Convert());
+
+            if (SourceObject.StoryQuizsParticipantInfos?.Count > 0)
+                foreach (var participant in SourceObject.StoryQuizsParticipantInfos)
+                    instaStory.StoryQuizsParticipantInfos.Add(ConvertersFabric.Instance.GetStoryQuizParticipantConverter(participant).Convert());
+
             return instaStory;
         }
     }

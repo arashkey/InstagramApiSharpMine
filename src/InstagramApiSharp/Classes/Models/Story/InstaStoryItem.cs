@@ -124,5 +124,9 @@ namespace InstagramApiSharp.Classes.Models
         public List<InstaStoryCountdownItem> Countdowns { get; set; } = new List<InstaStoryCountdownItem>();
 
         public bool CanReply { get; set; }
+
+        public List<InstaStoryQuizItem> StoryQuizs { get; set; } = new List<InstaStoryQuizItem>();
+
+        public List<InstaStoryQuizParticipant> StoryQuizsParticipantInfos { get; set; } = new List<InstaStoryQuizParticipant>();
     }
 }

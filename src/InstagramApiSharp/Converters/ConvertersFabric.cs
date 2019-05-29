@@ -1009,5 +1009,23 @@ namespace InstagramApiSharp.Converters
         {
             return new InstaDynamicSearchConverter { SourceObject = response };
         }
+
+        public IObjectConverter<InstaStoryQuizItem, InstaStoryQuizItemResponse> GetStoryQuizItemConverter(
+            InstaStoryQuizItemResponse response)
+        {
+            return new InstaStoryQuizItemConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaStoryQuizStickerItem, InstaStoryQuizStickerItemResponse> GetStoryQuizStickerItemConverter(
+            InstaStoryQuizStickerItemResponse response)
+        {
+            return new InstaStoryQuizStickerItemConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaStoryQuizParticipant, InstaStoryQuizParticipantResponse> GetStoryQuizParticipantConverter(
+            InstaStoryQuizParticipantResponse response)
+        {
+            return new InstaStoryQuizParticipantConverter { SourceObject = response };
+        }
     }
 }
