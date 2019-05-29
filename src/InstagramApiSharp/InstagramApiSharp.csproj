@@ -11,9 +11,9 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.0.1.0</Version>
-    <AssemblyVersion>2.0.1.0</AssemblyVersion>
-    <FileVersion>2.0.1.0</FileVersion>
+    <Version>2.0.2.0</Version>
+    <AssemblyVersion>2.0.2.0</AssemblyVersion>
+    <FileVersion>2.0.2.0</FileVersion>
     <Description>A complete Private Instagram API for .NET.
 
 
@@ -38,7 +38,16 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
-    <PackageReleaseNotes>v2.0.0
+    <PackageReleaseNotes>v2.0.2
+- [Add] support for StoryQuiz in InstaStoryItem class
+- [Add] support for StoryQuizsParticipantInfos in InstaStoryItem class
+- [Add] support StoryQuiz in InstaStoryUploadOptions class for uploading
+- [Add] AnswerToStoryQuizAsync to StoryProcessor
+
+v2.0.1
+- API Version updated to 94.0.0.22.116
+
+v2.0.0
 - Updated to API Version 91.0.0.18.118 [api version and signature key]
 - [Add] SendVoiceAsync to MessagingProcessor
 - [Add] SendDirectAnimatedMediaAsync to MessagingProcessor
