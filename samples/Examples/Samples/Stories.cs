@@ -35,7 +35,7 @@ namespace Examples.Samples
                 Console.WriteLine($"User: {feedItem.User.FullName}");
                 foreach (var item in feedItem.Items)
                     Console.WriteLine(
-                        $"Story item: {item.Caption?.Text ?? item.Code}, images:{item.ImageList?.Count ?? 0}, videos: {item.VideoList?.Count ?? 0}");
+                        $"Story item: {item.Caption?.Text ?? item.Code}, images:{item.Images?.Count ?? 0}, videos: {item.Videos?.Count ?? 0}");
             }
         }
 
@@ -136,6 +136,35 @@ namespace Examples.Samples
                 BackgroundColor = "#ffffff", // #ffffff is white
                 TextColor = "#000000" // #000000 is black
             });
+
+
+            // Add quiz 
+            var quiz = new InstaStoryQuizUpload
+            {
+                X = 0.5, // center of image
+                Y = 0.5, // center of image
+                Z = 0,
+                Width = 0.3148148,
+                Height = 0.110367894,
+                Rotation = 0,
+                Question = "Who is better?" // Question
+            };
+            // At least 2 answer is required, maximum answers is 4.
+            // First Answer
+            quiz.Options.Add(new InstaStoryQuizAnswer
+            {
+                Text = "Me" 
+            });
+            // Second Answer
+            quiz.Options.Add(new InstaStoryQuizAnswer
+            {
+                Text = "Myself" // for example, this is my question's answer
+            });
+            quiz.CorrectAnswer = 1; // Set correct answer.
+            storyOptions.StoryQuiz = quiz; // Sets quiz
+
+
+
 
             var image = new InstaImage { Uri = @"c:\someawesomepicture.jpg" };
 
