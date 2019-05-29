@@ -1027,5 +1027,11 @@ namespace InstagramApiSharp.Converters
         {
             return new InstaStoryQuizParticipantConverter { SourceObject = response };
         }
+
+        public IObjectConverter<InstaStoryQuizAnswer, InstaStoryQuizAnswerResponse> GetStoryQuizAnswerConverter(
+            InstaStoryQuizAnswerResponse response)
+        {
+            return new InstaStoryQuizAnswerConverter { SourceObject = response };
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace InstagramApiSharp.Classes.Models
     {
         public long QuizId { get; set; }
 
-        public List<InstaStoryVoterItem> Participants { get; set; } = new List<InstaStoryVoterItem>();
+        public List<InstaStoryQuizAnswer> Participants { get; set; } = new List<InstaStoryQuizAnswer>();
 
         public string MaxId { get; set; }
 

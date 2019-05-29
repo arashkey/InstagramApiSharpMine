@@ -1881,7 +1881,8 @@ namespace InstagramApiSharp.API.Processors
                     {"edits", new JObject()},
                     {"disable_comments", false},
                     {"configure_mode", 1},
-                    {"camera_position", "unknown"}
+                    {"camera_position", "unknown"},
+                    {"allow_multi_configures", "1"},
                 };
                 if (uri != null)
                 {
@@ -1977,6 +1978,16 @@ namespace InstagramApiSharp.API.Processors
 
                         data.Add("story_countdowns", countdownArr.ToString(Formatting.None));
                         data.Add("story_sticker_ids", "countdown_sticker_time");
+                    }
+                    if (uploadOptions.StoryQuiz != null)
+                    {
+                        var storyQuizArr = new JArray
+                        {
+                            uploadOptions.StoryQuiz.ConvertToJson()
+                        };
+
+                        data.Add("story_quizs", storyQuizArr.ToString(Formatting.None));
+                        data.Add("story_sticker_ids", "quiz_story_sticker_default");
                     }
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
@@ -2142,6 +2153,16 @@ namespace InstagramApiSharp.API.Processors
 
                         data.Add("story_countdowns", countdownArr.ToString(Formatting.None));
                         data.Add("story_sticker_ids", "countdown_sticker_time");
+                    }
+                    if (uploadOptions.StoryQuiz != null)
+                    {
+                        var storyQuizArr = new JArray
+                        {
+                            uploadOptions.StoryQuiz.ConvertToJson()
+                        };
+
+                        data.Add("story_quizs", storyQuizArr.ToString(Formatting.None));
+                        data.Add("story_sticker_ids", "quiz_story_sticker_default");
                     }
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);

@@ -19,7 +19,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("quiz_id")]
         public long QuizId { get; set; }
         [JsonProperty("participants")]
-        public List<InstaStoryVoterItemResponse> Participants { get; set; }
+        public List<InstaStoryQuizAnswerResponse> Participants { get; set; }
         [JsonProperty("max_id")]
         public string MaxId { get; set; }
         [JsonProperty("more_available")]

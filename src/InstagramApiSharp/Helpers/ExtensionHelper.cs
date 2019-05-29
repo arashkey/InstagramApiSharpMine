@@ -361,5 +361,36 @@ namespace InstagramApiSharp
                 {"is_sticker", countdown.IsSticker}
             };
         }
+
+        public static JObject ConvertToJson(this InstaStoryQuizUpload quiz)
+        {
+            var answers = new JArray();
+            if (quiz.Options?.Count > 0)
+                foreach (var item in quiz.Options)
+                    answers.Add(new JObject
+                    {
+                        {"text", item.Text},
+                        {"count", item.Count}
+                    });
+
+            return new JObject
+            {
+                {"x", quiz.X},
+                {"y", quiz.Y},
+                {"z", quiz.Z},
+                {"width", quiz.Width},
+                {"height", quiz.Height},
+                {"rotation", quiz.Rotation},
+                {"question", quiz.Question},
+                {"options", answers},
+                {"correct_answer", quiz.CorrectAnswer},
+                {"viewer_can_answer", quiz.ViewerCanAnswer},
+                {"viewer_answer", quiz.ViewerAnswer},
+                {"text_color", quiz.TextColor},
+                {"start_background_color", quiz.StartBackgroundColor},
+                {"end_background_color", quiz.EndBackgroundColor},
+                {"is_sticker", quiz.IsSticker},
+            };
+        }
     }
 }

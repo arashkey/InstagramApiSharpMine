@@ -733,6 +733,16 @@ namespace InstagramApiSharp.API.Processors
                                 data.Add("story_countdowns", countdownArr.ToString(Formatting.None));
                                 data.Add("story_sticker_ids", "countdown_sticker_time");
                             }
+                            if (uploadOptions.StoryQuiz != null)
+                            {
+                                var storyQuizArr = new JArray
+                                {
+                                    uploadOptions.StoryQuiz.ConvertToJson()
+                                };
+
+                                data.Add("story_quizs", storyQuizArr.ToString(Formatting.None));
+                                data.Add("story_sticker_ids", "quiz_story_sticker_default");
+                            }
                         }
                     }
                     instaUri = UriCreator.GetVideoStoryConfigureUri(true);

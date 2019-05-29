@@ -403,6 +403,35 @@ namespace ChallengeRequireExample
                 MessageBox.Show("Login first.");
                 return;
             }
+
+            var storyOptions = new InstaStoryUploadOptions();
+            // Add hashtag
+            var quiz = new InstaStoryQuizUpload
+            {
+                X = 0.5, // center of image
+                Y = 0.5, // center of image
+                Z = 0,
+                Width = 0.3148148,
+                Height = 0.110367894,
+                Rotation = 0,
+                Question = "Who is better?"
+            };
+            // at least 2 answer required, maximum answers is 4.
+            quiz.Options.Add(new InstaStoryQuizAnswer
+            {
+                Text = "Me"
+            });
+            quiz.Options.Add(new InstaStoryQuizAnswer
+            {
+                Text = "Myself" // for example, this is my question's answer
+            });
+            quiz.CorrectAnswer = 1;
+            storyOptions.StoryQuiz = quiz;
+            var image = new InstaImage { Uri = @"F:\3.jpg" };
+
+            var resultX = await InstaApi.StoryProcessor.UploadStoryPhotoAsync(image, "aaa", storyOptions);
+
+            return;
             var x = await InstaApi.FeedProcessor.GetExploreFeedAsync(PaginationParameters.MaxPagesToLoad(1));
 
             if (x.Succeeded == false)
