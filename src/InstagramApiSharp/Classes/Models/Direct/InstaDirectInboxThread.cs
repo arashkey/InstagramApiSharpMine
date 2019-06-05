@@ -37,7 +37,7 @@ namespace InstagramApiSharp.Classes.Models
 
         public InstaDirectThreadType ThreadType { get; set; }
 
-        public List<InstaDirectInboxItem> Items { get; set; }
+        public List<InstaDirectInboxItem> Items { get; set; } = new List<InstaDirectInboxItem>();
         
         public InstaDirectInboxItem LastPermanentItem { get; set; }
 

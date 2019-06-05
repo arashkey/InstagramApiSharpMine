@@ -43,7 +43,7 @@ namespace InstagramApiSharp.Classes.Models
 
         public InstaUserShort ProfileMedia { get; set; }
 
-        public List<InstaMedia> ProfileMediasPreview { get; set; }
+        public List<InstaMedia> PreviewMedias { get; set; } = new List<InstaMedia>();
 
         public InstaPlaceholder Placeholder { get; set; }
 

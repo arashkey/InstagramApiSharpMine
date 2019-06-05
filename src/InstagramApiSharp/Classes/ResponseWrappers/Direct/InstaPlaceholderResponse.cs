@@ -5,5 +5,6 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
     {
         [JsonProperty("is_linked")] public bool IsLinked { get; set; }
         [JsonProperty("message")] public string Message { get; set; }
+        [JsonProperty("title")] public string Title { get; set; }
     }
 }

@@ -28,6 +28,13 @@ namespace InstagramApiSharp.Converters
             if (Enum.TryParse(truncatedItemType, true, out InstaDirectThreadItemType type))
                 threadItem.ItemType = type;
 
+            try
+            {
+                if (SourceObject.PreviewMedias?.Count > 0)
+                    foreach (var item in SourceObject.PreviewMedias)
+                        threadItem.PreviewMedias.Add(ConvertersFabric.Instance.GetSingleMediaConverter(item).Convert());
+            }
+            catch { }
             if (threadItem.ItemType == InstaDirectThreadItemType.Link && SourceObject.Link != null)
             {
                 threadItem.Text = SourceObject.Link.Text;
@@ -136,25 +143,14 @@ namespace InstagramApiSharp.Converters
             {
                 var converter = ConvertersFabric.Instance.GetUserShortConverter(SourceObject.ProfileMedia);
                 threadItem.ProfileMedia = converter.Convert();
-                if (SourceObject.ProfileMediasPreview != null && SourceObject.ProfileMediasPreview.Any())
-                {
-                    try
-                    {
-                        var previewMedias = new List<InstaMedia>();
-                        foreach (var item in SourceObject.ProfileMediasPreview)
-                            previewMedias.Add(ConvertersFabric.Instance.GetSingleMediaConverter(item).Convert());
-
-                        threadItem.ProfileMediasPreview = previewMedias;
-                    }
-                    catch { }
-                }
             }
             else if (threadItem.ItemType == InstaDirectThreadItemType.Placeholder && SourceObject.Placeholder != null)
             {
                 threadItem.Placeholder = new InstaPlaceholder
                 {
                     IsLinked = SourceObject.Placeholder.IsLinked,
-                    Message = SourceObject.Placeholder.Message
+                    Message = SourceObject.Placeholder.Message,
+                    Title = SourceObject.Placeholder.Title
                 };
             }
             else if (threadItem.ItemType == InstaDirectThreadItemType.Location && SourceObject.LocationMedia != null)
@@ -184,6 +180,7 @@ namespace InstagramApiSharp.Converters
                     threadItem.LocationMedia.FacebookPlacesId = SourceObject.LocationMedia.FacebookPlacesId;
                     threadItem.LocationMedia.Lat = SourceObject.LocationMedia.Lat;
                     threadItem.LocationMedia.Lng = SourceObject.LocationMedia.Lng;
+
                 }
                 catch { }
             }
