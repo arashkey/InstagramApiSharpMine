@@ -1192,11 +1192,10 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadIds">Message thread ids</param>
         /// <param name="text">Message text</param>
         /// <returns>List of threads</returns>
-        public async Task<IResult<InstaDirectInboxThreadList>> SendDirectTextAsync(string recipients, string threadIds,
+        public async Task<IResult<bool>> SendDirectTextAsync(string recipients, string threadIds,
             string text)
         {
             UserAuthValidator.Validate(_userAuthValidate);
-            var threads = new InstaDirectInboxThreadList();
             try
             {
                 var directSendMessageUri = UriCreator.GetDirectSendMessageUri();
@@ -1225,22 +1224,20 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
-                    return Result.UnExpectedResponse<InstaDirectInboxThreadList>(response, json);
-                var result = JsonConvert.DeserializeObject<InstaSendDirectMessageResponse>(json);
-                if (!result.IsOk()) return Result.Fail<InstaDirectInboxThreadList>(result.Status);
-                threads.AddRange(result.Threads.Select(thread =>
-                    ConvertersFabric.Instance.GetDirectThreadConverter(thread).Convert()));
-                return Result.Success(threads);
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var result = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+               
+                return result.IsSucceed ? Result.Success(true) : Result.Fail<bool>(result.Status);
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaDirectInboxThreadList), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaDirectInboxThreadList>(exception);
+                return Result.Fail<bool>(exception);
             }
         }
 
