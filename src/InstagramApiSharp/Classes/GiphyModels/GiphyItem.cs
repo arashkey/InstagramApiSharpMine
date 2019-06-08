@@ -77,6 +77,10 @@ namespace InstagramApiSharp.Classes
     {
         [JsonProperty("original")]
         public GiphyFile Original { get; set; }
+        [JsonProperty("fixed_height")]
+        public GiphyFile FixedHeight { get; set; }
+        [JsonProperty("fixed_width")]
+        public GiphyFile FixedWidth { get; set; }
     }
 
     public class GiphyFile
