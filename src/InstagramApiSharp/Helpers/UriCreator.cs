@@ -488,10 +488,17 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetDirectConfigVideoUri()
+        public static Uri GetDirectConfigureVideoUri()
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DIRECT_BROADCAST_CONFIGURE_VIDEO, out var instaUri))
                 throw new Exception("Cant create URI for direct config video");
+            return instaUri;
+        }
+
+        public static Uri GetDirectConfigurePhotoUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DIRECT_BROADCAST_CONFIGURE_PHOTO, out var instaUri))
+                throw new Exception("Cant create URI for direct config photo");
             return instaUri;
         }
 

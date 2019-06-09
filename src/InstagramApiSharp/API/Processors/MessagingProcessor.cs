@@ -1682,7 +1682,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<bool>(exception);
             }
         }
-        private async Task<IResult<bool>> SendDirectPhoto(Action<InstaUploaderProgress> progress, string recipients, string threadId, InstaImage image)
+        private async Task<IResult<bool>> SendDirectPhoto(Action<InstaUploaderProgress> progress, string recipients, string threadIds, InstaImage image)
         {
             var upProgress = new InstaUploaderProgress
             {
@@ -1691,56 +1691,51 @@ namespace InstagramApiSharp.API.Processors
             };
             try
             {
-                var instaUri = UriCreator.GetDirectSendPhotoUri();
+             
                 var uploadId = ApiRequestMessage.GenerateRandomUploadId();
                 var clientContext = Guid.NewGuid();
                 upProgress.UploadId = uploadId;
                 progress?.Invoke(upProgress);
-                var requestContent = new MultipartFormDataContent(uploadId)
+                var singlePhoto = await _instaApi.HelperProcessor.UploadSinglePhoto(progress, image.ConvertToImageUpload(),
+                    upProgress, uploadId, false, recipients);
+
+                var instaUri = UriCreator.GetDirectConfigurePhotoUri();
+                var data = new Dictionary<string, string>
                 {
-                    {new StringContent("send_item"), "\"action\""},
-                    {new StringContent(clientContext.ToString()), "\"client_context\""},
-                    {new StringContent(_user.CsrfToken), "\"_csrftoken\""},
-                    {new StringContent(_deviceInfo.DeviceGuid.ToString()), "\"_uuid\""}
+                    {"action", "send_item"},
+                    {"client_context", Guid.NewGuid().ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"mutation_token", Guid.NewGuid().ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"allow_full_aspect_ratio", "true"},
+                    {"upload_id", uploadId},
                 };
-                if (!string.IsNullOrEmpty(recipients))
-                    requestContent.Add(new StringContent($"[[{recipients}]]"), "recipient_users");
-                else
-                    requestContent.Add(new StringContent($"[{threadId}]"), "thread_ids");
-                byte[] fileBytes;
-                if (image.ImageBytes == null)
-                    fileBytes = File.ReadAllBytes(image.Uri);
-                else
-                    fileBytes = image.ImageBytes;
-                var imageContent = new ByteArrayContent(fileBytes);
-                imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
-                imageContent.Headers.Add("Content-Type", "application/octet-stream");
-                requestContent.Add(imageContent, "photo",
-                    $"direct_temp_photo_{ApiRequestMessage.GenerateUploadId()}.jpg");
-                //var progressContent = new ProgressableStreamContent(requestContent, 4096, progress)
-                //{
-                //    UploaderProgress = upProgress
-                //};
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
-                request.Content = requestContent;
-                upProgress.UploadState = InstaUploadState.Uploading;
+                if (!string.IsNullOrEmpty(threadIds))
+                    data.Add("thread_ids", $"[{threadIds}]");
+                else if (!string.IsNullOrEmpty(recipients))
+                    data.Add("recipient_users", $"[[{recipients}]]");
+
+                upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode != HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    upProgress.UploadState = InstaUploadState.Error;
-                    progress?.Invoke(upProgress);
-                    return Result.UnExpectedResponse<bool>(response, json);
-                }
-                upProgress.UploadState = InstaUploadState.Uploaded;
-                progress?.Invoke(upProgress);
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                if (obj.Status.ToLower() == "ok")
-                {
-                    upProgress.UploadState = InstaUploadState.Completed;
-                    progress?.Invoke(upProgress);
-                    return Result.Success(true);
+                    var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+
+                    if (obj.IsSucceed)
+                    {
+                        upProgress.UploadState = InstaUploadState.Configured;
+                        progress?.Invoke(upProgress);
+                    }
+                    else
+                    {
+                        upProgress.UploadState = InstaUploadState.Completed;
+                        progress?.Invoke(upProgress);
+                    }
+                    return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
                 }
 
                 upProgress.UploadState = InstaUploadState.Error;

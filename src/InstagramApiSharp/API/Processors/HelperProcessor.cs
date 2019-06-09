@@ -539,7 +539,7 @@ namespace InstagramApiSharp.API.Processors
             {
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
-                var instaUri = UriCreator.GetDirectConfigVideoUri();
+                var instaUri = UriCreator.GetDirectConfigureVideoUri();
                 var retryContext = GetRetryContext();
                 var clientContext = Guid.NewGuid().ToString();
                 
@@ -559,7 +559,7 @@ namespace InstagramApiSharp.API.Processors
                     else
                         data.Add("thread_ids", $"[{threadId}]");
 
-                    instaUri = UriCreator.GetDirectConfigVideoUri();
+                    instaUri = UriCreator.GetDirectConfigureVideoUri();
                     var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
                     request.Content = new FormUrlEncodedContent(data);
                     request.Headers.Add("retry_context", retryContext);
@@ -904,7 +904,7 @@ namespace InstagramApiSharp.API.Processors
 
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
-                var instaUri = UriCreator.GetDirectConfigVideoUri();
+                var instaUri = UriCreator.GetDirectConfigureVideoUri();
                 var retryContext = GetRetryContext();
                 var clientContext = Guid.NewGuid().ToString();
 
