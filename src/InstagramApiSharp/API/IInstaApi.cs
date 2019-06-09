@@ -35,6 +35,10 @@ namespace InstagramApiSharp.API
     {
         #region Properties
         /// <summary>
+        ///     Get HttpHelper class
+        /// </summary>
+        HttpHelper HttpHelper { get; }
+        /// <summary>
         ///     Current <see cref="IHttpRequestProcessor"/>
         /// </summary>
         IHttpRequestProcessor HttpRequestProcessor { get; }

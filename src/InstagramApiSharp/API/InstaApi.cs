@@ -44,6 +44,7 @@ namespace InstagramApiSharp.API
         private InstaTwoFactorLoginInfo _twoFactorInfo;
         private InstaChallengeLoginInfo _challengeinfo;
         private UserSessionData _userSession;
+        public HttpHelper HttpHelper => _httpHelper;
         private UserSessionData _user
         {
             get { return _userSession; }

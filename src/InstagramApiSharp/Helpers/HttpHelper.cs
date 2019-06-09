@@ -16,7 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace InstagramApiSharp.Helpers
 {
-    internal class HttpHelper
+    public class HttpHelper
     {
         public /*readonly*/ InstaApiVersion _apiVersion;
         internal HttpHelper(InstaApiVersion apiVersionType)
