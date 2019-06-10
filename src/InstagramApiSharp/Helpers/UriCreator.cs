@@ -1627,13 +1627,11 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetUserFeedUri(string maxId = "")
+        public static Uri GetUserFeedUri()
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.TIMELINEFEED, out var instaUri))
                 throw new Exception("Cant create timeline feed URI");
-            return !string.IsNullOrEmpty(maxId)
-                ? new UriBuilder(instaUri) { Query = $"max_id={maxId}" }.Uri
-                : instaUri;
+            return instaUri;
         }
 
         public static Uri GetUserFollowersUri(long userPk, string rankToken, string searchQuery, bool mutualsfirst = false, string maxId = "")

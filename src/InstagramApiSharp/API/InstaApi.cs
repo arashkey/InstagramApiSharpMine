@@ -216,7 +216,7 @@ namespace InstagramApiSharp.API
                 if (_waterfallIdReg == null || useNewWaterfall)
                     _waterfallIdReg = Guid.NewGuid().ToString();
 
-                await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                await GetToken();
                 var cookies =
                     _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                     .BaseAddress);
@@ -281,7 +281,7 @@ namespace InstagramApiSharp.API
             {
                 _deviceIdReg = ApiRequestMessage.GenerateDeviceId();
 
-                await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                await GetToken();
                 var cookies =
                     _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                     .BaseAddress);
@@ -674,7 +674,7 @@ namespace InstagramApiSharp.API
                 if (delay == null)
                     delay = TimeSpan.FromSeconds(2.5);
 
-                await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                await GetToken();
                 var cookies =
                         _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                         .BaseAddress);
@@ -772,7 +772,7 @@ namespace InstagramApiSharp.API
                 var _phoneIdReg = Guid.NewGuid().ToString();
                 var _waterfallIdReg = Guid.NewGuid().ToString();
                 var _guidReg = Guid.NewGuid().ToString();
-                await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                await GetToken();
 
                 var cookies =
                     _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
@@ -933,8 +933,8 @@ namespace InstagramApiSharp.API
             {
                 bool needsRelogin = false;
                 ReloginLabel:
-                if (isNewLogin)
-                    await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                //if (isNewLogin)
+                //    await GetToken();
                 var cookies =
                     _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                         .BaseAddress);
@@ -1267,7 +1267,7 @@ namespace InstagramApiSharp.API
                     csrfToken = _user.CsrfToken;
                 else
                 {
-                    await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                    await GetToken();
                     var cookies =
                         _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                             .BaseAddress);
@@ -1345,7 +1345,7 @@ namespace InstagramApiSharp.API
                     token = _user.CsrfToken;
                 else
                 {
-                    await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                    await GetToken();
                     var cookies =
                         _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                             .BaseAddress);
@@ -1401,7 +1401,7 @@ namespace InstagramApiSharp.API
                     token = _user.CsrfToken;
                 else
                 {
-                    await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                    await GetToken();
                     var cookies =
                         _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                             .BaseAddress);
@@ -1869,6 +1869,14 @@ namespace InstagramApiSharp.API
         }
         #endregion Challenge part
 
+        internal async Task GetToken(bool fromBaseUri = true)
+        {
+            try
+            {
+                await _httpRequestProcessor.SendAsync(_httpHelper.GetDefaultRequest(HttpMethod.Get, !fromBaseUri ? UriCreator.GetLoginUri() : _httpRequestProcessor.Client.BaseAddress , _deviceInfo));
+            }
+            catch { }
+        }
         #endregion Authentication and challenge functions
 
         #region ORIGINAL FACEBOOK LOGIN
@@ -1897,7 +1905,7 @@ namespace InstagramApiSharp.API
             try
             {
                 if (newToken)
-                    await _httpRequestProcessor.GetAsync(_httpRequestProcessor.Client.BaseAddress);
+                    await GetToken();
                 else
                     System.Diagnostics.Debug.WriteLine("--------------------RELOGIN-------------------------");
                 var cookies =
