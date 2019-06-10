@@ -111,6 +111,13 @@ Public Class Form1
         LoadSession()
 
         If Not InstaApi.IsUserAuthenticated Then
+
+            ' Send requests for login flows (contact prefill, read msisdn header, launcher sync And qe sync)
+            ' Note 1: You should call this function before you calling IInstaApi.LoginAsync(), if you want your account act Like original instagram app.
+            ' Note 2: One call per one account! No need to call while you are loading a session
+            Await InstaApi.SendRequestsBeforeLoginAsync()
+
+
             Dim logInResult = Await InstaApi.LoginAsync()
             Debug.WriteLine(logInResult.Value)
             If logInResult.Succeeded Then

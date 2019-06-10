@@ -148,6 +148,13 @@ namespace ChallengeRequireExample
 
             if (!InstaApi.IsUserAuthenticated)
             {
+
+                // Send requests for login flows (contact prefill, read msisdn header, launcher sync and qe sync)
+                // Note 1: You should call this function before you calling IInstaApi.LoginAsync(), if you want your account act like original instagram app.
+                // Note 2: One call per one account! No need to call while you are loading a session
+                await InstaApi.SendRequestsBeforeLoginAsync();
+
+
                 var logInResult = await InstaApi.LoginAsync();
                 Debug.WriteLine(logInResult.Value);
                 if (logInResult.Succeeded)
