@@ -2015,7 +2015,7 @@ namespace InstagramApiSharp.Helpers
         }
         public static Uri GetDeleteDirectMessageUri(string threadId, string itemId)
         {
-            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_THREAD_HIDE, threadId, itemId),
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_THREAD_DELETE_MESSAGE, threadId, itemId),
                 out var instaUri))
                 throw new Exception("Cant create URI for delete direct message");
             return instaUri;
