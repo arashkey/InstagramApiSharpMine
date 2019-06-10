@@ -19,7 +19,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("media_count")] public long MediaCount { get; set; }
 
-        [JsonProperty("profile_pic_url")] public string ProfilePicUrl { get; set; }
+        [JsonProperty("profile_pic_url")] public string ProfilePicture { get; set; }
 
         [JsonProperty("follow_status")] public long? FollowStatus { get; set; }
         [JsonProperty("following")] public long? Following { get; set; }
@@ -27,5 +27,9 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("allow_following")] public bool? AllowFollowing { get; set; }
         [JsonProperty("formatted_media_count")] public string FormattedMediaCount { get; set; }
         [JsonProperty("search_result_subtitle")] public string SearchResultSubtitle { get; set; }
+        [JsonProperty("show_follow_drop_down")] public bool? ShowFollowDropDown { get; set; }
+        [JsonProperty("allow_muting_story")] public bool? AllowMutingStory { get; set; }
+        [JsonProperty("social_context")] public string SocialContext { get; set; }
+        [JsonProperty("subtitle")] public string Subtitle { get; set; }
     }
 }

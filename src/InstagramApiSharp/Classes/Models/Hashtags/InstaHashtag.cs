@@ -13,5 +13,10 @@
         public bool AllowFollowing { get; set; }
         public string FormattedMediaCount { get; set; }
         public string SearchResultSubtitle { get; set; }
+
+        public bool ShowFollowDropDown { get; set; }
+        public bool AllowMutingStory { get; set; }
+        public string SocialContext { get; set; }
+        public string Subtitle { get; set; }
     }
 }

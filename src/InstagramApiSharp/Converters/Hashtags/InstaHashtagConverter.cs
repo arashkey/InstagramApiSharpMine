@@ -24,17 +24,20 @@ namespace InstagramApiSharp.Converters
                 Id = SourceObject.Id,
                 Name = SourceObject.Name,
                 MediaCount = SourceObject.MediaCount,
-                ProfilePicture = SourceObject.ProfilePicUrl,
+                ProfilePicture = SourceObject.ProfilePicture,
                 AllowFollowing = SourceObject.AllowFollowing ?? true,
                 Following = System.Convert.ToBoolean(SourceObject.Following ?? 0),
                 NonViolating = System.Convert.ToBoolean(SourceObject.NonViolating ?? 1),
                 FormattedMediaCount = SourceObject.FormattedMediaCount,
-                SearchResultSubtitle = SourceObject.SearchResultSubtitle
+                SearchResultSubtitle = SourceObject.SearchResultSubtitle,
+                AllowMutingStory = SourceObject.AllowMutingStory ?? false,
+                ShowFollowDropDown = SourceObject.ShowFollowDropDown ?? false,
+                SocialContext = SourceObject.SocialContext,
+                Subtitle = SourceObject.Subtitle
             };
             try
             {
                 hashtag.FollowStatus = System.Convert.ToBoolean(SourceObject.FollowStatus ?? 0);
-
             }
             catch { }
             return hashtag;
