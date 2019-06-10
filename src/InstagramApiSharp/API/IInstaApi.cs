@@ -432,6 +432,13 @@ namespace InstagramApiSharp.API
         /// <param name="delay">Delay between requests. null = 2.5 seconds</param>
         Task<IResult<InstaAccountCreation>> CreateNewAccountAsync(string username, string password, string email, string firstName = ""/*, TimeSpan? delay = null*/);
         /// <summary>
+        ///     Send requests for login flows (contact prefill, read msisdn header, launcher sync and qe sync)
+        ///     <para>Note 1: You should call this function before you calling <see cref="IInstaApi.LoginAsync(bool)"/>, if you want your account act like original instagram app.</para>
+        ///     <para>Note 2: One call per one account! No need to call while you are loading a session</para>
+        /// </summary>
+        Task<IResult<bool>> SendRequestsBeforeLoginAsync();
+
+        /// <summary>
         ///     Login using given credentials asynchronously
         /// </summary>
         /// <param name="isNewLogin"></param>

@@ -1590,7 +1590,7 @@ namespace InstagramApiSharp.API
             try
             {
                 var instaUri = UriCreator.GetChallengeRequireFirstUri(_challengeinfo.ApiPath, _deviceInfo.DeviceGuid.ToString(), _deviceInfo.DeviceId);
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, new Dictionary<string, string>());
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -3020,6 +3020,185 @@ namespace InstagramApiSharp.API
         private void LogException(Exception exception)
         {
             _logger?.LogException(exception);
+        }
+
+        #endregion
+
+        #region internal calls
+        /// <summary>
+        ///     Send requests for login flows (contact prefill, read msisdn header, launcher sync and qe sync)
+        ///     <para>Note 1: You should call this function before you calling <see cref="IInstaApi.LoginAsync(bool)"/>, if you want your account act like original instagram app.</para>
+        ///     <para>Note 2: One call per one account! No need to call while you are loading a session</para>
+        /// </summary>
+        public async Task<IResult<bool>> SendRequestsBeforeLoginAsync()
+        {
+            try
+            {
+                //GetNotificationBadge();
+                GetContactPointPrefill();
+                GetReadMsisdnHeader();
+                GetPrefillCandidates();
+                LauncherSyncPrivate();
+                QeSync();
+                await Task.Delay(1000);
+                return Result.Success(true);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+        private async void GetNotificationBadge()
+        {
+            try
+            {
+                var data = new Dictionary<string, string>
+                {
+                    //{"_csrftoken", _user.CsrfToken},
+                    {"phone_id", _deviceInfo.PhoneGuid.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"user_ids", ""}
+                };
+
+                var instaUri = UriCreator.GetNotificationBadgeUri();
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+            }
+        }
+        private async void GetContactPointPrefill()
+        {
+            try
+            {
+                //.{"phone_id":"----","usage":"prefill"}&
+                var data = new Dictionary<string, string>
+                {
+                    {"phone_id", _deviceInfo.PhoneGuid.ToString()},
+                    {"usage", "prefill"}
+                };
+
+                var instaUri = UriCreator.GetContactPointPrefillUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+            }
+        }
+        private async void GetReadMsisdnHeader()
+        {
+            try
+            {
+                //.{"mobile_subno_usage":"default","device_id":"----"}&
+                var data = new Dictionary<string, string>
+                {
+                    {"mobile_subno_usage", "default"},
+                    {"device_id", _deviceInfo.DeviceGuid.ToString()},
+                };
+
+                var instaUri = UriCreator.GetReadMsisdnHeaderUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+            }
+        }
+        private async void GetPrefillCandidates()
+        {
+            try
+            {
+                var data = new Dictionary<string, string>
+                {
+                    {"android_device_id", _deviceInfo.DeviceId},
+                    {"client_contact_points", "[]"},
+                    {"phone_id", _deviceInfo.PhoneGuid.ToString()},
+                    {"usages", "[\"account_recovery_omnibox\"]"},
+                    {"logged_in_user_ids", "[]"},
+                    {"device_id", _deviceInfo.DeviceGuid.ToString()},
+                };
+
+                var instaUri = UriCreator.GetPrefillCandidatesUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+            }
+        }
+        private async void LauncherSyncPrivate()
+        {
+            try
+            {
+                var data = new JObject
+                {
+                    {"server_config_retrieval", "1"},
+                    {"id", _deviceInfo.DeviceGuid.ToString()},
+                };
+                var uri = UriCreator.GetLauncherSyncUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
+
+                var response = await _httpRequestProcessor.SendAsync(request);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+            }
+        }
+        private async void QeSync()
+        {
+            try
+            {
+                var data = new JObject
+                {
+                    {"server_config_retrieval", "1"},
+                    {"id", _deviceInfo.DeviceGuid.ToString()},
+                    {"experiments", InstaApiConstants.CONFIGS},
+                };
+                var uri = UriCreator.GetQeSyncUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+            }
         }
 
         #endregion

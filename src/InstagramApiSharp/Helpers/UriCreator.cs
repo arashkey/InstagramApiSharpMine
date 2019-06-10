@@ -2440,5 +2440,35 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for answer to quiz");
             return instaUri;
         }
+        public static Uri GetNotificationBadgeUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.NOTIFICATION_BADGE, out var instaUri))
+                throw new Exception("Cant create URI for notification badge");
+            return instaUri;
+        }
+        public static Uri GetContactPointPrefillUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.ACCOUNTS_CONTACT_POINT_PREFILL, out var instaUri))
+                throw new Exception("Cant create URI for contact point prefill");
+            return instaUri;
+        }
+        public static Uri GetReadMsisdnHeaderUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.ACCOUNTS_READ_MSISDN_HEADER, out var instaUri))
+                throw new Exception("Cant create URI for read msisdn header");
+            return instaUri;
+        }
+        public static Uri GetPrefillCandidatesUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.ACCOUNTS_GET_PREFILL_CANDIDATES, out var instaUri))
+                throw new Exception("Cant create URI for get prefill candidates");
+            return instaUri;
+        }
+        public static Uri GetQeSyncUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.QE_SYNC, out var instaUri))
+                throw new Exception("Cant create URI for qe sync");
+            return instaUri;
+        }
     }
 }

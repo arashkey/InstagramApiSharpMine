@@ -28,6 +28,10 @@ namespace InstagramApiSharp.API
         public const string FBSEARCH_DYNAMIC_SEARCH = API_SUFFIX + "/fbsearch/nullstate_dynamic_sections/?type={0}";
         public const string STORY_QUIZ_ANSWER = API_SUFFIX + "/media/{0}/{1}/story_quiz_answer/";
 
+
+        public const string ACCOUNTS_GET_PREFILL_CANDIDATES = API_SUFFIX + "/accounts/get_prefill_candidates/";
+        public const string QE_SYNC = API_SUFFIX + "/qe/sync/";
+
         // push 
         public const string FACEBOOK_OTA_FIELDS = "update%7Bdownload_uri%2Cdownload_uri_delta_base%2Cversion_code_delta_base%2Cdownload_uri_delta%2Cfallback_to_full_update%2Cfile_size_delta%2Cversion_code%2Cpublished_date%2Cfile_size%2Cota_bundle_type%2Cresources_checksum%7D";
         public const int FACEBOOK_ORCA_PROTOCOL_VERSION = 20150314;
@@ -125,27 +129,31 @@ namespace InstagramApiSharp.API
             }
         };
 
-        public const string CONFIGS = "ig_android_explore_grid_viewpoint,ig_android_dogfooding,ig_android_bloks_data_release," +
-            "ig_launcher_explore_navigation_redesign_android,ig_launcher_ig_android_network_stack_cap_api_request_qe," +
-            "ig_android_memory_manager_holdout,ig_direct_e2e_send_waterfall_sample_rate_config," +
-            "ig_launcher_ig_explore_remove_topic_channel_tooltip_experiment_android,ig_qe_value_consistency_checker," +
-            "ig_android_critical_path_manager,ig_android_qp_waterfall_logging,ig_android_bloks_demos,ig_android_video_playback," +
-            "ig_android_bug_report_screen_record,ig_android_upload_heap_on_oom,ig_launcher_ig_explore_post_chaining_pill_android_v0," +
-            "ig_synchronous_account_switch,ig_android_qp_keep_promotion_during_cooldown,ig_android_request_cap_tuning_with_bandwidth," +
-            "ig_android_request_compression_launcher,ig_android_feed_attach_report_logs,ig_android_insights_welcome_dialog_tooltip," +
-            "ig_android_qp_surveys_v1,ig_launcher_ig_android_network_request_cap_tuning_qe,ig_android_react_native_ota_kill_switch," +
-            "ig_android_gps_improvements_launcher,ig_android_notification_setting_sync,ig_android_scroll_aware_cta," +
-            "ig_launcher_ig_android_network_stack_cap_video_request_qe,ig_launcher_ig_explore_post_chaining_hide_comments_android_v0," +
-            "ig_android_explore_startup_prefetch_launcher,ig_android_extra_native_debugging_info,ig_android_insights_top_account_dialog_tooltip," +
-            "ig_contact_invites_netego_killswitch,ig_android_update_items_header_height_launcher,ig_android_uri_parser_cache_launcher," +
-            "ig_android_bitmap_strong_ref_cache_layer_launcher,ig_android_employee_options,ig_story_insights_entry," +
-            "ig_launcher_ig_explore_verified_badge_android,ig_android_direct_gifs_killswitch,ig_android_global_scheduler_direct," +
-            "ig_android_global_scheduler_infra,ig_android_cold_start_class_preloading,ig_android_rageshake_redesign," +
-            "ig_camera_android_attributed_effects_endpoint_api_query_config,ig_launcher_ig_android_network_stack_queue_undefined_request_qe," +
-            "ig_android_rage_shake_whitelist,ig_android_qp_xshare_to_fb,ig_launcher_force_switch_on_dialog,ig_android_betamap_cold_start," +
-            "ig_android_async_view_model_launcher,ig_launcher_ig_explore_video_chaining_container_module_android,ig_android_newsfeed_recyclerview," +
-            "ig_android_executor_limit_per_group_config,ig_delink_lasso_accounts,ig_android_feed_report_ranking_issue," +
-            "ig_android_shopping_django_product_search,ig_launcher_ig_android_reactnative_realtime_ota,ig_canvas_ad_pixel";
+        public const string CONFIGS = "ig_android_fci_onboarding_friend_search,ig_android_device_detection_info_upload," +
+            "ig_android_sms_retriever_backtest_universe,ig_android_direct_add_direct_to_android_native_photo_share_sheet," +
+            "ig_growth_android_profile_pic_prefill_with_fb_pic_2,ig_account_identity_logged_out_signals_global_holdout_universe," +
+            "ig_android_login_identifier_fuzzy_match,ig_android_reliability_leak_fixes_h1_2019,ig_android_push_fcm," +
+            "ig_android_show_login_info_reminder_universe,ig_android_email_fuzzy_matching_universe," +
+            "ig_android_one_tap_aymh_redesign_universe,ig_android_direct_send_like_from_notification," +
+            "ig_android_suma_landing_page,ig_android_direct_main_tab_universe,ig_android_login_forgot_password_universe," +
+            "ig_android_smartlock_hints_universe,ig_android_account_switch_infra_universe,ig_android_multi_tap_login_new," +
+            "ig_android_caption_typeahead_fix_on_o_universe,ig_android_save_pwd_checkbox_reg_universe," +
+            "ig_android_nux_add_email_device,ig_username_suggestions_on_username_taken,ig_android_analytics_accessibility_event," +
+            "ig_android_editable_username_in_reg,ig_android_ingestion_video_support_hevc_decoding,direct_app_deep_linking_universe," +
+            "ig_android_account_recovery_auto_login,ig_android_feed_cache_device_universe2,ig_android_sim_info_upload," +
+            "ig_android_mobile_http_flow_device_universe,ig_account_recovery_via_whatsapp_universe," +
+            "ig_android_hide_fb_button_when_not_installed_universe,ig_android_targeted_one_tap_upsell_universe," +
+            "ig_android_gmail_oauth_in_reg,ig_android_native_logcat_interceptor,ig_android_hide_typeahead_for_logged_users," +
+            "ig_android_vc_interop_use_test_igid_universe,ig_android_reg_modularization_universe,ig_android_phone_edit_distance_universe," +
+            "ig_android_device_verification_separate_endpoint,ig_android_universe_noticiation_channels,ig_android_account_linking_universe," +
+            "ig_android_hsite_prefill_new_carrier,ig_android_retry_create_account_universe,ig_android_family_apps_user_values_provider_universe," +
+            "ig_android_reg_nux_headers_cleanup_universe,ig_android_ci_fb_reg,ig_android_device_info_foreground_reporting," +
+            "ig_fb_invite_entry_points,ig_android_device_verification_fb_signup,ig_android_onetaplogin_optimization," +
+            "ig_video_debug_overlay,ig_android_ask_for_permissions_on_reg,ig_assisted_login_universe," +
+            "ig_android_display_full_country_name_in_reg_universe,ig_android_security_intent_switchoff," +
+            "ig_android_passwordless_auth,ig_circularimageview_outlineprovider,ig_android_direct_main_tab_account_switch," +
+            "ig_android_modularized_dynamic_nux_universe,ig_android_li_use_object_pool_holdout," +
+            "ig_android_fb_account_linking_sampling_freq_universe,ig_android_fix_sms_read_lollipop,ig_android_access_flow_prefill";
 
         public static string ACCEPT_LANGUAGE = "en-US";
 
