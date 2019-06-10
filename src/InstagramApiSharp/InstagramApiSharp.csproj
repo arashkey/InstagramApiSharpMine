@@ -11,9 +11,9 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.0.2.0</Version>
-    <AssemblyVersion>2.0.2.0</AssemblyVersion>
-    <FileVersion>2.0.2.0</FileVersion>
+    <Version>2.0.3.0</Version>
+    <AssemblyVersion>2.0.3.0</AssemblyVersion>
+    <FileVersion>2.0.3.0</FileVersion>
     <Description>A complete Private Instagram API for .NET.
 
 
@@ -38,7 +38,17 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
-    <PackageReleaseNotes>v2.0.2
+    <PackageReleaseNotes>v2.0.3
+- [Rename] ProfilePreviewMedias to PreviewMedias in InstaDirectInboxItem class [supports preview medias for hashtags, location, profiles and etc.]
+- [Bugfix] for SendDirectTextAsync
+- [Bugfix] for SendDirectPhotoAsync and SendDirectPhotoToRecipientsAsync
+- [Add] Title property to InstaPlaceholder class
+- [Add] some new properties to InstaHashtag class
+- [Add] GetHashtagsSectionsAsync to HashtagProcessor
+- [Add] public modifier to HttpHelper class
+- [Add] HttpHelper property to IInstaApi
+
+v2.0.2
 - [Add] support for StoryQuiz in InstaStoryItem class
 - [Add] support for StoryQuizsParticipantInfos in InstaStoryItem class
 - [Add] support StoryQuiz in InstaStoryUploadOptions class for uploading
