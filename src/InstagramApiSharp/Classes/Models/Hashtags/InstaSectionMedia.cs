@@ -17,6 +17,8 @@ namespace InstagramApiSharp.Classes.Models
     {
         public List<InstaMedia> Medias { get; set; } = new List<InstaMedia>();
 
+        public InstaChannel Channel { get; set; }
+
         public List<InstaRelatedHashtag> RelatedHashtags { get; set; } = new List<InstaRelatedHashtag>();
 
         public bool MoreAvailable { get; set; }

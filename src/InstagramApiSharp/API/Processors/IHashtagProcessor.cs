@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
+using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -10,6 +11,13 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IHashtagProcessor
     {
+        /// <summary>
+        ///     Get hashtag sections
+        /// </summary>
+        /// <param name="tagname">Tag name</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="hashtagSectionType">Section type</param>
+        Task<IResult<InstaSectionMedia>> GetHashtagsSectionsAsync(string tagname, PaginationParameters paginationParameters, InstaHashtagSectionType hashtagSectionType = InstaHashtagSectionType.All);
 
         /// <summary>
         ///     Get Hashtags posts

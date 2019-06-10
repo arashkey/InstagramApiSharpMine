@@ -10,6 +10,7 @@ using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Converters;
 using InstagramApiSharp.Converters.Json;
+using InstagramApiSharp.Enums;
 using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
@@ -40,6 +41,74 @@ namespace InstagramApiSharp.API.Processors
             _userAuthValidate = userAuthValidate;
             _instaApi = instaApi;
             _httpHelper = httpHelper;
+        }
+
+        /// <summary>
+        ///     Get hashtag sections
+        /// </summary>
+        /// <param name="tagname">Tag name</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="hashtagSectionType">Section type</param>
+        public async Task<IResult<InstaSectionMedia>> GetHashtagsSectionsAsync(string tagname, PaginationParameters paginationParameters, InstaHashtagSectionType hashtagSectionType = InstaHashtagSectionType.All)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+
+                InstaSectionMedia Convert(InstaSectionMediaListResponse hashtagMediaListResponse)
+                {
+                    return ConvertersFabric.Instance.GetHashtagMediaListConverter(hashtagMediaListResponse).Convert();
+                }
+                var mediaResponse = await GetHashtagSection(tagname,
+                   hashtagSectionType,
+                    paginationParameters.NextMaxId, paginationParameters.NextPage);
+                if (!mediaResponse.Succeeded)
+                {
+                    if (mediaResponse.Value != null)
+                        Result.Fail(mediaResponse.Info, Convert(mediaResponse.Value));
+                    else
+                        Result.Fail(mediaResponse.Info, default(InstaSectionMedia));
+                }
+                paginationParameters.NextMediaIds = mediaResponse.Value.NextMediaIds;
+                paginationParameters.NextPage = mediaResponse.Value.NextPage;
+                paginationParameters.NextMaxId = mediaResponse.Value.NextMaxId;
+                while (mediaResponse.Value.MoreAvailable
+                    && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
+                    && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                {
+                    var moreMedias = await GetHashtagSection(tagname, hashtagSectionType,
+                        paginationParameters.NextMaxId, mediaResponse.Value.NextPage);
+                    if (!moreMedias.Succeeded)
+                    {
+                        if (mediaResponse.Value.Sections != null && mediaResponse.Value.Sections.Any())
+                            return Result.Success(Convert(mediaResponse.Value));
+                        else
+                            return Result.Fail(moreMedias.Info, Convert(mediaResponse.Value));
+                    }
+
+                    mediaResponse.Value.MoreAvailable = moreMedias.Value.MoreAvailable;
+                    mediaResponse.Value.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
+                    mediaResponse.Value.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
+                    mediaResponse.Value.NextMediaIds = paginationParameters.NextMediaIds = moreMedias.Value.NextMediaIds;
+                    mediaResponse.Value.NextPage = paginationParameters.NextPage = moreMedias.Value.NextPage;
+                    mediaResponse.Value.Sections.AddRange(moreMedias.Value.Sections);
+                    paginationParameters.PagesLoaded++;
+                }
+
+                return Result.Success(ConvertersFabric.Instance.GetHashtagMediaListConverter(mediaResponse.Value).Convert());
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaSectionMedia), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaSectionMedia>(exception);
+            }
         }
 
         /// <summary>
@@ -568,6 +637,81 @@ namespace InstagramApiSharp.API.Processors
 
                 var request =
                     _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaSectionMediaListResponse>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaSectionMediaListResponse>(json);
+
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaSectionMediaListResponse), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaSectionMediaListResponse>(exception);
+            }
+        }
+
+        private async Task<IResult<InstaSectionMediaListResponse>> GetHashtagSection(string tagname,
+            InstaHashtagSectionType sectionType,
+            string nextMaxId = null,
+            int? page = null)
+        {
+            try
+            {
+                var instaUri = UriCreator.GetHashtagSectionUri(tagname);
+
+                //supported_tabs=["top","recent","discover"]&
+                //_csrftoken=4spGTGKweOwOkaiN9UBl4QIJbqQfMx7e&
+                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //include_persistent=true&
+                //rank_token=f4bc27fb-f278-4db1-9966-b9e2c752c9fa
+                var supportedTabs = new JArray();
+                if (sectionType == InstaHashtagSectionType.All && string.IsNullOrEmpty(nextMaxId))
+                {
+                    supportedTabs.Add("top");
+                    supportedTabs.Add("recent");
+                    supportedTabs.Add("discover");
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(nextMaxId) && sectionType == InstaHashtagSectionType.All)
+                        sectionType = InstaHashtagSectionType.Top;
+
+                    supportedTabs.Add(sectionType.ToString().ToLower());
+                }
+                //max_id=5989c96fb9834d789d0cb612c90c94fd&
+                //_csrftoken=4spGTGKweOwOkaiN9UBl4QIJbqQfMx7e&
+                //tab=top&
+                //page=1&
+                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
+                //include_persistent=false&
+                //rank_token=fa23a69f-5edf-4287-b139-084cece4e811
+                var data = new Dictionary<string, string>
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"include_persistent", string.IsNullOrEmpty(nextMaxId) ? "true": "false"},
+                    {"rank_token", _user.RankToken ?? Guid.NewGuid().ToString()}
+                };
+                if (string.IsNullOrEmpty(nextMaxId))
+                    data.Add("supported_tabs", supportedTabs.ToString(Formatting.None));
+                else
+                {
+                    data.Add("max_id", nextMaxId);
+                    data.Add("tab", sectionType.ToString().ToLower());
+                    data.Add("page", page.ToString());
+                }
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 

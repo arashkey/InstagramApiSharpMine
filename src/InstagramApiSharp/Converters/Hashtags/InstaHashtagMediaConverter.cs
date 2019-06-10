@@ -36,14 +36,22 @@ namespace InstagramApiSharp.Converters.Hashtags
                 {
                     try
                     {
-                        foreach (var item in section.LayoutContent.Medias)
+                        if (section.FeedType == "channel")
                         {
-                            try
+                            if (section.LayoutContent.ChannelContainer?.Channel != null)
+                                media.Channel = ConvertersFabric.Instance.GetChannelConverter(section.LayoutContent.ChannelContainer.Channel).Convert();
+                        }
+                        else
+                        {
+                            foreach (var item in section.LayoutContent.Medias)
                             {
-                                media.Medias.Add(ConvertersFabric.Instance.GetSingleMediaConverter(item.Media).Convert());
+                                try
+                                {
+                                    media.Medias.Add(ConvertersFabric.Instance.GetSingleMediaConverter(item.Media).Convert());
 
+                                }
+                                catch { }
                             }
-                            catch { }
                         }
                     }
                     catch { }
