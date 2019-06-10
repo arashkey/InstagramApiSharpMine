@@ -4,10 +4,16 @@ Private version of [InstagramApiSharp](https://github.com/ramtinak/PrivateInstag
 
 | Target | Branch | Version | Changelog |
 | ------ | ------ | ------ | ------ |
-| Github | master | v2.0.3 | [v2.0.3](https://github.com/ramtinak/InstagramApiSharp/issues/244#issuecomment-500412428) |
-| Release | master | v2.0.3 | [v2.0.3](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
+| Github | master | v2.0.4 | [v2.0.4](https://github.com/ramtinak/InstagramApiSharp/issues/244#issuecomment-500622290) |
+| Release | master | v2.0.4 | [v2.0.4](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
 
 #### Version changes
+v2.0.4
+- [Bugfix] for DeleteSelfMessageAsync
+- [Bugfix] for GetUserTimelineFeed
+- [Update] LoginAsync
+- [Add] SendRequestsBeforeLoginAsync to IInstaApi [login flows: contact prefill, read msisdn header, launcher sync and qe sync requests]
+
 v2.0.3
 - [Rename] ProfilePreviewMedias to PreviewMedias in InstaDirectInboxItem class [supports preview medias for hashtags, location, profiles and etc.]
 - [Bugfix] for SendDirectTextAsync
