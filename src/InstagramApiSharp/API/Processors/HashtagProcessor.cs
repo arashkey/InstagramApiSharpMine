@@ -667,12 +667,6 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var instaUri = UriCreator.GetHashtagSectionUri(tagname);
-
-                //supported_tabs=["top","recent","discover"]&
-                //_csrftoken=4spGTGKweOwOkaiN9UBl4QIJbqQfMx7e&
-                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
-                //include_persistent=true&
-                //rank_token=f4bc27fb-f278-4db1-9966-b9e2c752c9fa
                 var supportedTabs = new JArray();
                 if (sectionType == InstaHashtagSectionType.All && string.IsNullOrEmpty(nextMaxId))
                 {
@@ -687,13 +681,6 @@ namespace InstagramApiSharp.API.Processors
 
                     supportedTabs.Add(sectionType.ToString().ToLower());
                 }
-                //max_id=5989c96fb9834d789d0cb612c90c94fd&
-                //_csrftoken=4spGTGKweOwOkaiN9UBl4QIJbqQfMx7e&
-                //tab=top&
-                //page=1&
-                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
-                //include_persistent=false&
-                //rank_token=fa23a69f-5edf-4287-b139-084cece4e811
                 var data = new Dictionary<string, string>
                 {
                     {"_csrftoken", _user.CsrfToken},
