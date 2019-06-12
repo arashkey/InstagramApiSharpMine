@@ -11,9 +11,9 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.0.4.0</Version>
-    <AssemblyVersion>2.0.4.0</AssemblyVersion>
-    <FileVersion>2.0.4.0</FileVersion>
+    <Version>2.0.5.0</Version>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <FileVersion>2.0.5.0</FileVersion>
     <Description>A complete Private Instagram API for .NET.
 
 
@@ -38,7 +38,14 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
-    <PackageReleaseNotes>v2.0.4
+    <PackageReleaseNotes>v2.0.5
+- [Bugfix] for ChangeProfilePictureAsync
+- [Update] LoginAsync
+- [Add] new headers
+- [Add] some new properties to AndroidDevice class
+- [Dropping] support for Android v4.4 and lower in AndroidVersionList (since instagram is no longer supporting them)
+
+v2.0.4
 - [Bugfix] for DeleteSelfMessageAsync
 - [Bugfix] for GetUserTimelineFeed
 - [Update] LoginAsync

@@ -4,10 +4,17 @@ Private version of [InstagramApiSharp](https://github.com/ramtinak/PrivateInstag
 
 | Target | Branch | Version | Changelog |
 | ------ | ------ | ------ | ------ |
-| Github | master | v2.0.4 | [v2.0.4](https://github.com/ramtinak/InstagramApiSharp/issues/244#issuecomment-500622290) |
-| Release | master | v2.0.4 | [v2.0.4](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
+| Github | master | v2.0.5 | [v2.0.5](https://github.com/ramtinak/InstagramApiSharp/issues/244#issuecomment-501329122) |
+| Release | master | v2.0.5 | [v2.0.5](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
 
 #### Version changes
+v2.0.5
+- [Bugfix] for ChangeProfilePictureAsync
+- [Update] LoginAsync
+- [Add] new headers
+- [Add] some new properties to AndroidDevice class
+- [Dropping] support for Android v4.4 and lower in AndroidVersionList (since instagram is no longer supporting them)
+
 v2.0.4
 - [Bugfix] for DeleteSelfMessageAsync
 - [Bugfix] for GetUserTimelineFeed
