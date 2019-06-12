@@ -947,7 +947,14 @@ namespace InstagramApiSharp.API
                 if (isNewLogin)
                     signature = $"{_httpRequestProcessor.RequestMessage.GenerateSignature(_apiVersion, _apiVersion.SignatureKey, out devid)}.{_httpRequestProcessor.RequestMessage.GetMessageString()}";
                 else
+                {
+                    if (string.IsNullOrEmpty(csrftoken))
+                    {
+                        await GetToken();
+                        goto ReloginLabel;
+                    }
                     signature = $"{_httpRequestProcessor.RequestMessage.GenerateChallengeSignature(_apiVersion, _apiVersion.SignatureKey, csrftoken, out devid)}.{_httpRequestProcessor.RequestMessage.GetChallengeMessageString(csrftoken)}";
+                }
                 _deviceInfo.DeviceId = devid;
                 var fields = new Dictionary<string, string>
                 {
@@ -1589,8 +1596,19 @@ namespace InstagramApiSharp.API
 
             try
             {
-                var instaUri = UriCreator.GetChallengeRequireFirstUri(_challengeinfo.ApiPath, _deviceInfo.DeviceGuid.ToString(), _deviceInfo.DeviceId);
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, new Dictionary<string, string>());
+                //var instaUri = new Uri(_challengeinfo.Url);
+                var data = new Dictionary<string, string>
+                {
+                    {"guid", _deviceInfo.PhoneGuid.ToString()},
+                    {"device_id", _deviceInfo.DeviceGuid.ToString()},
+                    {"android_device_id", _deviceInfo.DeviceId},
+                    {"phone_id", _deviceInfo.PhoneGuid.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    //{"", ""},
+                };
+                //var instaUri = UriCreator.GetChallengeRequireFirstUri(_challengeinfo.ApiPath, _deviceInfo.DeviceGuid.ToString(), _deviceInfo.DeviceId);
+                var instaUri = UriCreator.GetChallengeRequireFirstUri(_challengeinfo.ApiPath, _deviceInfo);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo/*, data*/);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -3065,7 +3083,12 @@ namespace InstagramApiSharp.API
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"user_ids", ""}
                 };
+                var cookies = _httpRequestProcessor.HttpHandler.CookieContainer
+                    .GetCookies(_httpRequestProcessor.Client.BaseAddress);
 
+                var csrftoken = cookies[InstaApiConstants.CSRFTOKEN]?.Value;
+                if (!string.IsNullOrEmpty(csrftoken))
+                    data.Add("_csrftoken", csrftoken);
                 var instaUri = UriCreator.GetNotificationBadgeUri();
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -3187,8 +3210,15 @@ namespace InstagramApiSharp.API
                     {"id", _deviceInfo.DeviceGuid.ToString()},
                     {"experiments", InstaApiConstants.CONFIGS},
                 };
+                var cookies = _httpRequestProcessor.HttpHandler.CookieContainer
+                    .GetCookies(_httpRequestProcessor.Client.BaseAddress);
+
+                var csrftoken = cookies[InstaApiConstants.CSRFTOKEN]?.Value;
+                if (!string.IsNullOrEmpty(csrftoken))
+                    data.Add("_csrftoken", csrftoken);
                 var uri = UriCreator.GetQeSyncUri();
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
+                request.Headers.Add("X-DEVICE-ID", _deviceInfo.DeviceGuid.ToString());
                 var response = await _httpRequestProcessor.SendAsync(request);
             }
             catch (HttpRequestException httpException)

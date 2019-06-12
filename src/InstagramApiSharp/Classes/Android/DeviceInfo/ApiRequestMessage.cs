@@ -14,7 +14,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
     {
         readonly static Random Rnd = new Random();
         [JsonProperty("country_codes")]
-        public string CountryCodes { get; set; } = "[{\"country_code\":\"1\",\"source\":[\"default\"]}]";
+        public string CountryCodes { get; set; } = "[{\"country_code\":\"1\",\"source\":[\"default\"]},{\"country_code\":\"98\",\"source\":[\"uig_via_phone_id\"]}]";
         [JsonProperty("phone_id")]
         public string PhoneId { get; set; }
         [JsonProperty("username")]
@@ -144,9 +144,15 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
             return requestMessage;
         }
 
+        //public static string GenerateDeviceIdFromGuid(Guid guid)
+        //{
+        //    var hashedGuid = CryptoHelper.CalculateMd5(guid.ToString());
+        //    return $"android-{hashedGuid.Substring(0, 16)}";
+        //}
         public static string GenerateDeviceIdFromGuid(Guid guid)
         {
-            var hashedGuid = CryptoHelper.CalculateMd5(guid.ToString());
+            var unixMiliSec = Math.Round((double)DateTime.UtcNow.ToUnixTimeMiliSeconds()).ToString() + Rnd.Next(6789, 9999).ToString();
+            var hashedGuid = CryptoHelper.CalculateMd5(unixMiliSec);
             return $"android-{hashedGuid.Substring(0, 16)}";
         }
     }

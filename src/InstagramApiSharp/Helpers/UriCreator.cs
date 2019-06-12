@@ -281,7 +281,17 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for challenge require url");
             return instaUri;
         }
-
+        public static Uri GetChallengeRequireFirstUri(string apiPath, Classes.Android.DeviceInfo. AndroidDevice device)
+        {
+            if (!apiPath.EndsWith("/"))
+                apiPath += "/";
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.API_SUFFIX + apiPath +
+                $"?guid={device.PhoneGuid.ToString()}&device_id={device.DeviceGuid.ToString()}" +
+                $"&android_device_id={device.DeviceId.ToString()}&phone_id={device.PhoneGuid.ToString()}" +
+                $"&_uuid={device.DeviceGuid.ToString()}", out var instaUri))
+                throw new Exception("Cant create URI for challenge require url");
+            return instaUri;
+        }
         public static Uri GetChallengeUri()
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.CHALLENGE,
