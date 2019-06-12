@@ -31,5 +31,15 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         public string HardwareModel { get; set; }
         public string Resolution { get; set; } = "1080x1812";
         public string Dpi { get; set; } = "480dpi";
+
+
+        // Related to headers
+        // X-IG-Bandwidth-Speed-KBPS
+        // X-IG-Bandwidth-TotalBytes-B
+        // X-IG-Bandwidth-TotalTime-MS
+        public string IGBandwidthSpeedKbps { get; set; } = "1235.043";
+        public string IGBandwidthTotalBytesB { get; set; } = "1219685";
+        public string IGBandwidthTotalTimeMS { get; set; } = "949";
+
     }
 }

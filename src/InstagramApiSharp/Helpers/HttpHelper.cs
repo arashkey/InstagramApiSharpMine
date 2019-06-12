@@ -19,6 +19,7 @@ namespace InstagramApiSharp.Helpers
     public class HttpHelper
     {
         public /*readonly*/ InstaApiVersion _apiVersion;
+        readonly Random Rnd = new Random();
         internal HttpHelper(InstaApiVersion apiVersionType)
         {
             _apiVersion = apiVersionType;
@@ -29,13 +30,17 @@ namespace InstagramApiSharp.Helpers
             var userAgent = deviceInfo.GenerateUserAgent(_apiVersion);
 
             var request = new HttpRequestMessage(method, uri);
-            request.Headers.Add(InstaApiConstants.HEADER_ACCEPT_LANGUAGE, InstaApiConstants.ACCEPT_LANGUAGE);
-            request.Headers.Add(InstaApiConstants.HEADER_IG_CAPABILITIES, _apiVersion.Capabilities);
-            request.Headers.Add(InstaApiConstants.HEADER_IG_CONNECTION_TYPE, InstaApiConstants.IG_CONNECTION_TYPE);
-            request.Headers.Add(InstaApiConstants.HEADER_USER_AGENT, userAgent);
-            request.Headers.Add(InstaApiConstants.HEADER_IG_APP_ID, InstaApiConstants.IG_APP_ID);
             request.Headers.Add(InstaApiConstants.HEADER_PIGEON_SESSION_ID, deviceInfo.PigeonSessionId.ToString());
-            request.Headers.Add(InstaApiConstants.HEADER_PIGEON_RAWCLINETTIME, DateTime.UtcNow.ToUnixTime().ToString());
+            request.Headers.Add(InstaApiConstants.HEADER_PIGEON_RAWCLINETTIME, $"{DateTime.UtcNow.ToUnixTime()}.0{Rnd.Next(10, 99)}");
+            request.Headers.Add(InstaApiConstants.HEADER_X_IG_CONNECTION_SPEED, "-1kbps");
+            request.Headers.Add(InstaApiConstants.HEADER_X_IG_BANDWIDTH_SPEED_KBPS, deviceInfo.IGBandwidthSpeedKbps);
+            request.Headers.Add(InstaApiConstants.HEADER_X_IG_BANDWIDTH_TOTALBYTES_B, deviceInfo.IGBandwidthTotalBytesB);
+            request.Headers.Add(InstaApiConstants.HEADER_X_IG_BANDWIDTH_TOTALTIME_MS, deviceInfo.IGBandwidthTotalTimeMS);
+            request.Headers.Add(InstaApiConstants.HEADER_IG_CONNECTION_TYPE, InstaApiConstants.IG_CONNECTION_TYPE);
+            request.Headers.Add(InstaApiConstants.HEADER_IG_CAPABILITIES, _apiVersion.Capabilities);
+            request.Headers.Add(InstaApiConstants.HEADER_IG_APP_ID, InstaApiConstants.IG_APP_ID);
+            request.Headers.Add(InstaApiConstants.HEADER_USER_AGENT, userAgent);
+            request.Headers.Add(InstaApiConstants.HEADER_ACCEPT_LANGUAGE, InstaApiConstants.ACCEPT_LANGUAGE);
             //request.Properties.Add(new KeyValuePair<string, object>(InstaApiConstants.HEADER_XGOOGLE_AD_IDE,
             //    deviceInfo.GoogleAdId.ToString()));
             return request;

@@ -32,7 +32,7 @@ namespace InstagramApiSharp
             return string.Format(InstaApiConstants.USER_AGENT, deviceInfo.Dpi, deviceInfo.Resolution, deviceInfo.HardwareManufacturer,
                 deviceInfo.DeviceModelIdentifier, deviceInfo.FirmwareBrand, deviceInfo.HardwareModel,
                 apiVersion.AppVersion, deviceInfo.AndroidVer.APILevel,
-                deviceInfo.AndroidVer.VersionNumber, apiVersion.AppApiVersionCode);
+                deviceInfo.AndroidVer.VersionNumber, apiVersion.AppApiVersionCode, deviceInfo.AndroidBoardName);
         }
         public static string GenerateFacebookUserAgent()
         {

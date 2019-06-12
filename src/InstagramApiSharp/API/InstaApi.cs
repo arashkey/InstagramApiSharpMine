@@ -52,7 +52,7 @@ namespace InstagramApiSharp.API
         }
         private UserAuthValidate _userAuthValidate;
         bool IsCustomDeviceSet = false;
-
+        readonly Random Rnd = new Random();
         string _waterfallIdReg = "", _deviceIdReg = "", _phoneIdReg = "", _guidReg = "";
         InstaAccountRegistrationPhoneNumber _signUpPhoneNumberInfo;
 
@@ -2843,7 +2843,12 @@ namespace InstagramApiSharp.API
             if (!IsCustomDeviceSet)
                 _deviceInfo = data.DeviceInfo;
             _user = data.UserSession;
-
+            if (string.IsNullOrEmpty(_deviceInfo.IGBandwidthSpeedKbps))
+            {
+                _deviceInfo.IGBandwidthSpeedKbps = string.Format("{0}.{1}", Rnd.Next(1233, 1567), Rnd.Next(100, 999));
+                _deviceInfo.IGBandwidthTotalTimeMS = Rnd.Next(781, 999).ToString();
+                _deviceInfo.IGBandwidthTotalBytesB = ((int)((double.Parse(_deviceInfo.IGBandwidthSpeedKbps) * double.Parse(_deviceInfo.IGBandwidthTotalTimeMS)) + Rnd.Next(100, 999))).ToString();
+            }
             _httpRequestProcessor.RequestMessage.Username = data.UserSession.UserName;
             _httpRequestProcessor.RequestMessage.Password = data.UserSession.Password;
 
@@ -2876,6 +2881,12 @@ namespace InstagramApiSharp.API
                 _deviceInfo = data.DeviceInfo;
             _user = data.UserSession;
 
+            if (string.IsNullOrEmpty(_deviceInfo.IGBandwidthSpeedKbps))
+            {
+                _deviceInfo.IGBandwidthSpeedKbps = string.Format("{0}.{1}", Rnd.Next(1233, 1567), Rnd.Next(100, 999));
+                _deviceInfo.IGBandwidthTotalTimeMS = Rnd.Next(781, 999).ToString();
+                _deviceInfo.IGBandwidthTotalBytesB = ((int)((double.Parse(_deviceInfo.IGBandwidthSpeedKbps) * double.Parse(_deviceInfo.IGBandwidthTotalTimeMS)) + Rnd.Next(100, 999))).ToString();
+            }
 
             //Load Stream Edit 
             _httpRequestProcessor.RequestMessage.Username = data.UserSession.UserName;
@@ -2912,6 +2923,12 @@ namespace InstagramApiSharp.API
                 _deviceInfo = stateData.DeviceInfo;
             _user = stateData.UserSession;
 
+            if (string.IsNullOrEmpty(_deviceInfo.IGBandwidthSpeedKbps))
+            {
+                _deviceInfo.IGBandwidthSpeedKbps = string.Format("{0}.{1}", Rnd.Next(1233, 1567), Rnd.Next(100, 999));
+                _deviceInfo.IGBandwidthTotalTimeMS = Rnd.Next(781, 999).ToString();
+                _deviceInfo.IGBandwidthTotalBytesB = ((int)((double.Parse(_deviceInfo.IGBandwidthSpeedKbps) * double.Parse(_deviceInfo.IGBandwidthTotalTimeMS)) + Rnd.Next(100, 999))).ToString();
+            }
 
             //Load Stream Edit 
             _httpRequestProcessor.RequestMessage.Username = stateData.UserSession.UserName;
