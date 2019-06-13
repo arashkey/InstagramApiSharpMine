@@ -379,6 +379,9 @@ namespace InstagramApiSharp.API
 
         public const string CONSENT_NEW_USER_FLOW = API_SUFFIX + "/consent/new_user_flow/";
         public const string CONSENT_NEW_USER_FLOW_BEGINS = API_SUFFIX + "/consent/new_user_flow_begins/";
+        public const string CONSENT_EXISTING_USER_FLOW = API_SUFFIX + "/consent/existing_user_flow/";
+
+
 
         #endregion Consent endpoints constants
 

@@ -144,16 +144,16 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
             return requestMessage;
         }
 
-        //public static string GenerateDeviceIdFromGuid(Guid guid)
-        //{
-        //    var hashedGuid = CryptoHelper.CalculateMd5(guid.ToString());
-        //    return $"android-{hashedGuid.Substring(0, 16)}";
-        //}
         public static string GenerateDeviceIdFromGuid(Guid guid)
         {
-            var unixMiliSec = Math.Round((double)DateTime.UtcNow.ToUnixTimeMiliSeconds()).ToString() + Rnd.Next(6789, 9999).ToString();
-            var hashedGuid = CryptoHelper.CalculateMd5(unixMiliSec);
+            var hashedGuid = CryptoHelper.CalculateMd5(guid.ToString());
             return $"android-{hashedGuid.Substring(0, 16)}";
         }
+        //public static string GenerateDeviceIdFromGuid(Guid guid)
+        //{
+        //    var unixMiliSec = Math.Round((double)DateTime.UtcNow.ToUnixTimeMiliSeconds()).ToString() + Rnd.Next(6789, 9999).ToString();
+        //    var hashedGuid = CryptoHelper.CalculateMd5(unixMiliSec);
+        //    return $"android-{hashedGuid.Substring(0, 16)}";
+        //}
     }
 }

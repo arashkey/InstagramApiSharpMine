@@ -912,6 +912,36 @@ namespace InstagramApiSharp.API
         #endregion Register new account with Phone number and email
 
         #region Authentication and challenge functions
+        /// <summary>
+        ///     Accept consent required (only for GDPR countries)
+        /// </summary>
+        /// <param name="delay">Delay time between requests (null => 1.5 seconds)</param>
+        public async Task<IResult<bool>> AcceptConsentAsync(TimeSpan? delay = null)
+        {
+            try
+            {
+                if (delay == null)
+                    delay = TimeSpan.FromSeconds(1.5);
+
+                await AcceptFirstStepConsentAsync();
+                await Task.Delay(delay.Value);
+                await AcceptSecondStepConsentAsync();
+                await Task.Delay(delay.Value);
+                await AcceptThirdStepConsentAsync();
+
+                return Result.Success(true);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                LogException(exception);
+                return Result.Fail(exception, false);
+            }
+        }
 
         /// <summary>
         ///     Login using given credentials asynchronously
@@ -1135,11 +1165,14 @@ namespace InstagramApiSharp.API
 
             try
             {
-                var cookies = _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
-                    .BaseAddress);
+                if (string.IsNullOrEmpty(_user.CsrfToken))
+                {
+                    var cookies = _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
+                        .BaseAddress);
 
-                var csrftoken = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
-                _user.CsrfToken = csrftoken;
+                    var csrftoken = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
+                    _user.CsrfToken = csrftoken;
+                }
 
                 var twoFactorRequestMessage = new ApiTwoFactorRequestMessage(verificationCode,
                     _httpRequestProcessor.RequestMessage.Username,
@@ -1190,7 +1223,7 @@ namespace InstagramApiSharp.API
                     return Result.Fail("Challenge is required", InstaLoginTwoFactorResult.ChallengeRequired);
 
                 }
-                return Result.Fail("This code is no longer valid, please, call LoginAsync again to request a new one",
+                return Result.Fail("This code is no longer valid, please, request again for new one",
                     InstaLoginTwoFactorResult.CodeExpired);
             }
             catch (HttpRequestException httpException)
@@ -3100,6 +3133,9 @@ namespace InstagramApiSharp.API
                 return Result.Fail<bool>(exception);
             }
         }
+        /// <summary>
+        ///     Send requests after you logged in successfully (Act as an real instagram user)
+        /// </summary>
         public async Task<IResult<bool>> SendRequestsAfterLoginAsync()
         {
             try
@@ -3298,6 +3334,123 @@ namespace InstagramApiSharp.API
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
+            }
+        }
+
+
+        private async Task<IResult<bool>> AcceptFirstStepConsentAsync()
+        {
+            try
+            {
+                var cookies = _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
+                    .BaseAddress);
+
+                var csrftoken = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
+                _user.CsrfToken = csrftoken;
+
+                var instaUri = UriCreator.GetConsentExistingUserFlowUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_csrftoken", _user.CsrfToken}
+                };
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+
+                return Result.Success(true);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                LogException(exception);
+                return Result.Fail(exception, false);
+            }
+        }
+        private async Task<IResult<bool>> AcceptSecondStepConsentAsync()
+        {
+            try
+            {
+                var cookies = _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
+                    .BaseAddress);
+
+                var csrftoken = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
+                _user.CsrfToken = csrftoken;
+
+                var instaUri = UriCreator.GetConsentExistingUserFlowUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"current_screen_key", "qp_intro"},
+                    {"existing_user_intro_state", "2"},
+                };
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                return Result.Success(true);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                LogException(exception);
+                return Result.Fail(exception, false);
+            }
+        }
+        private async Task<IResult<bool>> AcceptThirdStepConsentAsync()
+        {
+            try
+            {
+                var cookies = _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
+                    .BaseAddress);
+
+                var csrftoken = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
+                _user.CsrfToken = csrftoken;
+                var instaUri = UriCreator.GetConsentExistingUserFlowUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"current_screen_key", "tos_and_two_age_button"},
+                    {"updates", "{\"age_consent_state\":\"2\",\"tos_data_policy_consent_state\":\"2\"}"},
+                };
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                return Result.Success(true);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                LogException(exception);
+                return Result.Fail(exception, false);
             }
         }
 

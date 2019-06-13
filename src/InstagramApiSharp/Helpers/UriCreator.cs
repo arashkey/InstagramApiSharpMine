@@ -2480,5 +2480,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for qe sync");
             return instaUri;
         }
+        public static Uri GetConsentExistingUserFlowUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.CONSENT_EXISTING_USER_FLOW, out var instaUri))
+                throw new Exception("Cant create URI for consent existing user flow");
+            return instaUri;
+        }
     }
 }
