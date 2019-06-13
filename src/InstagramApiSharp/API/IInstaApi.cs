@@ -196,6 +196,10 @@ namespace InstagramApiSharp.API
         /// </summary>
         InstaApiVersion GetApiVersionInfo();
         /// <summary>
+        ///     Get api version type
+        /// </summary>
+        InstaApiVersionType GetApiVersionType();
+        /// <summary>
         ///     Get user agent of current <see cref="IInstaApi"/>
         /// </summary>
         string GetUserAgent();
@@ -437,7 +441,7 @@ namespace InstagramApiSharp.API
         ///     <para>Note 2: One call per one account! No need to call while you are loading a session</para>
         /// </summary>
         Task<IResult<bool>> SendRequestsBeforeLoginAsync();
-
+        Task<IResult<bool>> SendRequestsAfterLoginAsync();
         /// <summary>
         ///     Login using given credentials asynchronously
         /// </summary>
