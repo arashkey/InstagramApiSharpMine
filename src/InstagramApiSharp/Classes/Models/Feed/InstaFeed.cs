@@ -39,6 +39,7 @@ namespace InstagramApiSharp.Classes.Models
         public ObservableCollection<InstaReelFeed> Stories { get; set; } = new ObservableCollection<InstaReelFeed>();
         //public List<InstaStory> Stories { get; set; } = new List<InstaStory>();
         public List<InstaSuggestionItem> SuggestedUserItems { get; set; } = new List<InstaSuggestionItem>();
+        public List<InstaSuggestionItem> SuggestedUserCardsItems { get; set; } = new List<InstaSuggestionItem>();
         public InstaAllCatchedUp EndOfFeedDemarcator { get; set; }
         public List<InstaHashtagMedia> Hashtags { get; set; } = new List<InstaHashtagMedia>();
         public InstaStoriesNetego StoriesNetego { get; set; }

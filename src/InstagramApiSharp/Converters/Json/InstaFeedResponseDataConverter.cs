@@ -147,6 +147,28 @@ namespace InstagramApiSharp.Converters.Json
                             Type = InstaFeedsType.Media
                         });
             }
+
+            var suggestedUsers = token["suggested_users"]?["suggestion_cards"];
+            if (suggestedUsers != null)
+            {
+                var post = new InstaPostResponse
+                {
+                    Type = InstaFeedsType.SuggestedUsersCard
+                };
+
+                foreach (var item in suggestedUsers)
+                {
+                    var card = item["user_card"];
+                    if (card != null)
+                    {
+                        if (card == null) continue;
+                        var usr = card.First.First.ToObject<InstaSuggestionItemResponse>();
+                        feed.SuggestedUsers.Add(usr);
+                        post.SuggestedUserCardsItems.Add(usr);
+                    }
+                }
+                feed.Posts.Add(post);
+            }
             return feed;
         }
 

@@ -11,6 +11,7 @@ namespace InstagramApiSharp.Enums
         SuggestedUsers,
         EndOfFeedDemarcator,
         Hashtag,
-        StoriesNetego
+        StoriesNetego,
+        SuggestedUsersCard
     }
 }

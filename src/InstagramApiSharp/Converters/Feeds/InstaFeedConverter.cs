@@ -81,6 +81,15 @@ namespace InstagramApiSharp.Converters
                             case InstaFeedsType.StoriesNetego:
                                 post.StoriesNetego = item.StoriesNetego;
                                 break;
+                            case InstaFeedsType.SuggestedUsersCard:
+                                foreach (var user in item.SuggestedUserCardsItems)
+                                    try
+                                    {
+                                        if (user != null)
+                                            post.SuggestedUserCardsItems.Add(ConvertersFabric.Instance.GetSuggestionItemConverter(user).Convert());
+                                    }
+                                    catch { }
+                                break;
                         }
                         feed.Posts.Add(post);
                     }

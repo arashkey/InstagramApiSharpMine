@@ -32,6 +32,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public List<InstaReelFeedResponse> Stories { get; set; } = new List<InstaReelFeedResponse>();
         //public List<InstaStoryResponse> Stories { get; set; } = new List<InstaStoryResponse>();
         public List<InstaSuggestionItemResponse> SuggestedUserItems { get; set; } = new List<InstaSuggestionItemResponse>();
+        public List<InstaSuggestionItemResponse> SuggestedUserCardsItems { get; set; } = new List<InstaSuggestionItemResponse>();
         public InstaAllCatchedUp EndOfFeedDemarcator { get; set; }
         public List<InstaHashtagMedia> Hashtags { get; set; } = new List<InstaHashtagMedia>();
         public InstaStoriesNetego StoriesNetego { get; set; }
