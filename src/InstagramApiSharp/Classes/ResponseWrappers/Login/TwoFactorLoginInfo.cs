@@ -17,6 +17,15 @@ namespace InstagramApiSharp.Classes
 
         [JsonProperty("phone_verification_settings")]
         public InstaPhoneVerificationSettings PhoneVerificationSettings { get; set; }
+        [JsonProperty("sms_two_factor_on")]
+        public bool? SmsTwoFactorOn { get; set; }
+        [JsonProperty("totp_two_factor_on")]
+        public bool? ToTpTwoFactorOn { get; set; }
+        [JsonProperty("show_new_login_screen")]
+        public bool? ShowNewLoginScreen { get; set; }
+        [JsonProperty("show_trusted_device_option")]
+        public bool? ShowTrustedDeviceOption { get; set; }
+
 
         public static InstaTwoFactorLoginInfo Empty => new InstaTwoFactorLoginInfo();
     }

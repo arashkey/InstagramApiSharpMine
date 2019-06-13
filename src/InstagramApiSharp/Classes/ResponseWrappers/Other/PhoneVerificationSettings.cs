@@ -19,7 +19,8 @@ namespace InstagramApiSharp.Classes
 
         [JsonProperty("robocall_after_max_sms")]
         public bool? RobocallAfterMaxSms { get; set; }
-
+        [JsonProperty("robocall_count_down_time_sec")]
+        public int? RobocallCountDownTimeSeconds { get; set; } 
         [JsonProperty("robocall_count_down_time")]
         public int? RobocallCountDownTime { get; set; }
     }

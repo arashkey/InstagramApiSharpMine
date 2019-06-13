@@ -1121,23 +1121,30 @@ namespace InstagramApiSharp.API
         ///     Before call this method, please run LoginAsync first.
         /// </summary>
         /// <param name="verificationCode">Verification Code sent to your phone number</param>
+        /// <param name="trustThisDevice">Trust this device or not?!</param>
         /// <returns>
         ///     Success --> is succeed
         ///     InvalidCode --> The code is invalid
         ///     CodeExpired --> The code is expired, please request a new one.
         ///     Exception --> Something wrong happened
         /// </returns>
-        public async Task<IResult<InstaLoginTwoFactorResult>> TwoFactorLoginAsync(string verificationCode)
+        public async Task<IResult<InstaLoginTwoFactorResult>> TwoFactorLoginAsync(string verificationCode, bool trustThisDevice = false)
         {
             if (_twoFactorInfo == null)
-                return Result.Fail<InstaLoginTwoFactorResult>("Run LoginAsync first");
+                return Result.Fail<InstaLoginTwoFactorResult>("Re-login required");
 
             try
             {
+                var cookies = _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
+                    .BaseAddress);
+
+                var csrftoken = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
+                _user.CsrfToken = csrftoken;
+
                 var twoFactorRequestMessage = new ApiTwoFactorRequestMessage(verificationCode,
                     _httpRequestProcessor.RequestMessage.Username,
                     _httpRequestProcessor.RequestMessage.DeviceId,
-                    _twoFactorInfo.TwoFactorIdentifier);
+                    _twoFactorInfo.TwoFactorIdentifier,_user.CsrfToken, _deviceInfo.DeviceGuid.ToString(), Convert.ToInt16(trustThisDevice));
 
                 var instaUri = UriCreator.GetTwoFactorLoginUri();
                 var signature =
@@ -1482,11 +1489,11 @@ namespace InstagramApiSharp.API
 
                 var postData = new Dictionary<string, string>
                 {
-                    { "two_factor_identifier",  _twoFactorInfo.TwoFactorIdentifier },
-                    { "username",    _httpRequestProcessor.RequestMessage.Username},
-                    { "device_id",   _httpRequestProcessor.RequestMessage.DeviceId},
-                    { "guid",        _deviceInfo.DeviceGuid.ToString()},
-                    { "_csrftoken",    _user.CsrfToken }
+                    {"_csrftoken", _user.CsrfToken},
+                    {"two_factor_identifier", _twoFactorInfo.TwoFactorIdentifier },
+                    {"username", _httpRequestProcessor.RequestMessage.Username},
+                    {"guid", _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id", _httpRequestProcessor.RequestMessage.DeviceId}
                 };
 
                 var instaUri = UriCreator.GetAccount2FALoginAgainUri();
