@@ -11,5 +11,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("stories")]
         public List<InstaRecentActivityFeedResponse> Stories { get; set; }
             = new List<InstaRecentActivityFeedResponse>();
+
+        [JsonIgnore] public InstaSuggestionItemListResponse SuggestedItems { get; set; } = new InstaSuggestionItemListResponse();
     }
 }

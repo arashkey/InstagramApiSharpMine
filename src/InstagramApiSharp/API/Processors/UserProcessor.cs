@@ -1602,6 +1602,12 @@ namespace InstagramApiSharp.API.Processors
                 activityFeed.Items.AddRange(
                     feedPage.Stories.Select(ConvertersFabric.Instance.GetSingleRecentActivityConverter)
                         .Select(converter => converter.Convert()));
+
+                if (feedPage.SuggestedItems?.Count > 0)
+                    activityFeed.SuggestedItems
+                        .AddRange(ConvertersFabric.Instance
+                        .GetSuggestionItemListConverter(feedPage.SuggestedItems).Convert());
+
                 paginationParameters.PagesLoaded++;
                 activityFeed.NextMaxId = paginationParameters.NextMaxId = feedPage.NextMaxId;
                 while (!string.IsNullOrEmpty(nextId)
@@ -1612,8 +1618,14 @@ namespace InstagramApiSharp.API.Processors
                         return Result.Fail(nextFollowingFeed.Info, activityFeed);
                     nextId = nextFollowingFeed.Value.NextMaxId;
                     activityFeed.Items.AddRange(
-                        feedPage.Stories.Select(ConvertersFabric.Instance.GetSingleRecentActivityConverter)
+                        nextFollowingFeed.Value.Stories.Select(ConvertersFabric.Instance.GetSingleRecentActivityConverter)
                             .Select(converter => converter.Convert()));
+
+                    if (nextFollowingFeed.Value.SuggestedItems?.Count > 0)
+                        activityFeed.SuggestedItems
+                            .AddRange(ConvertersFabric.Instance
+                            .GetSuggestionItemListConverter(feedPage.SuggestedItems).Convert());
+
                     paginationParameters.PagesLoaded++;
                     activityFeed.NextMaxId = paginationParameters.NextMaxId = nextId;
                 }

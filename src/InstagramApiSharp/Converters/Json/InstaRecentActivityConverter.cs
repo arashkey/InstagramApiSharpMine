@@ -27,6 +27,11 @@ namespace InstagramApiSharp.Converters.Json
             }
             else
             {
+                if(token.SelectToken("friend_request_stories") != null)
+                {
+                    var friendRequests = token.SelectToken("friend_request_stories")?.ToObject<List<InstaRecentActivityFeedResponse>>();
+                    recentActivity.Stories.AddRange(friendRequests);
+                }
                 if (token.SelectToken("new_stories") != null)
                 {
                     var newStories = token.SelectToken("new_stories")?.ToObject<List<InstaRecentActivityFeedResponse>>();
@@ -39,7 +44,10 @@ namespace InstagramApiSharp.Converters.Json
                 }
                 recentActivity.IsOwnActivity = true;
             }
-
+            if (token.SelectToken("aymf") != null)
+            {
+                recentActivity.SuggestedItems = token.SelectToken("aymf")?.SelectToken("items")?.ToObject<InstaSuggestionItemListResponse>();
+            }
             return recentActivity;
         }
 

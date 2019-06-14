@@ -6,6 +6,7 @@ namespace InstagramApiSharp.Classes.Models
     {
         public bool IsOwnActivity { get; set; } = false;
         public List<InstaRecentActivityFeed> Items { get; set; } = new List<InstaRecentActivityFeed>();
+        public InstaSuggestionItemList SuggestedItems { get; set; } = new InstaSuggestionItemList();
         public string NextMaxId { get; set; }
     }
 }
