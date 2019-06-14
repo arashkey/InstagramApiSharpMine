@@ -162,7 +162,7 @@ namespace InstagramApiSharp.Converters.Json
                     if (card != null)
                     {
                         if (card == null) continue;
-                        var usr = card.First.First.ToObject<InstaSuggestionItemResponse>();
+                        var usr = card.ToObject<InstaSuggestionItemResponse>();
                         feed.SuggestedUsers.Add(usr);
                         post.SuggestedUserCardsItems.Add(usr);
                     }

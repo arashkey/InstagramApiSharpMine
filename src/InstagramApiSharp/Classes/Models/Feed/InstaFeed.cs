@@ -33,6 +33,8 @@ namespace InstagramApiSharp.Classes.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
         }
+        private int _selectedIndex = -1;
+        public int SelectedIndex { get { return _selectedIndex; } set { _selectedIndex = value; OnPropertyChanged("SelectedIndex"); } }
         public InstaFeedsType Type { get; set; }
         public InstaMedia Media { get; set; }
         
