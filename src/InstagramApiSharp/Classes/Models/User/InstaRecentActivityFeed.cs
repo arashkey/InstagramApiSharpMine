@@ -43,5 +43,7 @@ namespace InstagramApiSharp.Classes.Models
 
         public int RequestCount { get; set; } = 0;
         public string SubText { get; set; }
+
+        public string IconUrl { get; set; }
     }
 }

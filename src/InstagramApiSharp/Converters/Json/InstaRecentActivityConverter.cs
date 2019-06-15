@@ -30,7 +30,15 @@ namespace InstagramApiSharp.Converters.Json
                 if(token.SelectToken("friend_request_stories") != null)
                 {
                     var friendRequests = token.SelectToken("friend_request_stories")?.ToObject<List<InstaRecentActivityFeedResponse>>();
-                    recentActivity.Stories.AddRange(friendRequests);
+                    if (friendRequests?.Count > 0)
+                    {
+                        try
+                        {
+                            if (friendRequests[0]?.Args?.RequestCount > 0)
+                                recentActivity.Stories.AddRange(friendRequests);
+                        }
+                        catch { }
+                    }
                 }
                 if (token.SelectToken("new_stories") != null)
                 {

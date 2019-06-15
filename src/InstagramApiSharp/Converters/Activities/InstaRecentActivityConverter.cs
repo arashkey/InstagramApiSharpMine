@@ -28,8 +28,15 @@ namespace InstagramApiSharp.Converters
                 SecondProfileId = SourceObject.Args.SecondProfileId,
                 SecondProfileImage = SourceObject.Args.SecondProfileImage,
                 SubText = SourceObject.Args.SubText,
-                RequestCount = SourceObject.Args.RequestCount
+                RequestCount = SourceObject.Args.RequestCount,
+                IconUrl = SourceObject.Args.IconUrl
             };
+            if (!string.IsNullOrEmpty(SourceObject.Args.IconUrl))
+               activityStory.ProfileImage = SourceObject.Args.IconUrl;
+            if (!string.IsNullOrEmpty(SourceObject.Args.SubText))
+                activityStory.Text = SourceObject.Args.SubText;
+            if (!string.IsNullOrEmpty(SourceObject.Args.RichText))
+                activityStory.Text = SourceObject.Args.RichText;
             try
             {
                 activityStory.Type = (Enums.InstaActivityFeedType)SourceObject.Type;
@@ -43,7 +50,7 @@ namespace InstagramApiSharp.Converters
             catch { }
             try
             {
-                activityStory.StoryType = (Enums.InstaActivityFeedStoryType)SourceObject.Args.StoryType;
+                activityStory.StoryType = (Enums.InstaActivityFeedStoryType)SourceObject.StoryType;
             }
             catch { }
             if (activityStory.Type == Enums.InstaActivityFeedType.FriendRequest)

@@ -9,5 +9,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("type")] public int Type { get; set; }
 
         [JsonProperty("pk")] public string Pk { get; set; }
+
+        [JsonProperty("story_type")] public int StoryType { get; set; }
     }
 }

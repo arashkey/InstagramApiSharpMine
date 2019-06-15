@@ -18,6 +18,7 @@ namespace InstagramApiSharp.Enums
         SharedPost = 49,
         LikedTagged = 192,
         TaggedYou = 102,
-        FriendRequest = 6
+        FriendRequest = 6,
+        FollowPeople = 45
     }
 }
