@@ -32,6 +32,10 @@ namespace InstagramApiSharp.API
         public const string ACCOUNTS_GET_PREFILL_CANDIDATES = API_SUFFIX + "/accounts/get_prefill_candidates/";
         public const string QE_SYNC = API_SUFFIX + "/qe/sync/";
 
+
+        public const string DIRECT_THREAD_VIDEOCALLS_MUTE = API_SUFFIX + "/direct_v2/threads/{0}/mute_video_call/";
+        public const string DIRECT_THREAD_VIDEOCALLS_UNMUTE = API_SUFFIX + "/direct_v2/threads/{0}/unmute_video_call/";
+
         // push 
         public const string FACEBOOK_OTA_FIELDS = "update%7Bdownload_uri%2Cdownload_uri_delta_base%2Cversion_code_delta_base%2Cdownload_uri_delta%2Cfallback_to_full_update%2Cfile_size_delta%2Cversion_code%2Cpublished_date%2Cfile_size%2Cota_bundle_type%2Cresources_checksum%7D";
         public const int FACEBOOK_ORCA_PROTOCOL_VERSION = 20150314;
@@ -421,15 +425,15 @@ namespace InstagramApiSharp.API
         public const string DIRECT_THREAD_ITEM_SEEN = API_SUFFIX + "/direct_v2/visual_threads/{0}/item_seen/";
         public const string DIRECT_THREAD_SEEN = API_SUFFIX + "/direct_v2/threads/{0}/items/{1}/seen/";
         public const string DIRECT_THREAD_LEAVE = API_SUFFIX + "/direct_v2/threads/{0}/leave/";
-        public const string DIRECT_THREAD_MUTE = API_SUFFIX + "/direct_v2/threads/{0}/mute/";
-        public const string DIRECT_THREAD_UNMUTE = API_SUFFIX + "/direct_v2/threads/{0}/unmute/";
+        public const string DIRECT_THREAD_MESSAGES_MUTE = API_SUFFIX + "/direct_v2/threads/{0}/mute/";
+        public const string DIRECT_THREAD_MESSAGES_UNMUTE = API_SUFFIX + "/direct_v2/threads/{0}/unmute/";
         public const string DIRECT_THREAD_UPDATE_TITLE = API_SUFFIX + "/direct_v2/threads/{0}/update_title/";
         public const string DIRECT_UNSTAR = API_SUFFIX + "/direct_v2/threads/{0}/unlabel/";
         public const string GET_DIRECT_INBOX = API_SUFFIX + "/direct_v2/inbox/";
         public const string GET_DIRECT_PENDING_INBOX = API_SUFFIX + "/direct_v2/pending_inbox/";
         public const string GET_DIRECT_SHARE_USER = API_SUFFIX + "/direct_v2/threads/broadcast/profile/";
         public const string GET_DIRECT_TEXT_BROADCAST = API_SUFFIX + "/direct_v2/threads/broadcast/text/";
-        public const string GET_DIRECT_THREAD = API_SUFFIX + "/direct_v2/threads/{0}";
+        public const string GET_DIRECT_THREAD = API_SUFFIX + "/direct_v2/threads/{0}/";
         public const string GET_DIRECT_THREAD_APPROVE = API_SUFFIX + "/direct_v2/threads/{0}/approve/";
         public const string GET_DIRECT_THREAD_APPROVE_MULTIPLE = API_SUFFIX + "/direct_v2/threads/approve_multiple/";
         public const string GET_DIRECT_THREAD_DECLINE = API_SUFFIX + "/direct_v2/threads/{0}/decline/";

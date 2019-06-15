@@ -680,15 +680,15 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
-        ///     Mute direct thread
+        ///     Mute direct thread messages
         /// </summary>
         /// <param name="threadId">Thread id</param>
-        public async Task<IResult<bool>> MuteDirectThreadAsync(string threadId)
+        public async Task<IResult<bool>> MuteDirectThreadMessagesAsync(string threadId)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var instaUri = UriCreator.GetMuteDirectThreadUri(threadId);
+                var instaUri = UriCreator.GetMuteDirectThreadMessagesUri(threadId);
 
                 var data = new Dictionary<string, string>
                 {
@@ -703,6 +703,43 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<bool>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
                 return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
+        /// <summary>
+        ///     Mute direct thread video calls
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        public async Task<IResult<bool>> MuteDirectThreadVideoCallsAsync(string threadId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetMuteDirectThreadVideoCallsUri(threadId);
+
+                var data = new Dictionary<string, string>
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()}
+                };
+                var request =
+                    _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
             }
             catch (HttpRequestException httpException)
             {
@@ -1524,15 +1561,15 @@ namespace InstagramApiSharp.API.Processors
             }
         }
         /// <summary>
-        ///     Unmute direct thread
+        ///     Unmute direct thread messages
         /// </summary>
         /// <param name="threadId">Thread id</param>
-        public async Task<IResult<bool>> UnMuteDirectThreadAsync(string threadId)
+        public async Task<IResult<bool>> UnMuteDirectThreadMessagesAsync(string threadId)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var instaUri = UriCreator.GetUnMuteDirectThreadUri(threadId);
+                var instaUri = UriCreator.GetUnMuteDirectThreadMessagesUri(threadId);
 
                 var data = new Dictionary<string, string>
                 {
@@ -1560,6 +1597,42 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
+        /// <summary>
+        ///     Unmute direct thread video calls
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        public async Task<IResult<bool>> UnMuteDirectThreadVideoCallsAsync(string threadId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetUnMuteDirectThreadVideoCallsUri(threadId);
+
+                var data = new Dictionary<string, string>
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()}
+                };
+                var request =
+                    _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
+                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
         /// <summary>
         ///     Update direct thread title (for groups)
         /// </summary>

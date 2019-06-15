@@ -125,10 +125,16 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<bool>> MarkDirectThreadAsSeenAsync(string threadId, string itemId);
 
         /// <summary>
-        ///     Mute direct thread
+        ///     Mute direct thread messages
         /// </summary>
         /// <param name="threadId">Thread id</param>
-        Task<IResult<bool>> MuteDirectThreadAsync(string threadId);
+        Task<IResult<bool>> MuteDirectThreadMessagesAsync(string threadId);
+
+        /// <summary>
+        ///     Mute direct thread video calls
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        Task<IResult<bool>> MuteDirectThreadVideoCallsAsync(string threadId);
 
 
         /// <summary>
@@ -435,10 +441,16 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="itemId">Item id (message id)</param>
         Task<IResult<bool>> UnLikeThreadMessageAsync(string threadId, string itemId);
         /// <summary>
-        ///     Unmute direct thread
+        ///     Unmute direct thread messages
         /// </summary>
         /// <param name="threadId">Thread id</param>
-        Task<IResult<bool>> UnMuteDirectThreadAsync(string threadId);
+        Task<IResult<bool>> UnMuteDirectThreadMessagesAsync(string threadId);
+
+        /// <summary>
+        ///     Unmute direct thread video calls
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        Task<IResult<bool>> UnMuteDirectThreadVideoCallsAsync(string threadId);
 
         /// <summary>
         ///     Update direct thread title (for groups)

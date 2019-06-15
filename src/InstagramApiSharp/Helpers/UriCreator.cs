@@ -1124,9 +1124,9 @@ namespace InstagramApiSharp.Helpers
                 : null;
         }
 
-        public static Uri GetMuteDirectThreadUri(string threadId)
+        public static Uri GetMuteDirectThreadMessagesUri(string threadId)
         {
-            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_THREAD_MUTE, threadId), out var instaUri))
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_THREAD_MESSAGES_MUTE, threadId), out var instaUri))
                 throw new Exception("Cant create URI for mute direct thread");
             return instaUri;
         }
@@ -1582,9 +1582,9 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetUnMuteDirectThreadUri(string threadId)
+        public static Uri GetUnMuteDirectThreadMessagesUri(string threadId)
         {
-            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_THREAD_UNMUTE, threadId), out var instaUri))
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_THREAD_MESSAGES_UNMUTE, threadId), out var instaUri))
                 throw new Exception("Cant create URI for unmute direct thread");
             return instaUri;
         }
@@ -2484,6 +2484,20 @@ namespace InstagramApiSharp.Helpers
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.CONSENT_EXISTING_USER_FLOW, out var instaUri))
                 throw new Exception("Cant create URI for consent existing user flow");
+            return instaUri;
+        }
+
+        public static Uri GetMuteDirectThreadVideoCallsUri(string threadId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_THREAD_VIDEOCALLS_MUTE, threadId), out var instaUri))
+                throw new Exception("Cant create URI for mute direct thread video calls");
+            return instaUri;
+        }
+
+        public static Uri GetUnMuteDirectThreadVideoCallsUri(string threadId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_THREAD_VIDEOCALLS_UNMUTE, threadId), out var instaUri))
+                throw new Exception("Cant create URI for unmute direct thread video calls");
             return instaUri;
         }
     }
