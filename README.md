@@ -4,10 +4,25 @@ Private version of [InstagramApiSharp](https://github.com/ramtinak/PrivateInstag
 
 | Target | Branch | Version | Changelog |
 | ------ | ------ | ------ | ------ |
-| Github | master | v2.0.5 | [v2.0.5](https://github.com/ramtinak/InstagramApiSharp/issues/244#issuecomment-501329122) |
-| Release | master | v2.0.5 | [v2.0.5](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
+| Github | master | v2.0.6 | [v2.0.6](https://github.com/ramtinak/InstagramApiSharp/issues/244#issuecomment-502359925) |
+| Release | master | v2.0.6 | [v2.0.6](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
 
 #### Version changes
+v2.0.6
+- [Update] TwoFactorLoginAsync to latest version
+- [Update] FollowUserAsync
+- [Update] UnFollowUserAsync
+- [Rename] MuteDirectThreadAsync to MuteDirectThreadMessagesAsync
+- [Rename] UnMuteDirectThreadAsync to UnMuteDirectThreadMessagesAsync
+- [Add] MuteDirectThreadVideoCallsAsync to MessagingProcessor
+- [Add] UnMuteDirectThreadVideoCallsAsync to MessagingProcessor
+- [Add] GetApiVersionType to IInstaApi
+- [Add] AcceptConsentAsync to IInstaApi [for consent_required]
+- [Add] SuggestedUserCardsItems to InstaPost class for new suggestions
+- [Add] new properties to InstaActivityFeed class
+- [Add] clarify types to InstaRecentActivityFeed class
+- [Add] support for friend request in InstaRecentActivityFeed class
+
 v2.0.5
 - [Bugfix] for ChangeProfilePictureAsync
 - [Update] LoginAsync
