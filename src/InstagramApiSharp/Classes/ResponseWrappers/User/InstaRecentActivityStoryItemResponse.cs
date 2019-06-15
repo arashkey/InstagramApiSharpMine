@@ -34,8 +34,8 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("comment_id")] public long? CommentId { get; set; }
         [JsonProperty("comment_ids")] public List<long> CommentIds { get; set; } = new List<long>();
-        [JsonProperty("story_type")] public int? StoryType { get; set; }
-        [JsonProperty("request_count")] public int? RequestCount { get; set; }
+        [JsonProperty("story_type")] public int StoryType { get; set; } = -1;
+        [JsonProperty("request_count")] public int RequestCount { get; set; } = 0;
         [JsonProperty("sub_text")] public string SubText { get; set; }
 
     }

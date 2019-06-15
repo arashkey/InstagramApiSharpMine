@@ -1529,11 +1529,12 @@ namespace InstagramApiSharp.API.Processors
             {
                 var fields = new Dictionary<string, string>
                 {
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"user_id", userId.ToString()},
-                    {"radio_type", "wifi-none"}
+                    {"radio_type", "wifi-none"},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()}
                 };
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
