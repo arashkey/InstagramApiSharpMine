@@ -2,9 +2,9 @@ Private version of [InstagramApiSharp](https://github.com/ramtinak/PrivateInstag
 
 
 
-| Target | Branch | Version | Changelog |
+| Target | Branch | Version | Download |
 | ------ | ------ | ------ | ------ |
-| Github | master | v2.0.6 | [v2.0.6](https://github.com/ramtinak/InstagramApiSharp/issues/244#issuecomment-502359925) |
+| Github | master | v2.0.6 | [v2.0.6](https://github.com/ramtinak/InstagramApiSharpMine/archive/master.zip) |
 | Release | master | v2.0.6 | [v2.0.6](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
 
 #### Version changes
