@@ -67,12 +67,13 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"user_breadcrumb", breadcrumb},
                     {"idempotence_token", Guid.NewGuid().ToString()},
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_csrftoken", _user.CsrfToken},
+                    {"radio_type", "wifi-none"},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"comment_text", text},
                     {"containermodule", "comments_feed_timeline"},
-                    {"radio_type", "wifi-none"}
                 };
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
