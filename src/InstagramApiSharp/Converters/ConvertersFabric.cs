@@ -1033,5 +1033,11 @@ namespace InstagramApiSharp.Converters
         {
             return new InstaStoryQuizAnswerConverter { SourceObject = response };
         }
+
+        public IObjectConverter<InstaDirectRespond, InstaDirectRespondResponse> GetDirectRespondConverter(
+            InstaDirectRespondResponse response)
+        {
+            return new InstaDirectRespondConverter { SourceObject = response };
+        }
     }
 }

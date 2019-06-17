@@ -729,9 +729,9 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetFriendshipPendingRequestsUri(string rankToken)
+        public static Uri GetFriendshipPendingRequestsUri(/*string rankToken*/)
         {
-            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.FRIENDSHIPS_PENDING_REQUESTS, rankToken), out var instaUri))
+            if (!Uri.TryCreate(BaseInstagramUri, /*string.Format(*/InstaApiConstants.FRIENDSHIPS_PENDING_REQUESTS/*, rankToken)*/, out var instaUri))
                 throw new Exception("Cant create URI for friendship pending requests");
             return instaUri;
         }

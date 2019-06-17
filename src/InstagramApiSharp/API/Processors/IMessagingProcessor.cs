@@ -326,7 +326,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadIds">Message thread ids</param>
         /// <param name="text">Message text</param>
         /// <returns>List of threads</returns>
-        Task<IResult<bool>> SendDirectTextAsync(string recipients, string threadIds,
+        Task<IResult<InstaDirectRespondPayload>> SendDirectTextAsync(string recipients, string threadIds,
             string text);
 
         /// <summary>

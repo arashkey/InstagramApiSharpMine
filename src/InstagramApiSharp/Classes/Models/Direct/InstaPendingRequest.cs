@@ -24,11 +24,6 @@ namespace InstagramApiSharp.Classes.Models
         [JsonProperty("netego_type")]
         public string NetegoType { get; set; }
         [JsonProperty("suggestions")]
-        public InstaPendingSuggestedSingleUser[] Suggestions { get; set; }
-    }
-    public class InstaPendingSuggestedSingleUser
-    {
-        [JsonProperty("user")]
-        public InstaUserShortResponse User { get; set; }
+        public InstaSuggestionItemListResponse Suggestions { get; set; }
     }
 }
