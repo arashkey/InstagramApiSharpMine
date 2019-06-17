@@ -2,9 +2,9 @@
 {
     public class InstaLink
     {
-        public string Type { get; set; }
-        public string Start { get; set; }
-        public string End { get; set; }
+        public Enums.InstaLinkType Type { get; set; }
+        public int Start { get; set; }
+        public int End { get; set; }
         public string Id { get; set; }
     }
 }

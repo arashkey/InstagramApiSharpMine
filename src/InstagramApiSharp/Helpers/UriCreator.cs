@@ -1201,9 +1201,9 @@ namespace InstagramApiSharp.Helpers
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.GET_RECENT_ACTIVITY, out var instaUri))
                 throw new Exception("Cant create URI (get recent activity)");
-            var query = $"activity_module=all";
-            var uriBuilder = new UriBuilder(instaUri) { Query = query };
-            return uriBuilder.Uri;
+            //var query = $"activity_module=all";
+            //var uriBuilder = new UriBuilder(instaUri) { Query = query };
+            return instaUri;
         }
 
         public static Uri GetRecentRecipientsUri()

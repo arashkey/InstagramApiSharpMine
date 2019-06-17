@@ -2,6 +2,7 @@
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
+using System;
 
 namespace InstagramApiSharp.Converters
 {
@@ -58,13 +59,22 @@ namespace InstagramApiSharp.Converters
 
             if (SourceObject.Args.Links != null)
                 foreach (var instaLinkResponse in SourceObject.Args.Links)
+                {
+                    var type = Enums.InstaLinkType.Unknown;
+                    try
+                    {
+                        var tObj = instaLinkResponse.Type.Replace("_", "");
+                        type = (Enums.InstaLinkType)Enum.Parse(typeof(Enums.InstaLinkType), tObj, true);
+                    }
+                    catch { }
                     activityStory.Links.Add(new InstaLink
                     {
                         Start = instaLinkResponse.Start,
                         End = instaLinkResponse.End,
                         Id = instaLinkResponse.Id,
-                        Type = instaLinkResponse.Type
+                        Type = type
                     });
+                }
             if (SourceObject.Args.InlineFollow != null)
             {
                 activityStory.InlineFollow = new InstaInlineFollow
