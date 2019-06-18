@@ -1,22 +1,26 @@
 ﻿using System.Collections.Generic;
 using InstagramApiSharp.Enums;
+using System.ComponentModel;
+
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaUserInfo
+    public class InstaUserInfo : INotifyPropertyChanged
     {
         public List<InstaUserChaining> ChainingSuggestions { get; set; } = new List<InstaUserChaining>();
 
         public long Pk { get; set; }
 
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         public string FullName { get; set; }
 
         public bool IsPrivate { get; set; }
 
+        public string ProfilePicture { get; set; }
+
         public string ProfilePicUrl { get; set; }
 
-        public string ProfilePicId { get; set; }
+        public string ProfilePictureId { get; set; }
 
         public bool IsVerified { get; set; }
 
@@ -53,7 +57,9 @@ namespace InstagramApiSharp.Classes.Models
         public bool CanCreateSponsorTags { get; set; }
 
         public bool CanBeTaggedAsSponsor { get; set; }
+
         public int TotalIGTVVideos { get; set; }
+
         public int TotalArEffects { get; set; }
 
         public string ReelAutoArchive { get; set; }
@@ -92,11 +98,11 @@ namespace InstagramApiSharp.Classes.Models
 
         public object PageIdForNewSumaBizAccount { get; set; }
 
-        public int AccountType { get; set; }
+        public InstaAccountType AccountType { get; set; }
 
         public string ProfileContext { get; set; }
 
-        public List<long> ProfileContextMutualFollowIds { get; set; }
+        public List<long> ProfileContextMutualFollowIds { get; set; } = new List<long>();
 
         public bool IsBusiness { get; set; }
 
@@ -234,5 +240,13 @@ namespace InstagramApiSharp.Classes.Models
         ///     Only for business account
         /// </summary>
         public long? PageId { get; set; }
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string memberName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
     }
 }

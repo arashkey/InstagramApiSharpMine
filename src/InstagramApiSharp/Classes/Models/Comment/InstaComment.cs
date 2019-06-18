@@ -72,6 +72,8 @@ namespace InstagramApiSharp.Classes.Models
         public long ParentCommentId { get; set; }
 
         public bool HasTranslation { get; set; }
+        private bool _isCommentsDisabled = false;
+        public bool IsCommentsDisabled { get => _isCommentsDisabled; set { _isCommentsDisabled = value; Update("IsCommentsDisabled"); } }
         public PaginationParameters PaginationParameters { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         private void Update(string PName) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PName)); }

@@ -863,7 +863,7 @@ namespace InstagramApiSharp.API.Processors
 
                 var user = info.Value;
                 if (!user.IsBusiness)
-                    return Result.Fail<InstaBusinessUser>($"'{user.Username}' is not a business account");
+                    return Result.Fail<InstaBusinessUser>($"'{user.UserName}' is not a business account");
 
                 var instaUri = UriCreator.GetUpdateBusinessInfoUri();
 

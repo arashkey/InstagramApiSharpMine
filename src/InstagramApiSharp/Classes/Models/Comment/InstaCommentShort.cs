@@ -28,6 +28,9 @@ namespace InstagramApiSharp.Classes.Models
         private bool _haslikedcm;
         public bool HasLikedComment { get => _haslikedcm; set { _haslikedcm = value; Update("HasLikedComment"); } }
 
+        private bool _isCommentsDisabled = false;
+        public bool IsCommentsDisabled { get => _isCommentsDisabled; set { _isCommentsDisabled = value; Update("IsCommentsDisabled"); } }
+
         public int CommentLikeCount { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;

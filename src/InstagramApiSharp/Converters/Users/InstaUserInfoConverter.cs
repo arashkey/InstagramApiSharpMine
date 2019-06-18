@@ -17,11 +17,11 @@ namespace InstagramApiSharp.Converters
             var userInfo = new InstaUserInfo
             {
                 Pk = SourceObject.User.Pk,
-                Username = SourceObject.User.Username,
+                UserName = SourceObject.User.Username,
                 FullName = SourceObject.User.FullName,
                 IsPrivate = SourceObject.User.IsPrivate,
                 ProfilePicUrl = SourceObject.User.ProfilePicUrl,
-                ProfilePicId = SourceObject.User.ProfilePicId,
+                ProfilePictureId = SourceObject.User.ProfilePicId,
                 IsVerified = SourceObject.User.IsVerified,
                 HasAnonymousProfilePicture = SourceObject.User.HasAnonymousProfilePicture,
                 MediaCount = SourceObject.User.MediaCount,
@@ -56,8 +56,6 @@ namespace InstagramApiSharp.Converters
                 HasProfileVideoFeed = SourceObject.User.HasProfileVideoFeed,
                 IsEligibleToShowFBCrossSharingNux = SourceObject.User.IsEligibleToShowFBCrossSharingNux,
                 PageIdForNewSumaBizAccount = SourceObject.User.PageIdForNewSumaBizAccount,
-                AccountType = SourceObject.User.AccountType,
-
 
                 ReelAutoArchive = SourceObject.User.ReelAutoArchive,
                 UsertagsCount = SourceObject.User.UsertagsCount,
@@ -99,8 +97,15 @@ namespace InstagramApiSharp.Converters
                 ShowShoppableFeed = SourceObject.User.ShowShoppableFeed ?? false,
                 ZipCode = SourceObject.User.Zip,
                 PageId = SourceObject.User.PageId ?? 0,
-                PageName = SourceObject.User.PageName
+                PageName = SourceObject.User.PageName,
+                ProfilePicture = SourceObject.User.ProfilePicUrl
             };
+            try
+            {
+                userInfo.AccountType = (InstaAccountType)SourceObject.User.AccountType;
+            }
+            catch { userInfo.AccountType = InstaAccountType.Normal; }
+
             if (SourceObject.User.BiographyWithEntities != null && SourceObject.User.BiographyWithEntities.Entities != null)
                 userInfo.BiographyWithEntities = SourceObject.User.BiographyWithEntities;
             if (!string.IsNullOrEmpty(SourceObject.User.BusinessContactMethod))

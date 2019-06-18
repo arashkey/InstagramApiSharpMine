@@ -166,7 +166,7 @@ namespace InstagramApiSharp
                     return "android_gcm";
             }
         }
-        static Random Rnd = new Random();
+        readonly static Random Rnd = new Random();
         public static string GenerateRandomString(this int length)
         {
             const string pool = "abcdefghijklmnopqrstuvwxyz0123456789";

@@ -1126,7 +1126,7 @@ namespace InstagramApiSharp.API
                     IsUserAuthenticated = false;
                     return Result.Fail(us.Info, false);
                 }
-                _user.UserName = _httpRequestProcessor.RequestMessage.Username = _user.LoggedInUser.UserName = us.Value.Username;
+                _user.UserName = _httpRequestProcessor.RequestMessage.Username = _user.LoggedInUser.UserName = us.Value.UserName;
                 _user.LoggedInUser.FullName = us.Value.FullName;
                 _user.LoggedInUser.IsPrivate = us.Value.IsPrivate;
                 _user.LoggedInUser.IsVerified = us.Value.IsVerified;
@@ -2294,25 +2294,40 @@ namespace InstagramApiSharp.API
             _httpRequestProcessor.SetHttpClientHandler(handler);
         }
         /// <summary>
-        /// Sets user credentials
+        ///     Sets user credentials
         /// </summary>
         public void SetUser(string username, string password)
         {
-            _user.UserName = username;
+            _user.UserName = username.ToLower();
             _user.Password = password;
 
-            _httpRequestProcessor.RequestMessage.Username = username;
+            _httpRequestProcessor.RequestMessage.Username = username.ToLower();
             _httpRequestProcessor.RequestMessage.Password = password;
         }
 
         /// <summary>
-        /// Sets user credentials
+        ///     Sets user credentials
         /// </summary>
         public void SetUser(UserSessionData user)
         {
             SetUser(user.UserName, user.Password);
         }
-
+        /// <summary>
+        ///     Update user information (private, profile picture, username and etc.)
+        ///     <para>Note 1. Login required!</para>
+        ///     <para>Note 2. It's necessary to save session, after you called this function</para>
+        /// </summary>
+        /// <param name="updatedUser">Updated user</param>
+        public void UpdateUser(InstaUserShort updatedUser)
+        {
+            if (updatedUser == null) return;
+            ValidateUser();
+            ValidateLoggedIn();
+            updatedUser.UserName = updatedUser.UserName.ToLower();
+            _user.UserName = updatedUser.UserName;
+            _user.LoggedInUser = updatedUser;
+            _httpRequestProcessor.RequestMessage.Username = updatedUser.UserName;
+        }
         /// <summary>
         ///     Gets current device
         /// </summary>
