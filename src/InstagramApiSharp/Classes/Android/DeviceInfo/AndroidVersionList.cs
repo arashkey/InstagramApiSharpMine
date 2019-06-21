@@ -12,7 +12,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
             {
                 new AndroidVersion
                 {
-                    Codename = "KitKat",
+                    Codename = "Lollipop",
                     VersionNumber = "5.0.0",
                     APILevel = "21"
                 },

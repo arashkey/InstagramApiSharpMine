@@ -1664,14 +1664,26 @@ namespace InstagramApiSharp.Helpers
                 .AddQueryParameterIfNotEmpty("query", searchQuery);
         }
 
-        public static Uri GetUserFollowingUri(long userPk, string rankToken, string searchQuery, string maxId = "")
+        public static Uri GetUserFollowingUri(long userPk, string rankToken, string searchQuery, string maxId = "", InstaFollowingOrderType orderBy = InstaFollowingOrderType.Default)
         {
             if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.FRIENDSHIPS_USER_FOLLOWING, userPk, rankToken),
                 out var instaUri))
                 throw new Exception("Cant create URI for user following");
+            var order = "";
+            switch(orderBy)
+            {
+                case InstaFollowingOrderType.DateFollowedEarliest:
+                    order = "date_followed_earliest";
+                    break;
+                case InstaFollowingOrderType.DateFollowedLatest:
+                    order = "date_followed_late";
+                    break;
+            }
             return instaUri
+                .AddQueryParameter("includes_hashtags", "true")
                 .AddQueryParameterIfNotEmpty("max_id", maxId)
-                .AddQueryParameterIfNotEmpty("query", searchQuery);
+                .AddQueryParameterIfNotEmpty("query", searchQuery)
+                .AddQueryParameterIfNotEmpty("order", order);
         }
 
         public static Uri GetUserFriendshipUri(long userId)
