@@ -1866,6 +1866,149 @@ namespace InstagramApiSharp.API.Processors
 
 
 
+
+
+
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////// OTHER FUNCTIONS /////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        public async Task<IResult<InstaMediaList>> GetChannelVideosAsync(Uri instaUri, string firstMediaId,
+                                        PaginationParameters paginationParameters)
+        {
+            var mediaList = new InstaMediaList();
+            try
+            {
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+
+                InstaMediaList Convert(InstaMediaListResponse mediaListResponse)
+                {
+                    return ConvertersFabric.Instance.GetMediaListConverter(mediaListResponse).Convert();
+                }
+
+                var mediaResult = await GetHashtagChannelVideos(instaUri, paginationParameters, firstMediaId);
+                if (!mediaResult.Succeeded)
+                {
+                    if (mediaResult.Value != null)
+                        return Result.Fail(mediaResult.Info, Convert(mediaResult.Value));
+                    else
+                        return Result.Fail(mediaResult.Info, default(InstaMediaList));
+                }
+                var mediaResponse = mediaResult.Value;
+                if (mediaResponse.Medias?.Count > 0)
+                    firstMediaId = mediaResponse.Medias[0].InstaIdentifier;
+
+                mediaList = Convert(mediaResponse);
+                mediaList.NextMaxId = paginationParameters.NextMaxId = mediaResponse.NextMaxId;
+                paginationParameters.PagesLoaded++;
+
+                while (mediaResponse.MoreAvailable
+                       && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
+                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                {
+
+                    var nextMedia = await GetHashtagChannelVideos(instaUri, paginationParameters, firstMediaId);
+                    if (!nextMedia.Succeeded)
+                        return Result.Fail(nextMedia.Info, mediaList);
+                    if (nextMedia.Value.Medias?.Count > 0)
+                        firstMediaId = nextMedia.Value.Medias[0].InstaIdentifier;
+                    mediaResponse.MoreAvailable = nextMedia.Value.MoreAvailable;
+                    mediaResponse.ResultsCount += nextMedia.Value.ResultsCount;
+                    mediaList.NextMaxId = mediaResponse.NextMaxId = paginationParameters.NextMaxId = nextMedia.Value.NextMaxId;
+                    mediaList.AddRange(Convert(nextMedia.Value));
+                    paginationParameters.PagesLoaded++;
+                }
+
+                mediaList.Pages = paginationParameters.PagesLoaded;
+                mediaList.PageSize = mediaResponse.ResultsCount;
+                return Result.Success(mediaList);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaMediaList), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, mediaList);
+            }
+        }
+        private async Task<IResult<InstaMediaListResponse>> GetHashtagChannelVideos(Uri instaUri,
+                                     PaginationParameters paginationParameters, string mediaId)
+        {
+            try
+            {
+                var orgItem = new JObject
+                {
+                    {"id", mediaId},
+                };
+                if (!string.IsNullOrEmpty(paginationParameters?.NextMaxId))
+                    orgItem.Add("index", 30);
+                else
+                    orgItem.Add("index", 0);
+
+                var jObj = new JObject
+                {
+                    {"last_organic_item", orgItem}
+                };
+                if (!string.IsNullOrEmpty(paginationParameters?.NextMaxId))
+                    jObj.Add("total_num_items", 31);
+                else
+                    jObj.Add("total_num_items", 1);
+
+                var data = new Dictionary<string, string>
+                {
+                    {"phone_id", _deviceInfo.PhoneGuid.ToString()},
+                    {"battery_level", "100"},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"is_charging", "0"},
+                    {"will_sound_on", "1"},
+                    {"rank_token", Guid.NewGuid().ToString()},
+                    {"paging_token", jObj.ToString(Formatting.None)}
+                };
+
+                if (instaUri.ToString().Contains("/tags/"))
+                    data.Add("module", "feed_hashtag");
+                else if (instaUri.ToString().Contains("/channels/"))
+                    data.Add("module", "explore_popular");
+
+                if (!string.IsNullOrEmpty(paginationParameters?.NextMaxId))
+                    data.Add("max_id", paginationParameters.NextMaxId);
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaMediaListResponse>(response, json);
+                var mediaResponse = JsonConvert.DeserializeObject<InstaMediaListResponse>(json,
+                    new InstaMediaListDataConverter());
+
+                return Result.Success(mediaResponse);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaMediaListResponse), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(InstaMediaListResponse));
+            }
+        }
+
+
+
+
         public static string GetRetryContext()
         {
             return new JObject

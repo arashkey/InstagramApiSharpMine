@@ -2520,5 +2520,12 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for hashtag channel videos");
             return instaUri;
         }
+
+        public static Uri GetExploreChannelVideosUri(string threadId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.EXPLORE_CHANNEL_VIEWER, threadId), out var instaUri))
+                throw new Exception("Cant create URI for explore channel videos");
+            return instaUri;
+        }
     }
 }

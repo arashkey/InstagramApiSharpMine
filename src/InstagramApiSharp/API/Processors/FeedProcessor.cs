@@ -42,6 +42,20 @@ namespace InstagramApiSharp.API.Processors
             _httpHelper = httpHelper;
         }
         /// <summary>
+        ///     Get medias for explore channel
+        /// </summary>
+        /// <param name="channelId">Channel id</param>
+        /// <param name="firstMediaId">First media id</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetExploreChannelVideosAsync(string channelId, string firstMediaId,
+            PaginationParameters paginationParameters)
+        {
+            return await _instaApi.HelperProcessor.GetChannelVideosAsync(UriCreator.GetExploreChannelVideosUri(channelId), firstMediaId, paginationParameters);
+        }
+        /// <summary>
         ///     Get user explore feed (Explore tab info) asynchronously
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>

@@ -9,6 +9,18 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IFeedProcessor
     {
+
+        /// <summary>
+        ///     Get medias for explore channel
+        /// </summary>
+        /// <param name="channelId">Channel id</param>
+        /// <param name="firstMediaId">First media id</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetExploreChannelVideosAsync(string channelId, string firstMediaId, PaginationParameters paginationParameters);
+
         /// <summary>
         ///     Get user explore feed (Explore tab info) asynchronously
         /// </summary>
