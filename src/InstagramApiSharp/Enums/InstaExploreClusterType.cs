@@ -13,6 +13,7 @@ namespace InstagramApiSharp.Enums
     {
         ExploreAll,
         HashtagInspired,
-        Shopping
+        Shopping,
+        IGTV
     }
 }
