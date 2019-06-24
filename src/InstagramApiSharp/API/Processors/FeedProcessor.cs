@@ -717,7 +717,7 @@ namespace InstagramApiSharp.API.Processors
                 if (string.IsNullOrEmpty(clusterId))
                     clusterId = "explore_all:0";
 
-                var exploreUri = UriCreator.GetTopicalExploreUri(_deviceInfo.GoogleAdId.ToString(), paginationParameters?.NextMaxId, clusterId);
+                var exploreUri = UriCreator.GetTopicalExploreUri(Guid.NewGuid().ToString(), paginationParameters?.NextMaxId, clusterId);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, exploreUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();

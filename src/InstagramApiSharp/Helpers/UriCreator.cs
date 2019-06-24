@@ -2317,11 +2317,12 @@ namespace InstagramApiSharp.Helpers
 
             instaUri = instaUri
                 .AddQueryParameter("is_prefetch", "false")
+                .AddQueryParameter("omit_cover_media", "true")
                 .AddQueryParameter("module", "explore_popular")
                 .AddQueryParameter("use_sectional_payload", "true")
                 .AddQueryParameter("timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString())
                 .AddQueryParameter("session_id", sessionId)
-                .AddQueryParameter("include_fixed_destinations", "false");
+                .AddQueryParameter("include_fixed_destinations", "true");
 
             if (clusterId.ToLower() == "explore_all:0" || clusterId.ToLower() == "explore_all%3A0")
             {
