@@ -750,6 +750,9 @@ namespace InstagramApiSharp.API
         public const string TAG_UNFOLLOW = API_SUFFIX + "/tags/unfollow/{0}/";
         public const string TAG_MEDIA_REPORT = API_SUFFIX + "/tags/hashtag_media_report/";
 
+        public const string TAG_CHANNEL_VIEWER = API_SUFFIX + "/tags/channel_viewer/hashtag_videos/{0}/";
+
+
         #endregion Tags endpoints constants
 
         #region Users endpoints constants

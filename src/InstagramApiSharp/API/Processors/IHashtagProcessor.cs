@@ -12,6 +12,17 @@ namespace InstagramApiSharp.API.Processors
     public interface IHashtagProcessor
     {
         /// <summary>
+        ///     Get medias for hashtag channel
+        /// </summary>
+        /// <param name="channelId">Channel id</param>
+        /// <param name="firstMediaId">First media id</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetHashtagChannelVideosAsync(string channelId, string firstMediaId, PaginationParameters paginationParameters);
+
+        /// <summary>
         ///     Get hashtag sections
         /// </summary>
         /// <param name="tagname">Tag name</param>

@@ -17,7 +17,7 @@ namespace InstagramApiSharp.Classes.Models
     {
         public string Id { get; set; }
 
-        public int LatestReelMedia { get; set; }
+        public long LatestReelMedia { get; set; }
 
         public DateTime ExpiringAt { get; set; }
         

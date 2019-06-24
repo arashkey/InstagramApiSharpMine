@@ -491,7 +491,7 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None)},
-                    {"source", "feed_timeline"},
+                    {"source", "reel_feed_timeline"},
                     {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},

@@ -2512,5 +2512,12 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for unmute direct thread video calls");
             return instaUri;
         }
+
+        public static Uri GetHashtagChannelVideosUri(string threadId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.TAG_CHANNEL_VIEWER, threadId), out var instaUri))
+                throw new Exception("Cant create URI for hashtag channel videos");
+            return instaUri;
+        }
     }
 }
