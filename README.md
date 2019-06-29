@@ -4,10 +4,34 @@ Private version of [InstagramApiSharp](https://github.com/ramtinak/PrivateInstag
 
 | Target | Branch | Version | Download |
 | ------ | ------ | ------ | ------ |
-| Github | master | v2.0.6 | [v2.0.6](https://github.com/ramtinak/InstagramApiSharpMine/archive/master.zip) |
-| Release | master | v2.0.6 | [v2.0.6](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
+| Github | master | v2.0.7 | [v2.0.7](https://github.com/ramtinak/InstagramApiSharpMine/archive/master.zip) |
+| Release | master | v2.0.7 | [v2.0.7](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
+
+#### How to build the project?
+Check this youtube video: https://www.youtube.com/watch?v=AFjKryHz9nM
 
 #### Version changes
+v2.0.7
+- [Bugfix] for Caption converter
+- [Update] recent activity uri
+- [Update] CommentMediaAsync
+- [Update] GetUsersStoriesAsHighlightsAsync
+- [Update] GetTopicalExploreFeed Uri
+- [Update] EditProfileAsync
+- [Update] SetBiographyAsync
+- [Update] ConfigureMediaDelay time
+- [Update] InstaExploreClusterType
+- [Change] SendDirectTextAsync response object
+- [Add] InstaLinkType for InstaLink class
+- [Add] UpdateUser to IInstaApi
+- [Add] Order support to GetUserFollowingAsync and GetUserFollowingByIdAsync
+- [Add] GetHashtagChannelVideosAsync to HashtagProcessor 
+- [Add] GetExploreChannelVideosAsync to FeedProcessor
+- [Add] tiny FFmpeg wrapper for .net framework
+- [Add] SetConfigureMediaDelay to IInstaApi and IInstaApiBuilder [for setting up delay before configuring media]
+- [Add] Birthday consent support for AcceptConsentAsync function
+- [Add] UploadSegmentedVideoToTVAsync to TVProcessor [Check IGTVUploader example project]
+
 v2.0.6
 - [Update] TwoFactorLoginAsync to latest version
 - [Update] FollowUserAsync

@@ -11,9 +11,9 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.0.6.0</Version>
-    <AssemblyVersion>2.0.6.0</AssemblyVersion>
-    <FileVersion>2.0.6.0</FileVersion>
+    <Version>2.0.7.0</Version>
+    <AssemblyVersion>2.0.7.0</AssemblyVersion>
+    <FileVersion>2.0.7.0</FileVersion>
     <Description>A complete Private Instagram API for .NET.
 
 
@@ -38,7 +38,28 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
-    <PackageReleaseNotes>v2.0.6
+    <PackageReleaseNotes>v2.0.7
+- [Bugfix] for Caption converter
+- [Update] recent activity uri
+- [Update] CommentMediaAsync
+- [Update] GetUsersStoriesAsHighlightsAsync
+- [Update] GetTopicalExploreFeed Uri
+- [Update] EditProfileAsync
+- [Update] SetBiographyAsync
+- [Update] ConfigureMediaDelay time
+- [Update] InstaExploreClusterType
+- [Change] SendDirectTextAsync response object
+- [Add] InstaLinkType for InstaLink class
+- [Add] UpdateUser to IInstaApi
+- [Add] Order support to GetUserFollowingAsync and GetUserFollowingByIdAsync
+- [Add] GetHashtagChannelVideosAsync to HashtagProcessor 
+- [Add] GetExploreChannelVideosAsync to FeedProcessor
+- [Add] tiny FFmpeg wrapper for .net framework
+- [Add] SetConfigureMediaDelay to IInstaApi and IInstaApiBuilder [for setting up delay before configuring media]
+- [Add] Birthday consent support for AcceptConsentAsync function
+- [Add] UploadSegmentedVideoToTVAsync to TVProcessor [Check IGTVUploader example project]
+
+v2.0.6
 - [Update] TwoFactorLoginAsync to latest version
 - [Update] FollowUserAsync
 - [Update] UnFollowUserAsync
