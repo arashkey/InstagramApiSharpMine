@@ -65,6 +65,11 @@ namespace InstagramApiSharp.API.Processors
                 var uploadResult = await _instaApi.HelperProcessor.UploadSinglePhoto(progress, image, upProgress, uploadId, false, userId.ToString());
                 if (!uploadResult.Succeeded)
                     Result.Fail(uploadResult.Info, false);
+                try
+                {
+                    await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                }
+                catch { }
                 Random rnd = new Random();
                 var data = new JObject
                 {
@@ -1906,6 +1911,11 @@ namespace InstagramApiSharp.API.Processors
             {
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
+                try
+                {
+                    await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                }
+                catch { }
                 var instaUri = UriCreator.GetVideoStoryConfigureUri();// UriCreator.GetStoryConfigureUri();
                 var data = new JObject
                 {
@@ -2073,6 +2083,11 @@ namespace InstagramApiSharp.API.Processors
             {
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
+                try
+                {
+                    await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                }
+                catch { }
                 var instaUri = UriCreator.GetVideoStoryConfigureUri(false);
                 var rnd = new Random();
                 var data = new JObject

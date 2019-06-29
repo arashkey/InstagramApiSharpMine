@@ -11,6 +11,7 @@ namespace InstagramApiSharp.Classes
         private IRequestDelay _delay;
         private readonly IInstaLogger _logger;
         public IRequestDelay Delay { get { return _delay; } set { _delay = value; } }
+        public IConfigureMediaDelay ConfigureMediaDelay { get; set; } = Classes.ConfigureMediaDelay.PreferredDelay();
         public HttpRequestProcessor(IRequestDelay delay, HttpClient httpClient, HttpClientHandler httpHandler,
             ApiRequestMessage requestMessage, IInstaLogger logger)
         {

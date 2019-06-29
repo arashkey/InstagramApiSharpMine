@@ -53,6 +53,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="video">Video to upload (aspect ratio is very important for thumbnail and video | range 0.5 - 1.0 | Width = 480, Height = 852)</param>
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
+        /// <param name="videoUploadOption">Video options</param>
         Task<IResult<InstaMedia>> UploadVideoAsync(InstaVideoUpload video, string title, string caption);
         /// <summary>
         ///     Upload video to Instagram TV with progress
@@ -61,6 +62,14 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="video">Video to upload (aspect ratio is very important for thumbnail and video | range 0.5 - 1.0 | Width = 480, Height = 852)</param>
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
+        /// <param name="videoUploadOption">Video options</param>
         Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string title, string caption);
+        /// <summary>
+        ///     Upload segmented video to igtv 
+        /// </summary>
+        /// <param name="tvVideo">IgTV Video to upload</param>
+        /// <param name="title">Title</param>
+        /// <param name="caption">Caption</param>
+        Task<IResult<InstaMedia>> UploadSegmentedVideoToTVAsync(InstaTVVideoUpload tvVideo, string title, string caption);
     }
 }

@@ -179,6 +179,7 @@ namespace InstagramApiSharp
         {
             System.Diagnostics.Debug.WriteLine(Convert.ToString(obj));
         }
+        public static string EncodeTime(this TimeSpan span) => $"{span.Hours.ToString("00")}:{span.Minutes.ToString("00")}:{span.Seconds.ToString("00")}";
 
         public static InstaImageUpload ConvertToImageUpload(this InstaImage instaImage, InstaUserTagUpload[] userTags = null)
         {

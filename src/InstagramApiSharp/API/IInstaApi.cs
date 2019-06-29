@@ -262,6 +262,11 @@ namespace InstagramApiSharp.API
         /// <param name="delay">Timespan delay</param>
         void SetRequestDelay(IRequestDelay delay);
         /// <summary>
+        ///     Set delay before configuring medias [only for uploading parts]
+        /// </summary>
+        /// <param name="configureMediaDelay">Timespan delay for configuring Media</param>
+        void SetConfigureMediaDelay(IConfigureMediaDelay configureMediaDelay);
+        /// <summary>
         ///     Set instagram api version (for user agent version)
         /// </summary>
         /// <param name="apiVersion">Api version</param>

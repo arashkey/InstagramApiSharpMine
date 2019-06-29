@@ -217,7 +217,7 @@ namespace InstagramApiSharp.API.Processors
             {
                 var editRequest = await GetRequestForEditProfileAsync();
                 if(!editRequest.Succeeded)
-                    return Result.Fail("Edit request returns badrequest", (InstaUserEdit)null);
+                    return Result.Fail(editRequest.Info, (InstaUserEdit)null);
                 var user = editRequest.Value.Username;
 
                 if (string.IsNullOrEmpty(newUsername))
@@ -288,7 +288,7 @@ namespace InstagramApiSharp.API.Processors
             {
                 var editRequest = await GetRequestForEditProfileAsync();
                 if (!editRequest.Succeeded)
-                    return Result.Fail("Edit request returns badrequest.\r\nPlease try again.", (InstaBiography)null);
+                    return Result.Fail(editRequest.Info, (InstaBiography)null);
 
                 var instaUri = UriCreator.GetSetBiographyUri();
                 var data = new JObject

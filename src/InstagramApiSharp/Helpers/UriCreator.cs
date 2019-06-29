@@ -2527,5 +2527,25 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for explore channel videos");
             return instaUri;
         }
+
+        public static Uri GetRUploadVideoStartUri(string guid)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.RUPLOAD_IGVIDEO_START, guid), out var instaUri))
+                throw new Exception("Cant create URI for rupload segmented video start");
+            return instaUri;
+        }
+        public static Uri GetRUploadVideoTransferUri(string md5, int start, int fileSize)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.RUPLOAD_IGVIDEO_TRANSFER, md5, start, fileSize), out var instaUri))
+                throw new Exception("Cant create URI for rupload segmented video transfer");
+            return instaUri;
+        }
+
+        public static Uri GetRUploadVideoEndUri(string guid)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.RUPLOAD_IGVIDEO_END, guid), out var instaUri))
+                throw new Exception("Cant create URI for rupload segmented video end");
+            return instaUri;
+        }
     }
 }

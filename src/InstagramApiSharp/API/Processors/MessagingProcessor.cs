@@ -1772,7 +1772,11 @@ namespace InstagramApiSharp.API.Processors
                 progress?.Invoke(upProgress);
                 var singlePhoto = await _instaApi.HelperProcessor.UploadSinglePhoto(progress, image.ConvertToImageUpload(),
                     upProgress, uploadId, false, recipients);
-
+                try
+                {
+                    await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                }
+                catch { }
                 var instaUri = UriCreator.GetDirectConfigurePhotoUri();
                 var data = new Dictionary<string, string>
                 {

@@ -169,9 +169,10 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="video">Video to upload (aspect ratio is very important for thumbnail and video | range 0.5 - 1.0 | Width = 480, Height = 852)</param>
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
-        public async Task<IResult<InstaMedia>> UploadVideoAsync(InstaVideoUpload video, string title, string caption)
+        /// <param name="videoUploadOption">Video options</param>
+        public async Task<IResult<InstaMedia>> UploadVideoAsync(InstaVideoUpload video, string title, string caption/*, InstaVideoUploadOption videoUploadOption = null*/)
         {
-            return await UploadVideoAsync(null, video, title, caption);
+            return await UploadVideoAsync(null, video, title, caption/*, videoUploadOption*/);
         }
 
         /// <summary>
@@ -181,10 +182,23 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="video">Video to upload (aspect ratio is very important for thumbnail and video | range 0.5 - 1.0 | Width = 480, Height = 852)</param>
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
-        public async Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string title, string caption)
+        /// <param name="videoUploadOption">Video options</param>
+        public async Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string title, string caption/*, InstaVideoUploadOption videoUploadOption = null*/)
         {
             UserAuthValidator.Validate(_userAuthValidate);
-            return await _instaApi.HelperProcessor.SendIGTVVideoAsync(progress, video, title, caption);
+            return await _instaApi.HelperProcessor.SendIGTVVideoAsync(progress, video, title, caption/*, videoUploadOption*/);
+        }
+
+        /// <summary>
+        ///     Upload segmented video to igtv 
+        /// </summary>
+        /// <param name="tvVideo">IgTV Video to upload</param>
+        /// <param name="title">Title</param>
+        /// <param name="caption">Caption</param>
+        public async Task<IResult<InstaMedia>> UploadSegmentedVideoToTVAsync(InstaTVVideoUpload tvVideo, string title, string caption)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            return await _instaApi.HelperProcessor.SendTVVideoAsync(tvVideo, title, caption);
         }
 
         private async Task<IResult<InstaTVChannel>> GetChannel(InstaTVChannelType? channelType, long? userId, PaginationParameters paginationParameters)

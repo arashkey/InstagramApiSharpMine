@@ -15,9 +15,9 @@ namespace InstagramApiSharp.Classes.Models
 
         public string Uri { get; set; }
 
-        public int Width { get; set; }
+        public int Width { get; set; } = 0;
 
-        public int Height { get; set; }
+        public int Height { get; set; } = 0;
 
         public int Type { get; set; }
 

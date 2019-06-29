@@ -930,6 +930,11 @@ namespace InstagramApiSharp.API.Processors
                 upProgress.Name = "Album upload";
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
+                try
+                {
+                    await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                }
+                catch { }
                 var instaUri = UriCreator.GetMediaAlbumConfigureUri();
                 var clientSidecarId = ApiRequestMessage.GenerateUploadId();
                 var childrenArray = new JArray();
@@ -1148,6 +1153,11 @@ namespace InstagramApiSharp.API.Processors
                 upProgress.Name = "Album upload";
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
+                try
+                {
+                    await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                }
+                catch { }
                 var instaUri = UriCreator.GetMediaAlbumConfigureUri();
                 var clientSidecarId = ApiRequestMessage.GenerateUploadId();
                 var childrenArray = new JArray();
@@ -1240,6 +1250,11 @@ namespace InstagramApiSharp.API.Processors
             {
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
+                try
+                {
+                    await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                }
+                catch { }
                 var instaUri = UriCreator.GetMediaConfigureUri(true);
                 var data = new JObject
                 {

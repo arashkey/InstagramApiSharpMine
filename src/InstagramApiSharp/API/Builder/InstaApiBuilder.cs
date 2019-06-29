@@ -11,6 +11,7 @@ namespace InstagramApiSharp.API.Builder
 {
     public class InstaApiBuilder : IInstaApiBuilder
     {
+        private IConfigureMediaDelay _configureMediaDelay = ConfigureMediaDelay.PreferredDelay();
         private IRequestDelay _delay = RequestDelay.Empty();
         private AndroidDevice _device;
         private HttpClient _httpClient;
@@ -174,7 +175,18 @@ namespace InstagramApiSharp.API.Builder
             _delay = delay;
             return this;
         }
-
+        /// <summary>
+        ///     Set delay before configuring medias [only for uploading parts]
+        /// </summary>
+        /// <param name="configureMediaDelay">Timespan delay for configuring Media</param>
+        /// <returns>API Builder</returns>
+        public IInstaApiBuilder SetConfigureMediaDelay(IConfigureMediaDelay configureMediaDelay)
+        {
+            if (configureMediaDelay == null)
+                configureMediaDelay = ConfigureMediaDelay.PreferredDelay();
+            _configureMediaDelay = configureMediaDelay;
+            return this;
+        }
         /// <summary>
         ///     Set custom android device.
         ///     <para>Note: this is optional, if you didn't set this, InstagramApiSharp will choose random device.</para>

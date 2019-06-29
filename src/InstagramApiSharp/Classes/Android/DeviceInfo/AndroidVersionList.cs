@@ -56,8 +56,14 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
                 {
                     Codename = "Pie",
                     VersionNumber = "9.0.0",
-                    APILevel = "27"
-                }
+                    APILevel = "28"
+                },
+                //new AndroidVersion
+                //{
+                //    Codename = "Q",
+                //    VersionNumber = "10.0.0",
+                //    APILevel = "29"
+                //}
             };
         }
     }

@@ -17,5 +17,6 @@ namespace InstagramApiSharp.Classes
         Task<string> SendAndGetJsonAsync(HttpRequestMessage requestMessage, HttpCompletionOption completionOption);
         Task<string> GeJsonAsync(Uri requestUri);
         IRequestDelay Delay { get; set; }
+        IConfigureMediaDelay ConfigureMediaDelay { get; set; }
     }
 }

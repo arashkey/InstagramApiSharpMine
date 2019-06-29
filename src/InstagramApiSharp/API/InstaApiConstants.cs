@@ -39,6 +39,12 @@ namespace InstagramApiSharp.API
 
         public const string EXPLORE_CHANNEL_VIEWER = API_SUFFIX + "/channels/viewer/discover_videos/{0}/";
 
+
+
+        public const string RUPLOAD_IGVIDEO_START = "/rupload_igvideo/{0}?segmented=true&phase=start";
+        public const string RUPLOAD_IGVIDEO_TRANSFER = "/rupload_igvideo/{0}-{1}-{2}?segmented=true&phase=transfer";
+        public const string RUPLOAD_IGVIDEO_END = "/rupload_igvideo/{0}?segmented=true&phase=end";
+
         // push 
         public const string FACEBOOK_OTA_FIELDS = "update%7Bdownload_uri%2Cdownload_uri_delta_base%2Cversion_code_delta_base%2Cdownload_uri_delta%2Cfallback_to_full_update%2Cfile_size_delta%2Cversion_code%2Cpublished_date%2Cfile_size%2Cota_bundle_type%2Cresources_checksum%7D";
         public const int FACEBOOK_ORCA_PROTOCOL_VERSION = 20150314;
@@ -591,7 +597,7 @@ namespace InstagramApiSharp.API
         public const string IGTV_SEARCH = API_SUFFIX + "/igtv/search/?query={0}";
         public const string IGTV_SUGGESTED_SEARCHES = API_SUFFIX + "/igtv/suggested_searches/";
         public const string IGTV_TV_GUIDE = API_SUFFIX + "/igtv/tv_guide/";
-        public const string MEDIA_CONFIGURE_TO_IGTV = API_SUFFIX + "/media/configure_to_igtv/";
+        public const string MEDIA_CONFIGURE_TO_IGTV = API_SUFFIX + "/media/configure_to_igtv/?video=1";
 
         #endregion IgTv (instagram tv) endpoints constants
 

@@ -59,6 +59,13 @@ namespace InstagramApiSharp.API.Builder
         /// <param name="delay">Timespan delay</param>
         /// <returns>API Builder</returns>
         IInstaApiBuilder SetRequestDelay(IRequestDelay delay);
+
+        /// <summary>
+        ///     Set delay before configuring medias [only for uploading parts]
+        /// </summary>
+        /// <param name="configureMediaDelay">Timespan delay for configuring Media</param>
+        /// <returns>API Builder</returns>
+        IInstaApiBuilder SetConfigureMediaDelay(IConfigureMediaDelay configureMediaDelay);
         //[Obsolete("Deprecated. Please use IInstaApi.SetDevice instead.")]
         /// <summary>
         ///     Set custom android device.
