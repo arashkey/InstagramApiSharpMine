@@ -83,7 +83,7 @@ namespace InstagramApiSharp.API.Builder
             if (_apiVersionType == null)
                 _apiVersionType = InstaApiVersionType.Version94;
 
-            var instaApi = new InstaApi(_user, _logger, _device, _httpRequestProcessor, _apiVersionType.Value);
+            var instaApi = new InstaApi(_user, _logger, _device, _httpRequestProcessor, _apiVersionType.Value, _configureMediaDelay);
             if (_sessionHandler != null)
             {
                 _sessionHandler.InstaApi = instaApi;
