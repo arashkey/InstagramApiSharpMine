@@ -111,6 +111,8 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
+                if (!string.IsNullOrEmpty(caption))
+                    caption = caption.Replace("\r", "");
                 var editMediaUri = UriCreator.GetEditMediaUri(mediaId);
 
                 var currentMedia = await GetMediaByIdAsync(mediaId);
@@ -932,6 +934,8 @@ namespace InstagramApiSharp.API.Processors
         {
             try
             {
+                if (!string.IsNullOrEmpty(caption))
+                    caption = caption.Replace("\r", "");
                 upProgress.Name = "Album upload";
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
@@ -970,7 +974,7 @@ namespace InstagramApiSharp.API.Processors
                             {"manufacturer", _deviceInfo.HardwareManufacturer},
                             {"model", _deviceInfo.DeviceModelIdentifier},
                             {"android_release", _deviceInfo.AndroidVer.VersionNumber},
-                            {"android_version", _deviceInfo.AndroidVer.APILevel}
+                            {"android_version", int.Parse(_deviceInfo.AndroidVer.APILevel)}
                         }
                     },
                     {"children_metadata", childrenArray},
@@ -1155,6 +1159,8 @@ namespace InstagramApiSharp.API.Processors
         {
             try
             {
+                if (!string.IsNullOrEmpty(caption))
+                    caption = caption.Replace("\r", "");
                 upProgress.Name = "Album upload";
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
@@ -1187,6 +1193,7 @@ namespace InstagramApiSharp.API.Processors
                     {"_csrftoken", _user.CsrfToken},
                     {"caption", caption},
                     {"client_sidecar_id", clientSidecarId},
+                    {"device_id", _deviceInfo.DeviceId},
                     {"upload_id", clientSidecarId},
                     {
                         "device", new JObject
@@ -1194,7 +1201,7 @@ namespace InstagramApiSharp.API.Processors
                             {"manufacturer", _deviceInfo.HardwareManufacturer},
                             {"model", _deviceInfo.DeviceModelIdentifier},
                             {"android_release", _deviceInfo.AndroidVer.VersionNumber},
-                            {"android_version", _deviceInfo.AndroidVer.APILevel}
+                            {"android_version", int.Parse(_deviceInfo.AndroidVer.APILevel)}
                         }
                     },
                     {"children_metadata", childrenArray},
@@ -1253,6 +1260,8 @@ namespace InstagramApiSharp.API.Processors
         {
             try
             {
+                if (!string.IsNullOrEmpty(caption))
+                    caption = caption.Replace("\r", "");
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
                 try
@@ -1266,6 +1275,7 @@ namespace InstagramApiSharp.API.Processors
                     {"caption", caption ?? string.Empty},
                     {"upload_id", uploadId},
                     {"source_type", "4"},
+                    {"device_id", _deviceInfo.DeviceId},
                     {"camera_position", "unknown"},
                     {"creation_logger_session_id", Guid.NewGuid().ToString()},
                     {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},

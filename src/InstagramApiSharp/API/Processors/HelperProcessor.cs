@@ -1111,20 +1111,20 @@ namespace InstagramApiSharp.API.Processors
                     {"image_compression", "{\"lib_name\":\"moz\",\"lib_version\":\"3.1.m\",\"quality\":\"95\"}"},
                 };
 
-                var uploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
-                request = _httpHelper.GetDefaultRequest(HttpMethod.Get, photoUri, _deviceInfo);
-                request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
-                request.Headers.Add("X-Instagram-Rupload-Params", uploadParams);
-                response = await _httpRequestProcessor.SendAsync(request);
-                json = await response.Content.ReadAsStringAsync();
+                //var uploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
+                //request = _httpHelper.GetDefaultRequest(HttpMethod.Get, photoUri, _deviceInfo);
+                //request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
+                //request.Headers.Add("X-Instagram-Rupload-Params", uploadParams);
+                //response = await _httpRequestProcessor.SendAsync(request);
+                //json = await response.Content.ReadAsStringAsync();
 
 
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    upProgress.UploadState = InstaUploadState.Error;
-                    progress?.Invoke(upProgress);
-                    return Result.UnExpectedResponse<InstaMedia>(response, json);
-                }
+                //if (response.StatusCode != HttpStatusCode.OK)
+                //{
+                //    upProgress.UploadState = InstaUploadState.Error;
+                //    progress?.Invoke(upProgress);
+                //    return Result.UnExpectedResponse<InstaMedia>(response, json);
+                //}
                 upProgress.UploadState = InstaUploadState.Uploading;
                 progress?.Invoke(upProgress);
                 var photoUploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
@@ -1180,6 +1180,8 @@ namespace InstagramApiSharp.API.Processors
         {
             try
             {
+                if (!string.IsNullOrEmpty(caption))
+                    caption = caption.Replace("\r", "");
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
                 try
@@ -1192,15 +1194,16 @@ namespace InstagramApiSharp.API.Processors
                 var rnd = new Random();
                 var data = new JObject
                 {
-                    {"date_time_digitalized", DateTime.UtcNow.ToString("yyyy:MM:dd+hh:mm:ss")},
-                    {"date_time_original", DateTime.UtcNow.ToString("yyyy:MM:dd+hh:mm:ss")},
-                    {"is_suggested_venue", "false"},
+                    //{"date_time_digitalized", DateTime.UtcNow.ToString("yyyy:MM:dd+hh:mm:ss")},
+                    //{"date_time_original", DateTime.UtcNow.ToString("yyyy:MM:dd+hh:mm:ss")},
+                    //{"is_suggested_venue", "false"},
                     {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"media_folder", "Camera"},
-                    {"source_type", "3"},
+                    {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id", _deviceInfo.DeviceId},
                     {"caption", caption ?? string.Empty},
                     {"upload_id", uploadId},
                     {
@@ -1208,7 +1211,7 @@ namespace InstagramApiSharp.API.Processors
                             {"manufacturer", _deviceInfo.HardwareManufacturer},
                             {"model", _deviceInfo.DeviceModelIdentifier},
                             {"android_release", _deviceInfo.AndroidVer.VersionNumber},
-                            {"android_version", _deviceInfo.AndroidVer.APILevel}
+                            {"android_version", int.Parse(_deviceInfo.AndroidVer.APILevel)}
                         }
                     },
                     {
