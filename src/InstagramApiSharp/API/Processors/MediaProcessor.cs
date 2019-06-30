@@ -117,15 +117,18 @@ namespace InstagramApiSharp.API.Processors
 
                 var data = new JObject
                 {
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"_uid", _user.LoggedInUser.Pk},
+                    {"caption_text", caption ?? string.Empty},
+                    {"fb_user_tags", "{\"in\":[]}"},
                     {"_csrftoken", _user.CsrfToken},
-                    {"caption_text", caption ?? string.Empty}
+                    {"_uid", _user.LoggedInUser.Pk},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"container_module", "edit_media_info"}
                 };
                 if (location != null)
-                {
                     data.Add("location", location.GetJson());
-                }
+                else
+                    data.Add("location", "{}");
 
                 var removeArr = new JArray();
                 if (currentMedia.Succeeded)
@@ -193,6 +196,8 @@ namespace InstagramApiSharp.API.Processors
                         };
                         data.Add("usertags", root.ToString(Formatting.None));
                     }
+                    else
+                        data.Add("usertags", "{\"in\":[]}");
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, editMediaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
