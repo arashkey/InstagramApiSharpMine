@@ -186,7 +186,6 @@ namespace InstagramApiSharp.API.Processors
                 var fields = new Dictionary<string, string>
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_csrftoken", _user.CsrfToken}
                 };
                 var request =
@@ -223,7 +222,6 @@ namespace InstagramApiSharp.API.Processors
                 var fields = new Dictionary<string, string>
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_csrftoken", _user.CsrfToken}
                 };
                 var request =
