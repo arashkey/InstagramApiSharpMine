@@ -2550,5 +2550,12 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for rupload segmented video end");
             return instaUri;
         }
+
+        public static Uri GetBroadcastReelReactUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DIRECT_BROADCAST_REEL_REACT, out var instaUri))
+                throw new Exception("Cant create URI for direct broadcast reel react");
+            return instaUri;
+        }
     }
 }

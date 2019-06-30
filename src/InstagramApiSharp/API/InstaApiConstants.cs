@@ -415,6 +415,7 @@ namespace InstagramApiSharp.API
         public const string DIRECT_BROADCAST_SHARE_VOICE = API_SUFFIX + "/direct_v2/threads/broadcast/share_voice/";
         public const string DIRECT_BROADCAST_ANIMATED_MEDIA = API_SUFFIX + "/direct_v2/threads/broadcast/animated_media/";
         public const string DIRECT_BROADCAST_FELIX_SHARE = API_SUFFIX + "/direct_v2/threads/broadcast/felix_share/";
+        public const string DIRECT_BROADCAST_REEL_REACT = API_SUFFIX + "/direct_v2/threads/broadcast/reel_react/";
 
         /// <summary>
         /// post data:

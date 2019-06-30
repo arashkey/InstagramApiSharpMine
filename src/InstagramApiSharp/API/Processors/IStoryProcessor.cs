@@ -171,6 +171,14 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<bool>> MarkHighlightAsSeenAsync(string mediaId, string highlightId, long takenAtUnix);
 
         /// <summary>
+        ///     Send reaction to an story
+        /// </summary>
+        /// <param name="storyOwnerUserId">Story owner user id/pk</param>
+        /// <param name="storyMediaId">Story media identifier</param>
+        /// <param name="reactionEmoji">Reaction emoji</param>
+        Task<IResult<InstaDirectRespondPayload>> SendReactionToStoryAsync(long storyOwnerUserId, string storyMediaId, string reactionEmoji);
+
+        /// <summary>
         ///     Share an media to story
         ///     <para>
         ///     Note 1: You must draw whatever you want in your image first! 

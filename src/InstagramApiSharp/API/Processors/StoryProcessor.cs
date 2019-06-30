@@ -1060,6 +1060,58 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
+        ///     Send reaction to an story
+        /// </summary>
+        /// <param name="storyOwnerUserId">Story owner user id/pk</param>
+        /// <param name="storyMediaId">Story media identifier</param>
+        /// <param name="reactionEmoji">Reaction emoji</param>
+        public async Task<IResult<InstaDirectRespondPayload>> SendReactionToStoryAsync(long storyOwnerUserId, string storyMediaId, string reactionEmoji)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetBroadcastReelReactUri();
+                var token = Guid.NewGuid().ToString();
+                var data = new JObject
+                {
+                    {"recipient_users", $"[[{storyOwnerUserId}]]"},
+                    {"action", "send_item"},
+                    {"client_context", token},
+                    {"media_id", storyMediaId},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"text", reactionEmoji},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"mutation_token", token},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"entry", "reel"},
+                    {"reaction_emoji", reactionEmoji},
+                    {"reel_id", storyOwnerUserId.ToString()},
+                };
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaDirectRespondPayload>(response, json);
+                var result = JsonConvert.DeserializeObject<InstaDirectRespondResponse>(json);
+
+                return result.IsSucceed ? Result.Success(ConvertersFabric.Instance
+                    .GetDirectRespondConverter(result).Convert().Payload) : Result.Fail<InstaDirectRespondPayload>(result.StatusCode);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaDirectRespondPayload), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaDirectRespondPayload>(exception);
+            }
+        }
+        /// <summary>
         ///     Share an media to story
         ///     <para>
         ///     Note 1: You must draw whatever you want in your image first! 
