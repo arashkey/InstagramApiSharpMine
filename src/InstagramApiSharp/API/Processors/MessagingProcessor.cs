@@ -254,27 +254,32 @@ namespace InstagramApiSharp.API.Processors
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
+                if (paginationParameters.NextPage == null)
+                    paginationParameters.NextPage = 0;
+
                 InstaDirectInboxContainer Convert(InstaDirectInboxContainerResponse inboxContainerResponse)
                 {
                     return ConvertersFabric.Instance.GetDirectInboxConverter(inboxContainerResponse).Convert();
                 }
 
-                var inbox = await GetDirectInbox(paginationParameters.NextMaxId);
+                var inbox = await GetDirectInbox(paginationParameters.NextMaxId, paginationParameters.NextPage.Value);
                 if (!inbox.Succeeded)
                     return Result.Fail(inbox.Info, default(InstaDirectInboxContainer));
                 var inboxResponse = inbox.Value;
                 paginationParameters.NextMaxId = inboxResponse.Inbox.OldestCursor;
+                paginationParameters.NextPage = inboxResponse.SeqId;
                 var pagesLoaded = 1;
                 while (inboxResponse.Inbox.HasOlder
                       && !string.IsNullOrEmpty(inboxResponse.Inbox.OldestCursor)
                       && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
-                    var nextInbox = await GetDirectInbox(inboxResponse.Inbox.OldestCursor);
+                    var nextInbox = await GetDirectInbox(inboxResponse.Inbox.OldestCursor, paginationParameters.NextPage.Value);
 
                     if (!nextInbox.Succeeded)
                         return Result.Fail(nextInbox.Info, Convert(nextInbox.Value));
 
                     inboxResponse.Inbox.OldestCursor = paginationParameters.NextMaxId = nextInbox.Value.Inbox.OldestCursor;
+                    paginationParameters.NextPage = nextInbox.Value.SeqId;
                     inboxResponse.Inbox.HasOlder = nextInbox.Value.Inbox.HasOlder;
                     inboxResponse.Inbox.BlendedInboxEnabled = nextInbox.Value.Inbox.BlendedInboxEnabled;
                     inboxResponse.Inbox.UnseenCount = nextInbox.Value.Inbox.UnseenCount;
@@ -1833,11 +1838,11 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<bool>(exception);
             }
         }
-        private async Task<IResult<InstaDirectInboxContainerResponse>> GetDirectInbox(string maxId = null)
+        private async Task<IResult<InstaDirectInboxContainerResponse>> GetDirectInbox(string maxId = null, int seqId = 0)
         {
             try
             {
-                var directInboxUri = UriCreator.GetDirectInboxUri(maxId);
+                var directInboxUri = UriCreator.GetDirectInboxUri(maxId, seqId);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, directInboxUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();

@@ -522,13 +522,16 @@ namespace InstagramApiSharp.Helpers
                 : new UriBuilder(instaUri) { Query = $"use_unified_inbox=true" }.Uri;
         }
 
-        public static Uri GetDirectInboxUri(string NextId = "")
+        public static Uri GetDirectInboxUri(string nextId = "", int seqId = 0)
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.GET_DIRECT_INBOX, out var instaUri))
                 throw new Exception("Cant create URI for get inbox");
-            return !string.IsNullOrEmpty(NextId)
-                ? new UriBuilder(instaUri) { Query = $"persistentBadging=true&use_unified_inbox=true&cursor={NextId}&direction=older" }.Uri
-                 : new UriBuilder(instaUri) { Query = "persistentBadging=true&use_unified_inbox=true" }.Uri;
+            return !string.IsNullOrEmpty(nextId)
+                ? new UriBuilder(instaUri) { Query = $"visual_message_return_type=unseen&thread_message_limit=10&limit=20&" +
+                $"persistentBadging=true&use_unified_inbox=true&cursor={nextId}&direction=older&seq_id={seqId}" }.Uri
+
+                 : new UriBuilder(instaUri) { Query = "visual_message_return_type=unseen&thread_message_limit=10&limit=20&" +
+                 "persistentBadging=true&use_unified_inbox=true" }.Uri;
             //: instaUri;
             //        return instaUri
             ////GET /api/v1/direct_v2/inbox/?visual_message_return_type=unseen&persistentBadging=true&use_unified_inbox=true
