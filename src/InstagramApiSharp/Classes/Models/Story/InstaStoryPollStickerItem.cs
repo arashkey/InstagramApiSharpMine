@@ -27,6 +27,6 @@ namespace InstagramApiSharp.Classes.Models
 
         public bool Finished { get; set; }
 
-        public long ViewerVote { get; set; } = 0;
+        public long ViewerVote { get; set; } = -1;
     }
 }

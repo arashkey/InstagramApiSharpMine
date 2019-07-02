@@ -67,6 +67,12 @@ namespace InstagramApiSharp.API
             internal set { _isUserAuthenticated = value; _userAuthValidate.IsUserAuthenticated = value; }
         }
         /// <summary>
+        ///     Load instagram's api version from session file
+        ///     <para>Default is False</para>
+        /// </summary>
+        public bool LoadApiVersionFromSessionFile { get; set; } = false;
+
+        /// <summary>
         ///     Current <see cref="HttpClient"/>
         /// </summary>
         public HttpClient HttpClient { get => _httpRequestProcessor.Client; }
@@ -2941,6 +2947,8 @@ namespace InstagramApiSharp.API
 
             if (data.InstaApiVersion == null)
                 data.InstaApiVersion = InstaApiVersionType.Version94;
+            if(!LoadApiVersionFromSessionFile)
+                data.InstaApiVersion = InstaApiVersionType.Version94;
             _apiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
             _httpHelper = new HttpHelper(_apiVersion);
@@ -2980,6 +2988,8 @@ namespace InstagramApiSharp.API
             }
 
             if (data.InstaApiVersion == null)
+                data.InstaApiVersion = InstaApiVersionType.Version94;
+            if (!LoadApiVersionFromSessionFile)
                 data.InstaApiVersion = InstaApiVersionType.Version94;
             _apiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);
@@ -3022,6 +3032,8 @@ namespace InstagramApiSharp.API
             }
 
             if (stateData.InstaApiVersion == null)
+                stateData.InstaApiVersion = InstaApiVersionType.Version94;
+            if (!LoadApiVersionFromSessionFile)
                 stateData.InstaApiVersion = InstaApiVersionType.Version94;
             _apiVersionType = stateData.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(_apiVersionType);

@@ -52,6 +52,11 @@ namespace InstagramApiSharp.API
         bool IsUserAuthenticated { get; }
 
         /// <summary>
+        ///     Load instagram's api version from session file
+        ///     <para>Default is False</para>
+        /// </summary>
+        bool LoadApiVersionFromSessionFile { get; set; }
+        /// <summary>
         ///     Live api functions.
         /// </summary>
         ILiveProcessor LiveProcessor { get; }
