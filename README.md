@@ -1,4 +1,4 @@
-Private version of [InstagramApiSharp](https://github.com/ramtinak/PrivateInstagramApiSharp) ![InstagramApiSharp](http://s8.picofile.com/file/8336601292/insta50x.png)
+Private version of [InstagramApiSharp](https://github.com/ramtinak/InstagramApiSharp) ![InstagramApiSharp](http://s8.picofile.com/file/8336601292/insta50x.png)
 
 
 
