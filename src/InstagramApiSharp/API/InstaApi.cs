@@ -920,6 +920,13 @@ namespace InstagramApiSharp.API
         #endregion Register new account with Phone number and email
 
         #region Authentication and challenge functions
+        
+        /// <summary>
+        /// Set Challenge Info when server asks for a challenge on calling functions
+        /// </summary>
+        /// <param name="Challenge"></param>
+        public void SetChallengeInfo(InstaChallengeLoginInfo Challenge) => _challengeinfo = Challenge;
+
         /// <summary>
         ///     Accept consent required (only for GDPR countries)
         /// </summary>
