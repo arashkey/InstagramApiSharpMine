@@ -202,14 +202,14 @@ v2.0.0
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.3'">
-    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+    <!--<PackageReference Include="Microsoft.CSharp" Version="4.3.0" />-->
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
     <!--<PackageReference Include="NETStandard.Library" Version="1.6.0" />-->
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <!--<PackageReference Include="MQTTnet" Version="3.0.2" />
     <PackageReference Include="System.Net.Security" Version="4.3.2" />
     <PackageReference Include="System.Net.WebSockets" Version="4.3.0" />
@@ -218,7 +218,7 @@ v2.0.0
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
+    <PackageReference Update="NETStandard.Library" Version="2.0.0" />
   </ItemGroup>
 
   <!--<ItemGroup Condition="'$(TargetFramework)' == 'net452'">
