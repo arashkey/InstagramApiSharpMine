@@ -34,7 +34,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public string StartBackgroundColor { get; set; }
         [JsonProperty("end_background_color")]
         public string EndBackgroundColor { get; set; }
-        [JsonProperty("viewer_vote")]
-        public long? ViewerVote { get; set; }
+        [JsonProperty("viewer_answer")]
+        public long? ViewerAnswer { get; set; }
     }
 }

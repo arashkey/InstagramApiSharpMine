@@ -31,7 +31,7 @@ namespace InstagramApiSharp.Converters
                 StartBackgroundColor = SourceObject.StartBackgroundColor,
                 TextColor = SourceObject.TextColor,
                 ViewerCanAnswer = SourceObject.ViewerCanAnswer,
-                ViewerVote = SourceObject.ViewerVote ?? -1
+                ViewerAnswer = SourceObject.ViewerAnswer ?? -1
             };
 
             if (SourceObject.Tallies?.Count > 0)
