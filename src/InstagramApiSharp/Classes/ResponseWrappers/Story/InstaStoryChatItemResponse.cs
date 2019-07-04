@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
-    public class InstaStorySliderItemResponse
+    public class InstaStoryChatItemResponse
     {
         [JsonProperty("x")]
         public float X { get; set; }
@@ -28,7 +28,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public int IsPinned { get; set; }
         [JsonProperty("is_hidden")]
         public int IsHidden { get; set; }
-        [JsonProperty("slider_sticker")]
-        public InstaStorySliderStickerItemResponse SliderSticker { get; set; }
+        [JsonProperty("chat_sticker")]
+        public InstaStoryChatStickerItemResponse ChatSticker { get; set; }
     }
 }

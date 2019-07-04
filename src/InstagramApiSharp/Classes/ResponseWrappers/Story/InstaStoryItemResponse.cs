@@ -134,5 +134,10 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("story_quizs")] public List<InstaStoryQuizItemResponse> StoryQuizs { get; set; }
 
         [JsonProperty("story_quiz_participant_infos")] public List<InstaStoryQuizParticipantResponse> StoryQuizsParticipantInfos { get; set; }
+
+        [JsonProperty("story_chats")] public List<InstaStoryChatItemResponse> StoryChats { get; set; }
+
+        [JsonProperty("story_chat_request_infos")] public List<InstaStoryChatRequestInfoItemResponse> StoryChatRequestInfos { get; set; }
+
     }
 }
