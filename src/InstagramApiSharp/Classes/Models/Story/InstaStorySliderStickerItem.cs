@@ -7,6 +7,7 @@ namespace InstagramApiSharp.Classes.Models
     public class InstaStorySliderStickerItem
     {
         public string TextColor { get; set; }
+        public string BackgroundColor { get; set; }
 
         public long SliderId { get; set; }
 
