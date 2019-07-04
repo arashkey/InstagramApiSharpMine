@@ -711,6 +711,7 @@ namespace InstagramApiSharp.API
 
         public const string MEDIA_TAG = API_SUFFIX + "/media/{0}/tags/";
         public const string MEDIA_STORY_CHAT_REQUEST = API_SUFFIX + "/media/story_chat_request/";
+        public const string MEDIA_STORY_CHAT_CANCEL_REQUEST = API_SUFFIX + "/media/story_chat_cancel_request/";
 
         #endregion Media endpoints constants
 

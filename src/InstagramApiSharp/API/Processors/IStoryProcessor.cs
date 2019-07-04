@@ -20,6 +20,12 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<bool>> StoryChatRequestAsync(long storyChatId);
 
         /// <summary>
+        ///     Cancel story chat request
+        /// </summary>
+        /// <param name="storyChatId">Story chat id (<see cref="InstaStoryChatStickerItem.StoryChatId"/>)</param>
+        Task<IResult<bool>> CancelStoryChatRequestAsync(long storyChatId);
+
+        /// <summary>
         ///     Reply a photo to story
         /// </summary>
         /// <param name="image">Photo to send</param>

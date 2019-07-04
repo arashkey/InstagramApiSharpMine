@@ -44,6 +44,7 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+        
         /// <summary>
         ///     Request for joing chats from story
         /// </summary>
@@ -51,6 +52,14 @@ namespace InstagramApiSharp.API.Processors
         public async Task<IResult<bool>> StoryChatRequestAsync(long storyChatId)
         {
             return await RequestOrCancelStoryChat(UriCreator.GetStoryChatRequestUri(), storyChatId);
+        }
+        /// <summary>
+        ///     Cancel story chat request
+        /// </summary>
+        /// <param name="storyChatId">Story chat id (<see cref="InstaStoryChatStickerItem.StoryChatId"/>)</param>
+        public async Task<IResult<bool>> CancelStoryChatRequestAsync(long storyChatId)
+        {
+            return await RequestOrCancelStoryChat(UriCreator.GetStoryChatCancelRequestUri(), storyChatId);
         }
         public async Task<IResult<bool>> ReplyPhotoToStoryAsync(InstaImageUpload image, /*string storyMediaId,*/ long userId)
         {
