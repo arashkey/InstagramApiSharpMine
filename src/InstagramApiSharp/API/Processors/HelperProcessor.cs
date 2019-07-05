@@ -547,7 +547,8 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetDirectConfigureVideoUri();
                 var retryContext = GetRetryContext();
                 var clientContext = Guid.NewGuid().ToString();
-                
+                if (!string.IsNullOrEmpty(caption))
+                    caption = caption.Replace("\r", "");
                 if (isDirectVideo)
                 {
                     var data = new Dictionary<string, string>
@@ -748,6 +749,16 @@ namespace InstagramApiSharp.API.Processors
                                 data.Add("story_quizs", storyQuizArr.ToString(Formatting.None));
                                 data.Add("story_sticker_ids", "quiz_story_sticker_default");
                             }
+                            if (uploadOptions.StoryChats?.Count > 0)
+                            {
+                                var chatArr = new JArray();
+                                foreach (var item in uploadOptions.StoryChats)
+                                    chatArr.Add(item.ConvertToJson());
+
+                                data.Add("story_chats", chatArr.ToString(Formatting.None));
+                                data.Add("internal_features", "chat_sticker");
+                                data.Add("story_sticker_ids", "chat_sticker_id");
+                            }
                         }
                     }
                     instaUri = UriCreator.GetVideoStoryConfigureUri(true);
@@ -914,6 +925,8 @@ namespace InstagramApiSharp.API.Processors
                     await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
                 }
                 catch { }
+                if (!string.IsNullOrEmpty(caption))
+                    caption = caption.Replace("\r", "");
                 var instaUri = UriCreator.GetDirectConfigureVideoUri();
                 var retryContext = GetRetryContext();
                 var clientContext = Guid.NewGuid().ToString();

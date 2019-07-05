@@ -30,5 +30,7 @@ namespace InstagramApiSharp.Classes.Models
         public List<InstaStoryQuestionUpload> Questions { get; set; } = new List<InstaStoryQuestionUpload>();
 
         public InstaStoryQuizUpload StoryQuiz { get; set; }
+
+        public List<InstaStoryChatUpload> StoryChats { get; set; } = new List<InstaStoryChatUpload>();
     }
 }

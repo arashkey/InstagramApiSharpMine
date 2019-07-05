@@ -393,5 +393,23 @@ namespace InstagramApiSharp
                 {"is_sticker", quiz.IsSticker},
             };
         }
+
+        public static JObject ConvertToJson(this InstaStoryChatUpload storyChat)
+        {
+            return new JObject
+            {
+                {"x", storyChat.X},
+                {"y", storyChat.Y},
+                {"z", storyChat.Z},
+                {"width", storyChat.Width},
+                {"height", storyChat.Height},
+                {"rotation", storyChat.Rotation},
+                {"text", storyChat.GroupName},
+                {"start_background_color", storyChat.StartBackgroundColor},
+                {"end_background_color", storyChat.EndBackgroundColor},
+                {"has_started_chat", storyChat.HasChatStarted},
+                {"is_sticker", storyChat.IsSticker}
+            };
+        }
     }
 }

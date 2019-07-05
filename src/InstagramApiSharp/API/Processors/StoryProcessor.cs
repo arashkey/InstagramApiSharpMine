@@ -1978,6 +1978,8 @@ namespace InstagramApiSharp.API.Processors
             {
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
+                if (!string.IsNullOrEmpty(caption))
+                    caption = caption.Replace("\r", "");
                 try
                 {
                     await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
@@ -2103,6 +2105,17 @@ namespace InstagramApiSharp.API.Processors
                         data.Add("story_quizs", storyQuizArr.ToString(Formatting.None));
                         data.Add("story_sticker_ids", "quiz_story_sticker_default");
                     }
+                    if (uploadOptions.StoryChats?.Count > 0)
+                    {
+                        var chatArr = new JArray();
+                        foreach (var item in uploadOptions.StoryChats)
+                            chatArr.Add(item.ConvertToJson());
+
+                        data.Add("story_chats", chatArr.ToString(Formatting.None));
+                        data.Add("internal_features", "chat_sticker");
+                        data.Add("story_sticker_ids", "chat_sticker_id");
+                    }
+
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -2150,6 +2163,8 @@ namespace InstagramApiSharp.API.Processors
             {
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
+                if (!string.IsNullOrEmpty(caption))
+                    caption = caption.Replace("\r", "");
                 try
                 {
                     await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
@@ -2282,6 +2297,16 @@ namespace InstagramApiSharp.API.Processors
 
                         data.Add("story_quizs", storyQuizArr.ToString(Formatting.None));
                         data.Add("story_sticker_ids", "quiz_story_sticker_default");
+                    }
+                    if (uploadOptions.StoryChats?.Count > 0)
+                    {
+                        var chatArr = new JArray();
+                        foreach (var item in uploadOptions.StoryChats)
+                            chatArr.Add(item.ConvertToJson());
+
+                        data.Add("story_chats", chatArr.ToString(Formatting.None));
+                        data.Add("internal_features", "chat_sticker");
+                        data.Add("story_sticker_ids", "chat_sticker_id");
                     }
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
