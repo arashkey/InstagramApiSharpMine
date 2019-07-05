@@ -164,6 +164,19 @@ namespace Examples.Samples
             storyOptions.StoryQuiz = quiz; // Sets quiz
 
 
+            // Add story chat
+            var chat = new InstaStoryChatUpload
+            {
+                X = 0.5, // center of image
+                Y = 0.5, // center of image
+                Z = 0,
+                Width = 0.48333332,
+                Height = 0.21962096,
+                Rotation = 0,
+                GroupName = "InstagramApiSharp" // group name [title]
+            };
+            storyOptions.StoryChats.Add(chat);
+
 
 
             var image = new InstaImage { Uri = @"c:\someawesomepicture.jpg" };
