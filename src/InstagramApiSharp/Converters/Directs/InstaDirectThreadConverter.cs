@@ -3,6 +3,7 @@ using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace InstagramApiSharp.Converters
 {
@@ -104,7 +105,7 @@ namespace InstagramApiSharp.Converters
             }
             try
             {
-                if (thread.LastActivity > thread.LastSeenAt[0].SeenTime)
+                if (thread.LastActivity != thread.LastSeenAt.LastOrDefault().SeenTime)
                     thread.HasUnreadMessage = true;
             }
             catch 
