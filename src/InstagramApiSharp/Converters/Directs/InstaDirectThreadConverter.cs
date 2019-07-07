@@ -39,7 +39,13 @@ namespace InstagramApiSharp.Converters
                 ThreadType = SourceObject.ThreadType,
                 Title = SourceObject.Title,
             
-                MentionsMuted = SourceObject.MentionsMuted ?? false
+                MentionsMuted = SourceObject.MentionsMuted ?? false,
+                Archived = SourceObject.Archived ?? false,
+                ApprovalRequiredForNewMembers = SourceObject.ApprovalRequiredForNewMembers ?? false,
+                Folder = SourceObject.Folder ?? 0,
+                InputMode = SourceObject.InputMode ?? 0,
+                BusinessThreadFolder = SourceObject.BusinessThreadFolder ?? 0,
+                ReadState = SourceObject.ReadState ?? 0
             };
 
             if (SourceObject.Inviter != null)
@@ -112,7 +118,16 @@ namespace InstagramApiSharp.Converters
             {
                 thread.HasUnreadMessage = false;
             }
-            
+
+            if (SourceObject.DirectStory?.Items?.Count > 0)
+            {
+                try
+                {
+                    foreach (var item in SourceObject.DirectStory.Items)
+                        thread.DirectStories.Add(ConvertersFabric.Instance.GetDirectThreadItemConverter(item).Convert());
+                }
+                catch { }
+            }
 
             return thread;
         }

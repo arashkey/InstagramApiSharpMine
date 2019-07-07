@@ -59,12 +59,26 @@ namespace InstagramApiSharp.Classes.Models
 
         public int ExpiringMediaReceiveCount { get; set; }
 
-        public List<InstaLastSeen> LastSeenAt { get; set; }
+        public List<InstaLastSeen> LastSeenAt { get; set; } = new List<InstaLastSeen>();
 
         public List<InstaUserShortFriendship> LeftUsers { get; set; } = new List<InstaUserShortFriendship>();
 
         public string NewestCursor { get; set; }
 
         public bool MentionsMuted { get; set; }
+
+        public bool Archived { get; set; }
+
+        public bool ApprovalRequiredForNewMembers { get; set; }
+
+        public int Folder { get; set; }
+
+        public int InputMode { get; set; }
+
+        public int BusinessThreadFolder { get; set; }
+
+        public int ReadState { get; set; }
+
+        public List<InstaDirectInboxItem> DirectStories { get; set; } = new List<InstaDirectInboxItem>();
     }
 }

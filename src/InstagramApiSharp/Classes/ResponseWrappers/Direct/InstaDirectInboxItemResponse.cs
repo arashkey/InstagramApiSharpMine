@@ -4,6 +4,10 @@ using Newtonsoft.Json;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
+    public class InstaDirectInboxItemContainerResponse
+    {
+        [JsonProperty("items")] public List<InstaDirectInboxItemResponse> Items { get; set; } = new List<InstaDirectInboxItemResponse>();
+    }
     public class InstaDirectInboxItemResponse : BaseStatusResponse
     { 
         [JsonProperty("text")] public string Text { get; set; }

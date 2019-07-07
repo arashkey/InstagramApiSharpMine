@@ -53,6 +53,11 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("is_group")] public bool? IsGroup { get; set; }
 
+        [JsonProperty("archived")] public bool? Archived { get; set; }
+
+        [JsonProperty("approval_required_for_new_members")] public bool? ApprovalRequiredForNewMembers { get; set; }
+
+
         [JsonProperty("reshare_send_count")] public int? ReshareSendCount { get; set; }
 
         [JsonProperty("reshare_receive_count")] public int? ReshareReceiveCount { get; set; }
@@ -61,12 +66,23 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("expiring_media_receive_count")] public int? ExpiringMediaReceiveCount { get; set; }
 
+        [JsonProperty("folder")] public int? Folder { get; set; }
+
+        [JsonProperty("input_mode")] public int? InputMode { get; set; }
+
+        [JsonProperty("business_thread_folder")] public int? BusinessThreadFolder { get; set; }
+    
+        [JsonProperty("read_state")] public int? ReadState { get; set; }
+
         [JsonProperty("left_users")] public List<InstaUserShortFriendshipResponse> LeftUsers { get; set; }
 
         [JsonProperty("newest_cursor")] public string NewestCursor { get; set; }
 
 
         [JsonProperty("last_seen_at")] public object LastSeenAt { get; set; }
+
+        [JsonProperty("direct_story")] public InstaDirectInboxItemContainerResponse DirectStory { get; set; }
+
 
 
 

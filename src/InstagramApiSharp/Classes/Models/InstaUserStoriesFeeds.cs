@@ -6,7 +6,7 @@ namespace InstagramApiSharp.Classes.Models
 {
     public class InstaUserStoriesFeeds
     {
-        public List<InstaReelFeed> Items = new List<InstaReelFeed>();
+        public List<InstaReelFeed> Items { get; set; } = new List<InstaReelFeed>();
     }
 
 }
