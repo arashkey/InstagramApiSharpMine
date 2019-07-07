@@ -31,6 +31,7 @@ v2.0.8
 - [Add] ViewerAnswer property to InstaStoryQuizStickerItem class
 - [Add] ViewerVote property to InstaStorySliderStickerItem class
 - [Add] BackgroundColor property to InstaStorySliderStickerItem class
+- [Add] some new properties to InstaDirectInboxThread class
 - [Remove] UWP support from ISessionHandler
 
 v2.0.7
