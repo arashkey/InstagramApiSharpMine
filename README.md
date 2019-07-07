@@ -4,13 +4,35 @@ Private version of [InstagramApiSharp](https://github.com/ramtinak/InstagramApiS
 
 | Target | Branch | Version | Download |
 | ------ | ------ | ------ | ------ |
-| Github | master | v2.0.7 | [v2.0.7](https://github.com/ramtinak/InstagramApiSharpMine/archive/master.zip) |
-| Release | master | v2.0.7 | [v2.0.7](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
+| Github | master | v2.0.8 | [v2.0.8](https://github.com/ramtinak/InstagramApiSharpMine/archive/master.zip) |
+| Release | master | v2.0.8 | [v2.0.8](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
 
 #### How to build the project?
 Check this youtube video: https://www.youtube.com/watch?v=AFjKryHz9nM
 
 #### Version changes
+v2.0.8
+- [Update] signature key and API version 100.0.0.17.129 as default 
+- [Set] latest ApiVersion automatically [For disable this option just set InstaApi.LoadApiVersionFromSessionFile to TRUE, it's recommended to always be FALSE]
+- [Update] GetDirectInboxAsync uri
+- [Update] EnableMediaCommentAsync, DisableMediaCommentAsync
+- [Update] EditMediaAsync
+- [Update] ArchiveMediaAsync, UnArchiveMediaAsync, LikeMediaAsync, UnLikeMediaAsync
+- [Update] UploadAlbumAsync
+- [Update] UploadPhotoAsync
+- [Update] UploadVideoAsync
+- [Add] SendReactionToStoryAsync to StoryProcessor
+- [Add] StoryChatRequestAsync to StoryProcessor
+- [Add] CancelStoryChatRequestAsync to StoryProcessor
+- [Add] support for uploading Story Chats to InstaStoryUploadOptions class
+- [Add] StoryChats support to InstaStoryItem class
+- [Add] StoryChatRequestInfos support to InstaStoryItem class
+- [Add] SetChallenge function to IInstaApi [by @NGame1]
+- [Add] ViewerAnswer property to InstaStoryQuizStickerItem class
+- [Add] ViewerVote property to InstaStorySliderStickerItem class
+- [Add] BackgroundColor property to InstaStorySliderStickerItem class
+- [Remove] UWP support from ISessionHandler
+
 v2.0.7
 - [Bugfix] for Caption converter
 - [Update] recent activity uri
