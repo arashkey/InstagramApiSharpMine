@@ -1057,5 +1057,11 @@ namespace InstagramApiSharp.Converters
         {
             return new InstaStoryChatRequestInfoItemConverter { SourceObject = response };
         }
+
+        public IObjectConverter<InstaPendingRequest, InstaPendingRequestResponse> GetPendingRequestConverter(
+            InstaPendingRequestResponse response)
+        {
+            return new InstaPendingRequestConverter { SourceObject = response };
+        }
     }
 }

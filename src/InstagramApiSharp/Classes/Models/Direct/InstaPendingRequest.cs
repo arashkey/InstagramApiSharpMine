@@ -1,29 +1,23 @@
-﻿using InstagramApiSharp.Classes.ResponseWrappers;
-using Newtonsoft.Json;
+﻿/*
+ * Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https://t.me/ramtinak ]
+ * 
+ * Github source: https://github.com/ramtinak/InstagramApiSharpMine
+ * Nuget package: https://www.nuget.org/packages/InstagramApiSharpMine
+ * 
+ * IRANIAN DEVELOPERS
+ */
 
+using InstagramApiSharp.Classes.ResponseWrappers;
+using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaPendingRequest
     {
-        [JsonProperty("big_list")]
+        public string NextMaxId { get; set; }
         public bool BigList { get; set; }
-        [JsonProperty("page_size")]
         public int PageSize { get; set; }
-        [JsonProperty("status")]
-        public string Status { get; set; }
-        [JsonProperty("suggested_users")]
-        public InstaPendingSuggestedUsers SuggestedUsers { get; set; }
-        [JsonProperty("truncate_follow_requests_at_index")]
+        public List<InstaSuggestionItem> SuggestedUsers { get; set; } = new List<InstaSuggestionItem>();
         public int TruncateFollowRequestsAtIndex { get; set; }
-        [JsonProperty("users")]
-        public InstaUserShortResponse[] Users { get; set; }
-    }
-    
-    public class InstaPendingSuggestedUsers
-    {
-        [JsonProperty("netego_type")]
-        public string NetegoType { get; set; }
-        [JsonProperty("suggestions")]
-        public InstaSuggestionItemListResponse Suggestions { get; set; }
+        public List<InstaUserShortFriendship> Users { get; set; } = new List<InstaUserShortFriendship>();
     }
 }

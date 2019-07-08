@@ -480,11 +480,11 @@ namespace InstagramApiSharp.API.Processors
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
-                    var JRes = JsonConvert.DeserializeObject<InstaPendingRequest>(json);
-                    return Result.Success(JRes);
+                    var obj = JsonConvert.DeserializeObject<InstaPendingRequestResponse>(json);
+                    return Result.Success(ConvertersFabric.Instance.GetPendingRequestConverter(obj).Convert());
                 }
 
-                return Result.Fail<InstaPendingRequest>(response.StatusCode.ToString());
+                return Result.UnExpectedResponse<InstaPendingRequest>(response, json);
             }
             catch (HttpRequestException httpException)
             {
