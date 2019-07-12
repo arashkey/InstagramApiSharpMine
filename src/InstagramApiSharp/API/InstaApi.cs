@@ -1230,7 +1230,7 @@ namespace InstagramApiSharp.API
                     var converter = ConvertersFabric.Instance.GetUserShortConverter(loginInfo.User);
                     _user.LoggedInUser = converter.Convert();
                     _user.RankToken = $"{_user.LoggedInUser.Pk}_{_httpRequestProcessor.RequestMessage.PhoneId}";
-
+                    InvalidateProcessors();
                     return Result.Success(InstaLoginTwoFactorResult.Success);
                 }
 
