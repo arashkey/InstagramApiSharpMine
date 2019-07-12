@@ -8,7 +8,8 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
     internal class ApiTwoFactorRequestMessage
     {
         internal ApiTwoFactorRequestMessage(string verificationCode, string username, string deviceId,
-            string twoFactorIdentifier, string csrftoken, string deviceGuid, int trustThisDevice = 0, int verificationMethod = 1)
+            string twoFactorIdentifier, string csrftoken, string deviceGuid, int trustThisDevice = 0, int verificationMethod = 1,
+            string fbAccessToken = null)
         {
             verification_code = verificationCode;
             this.username = username;
@@ -18,6 +19,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
             guid = deviceGuid;
             trust_this_device = trustThisDevice.ToString(); // 0 no, 1 yes
             verification_method = verificationMethod.ToString(); // 1 text
+            fb_access_token = fbAccessToken;
         }
 
         public string verification_code { get; set; }
@@ -29,6 +31,8 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         public string device_id { get; set; }
         public string verification_method { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string fb_access_token { get; set; }
         internal string GenerateSignature(InstaApiVersion apiVersion, string signatureKey)
         {
             if (string.IsNullOrEmpty(signatureKey))

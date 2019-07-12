@@ -1198,7 +1198,8 @@ namespace InstagramApiSharp.API
                 var twoFactorRequestMessage = new ApiTwoFactorRequestMessage(verificationCode,
                     _httpRequestProcessor.RequestMessage.Username,
                     _httpRequestProcessor.RequestMessage.DeviceId,
-                    _twoFactorInfo.TwoFactorIdentifier,_user.CsrfToken, _deviceInfo.DeviceGuid.ToString(), Convert.ToInt16(trustThisDevice));
+                    _twoFactorInfo.TwoFactorIdentifier,_user.CsrfToken, _deviceInfo.DeviceGuid.ToString(), Convert.ToInt16(trustThisDevice),
+                    1, FbAccessToken);
 
                 var instaUri = UriCreator.GetTwoFactorLoginUri();
                 var signature =
@@ -1959,6 +1960,7 @@ namespace InstagramApiSharp.API
         #endregion Authentication and challenge functions
 
         #region ORIGINAL FACEBOOK LOGIN
+        private string FbAccessToken = null;
 
         /// <summary>
         ///     Login with Facebook access token
@@ -2001,7 +2003,7 @@ namespace InstagramApiSharp.API
 
                 if (waterfallId.IsEmpty())
                     waterfallId = Guid.NewGuid().ToString();
-
+                FbAccessToken = fbAccessToken;
                 var instaUri = UriCreator.GetFacebookSignUpUri();
 
                 var data = new JObject
@@ -2035,6 +2037,7 @@ namespace InstagramApiSharp.API
                     if (loginFailReason.TwoFactorRequired)
                     {
                         _twoFactorInfo = loginFailReason.TwoFactorLoginInfo;
+                        SetUser(_twoFactorInfo.Username, "ALAKIMASALAN");
                         _httpRequestProcessor.RequestMessage.Username = _twoFactorInfo.Username;
                         _httpRequestProcessor.RequestMessage.DeviceId = _deviceInfo.DeviceId;
                         return Result.Fail("Two Factor Authentication is required", InstaLoginResult.TwoFactorRequired);
