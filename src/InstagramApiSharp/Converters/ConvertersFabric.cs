@@ -1063,5 +1063,11 @@ namespace InstagramApiSharp.Converters
         {
             return new InstaPendingRequestConverter { SourceObject = response };
         }
+
+        public IObjectConverter<InstaTrustedDevice, InstaTrustedDeviceResponse> GetTrustedDeviceConverter(
+            InstaTrustedDeviceResponse response)
+        {
+            return new InstaTrustedDeviceConverter { SourceObject = response };
+        }
     }
 }
