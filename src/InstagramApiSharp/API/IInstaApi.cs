@@ -511,13 +511,14 @@ namespace InstagramApiSharp.API
         /// </summary>
         /// <param name="verificationCode">Verification Code sent to your phone number</param>
         /// <param name="trustThisDevice">Trust this device or not?!</param>
+        /// <param name="twoFactorVerifyOptions">Two factor verification option</param>
         /// <returns>
         ///     Success --> is succeed
         ///     InvalidCode --> The code is invalid
         ///     CodeExpired --> The code is expired, please request a new one.
         ///     Exception --> Something wrong happened
         /// </returns>
-        Task<IResult<InstaLoginTwoFactorResult>> TwoFactorLoginAsync(string verificationCode, bool trustThisDevice = false);
+        Task<IResult<InstaLoginTwoFactorResult>> TwoFactorLoginAsync(string verificationCode, bool trustThisDevice = false, InstaTwoFactorVerifyOptions twoFactorVerifyOptions = InstaTwoFactorVerifyOptions.SmsCode);
 
         /// <summary>
         ///     Get Two Factor Authentication details

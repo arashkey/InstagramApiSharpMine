@@ -981,7 +981,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="text">Text to send</param>
         /// <param name="link">Link to send</param>
         /// <param name="threadIds">Thread ids</param>
-        public async Task<IResult<bool>> SendDirectLinkAsync(string text, string link, params string[] threadIds)
+        public async Task<IResult<InstaDirectRespondPayload>> SendDirectLinkAsync(string text, string link, params string[] threadIds)
         {
             return await SendDirectLinkAsync(text, link, threadIds, null);
         }
@@ -992,7 +992,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="text">Text to send</param>
         /// <param name="link">Link to send</param>
         /// <param name="recipients">Recipients ids</param>
-        public async Task<IResult<bool>> SendDirectLinkToRecipientsAsync(string text, string link, params string[] recipients)
+        public async Task<IResult<InstaDirectRespondPayload>> SendDirectLinkToRecipientsAsync(string text, string link, params string[] recipients)
         {
             return await SendDirectLinkAsync(text, link, null, recipients);
         }
@@ -1005,7 +1005,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="link">Link to send</param>
         /// <param name="threadIds">Thread ids</param>
         /// <param name="recipients">Recipients ids</param>
-        public async Task<IResult<bool>> SendDirectLinkAsync(string text, string link, string[] threadIds, string[] recipients)
+        public async Task<IResult<InstaDirectRespondPayload>> SendDirectLinkAsync(string text, string link, string[] threadIds, string[] recipients)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
@@ -1034,19 +1034,21 @@ namespace InstagramApiSharp.API.Processors
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
-                    return Result.UnExpectedResponse<bool>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+                    return Result.UnExpectedResponse<InstaDirectRespondPayload>(response, json);
+                var result = JsonConvert.DeserializeObject<InstaDirectRespondResponse>(json);
+
+                return result.IsSucceed ? Result.Success(ConvertersFabric.Instance
+                    .GetDirectRespondConverter(result).Convert().Payload) : Result.Fail<InstaDirectRespondPayload>(result.StatusCode);
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, default(InstaDirectRespondPayload), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<bool>(exception);
+                return Result.Fail<InstaDirectRespondPayload>(exception);
             }
         }
 

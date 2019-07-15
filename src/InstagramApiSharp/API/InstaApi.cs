@@ -1173,13 +1173,14 @@ namespace InstagramApiSharp.API
         /// </summary>
         /// <param name="verificationCode">Verification Code sent to your phone number</param>
         /// <param name="trustThisDevice">Trust this device or not?!</param>
+        /// <param name="twoFactorVerifyOptions">Two factor verification option</param>
         /// <returns>
         ///     Success --> is succeed
         ///     InvalidCode --> The code is invalid
         ///     CodeExpired --> The code is expired, please request a new one.
         ///     Exception --> Something wrong happened
         /// </returns>
-        public async Task<IResult<InstaLoginTwoFactorResult>> TwoFactorLoginAsync(string verificationCode, bool trustThisDevice = false)
+        public async Task<IResult<InstaLoginTwoFactorResult>> TwoFactorLoginAsync(string verificationCode, bool trustThisDevice = false, InstaTwoFactorVerifyOptions twoFactorVerifyOptions = InstaTwoFactorVerifyOptions.SmsCode)
         {
             if (_twoFactorInfo == null)
                 return Result.Fail<InstaLoginTwoFactorResult>("Re-login required");
@@ -1199,7 +1200,7 @@ namespace InstagramApiSharp.API
                     _httpRequestProcessor.RequestMessage.Username,
                     _httpRequestProcessor.RequestMessage.DeviceId,
                     _twoFactorInfo.TwoFactorIdentifier,_user.CsrfToken, _deviceInfo.DeviceGuid.ToString(), Convert.ToInt16(trustThisDevice),
-                    1, FbAccessToken);
+                    (int)twoFactorVerifyOptions, FbAccessToken);
 
                 var instaUri = UriCreator.GetTwoFactorLoginUri();
                 var signature =
