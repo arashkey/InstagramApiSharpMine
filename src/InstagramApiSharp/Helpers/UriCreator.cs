@@ -2571,5 +2571,12 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for story chat cancel request");
             return instaUri;
         }
+
+        public static Uri GetRemoveTrustedDeviceUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.ACCOUNTS_REMOVE_TRUSTED_DEVICE, out var instaUri))
+                throw new Exception("Cant create URI for remove trusted device");
+            return instaUri;
+        }
     }
 }

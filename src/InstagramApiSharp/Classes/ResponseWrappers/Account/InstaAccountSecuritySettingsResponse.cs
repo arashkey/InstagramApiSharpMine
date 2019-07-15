@@ -28,7 +28,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("backup_codes")]
         public List<string> BackupCodes { get; set; } = new List<string>();
         [JsonProperty("trusted_devices")]
-        public List<InstaTrustedDeviceResponse> TrustedDevices = new List<InstaTrustedDeviceResponse>();
+        public List<InstaTrustedDeviceResponse> TrustedDevices { get; set; } = new List<InstaTrustedDeviceResponse>();
         [JsonProperty("status")]
         internal string Status { get; set; }
     }

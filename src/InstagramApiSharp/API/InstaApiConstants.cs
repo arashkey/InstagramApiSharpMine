@@ -358,6 +358,7 @@ namespace InstagramApiSharp.API
         public const string ACCOUNTS_GET_PRESENCE = API_SUFFIX + "/accounts/get_presence_disabled/";
         public const string ACCOUNTS_GET_BLOCKED_COMMENTERS = API_SUFFIX + "/accounts/get_blocked_commenters/";
         public const string ACCOUNTS_SET_BLOCKED_COMMENTERS = API_SUFFIX + "/accounts/set_blocked_commenters/";
+        public const string ACCOUNTS_REMOVE_TRUSTED_DEVICE = API_SUFFIX + "/accounts/remove_trusted_device/";
 
         #endregion Account endpoint constants
 

@@ -557,7 +557,42 @@ namespace InstagramApiSharp.API.Processors
         #endregion Profile edit
 
         #region Story settings
-        // Story settings
+        /// <summary>
+        ///     Remove trusted device
+        /// </summary>        
+        /// <param name="trustedDeviceGuid">Trusted device guid (get it from <see cref="InstaTrustedDevice.DeviceGuid"/>)</param>
+        public async Task<IResult<bool>> RemoveTrustedDeviceAsync(string trustedDeviceGuid)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetRemoveTrustedDeviceUri();
+                var data = new JObject
+                {
+                    {"device_guid", trustedDeviceGuid},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()}
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.Fail<bool>(obj.Message);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
         /// <summary>
         ///     Get story settings.
         /// </summary>

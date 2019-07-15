@@ -111,6 +111,12 @@ namespace InstagramApiSharp.API.Processors
 
         #region Story settings
         /// <summary>
+        ///     Remove trusted device
+        /// </summary>        
+        /// <param name="trustedDeviceGuid">Trusted device guid (get it from <see cref="InstaTrustedDevice.DeviceGuid"/>)</param>
+        Task<IResult<bool>> RemoveTrustedDeviceAsync(string trustedDeviceGuid);
+
+        /// <summary>
         ///     Allow story message replies.
         /// </summary>
         /// <param name="repliesType">Reply typo</param>        
