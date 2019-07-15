@@ -26,6 +26,6 @@ namespace InstagramApiSharp.Classes.Models
 
         public List<string> BackupCodes { get; set; } = new List<string>();
 
-        public List<InstaTrustedDevice> TrustedDevices = new List<InstaTrustedDevice>();
+        public List<InstaTrustedDevice> TrustedDevices { get; set; } = new List<InstaTrustedDevice>();
     }
 }

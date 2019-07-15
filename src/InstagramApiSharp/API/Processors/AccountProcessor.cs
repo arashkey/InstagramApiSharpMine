@@ -883,8 +883,8 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaAccountSecuritySettings>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaAccountSecuritySettings>(json);
-                return Result.Success(obj);
+                var obj = JsonConvert.DeserializeObject<InstaAccountSecuritySettingsResponse>(json);
+                return Result.Success(ConvertersFabric.Instance.GetSecuritySettingsConverter(obj).Convert());
             }
             catch (HttpRequestException httpException)
             {

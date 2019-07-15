@@ -1069,5 +1069,11 @@ namespace InstagramApiSharp.Converters
         {
             return new InstaTrustedDeviceConverter { SourceObject = response };
         }
+
+        public IObjectConverter<InstaAccountSecuritySettings, InstaAccountSecuritySettingsResponse> GetSecuritySettingsConverter(
+            InstaAccountSecuritySettingsResponse response)
+        {
+            return new InstaAccountSecuritySettingsConverter { SourceObject = response };
+        }
     }
 }
