@@ -233,6 +233,7 @@ v2.0.0
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Iconic.Zlib.NetstandardUwp" Version="1.0.1" />
     <!--<PackageReference Include="MQTTnet" Version="3.0.2" />
     <PackageReference Include="System.Net.Security" Version="4.3.2" />
     <PackageReference Include="System.Net.WebSockets" Version="4.3.0" />
