@@ -20,6 +20,12 @@ namespace InstagramApiSharp.API.Processors
     public interface ITVProcessor
     {
         /// <summary>
+        ///     Browse Feed
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        Task<IResult<InstaTVBrowseFeed>> BrowseFeedAsync(PaginationParameters paginationParameters);
+
+        /// <summary>
         ///     Get channel by user id (pk) => channel owner
         /// </summary>
         /// <param name="userId">User id (pk) => channel owner</param>

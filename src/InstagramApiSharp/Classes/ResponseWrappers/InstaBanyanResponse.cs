@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https://t.me/ramtinak ]
+ * 
+ * Github source: https://github.com/ramtinak/InstagramApiSharpMine
+ * Nuget package: https://www.nuget.org/packages/InstagramApiSharpMine
+ * 
+ * IRANIAN DEVELOPERS
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;

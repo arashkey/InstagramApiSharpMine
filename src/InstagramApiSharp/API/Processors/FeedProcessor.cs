@@ -390,7 +390,7 @@ namespace InstagramApiSharp.API.Processors
                 paginationParameters.NextMaxId = feed.NextMaxId;
                 paginationParameters.PagesLoaded++;
 
-                while (feedResponse.MoreAvailable
+                while (feed.MoreAvailable
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
@@ -401,7 +401,7 @@ namespace InstagramApiSharp.API.Processors
                     var convertedFeed = Convert(nextFeed.Value);
                     feed.Medias.AddRange(convertedFeed.Medias);
                     feed.Stories.AddRange(convertedFeed.Stories);
-                    feedResponse.MoreAvailable = nextFeed.Value.MoreAvailable;
+                    feed.MoreAvailable = nextFeed.Value.MoreAvailable;
                     paginationParameters.NextMaxId = nextFeed.Value.NextMaxId;
                     paginationParameters.PagesLoaded++;
                 }

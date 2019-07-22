@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
-    internal class InstaBroadcastStartResponse
+    public class InstaBroadcastStartResponse
     {
         [JsonProperty("media_id")]
         public string MediaId { get; set; }

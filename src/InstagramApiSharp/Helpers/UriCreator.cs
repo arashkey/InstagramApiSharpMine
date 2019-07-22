@@ -2578,5 +2578,16 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for remove trusted device");
             return instaUri;
         }
+
+        public static Uri GetTVBrowseFeedUri(string maxId = null)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.IGTV_BROWSE_FEED, out var instaUri))
+                throw new Exception("Cant create URI for browse igtv");
+            if (string.IsNullOrEmpty(maxId))
+                instaUri = instaUri.AddQueryParameter("prefetch", "1");
+
+            return instaUri
+                .AddQueryParameter("max_id", maxId);
+        }
     }
 }

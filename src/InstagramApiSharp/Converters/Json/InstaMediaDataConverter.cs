@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace InstagramApiSharp.Converters.Json
 {
-    internal class InstaMediaDataConverter : JsonConverter
+    public class InstaMediaDataConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {

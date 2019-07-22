@@ -1,8 +1,8 @@
 ﻿/*
  * Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https://t.me/ramtinak ]
  * 
- * Github source: https://github.com/ramtinak/InstagramApiSharp
- * Nuget package: https://www.nuget.org/packages/InstagramApiSharp
+ * Github source: https://github.com/ramtinak/InstagramApiSharpMine
+ * Nuget package: https://www.nuget.org/packages/InstagramApiSharpMine
  * 
  * IRANIAN DEVELOPERS
  */

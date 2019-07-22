@@ -48,6 +48,66 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+
+        /// <summary>
+        ///     Browse Feed
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        public async Task<IResult<InstaTVBrowseFeed>> BrowseFeedAsync(PaginationParameters paginationParameters)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            var tvFeed = new InstaTVBrowseFeed();
+            try
+            {
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+
+                InstaTVBrowseFeed Convert(InstaTVBrowseFeedResponse instaTVBrowseFeedResponse)
+                {
+                    return ConvertersFabric.Instance.GetTVBrowseFeedConverter(instaTVBrowseFeedResponse).Convert();
+                }
+                var browseFeed = await BrowseFeed(paginationParameters.NextMaxId);
+                if (!browseFeed.Succeeded)
+                    return Result.Fail(browseFeed.Info, tvFeed);
+
+                var feedResponse = browseFeed.Value;
+
+                tvFeed = Convert(feedResponse);
+                paginationParameters.NextMaxId = tvFeed.MaxId;
+                paginationParameters.PagesLoaded++;
+
+                while (tvFeed.MoreAvailable
+                       && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
+                       && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
+                {
+                    var nextFeed = await BrowseFeed(paginationParameters.NextMaxId);
+                    if (!nextFeed.Succeeded)
+                        return Result.Fail(nextFeed.Info, tvFeed);
+
+                    var convertedFeed = Convert(nextFeed.Value);
+                    tvFeed.BrowseItems.AddRange(convertedFeed.BrowseItems);
+                    tvFeed.MoreAvailable = nextFeed.Value.MoreAvailable;
+                    paginationParameters.NextMaxId = nextFeed.Value.MaxId;
+                    if (convertedFeed.MyChannel != null)
+                        tvFeed.MyChannel = convertedFeed.MyChannel;
+                    tvFeed.BannerToken = convertedFeed.BannerToken;
+                    paginationParameters.PagesLoaded++;
+                }
+
+                return Result.Success(tvFeed);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, tvFeed, ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, tvFeed);
+            }
+        }
+
         /// <summary>
         ///     Get channel by user id (pk) => channel owner
         /// </summary>
@@ -239,5 +299,34 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaTVChannel>(exception);
             }
         }
+
+        private async Task<IResult<InstaTVBrowseFeedResponse>> BrowseFeed(string maxId)
+        {
+            try
+            {
+                var instaUri = UriCreator.GetTVBrowseFeedUri(maxId);
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaTVBrowseFeedResponse>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaTVBrowseFeedResponse>(json);
+
+                return obj.IsSucceed ? Result.Success(obj) : Result.Fail<InstaTVBrowseFeedResponse>(obj.Message);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaTVBrowseFeedResponse), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaTVBrowseFeedResponse>(exception);
+            }
+        }
+
     }
 }
