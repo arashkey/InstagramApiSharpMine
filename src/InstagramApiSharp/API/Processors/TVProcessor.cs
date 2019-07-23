@@ -337,6 +337,14 @@ namespace InstagramApiSharp.API.Processors
                 if (paginationParameters != null && !string.IsNullOrEmpty(paginationParameters.NextMaxId))
                     data.Add("max_id", paginationParameters.NextMaxId);
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+
+                var rnd = new Random();
+                request.Headers.Add("X-Ads-Opt-Out", "0");
+                request.Headers.Add("X-Google-AD-ID", _deviceInfo.GoogleAdId.ToString());
+                request.Headers.Add("X-DEVICE-ID", _deviceInfo.DeviceGuid.ToString());
+                request.Headers.Add("X-CM-Bandwidth-KBPS", $"{rnd.Next(678, 987)}.{rnd.Next(321, 876)}");
+                request.Headers.Add("X-CM-Latency", $"{rnd.Next(100, 250)}.{rnd.Next(321, 876)}");
+
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 
