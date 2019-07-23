@@ -667,7 +667,7 @@ namespace InstagramApiSharp.API
         public const string DISABLE_MEDIA_COMMENTS = API_SUFFIX + "/media/{0}/disable_comments/";
         public const string EDIT_MEDIA = API_SUFFIX + "/media/{0}/edit_media/";
         public const string GET_MEDIA = API_SUFFIX + "/media/{0}/info/";
-        public const string GET_SHARE_LINK = API_SUFFIX + "/media/{0}/permalink/";
+        public const string GET_SHARE_LINK = API_SUFFIX + "/media/{0}/permalink/?share_to_app=copy_link";
         public const string LIKE_COMMENT = API_SUFFIX + "/media/{0}/comment_like/";
         public const string LIKE_MEDIA = API_SUFFIX + "/media/{0}/like/";
         public const string MAX_MEDIA_ID_POSTFIX = "/media/?max_id=";
