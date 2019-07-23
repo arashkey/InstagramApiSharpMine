@@ -261,6 +261,64 @@ namespace InstagramApiSharp.API.Processors
             return await _instaApi.HelperProcessor.SendTVVideoAsync(tvVideo, title, caption);
         }
 
+        /// <summary>
+        ///     Mark a media or medias as seen
+        /// </summary>
+        /// <param name="mediaPkImpression">Media Pk impression (<see cref="InstaMedia.Pk"/>)</param>
+        /// <param name="progress">Progress time</param>
+        /// <param name="mediaPKsGridImpressions">Media PKs grid impressions</param>
+        public async Task<IResult<bool>> MarkAsSeenAsync(string mediaPkImpression, int progress = 0, string[] mediaPKsGridImpressions = null)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetSeenTVUri();
+                var root = new JObject();
+                var impression = new JObject();
+                var gridImpressions = new JArray();
+
+                if (!string.IsNullOrEmpty(mediaPkImpression))
+                {
+                    impression.Add(mediaPkImpression, new JObject
+                    {
+                        {"view_progress_s", progress }
+                    });
+                }
+                if (mediaPKsGridImpressions?.Length > 0)
+                    gridImpressions = new JArray(mediaPKsGridImpressions);
+
+                root.Add("impressions", impression);
+                root.Add("grid_impressions", gridImpressions);
+
+                var data = new JObject
+                {
+                    {"seen_state", root.ToString(Formatting.None)},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.Fail<bool>(obj.Message);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
         private async Task<IResult<InstaTVChannel>> GetChannel(InstaTVChannelType? channelType, long? userId, PaginationParameters paginationParameters)
         {
             try

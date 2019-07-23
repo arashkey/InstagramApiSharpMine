@@ -77,5 +77,13 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
         Task<IResult<InstaMedia>> UploadSegmentedVideoToTVAsync(InstaTVVideoUpload tvVideo, string title, string caption);
+
+        /// <summary>
+        ///     Mark a media or medias as seen
+        /// </summary>
+        /// <param name="mediaPkImpression">Media Pk impression (<see cref="InstaMedia.Pk"/>)</param>
+        /// <param name="progress">Progress time</param>
+        /// <param name="mediaPKsGridImpressions">Media PKs grid impressions</param>
+        Task<IResult<bool>> MarkAsSeenAsync(string mediaPkImpression, int progress = 0, string[] mediaPKsGridImpressions = null);
     }
 }

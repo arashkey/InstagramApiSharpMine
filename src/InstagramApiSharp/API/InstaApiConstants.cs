@@ -601,6 +601,7 @@ namespace InstagramApiSharp.API
         public const string IGTV_TV_GUIDE = API_SUFFIX + "/igtv/tv_guide/";
         public const string MEDIA_CONFIGURE_TO_IGTV = API_SUFFIX + "/media/configure_to_igtv/?video=1";
         public const string IGTV_BROWSE_FEED = API_SUFFIX + "/igtv/browse_feed/";
+        public const string IGTV_WRITE_SEEN = API_SUFFIX + "/igtv/write_seen_state/";
 
         #endregion IgTv (instagram tv) endpoints constants
 

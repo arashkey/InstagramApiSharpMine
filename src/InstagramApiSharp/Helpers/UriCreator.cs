@@ -2589,5 +2589,12 @@ namespace InstagramApiSharp.Helpers
             return instaUri
                 .AddQueryParameter("max_id", maxId);
         }
+
+        public static Uri GetSeenTVUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.IGTV_WRITE_SEEN, out var instaUri))
+                throw new Exception("Cant create URI for tv write seen");
+            return instaUri;
+        }
     }
 }
