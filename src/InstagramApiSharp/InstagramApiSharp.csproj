@@ -11,9 +11,9 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.0.8.0</Version>
-    <AssemblyVersion>2.0.8.0</AssemblyVersion>
-    <FileVersion>2.0.8.0</FileVersion>
+    <Version>2.0.9.0</Version>
+    <AssemblyVersion>2.0.9.0</AssemblyVersion>
+    <FileVersion>2.0.9.0</FileVersion>
     <Description>A complete Private Instagram API for .NET.
 
 
@@ -38,7 +38,21 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
-    <PackageReleaseNotes>v2.0.8
+    <PackageReleaseNotes>v2.0.9
+- [Bugfix] for facebook login with 2fa enabled
+- [Bugfix] for 2factor login
+- [Bugfix] for DeleteMediaAsync
+- [Update] GetPendingFriendRequestsAsync
+- [Update] SendDirectLinkAsync response type
+- [Update] GetSuggestedSearchesAsync Uri
+- [Update] GetShareLinkFromMediaIdAsync Uri
+- [Update] GetChannelByIdAsync, GetChannelByTypeAsync functions
+- [Add] GetSecuritySettingsInfoAsync converter [Support trusted devices]
+- [Add] RemoveTrustedDeviceAsync to AccountProcessor
+- [Add] BrowseFeedAsync to TVProcessor
+- [Add] MarkAsSeenAsync to TVProcesser
+
+v2.0.8
 - [Update] signature key and API version 100.0.0.17.129 as default 
 - [Set] latest ApiVersion automatically [For disable this option just set InstaApi.LoadApiVersionFromSessionFile to TRUE, it's recommended to always be FALSE]
 - [Update] GetDirectInboxAsync uri

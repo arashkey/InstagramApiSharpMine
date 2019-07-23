@@ -4,13 +4,27 @@ Private version of [InstagramApiSharp](https://github.com/ramtinak/InstagramApiS
 
 | Target | Branch | Version | Download |
 | ------ | ------ | ------ | ------ |
-| Github | master | v2.0.8 | [v2.0.8](https://github.com/ramtinak/InstagramApiSharpMine/archive/master.zip) |
-| Release | master | v2.0.8 | [v2.0.8](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
+| Github | master | v2.0.9 | [v2.0.9](https://github.com/ramtinak/InstagramApiSharpMine/archive/master.zip) |
+| Release | master | v2.0.9 | [v2.0.9](https://github.com/ramtinak/InstagramApiSharpMine/releases/) |
 
 #### How to build the project?
 Check this youtube video: https://www.youtube.com/watch?v=AFjKryHz9nM
 
 #### Version changes
+v2.0.9
+- [Bugfix] for facebook login with 2fa enabled
+- [Bugfix] for 2factor login
+- [Bugfix] for DeleteMediaAsync
+- [Update] GetPendingFriendRequestsAsync
+- [Update] SendDirectLinkAsync response type
+- [Update] GetSuggestedSearchesAsync Uri
+- [Update] GetShareLinkFromMediaIdAsync Uri
+- [Update] GetChannelByIdAsync, GetChannelByTypeAsync functions
+- [Add] GetSecuritySettingsInfoAsync converter [Support trusted devices]
+- [Add] RemoveTrustedDeviceAsync to AccountProcessor
+- [Add] BrowseFeedAsync to TVProcessor
+- [Add] MarkAsSeenAsync to TVProcesser
+
 v2.0.8
 - [Update] signature key and API version 100.0.0.17.129 as default 
 - [Set] latest ApiVersion automatically [For disable this option just set InstaApi.LoadApiVersionFromSessionFile to TRUE, it's recommended to always be FALSE]
