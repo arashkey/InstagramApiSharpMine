@@ -231,11 +231,14 @@ namespace Examples.Samples
                 if (stories.Succeeded && stories.Value?.Items?.Count > 0)
                 {
                     var result = stories.Value;
+                    
                     // Seen a story
                     MarkStoryAsSeen(result);
 
+
                     // Vote to Story Poll
                     VoteStoryPolls(result);
+
 
                     // Answer to Story question
                     AnswerToStoryQuestion(result);
@@ -243,6 +246,10 @@ namespace Examples.Samples
 
                     // Answer to Story quizz
                     AnswerToStoryQuiz(result);
+
+
+                    // Vote So story slider
+                    VoteToStorySlider(result);
                 }
             }
         }
@@ -352,5 +359,31 @@ namespace Examples.Samples
                 $"answered to: {storyQuiz.QuizSticker.QuizId} '{storyQuiz.QuizSticker.Tallies.Count}' selected '{myAnswer}' result: {result.Succeeded}");
         }
 
+
+
+        public async void VoteToStorySlider(InstaStory reelStory)
+        {
+            var storyItem = reelStory.Items.FirstOrDefault(x => x.StorySliders?.Count > 1); // choose a story that has a Story slider
+            if (storyItem == null)
+            {
+                Console.WriteLine("No story slider exist.");
+                return;
+            }
+
+            var storySlider = storyItem.StorySliders[0]; // gets first story slider
+
+            // checks for answer, maybe we already voted
+            if (storySlider.SliderSticker.ViewerVote != -1 || storySlider.SliderSticker.ViewerCanVote)
+                return;
+            double myAnswer = 7;
+            // story sliders answer is a range between 0 to 1, it's so I but here we use 0 to 10 and then divide it by 10
+            // to get's the real answer
+            myAnswer /= 10;
+
+            var result = await InstaApi.StoryProcessor
+                   .VoteStorySliderAsync(storyItem.Id, storySlider.SliderSticker.SliderId.ToString(), myAnswer);
+            Console.WriteLine($"{storyItem.Id} '{storySlider.SliderSticker.Question}'\t\t" +
+                $"answered to: {storySlider.SliderSticker.SliderId} '{myAnswer * 10} / 10' result: {result.Succeeded}");
+        }
     }
 }
