@@ -160,6 +160,148 @@ namespace InstagramApiSharp.API.Versions
                          Capabilities = "3brTvw==",
                          SignatureKey = "e0767f8a7ae9f6c1f9d3674be35d96117f0589960bf3dbd2921f020b33ca4b9f"
                     }
+                },
+                {
+                    InstaApiVersionType.Version105,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "166149717",
+                         AppVersion = "105.0.0.18.119",
+                         Capabilities = "3brTvwE=",
+                         SignatureKey = "d9af03055a2774b684c870c47b05abb1ac96f590820e370356d402e68bd9411f"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version113,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "175574628",
+                         AppVersion = "113.0.0.39.122",
+                         Capabilities = "3brTvwE=",
+                         SignatureKey = "8013dff8e97c16461a8881071210e8271c8fb0cf604d3c7d8f798df621435a18",
+                         BloksVersionId = "15f3ececf8692b1eddb3a12f1ffb072cc9e9109aac995e30f1f500b68d9917eb"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version117,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "180322757",
+                         AppVersion = "117.0.0.28.123",
+                         Capabilities = "3brTvwE=",
+                         SignatureKey = "a86109795736d73c9a94172cd9b736917d7d94ca61c9101164894b3f0d43bef4",
+                         BloksVersionId = "0a3ae4c88248863609c67e278f34af44673cff300bc76add965a9fb036bd3ca3"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version121,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "185203705",
+                         AppVersion = "121.0.0.29.119",
+                         Capabilities = "3brTvwE=",
+                         SignatureKey = "9193488027538fd3450b83b7d05286d4ca9599a0f7eeed90d8c85925698a05dc",
+                         BloksVersionId = "1b030ce63a06c25f3e4de6aaaf6802fe1e76401bc5ab6e5fb85ed6c2d333e0c7"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version123,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "188791674",
+                         AppVersion = "123.0.0.21.114",
+                         Capabilities = "3brTvwM=",
+                         SignatureKey = "8fea883900208c803efa5daebe163d3d75979be19e288368a3e34a465c0f975e",
+                         BloksVersionId = "7ab39aa203b17c94cc6787d6cd9052d221683361875eee1e1bfe30b8e9debd74"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version124,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "192992577",
+                         AppVersion = "124.0.0.17.473",
+                         Capabilities = "3brTvwM=",
+                         SignatureKey = "fdec5d441c8c18708cecfbfe184ad1c08a6c99849bcd986061b7909306873e0e",
+                         BloksVersionId = "d43b6b50d0644a8d433f1914592fdff0b1a60932deead2b1090e9d7723dc75db"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version126,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "195435560",
+                         AppVersion = "126.0.0.25.121",
+                         Capabilities = "3brTvwM=",
+                         SignatureKey = "8e496c87a09d5e922f6e33df3f399ce298ddbd6f7d6d038417047cc6474a3542",
+                         BloksVersionId = "e538d4591f238824118bfcb9528c8d005f2ea3becd947a3973c030ac971bb88e"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version129,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "199325909",
+                         AppVersion = "129.0.0.29.119",
+                         Capabilities = "3brTvwM=",
+                         SignatureKey = "d824458730434607defeba6566f92fc4bb4f34001c06c4d221e761a174e7b194",
+                         BloksVersionId = "0e5dc0b9970ffc452602afb7e530944daa9a16c71932e1ba8d322bf84d48bb82"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version130,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "200396014",
+                         AppVersion = "130.0.0.31.121",
+                         Capabilities = "3brTvwM=",
+                         SignatureKey = "f0bdfd5332d66a64d5e04965e6a7ade67c4e2cfc57ea38f0083c0400640a5e20",
+                         BloksVersionId = "0e9b6d9c0fb2a2df4862cd7f46e3f719c55e9f90c20db0e5d95791b66f43b367"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version136,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "208061688",
+                         AppVersion = "136.0.0.34.124",
+                         Capabilities = "3brTvwM=",
+                         SignatureKey = "46024e8f31e295869a0e861eaed42cb1dd8454b55232d85f6c6764365079374b",
+                         BloksVersionId = "edc619c2e837cfe4107a7229f75ee68836af821b16b1b6ec9637914ba0b973fe"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version146,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "221134032",
+                         AppVersion = "146.0.0.27.125",
+                         Capabilities = "3brTvw8=",
+                         SignatureKey = "SIGNATURE",
+                         BloksVersionId = "457c39d23261600a30d5f10fb9ee409065bf9bf8ee5480183a575fabb692a6f7"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version157,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "242168941",
+                         AppVersion = "157.0.0.37.120",
+                         Capabilities = "3brTvw8=",
+                         SignatureKey = "SIGNATURE",
+                         BloksVersionId = "3fb505389eb683d8514c257597479c819304491615c89803d7cc0071987eeafe"
+                    }
+                },
+                {
+                    InstaApiVersionType.Version164,
+                    new InstaApiVersion
+                    {
+                         AppApiVersionCode = "252055945",
+                         AppVersion = "164.0.0.46.123",
+                         Capabilities = "3brTvx8=",
+                         SignatureKey = "SIGNATURE",
+                         BloksVersionId = "d94aad116996ca7cca05e4bce137add77f307b94b8120e154177ed79934a960f"
+                    }
                 }
             };
         }

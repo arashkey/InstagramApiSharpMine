@@ -85,6 +85,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
 
 
+        [JsonProperty("admin_user_ids")] public List<long> AdminUserIds { get; set; }
 
     }
 }

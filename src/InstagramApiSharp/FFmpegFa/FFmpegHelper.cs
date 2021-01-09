@@ -1,4 +1,4 @@
-﻿#if !WINDOWS_UWP && !NETSTANDARD
+﻿#if NETSTANDARD
 
 /*
  * Credit Ramtin Jokar
@@ -267,7 +267,81 @@ namespace InstagramApiSharp.FFmpegFa
 
             })).Start();
         }
+        /// <summary>
+        ///     Resize image
+        /// </summary>
+        /// <param name="inputFile">Input image file path</param>
+        /// <param name="outputFile">Output image file path</param>
+        /// <param name="newSize">New size</param>
+        public void ResizeImage(string inputFile, string outputFile, ImageSize newSize)
+        {
+            if (string.IsNullOrEmpty(inputFile))
+                throw new Exception("Inputfile is empty. Choose an input file.");
+            if (string.IsNullOrEmpty(outputFile))
+                throw new Exception("Outputfile is empty. Choose an output file.");
 
+            var cmd = string.Empty;
+            var wh = string.Format("{0}x{1}", newSize.Width, newSize.Height);
+
+            cmd = $"-i \"{inputFile}\" -vf scale={wh} \"{outputFile}\"";
+
+            Process process = new Process();
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.FileName = FFmpegStartupPath;
+            process.StartInfo.Arguments = cmd;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.Start();
+            new Thread(new ThreadStart(() => {
+
+                StreamReader sr = process.StandardError;
+                Output("Start.....");
+                var name = "";
+                if (inputFile.Contains("\\"))
+                    name = Path.GetFileName(inputFile);
+                else name = inputFile;
+
+
+                progress = new FFmpegProgress();
+                bool d = false;
+                TimeSpan totalTimeSpan = TimeSpan.FromMilliseconds(0);
+                Output("Total:" + totalTimeSpan.TotalMilliseconds);
+                //frame=   18 fps=0.0 q=0.0 size=       7kB time=00:00:00.88 bitrate=  68.8kbits/s speed=1.69x   
+                while (!sr.EndOfStream)
+                {
+                    var v = (sr.ReadLine());
+                    Output(v);
+                    if (v.ToLower().Contains("duration") && !d)
+                    {
+                        try
+                        {
+                            FFmpegInfo fFmpegInfo = new FFmpegInfo(v, name);
+                            totalTimeSpan = fFmpegInfo.Duration;
+                            progress.InputFileInfo = fFmpegInfo;
+                            d = true;
+                        }
+                        catch { }
+                    }
+                    if (v.Contains("time=") && totalTimeSpan.TotalMilliseconds != 0)
+                    {
+                        try
+                        {
+                            SendProgress(totalTimeSpan, v);
+                        }
+                        catch { }
+                    }
+                }
+                try
+                {
+                    SendProgress(totalTimeSpan, ".:::END:::.");
+                    // 100%
+                }
+                catch { }
+                Output("End.....");
+            })).Start();
+        }
         /// <summary>
         ///     Resize video
         /// </summary>

@@ -8,9 +8,11 @@
  */
 
 using Newtonsoft.Json;
+using System;
 
 namespace InstagramApiSharp.Classes
 {
+    [Serializable]
     public class InstaChallengeLoginInfo
     {
         [JsonProperty("url")]
@@ -25,6 +27,8 @@ namespace InstagramApiSharp.Classes
         public bool Logout { get; set; }
         [JsonProperty("native_flow")]
         public bool NativeFlow { get; set; }
+        [JsonProperty("challenge_context")]
+        public string ChallengeContext { get; set; }
 
     }
 }

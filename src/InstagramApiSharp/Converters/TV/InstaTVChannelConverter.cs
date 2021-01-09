@@ -17,50 +17,46 @@ using InstagramApiSharp.Classes.ResponseWrappers.Business;
 
 namespace InstagramApiSharp.Converters
 {
-    internal class InstaTVUserConverter : IObjectConverter<InstaTVUser, InstaTVUserResponse>
+    internal class InstaTVChannelConverter : IObjectConverter<InstaTVChannel, InstaTVChannelResponse>
     {
-        public InstaTVUserResponse SourceObject { get; set; }
+        public InstaTVChannelResponse SourceObject { get; set; }
 
-        public InstaTVUser Convert()
+        public InstaTVChannel Convert()
         {
             if (SourceObject == null)
                 throw new ArgumentNullException("SourceObject");
 
-            var user = new InstaTVUser
+            var channel = new InstaTVChannel
             {
-                AllowedCommenterType = SourceObject.AllowedCommenterType,
-                Biography = SourceObject.Biography,
-                BiographyWithEntities = SourceObject.BiographyWithEntities,
-                CanBoostPost = SourceObject.CanBoostPost,
-                CanLinkEntitiesInBio = SourceObject.CanLinkEntitiesInBio,
-                CanSeeOrganicInsights = SourceObject.CanSeeOrganicInsights,
-                ExternalLynxUrl = SourceObject.ExternalLynxUrl,
-                ExternalUrl = SourceObject.ExternalUrl,
-                FollowerCount = SourceObject.FollowerCount,
-                FollowingCount = SourceObject.FollowingCount,
-                FollowingTagCount = SourceObject.FollowingTagCount,
-                FullName = SourceObject.FullName,
-                GeoMediaCount = SourceObject.GeoMediaCount,
-                HasAnonymousProfilePicture = SourceObject.HasAnonymousProfilePicture,
-                HasBiographyTranslation = SourceObject.HasBiographyTranslation,
-                HasPlacedOrders = SourceObject.HasPlacedOrders,
-                IsPrivate = SourceObject.IsPrivate,
-                IsVerified = SourceObject.IsVerified,
-                MediaCount = SourceObject.MediaCount,
-                Pk = SourceObject.Pk,
-                ProfilePicId = SourceObject.ProfilePicId,
-                ProfilePicUrl = SourceObject.ProfilePicUrl,
-                ReelAutoArchive = SourceObject.ReelAutoArchive,
-                ShowInsightsTerms = SourceObject.ShowInsightsTerms,
-                TotalIGTVVideosCount = SourceObject.TotalIGTVVideosCount,
-                Username = SourceObject.Username
+                HasMoreAvailable = SourceObject.HasMoreAvailable,
+                Id = SourceObject.Id,
+                MaxId = SourceObject.MaxId,
+                Title = SourceObject.Title,
+                Type = SourceObject.Type,
+                ApproxTotalVideos = SourceObject.ApproxTotalVideos ?? 0,
+                Description = SourceObject.Description
             };
-            try
+
+            if (SourceObject.Items != null && SourceObject.Items.Any())
             {
-                user.FriendshipStatus = ConvertersFabric.Instance.GetFriendShipStatusConverter(SourceObject.FriendshipStatus).Convert();
+                foreach (var item in SourceObject.Items)
+                {
+                    try
+                    {
+                        channel.Items.Add(ConvertersFabric.Instance.GetSingleMediaConverter(item).Convert());
+                    }
+                    catch { }
+                }
             }
-            catch { }
-            return user;
+            if (SourceObject.UserDetail != null)
+            {
+                try
+                {
+                    channel.UserDetail = ConvertersFabric.Instance.GetTVUserConverter(SourceObject.UserDetail).Convert();
+                }
+                catch { }
+            }
+            return channel;
         }
     }
 }

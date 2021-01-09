@@ -19,6 +19,8 @@ namespace InstagramApiSharp.Classes.Models
         public string Title { get; set; }
 
         public string Id { get; set; }
+        public string Description { get; set; }
+        public int? ApproxTotalVideos { get; set; }
 
         public List<InstaMedia> Items { get; set; } = new List<InstaMedia>();
 

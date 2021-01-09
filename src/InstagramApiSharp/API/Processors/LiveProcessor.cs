@@ -23,6 +23,7 @@ using InstagramApiSharp.Converters.Json;
 using InstagramApiSharp.Converters;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using System.Collections.Generic;
+using System.Text;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -51,6 +52,240 @@ namespace InstagramApiSharp.API.Processors
             _httpHelper = httpHelper;
         }
 
+        /// <summary>
+        ///     Let Instagram know that you invited someone to a live broadcast and joined successfully
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="userIdToInvite">User id (pk) to invite</param>
+        /// <param name="offsetToVideoStart">Offset to video start </param>
+        public async Task<IResult<bool>> BroadcastEventAsync(string broadcastId, long userIdToInvite, int offsetToVideoStart = 30)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetBroadcastEventLiveUri(broadcastId);
+                var data = new JObject
+                {
+                    {"client_version", "1"},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"event_user_id", userIdToInvite.ToString()},
+                    {"event_type", "JOINED"},
+                    {"offset_to_video_start", offsetToVideoStart.ToString()},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+        /// <summary>
+        ///     Leave or cancel a live broadcast
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="encodedServerDataInfo">Encoded server data information => from <see cref="JoinBroadcastAsync"/> response</param>
+        /// <param name="numParticipants">Number of participants</param>
+        public async Task<IResult<bool>> LeaveBroadcastAsync(string broadcastId, string encodedServerDataInfo, int numParticipants = 1)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetBroadcastLeaveLiveUri(broadcastId);
+                var data = new JObject
+                {
+                    {"reason", "leave_broadcast"},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"num_participants", numParticipants.ToString()},
+                    {"encoded_server_data_info", encodedServerDataInfo},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+        /// <summary>
+        ///     Invite to a live broadcast
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="userIdToInvite">User id (pk) to invite</param>
+        /// <param name="encodedServerDataInfo">Encoded server data information => from <see cref="JoinBroadcastAsync"/> response</param>
+        /// <param name="offsetToVideoStart">Offset to video start </param>
+        public async Task<IResult<bool>> InviteToBroadcastAsync(string broadcastId, long userIdToInvite, string encodedServerDataInfo, int offsetToVideoStart = 30)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetBroadcastInviteLiveUri(broadcastId);
+                var data = new JObject
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"invitees", userIdToInvite.ToString()},
+                    {"offset_to_video_start", offsetToVideoStart.ToString()},
+                    {"encoded_server_data_info", encodedServerDataInfo},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+        /// <summary>
+        ///     Confirm a join broadcast request
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="encodedServerDataInfo">Encoded server data information => from <see cref="JoinBroadcastAsync"/> response</param>
+        /// <param name="curVersion">Cur version => 1 or 2 or 3</param>
+        public async Task<IResult<bool>> ConfirmJoinBroadcastAsync(string broadcastId, string encodedServerDataInfo, uint curVersion = 2)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetBroadcastConfirmLiveUri(broadcastId);
+                var data = new JObject
+                {
+                    {"message_type", "CONFERENCE_STATE"},
+                    {"cur_version", curVersion.ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"transaction_id", ExtensionHelper.GetLiveTransactionToken()},
+                    {"encoded_server_data_info", encodedServerDataInfo},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+        /// <summary>
+        ///     Requests to join a Live broadcast as a co-broadcaster
+        ///     <para>If someone sends you a request to join your own live, you should send them a join request as well</para>
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="sdpOffer">Sdp offer => I don't know what is this but it seems it's related to RTSP</param>
+        /// <param name="targetVideoWidth">Video width</param>
+        /// <param name="targetVideoHeight">Video height</param>
+        public async Task<IResult<InstaBroadcastJoin>> JoinBroadcastAsync(string broadcastId, string sdpOffer, uint targetVideoWidth = 848, uint targetVideoHeight = 512)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetBroadcastJoinLiveUri(broadcastId);
+                var data = new JObject
+                {
+                    {"target_video_height", targetVideoHeight.ToString()},
+                    {"target_video_width", targetVideoWidth.ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"sdp_offer", sdpOffer},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()}
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaBroadcastJoin>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaBroadcastJoin>(json);
+                return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<InstaBroadcastJoin>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaBroadcastJoin), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaBroadcastJoin>(exception);
+            }
+        }
+        /// <summary>
+        ///     Get post live thumbnails
+        /// </summary>
+        /// <param name="broadcastId">Broadcast identifier</param>
+        public async Task<IResult<InstaBroadcastThumbnails>> GetPostLiveThumbnailsAsync(string broadcastId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetPostLiveThumbnailsUri(broadcastId, _instaApi.HttpHelper);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaBroadcastThumbnails>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaBroadcastThumbnails>(json);
+                return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<InstaBroadcastThumbnails>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaBroadcastThumbnails), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaBroadcastThumbnails>(exception);
+            }
+        }
         /// <summary>
         ///     Add an broadcast to post live.
         /// </summary>
@@ -105,13 +340,13 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"user_breadcrumb", commentText},
-                    {"idempotence_token",  Guid.NewGuid().ToString()},
-                    {"comment_text", commentText},
                     {"live_or_vod", "1"},
-                    {"offset_to_video_start"," 0"},
+                    {"idempotence_token",  Guid.NewGuid().ToString()},
                     {"_csrftoken", _user.CsrfToken},
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"comment_text", commentText},
+                    {"offset_to_video_start"," 0"},
                 };
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
@@ -142,24 +377,22 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="previewWidth">Preview width</param>
         /// <param name="previewHeight">Preview height</param>
-        /// <param name="broadcastMessage">Broadcast start message</param>
-        public async Task<IResult<InstaBroadcastCreate>> CreateAsync(int previewWidth = 720, int previewHeight = 1184, string broadcastMessage = "")
+        public async Task<IResult<InstaBroadcastCreate>> CreateAsync(int previewWidth = 720, int previewHeight = 1184)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
                 var instaUri = UriCreator.GetBroadcastCreateUri();
-                var data = new JObject
+                var data = new Dictionary<string, string>
                 {
                     {"_csrftoken", _user.CsrfToken},
+                    {"preview_height",  previewHeight.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"preview_height",  previewHeight},
-                    {"preview_width",  previewWidth},
-                    {"broadcast_message",  broadcastMessage},
-                    {"broadcast_type",  "RTMP"},
-                    {"internal_only",  0}
+                    {"broadcast_type",  "RTMP_SWAP_ENABLED"},
+                    {"preview_width",  previewWidth.ToString()},
+                    {"internal_only",  0.ToString()}
                 };
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -307,7 +540,7 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"_uid", _user.LoggedInUser.UserName},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"end_after_copyright_warning", endAfterCopyrightWarning.ToString()},
                 };
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
@@ -464,14 +697,13 @@ namespace InstagramApiSharp.API.Processors
             {
                 var instaUri = UriCreator.GetLiveHeartbeatAndViewerCountUri(broadcastId);
                 var uploadId = ApiRequestMessage.GenerateUploadId();
-                var requestContent = new MultipartFormDataContent(uploadId)
+                var data = new Dictionary<string, string>
                 {
-                    {new StringContent(_user.CsrfToken), "\"_csrftoken\""},
-                    {new StringContent(_deviceInfo.DeviceGuid.ToString()), "\"_uuid\""},
-                    {new StringContent("offset_to_video_start"),"30"}
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"offset_to_video_start", "30"}
                 };
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
-                request.Content = requestContent;
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -936,20 +1168,25 @@ namespace InstagramApiSharp.API.Processors
         ///     Start live broadcast. NOTE: YOU MUST CREATE AN BROADCAST FIRST(CreateAsync) AND THEN CALL THIS METHOD. 
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
-        /// <param name="sendNotifications">Send notifications</param>
-        public async Task<IResult<InstaBroadcastStart>> StartAsync(string broadcastId, bool sendNotifications)
+        /// <param name="latitude">longitude of your place</param>
+        /// <param name="longitude">longitude of your place</param>
+        public async Task<IResult<InstaBroadcastStart>> StartAsync(string broadcastId, double? latitude = null, double? longitude = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
                 var instaUri = UriCreator.GetBroadcastStartUri(broadcastId);
-                var data = new JObject
+                var data = new Dictionary<string,string>
                 {
                     {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"should_send_notifications",  sendNotifications}
                 };
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                if (latitude != null && longitude != null)
+                {
+                    data.Add("latitude", latitude.ToString());
+                    data.Add("longitude", longitude.ToString());
+                }
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();

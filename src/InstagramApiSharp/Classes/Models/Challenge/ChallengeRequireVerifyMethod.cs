@@ -40,10 +40,10 @@ namespace InstagramApiSharp.Classes
         public string GoogleOauthToken { get; set; }
         [JsonProperty("email")]
         public string Email { get; set; }
-        [JsonProperty("phone_number")]
+        [JsonProperty("phone_number", NullValueHandling = NullValueHandling.Ignore)]
         public string PhoneNumber { get; set; }
 
-        public bool SubmitPhoneRequired => PhoneNumber.ToLower().Contains("none");
+        public bool SubmitPhoneRequired => (PhoneNumber != null);
     }
 
 }

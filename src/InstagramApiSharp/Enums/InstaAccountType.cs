@@ -12,6 +12,7 @@ namespace InstagramApiSharp.Enums
     public enum InstaAccountType
     {
         Normal = 1,
-        Business = 2
+        Business = 2,
+        Creator = 3
     }
 }

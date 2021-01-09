@@ -12,6 +12,13 @@ namespace InstagramApiSharp.API.Processors
     public interface IHashtagProcessor
     {
         /// <summary>
+        ///     Seen hashtag story as seen
+        /// </summary>
+        /// <param name="hashtagId">Hashtag Id</param>
+        /// <param name="storyMediaId">Story media identifier</param>
+        /// <param name="takenAtUnix">Taken at unix</param>
+        Task<IResult<bool>> MarkHashtagStoryAsSeenAsync(string hashtagId, string storyMediaId, long takenAtUnix);
+        /// <summary>
         ///     Get medias for hashtag channel
         /// </summary>
         /// <param name="channelId">Channel id</param>

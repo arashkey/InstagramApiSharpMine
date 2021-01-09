@@ -64,5 +64,10 @@ namespace InstagramApiSharp.Classes.Models
         public InstaDirectBroadcast LiveViewerInvite { get; set; }
 
         public InstaVideoCallEvent VideoCallEvent { get; set; }
+
+        public InstaProduct ProductShare { get; set; }
+
+
+        public InstaDirectArEffect ArEffect { get; set; }
     }
 }

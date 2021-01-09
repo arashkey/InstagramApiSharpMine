@@ -24,6 +24,10 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public string Title { get; set; }
         [JsonProperty("id")]
         public string Id { get; set; }
+        [JsonProperty("description")]
+        public string Description { get; set; }
+        [JsonProperty("approx_total_videos")]
+        public int? ApproxTotalVideos { get; set; }
         [JsonProperty("items")]
         public List<InstaMediaItemResponse> Items { get; set; }
         [JsonProperty("more_available")]

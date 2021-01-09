@@ -9,6 +9,7 @@
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using System.Threading.Tasks;
+using System;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -18,9 +19,53 @@ namespace InstagramApiSharp.API.Processors
     public interface ILiveProcessor
     {
         /// <summary>
+        ///     Let Instagram know that you invited someone to a live broadcast and joined successfully
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="userIdToInvite">User id (pk) to invite</param>
+        /// <param name="offsetToVideoStart">Offset to video start </param>
+        Task<IResult<bool>> BroadcastEventAsync(string broadcastId, long userIdToInvite, int offsetToVideoStart = 30);
+        /// <summary>
+        ///     Leave or cancel a live broadcast
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="encodedServerDataInfo">Encoded server data information => from <see cref="JoinBroadcastAsync"/> response</param>
+        /// <param name="numParticipants">Number of participants</param>
+        Task<IResult<bool>> LeaveBroadcastAsync(string broadcastId, string encodedServerDataInfo, int numParticipants = 1);
+        /// <summary>
+        ///     Invite to a live broadcast
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="userIdToInvite">User id (pk) to invite</param>
+        /// <param name="encodedServerDataInfo">Encoded server data information => from <see cref="JoinBroadcastAsync"/> response</param>
+        /// <param name="offsetToVideoStart">Offset to video start </param>
+        Task<IResult<bool>> InviteToBroadcastAsync(string broadcastId, long userIdToInvite, string encodedServerDataInfo, int offsetToVideoStart = 30);
+        /// <summary>
+        ///     Confirm a join broadcast request
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="encodedServerDataInfo">Encoded server data information => from <see cref="JoinBroadcastAsync"/> response</param>
+        /// <param name="curVersion">Cur version => 1 or 2 or 3</param>
+        Task<IResult<bool>> ConfirmJoinBroadcastAsync(string broadcastId, string encodedServerDataInfo, uint curVersion = 2);
+        /// <summary>
+        ///     Requests to join a Live broadcast as a co-broadcaster
+        ///     <para>If someone sends you a request to join your own live, you should send them a join request as well</para>
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="sdpOffer">Sdp offer => I don't know what is this but it seems it's related to RTSP</param>
+        /// <param name="targetVideoWidth">Video width</param>
+        /// <param name="targetVideoHeight">Video height</param>
+        Task<IResult<InstaBroadcastJoin>> JoinBroadcastAsync(string broadcastId, string sdpOffer, uint targetVideoWidth = 848, uint targetVideoHeight = 512);
+        /// <summary>
+        ///     Get post live thumbnails
+        /// </summary>
+        /// <param name="broadcastId">Broadcast identifier</param>
+        Task<IResult<InstaBroadcastThumbnails>> GetPostLiveThumbnailsAsync(string broadcastId);
+        /// <summary>
         ///     Add an broadcast to post live.
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
+        [Obsolete("AddToPostLiveAsync API is deprecated by Instagram.\nSo this function will be deleted in the future releases.", true)]
         Task<IResult<InstaBroadcastAddToPostLive>> AddToPostLiveAsync(string broadcastId);
 
         /// <summary>
@@ -36,13 +81,13 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="previewWidth">Preview width</param>
         /// <param name="previewHeight">Preview height</param>
-        /// <param name="broadcastMessage">Broadcast start message</param>
-        Task<IResult<InstaBroadcastCreate>> CreateAsync(int previewWidth = 720, int previewHeight = 1184, string broadcastMessage = "");
+        Task<IResult<InstaBroadcastCreate>> CreateAsync(int previewWidth = 1080, int previewHeight = 1794);
 
         /// <summary>
         ///     Delete an broadcast from post live.
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
+        [Obsolete("DeletePostLiveAsync API is deprecated by Instagram.\nSo this function will be deleted in the future releases.", true)]
         Task<IResult<bool>> DeletePostLiveAsync(string broadcastId);
 
         /// <summary>
@@ -148,8 +193,9 @@ namespace InstagramApiSharp.API.Processors
         ///     Start live broadcast. NOTE: YOU MUST CREATE AN BROADCAST FIRST(CreateAsync) AND THEN CALL THIS METHOD. 
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
-        /// <param name="sendNotifications">Send notifications</param>
-        Task<IResult<InstaBroadcastStart>> StartAsync(string broadcastId, bool sendNotifications);
+        /// <param name="latitude">longitude of your place</param>
+        /// <param name="longitude">longitude of your place</param>
+        Task<IResult<InstaBroadcastStart>> StartAsync(string broadcastId, double? latitude = null, double? longitude = null);
 
         /// <summary>
         ///     Share an live broadcast to direct thread

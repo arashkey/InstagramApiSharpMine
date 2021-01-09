@@ -20,6 +20,12 @@ namespace InstagramApiSharp.API.Processors
     public interface IDiscoverProcessor
     {
         /// <summary>
+        ///     Dismiss user suggestions
+        /// </summary>
+        /// <param name="targetId">Target id (user id)</param>
+        /// <param name="algorithm">Algorithm</param>
+        Task<IResult<bool>> DismissUserSuggestionAsync(string targetId, string algorithm = "ig_normal_followings_of_normal_followings_algorithm");
+        /// <summary>
         ///     Clear Recent searches
         /// </summary>
         Task<IResult<bool>> ClearRecentSearchsAsync();
@@ -79,8 +85,9 @@ namespace InstagramApiSharp.API.Processors
         ///     Search user people
         /// </summary>
         /// <param name="query">Query to search</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="count">Count</param>
-        Task<IResult<InstaDiscoverSearchResult>> SearchPeopleAsync(string query, int count = 50);
+        Task<IResult<InstaDiscoverSearchResult>> SearchPeopleAsync(string query, PaginationParameters paginationParameters, int count = 30);
         #region Other functions
 
         /// <summary>

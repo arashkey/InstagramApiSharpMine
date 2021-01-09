@@ -8,9 +8,11 @@
  */
 
 using Newtonsoft.Json;
+using System;
 
 namespace InstagramApiSharp.Classes
 {
+    [Serializable]
     public class InstaPhoneVerificationSettings
     {
         [JsonProperty("max_sms_count")] public string MaxSmsCount { get; set; }

@@ -5,6 +5,8 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 {
     public class InstaStoryItemResponse
     {
+        [JsonProperty("audience")] public string Audience { get; set; }
+
         [JsonProperty("show_one_tap_fb_share_tooltip")] public bool ShowOneTapTooltip { get; set; }
 
         [JsonProperty("has_liked")] public bool HasLiked { get; set; }

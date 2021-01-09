@@ -26,6 +26,10 @@ using System;
 using InstagramApiSharp.API.Versions;
 using InstagramApiSharp.Helpers;
 
+using InstagramApiSharp.API.Push;
+#if WITH_NOTIFICATION
+using InstagramApiSharp.API.RealTime;
+#endif
 namespace InstagramApiSharp.API
 {
     /// <summary>
@@ -34,6 +38,29 @@ namespace InstagramApiSharp.API
     public interface IInstaApi
     {
         #region Properties
+#if WITH_NOTIFICATION
+        /// <summary>
+        ///     Realtime client for direct message only [for now]
+        /// </summary>
+        RealTimeClient RealTimeClient { get; }
+        /// <summary>
+        ///     Push notifications
+        /// </summary>
+        FbnsClient PushClient { get; }
+#endif
+        /// <summary>
+        ///     Get current api version of Instagram that <see cref="InstagramApiSharp"/> is using it
+        /// </summary>
+        InstaApiVersionType InstaApiVersionType { get; }
+
+        /// <summary>
+        ///     Gets or sets two factor login info
+        /// </summary>
+        InstaTwoFactorLoginInfo TwoFactorLoginInfo { get; set; }
+        /// <summary>
+        ///     Gets or sets challenge login info
+        /// </summary>
+        InstaChallengeLoginInfo ChallengeLoginInfo { get; set; }
         /// <summary>
         ///     Get HttpHelper class
         /// </summary>
@@ -132,9 +159,9 @@ namespace InstagramApiSharp.API
         /// </summary>
         ISessionHandler SessionHandler { get; set; }
 
-        #endregion
+#endregion
 
-        #region State data
+#region State data
 
         /// <summary>
         ///     Get current state info as Memory stream
@@ -192,9 +219,9 @@ namespace InstagramApiSharp.API
         Task LoadStateDataFromStringAsync(string json);
 
 
-        #endregion State data
+#endregion State data
 
-        #region Other public functions
+#region Other public functions
 
         /// <summary>
         ///     Get current API version info (signature key, api version info, app id)
@@ -338,16 +365,17 @@ namespace InstagramApiSharp.API
         /// <param name="uri">Desire uri (must include https://i.instagram.com/api/v...) </param>
         /// <param name="data">Data to post</param>
         Task<IResult<string>> SendPostRequestAsync(System.Uri uri, Dictionary<string, string> data);
-        #endregion Other public functions
+#endregion Other public functions
 
-        #region Authentication, challenge functions
+#region Authentication, challenge functions
 
-        #region Challenge part
+#region Challenge part
 
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////// Challenge for logged in user /////////////////////////////////
 
+        [Obsolete("Deprecated. Please use IInstaApi.ChallengeLoginInfo property instead.")]
         /// <summary>
         ///     Set Challenge Info when server asks for a challenge on calling functions
         /// </summary>
@@ -404,7 +432,7 @@ namespace InstagramApiSharp.API
         /// </summary>
         /// <param name="verifyCode">Verification code</param>
         Task<IResult<InstaLoginResult>> VerifyCodeForChallengeRequireAsync(string verifyCode);
-        #endregion Challenge part
+#endregion Challenge part
         
         /// <summary>
         ///     Check email availability
@@ -572,10 +600,19 @@ namespace InstagramApiSharp.API
 
         #region Giphy
 
-        Task<IResult<GiphyList>> GetGiphyTrendingAsync(int count = 100);
+        /// <summary>
+        ///     Get trending giphy
+        /// </summary>
+        /// <param name="requestType">Request type for Direct or story</param>
+        Task<IResult<GiphyList>> GetGiphyTrendingAsync(InstaGiphyRequestType requestType = InstaGiphyRequestType.Direct);
 
-        Task<IResult<GiphyList>> SearchGiphyAsync(string query, int count = 100);
+        /// <summary>
+        ///     Search giphy
+        /// </summary>
+        /// <param name="query">Query to search</param>
+        /// <param name="requestType">Request type for Direct or story</param>
+        Task<IResult<GiphyList>> SearchGiphyAsync(string query, InstaGiphyRequestType requestType = InstaGiphyRequestType.Direct);
 
-        #endregion Giphy
+#endregion Giphy
     }
 }

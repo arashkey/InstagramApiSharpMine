@@ -22,6 +22,8 @@
         AnimatedMedia = 14,
         Hashtag = 15,
         LiveViewerInvite = 16,
-        VideoCallEvent = 17
+        VideoCallEvent = 17,
+        ProductShare = 18,
+        ArEffect = 19,
     }
 }

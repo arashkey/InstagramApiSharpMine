@@ -4,7 +4,9 @@ using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaStoryItem
-    { 
+    {
+        public string Audience { get; set; }
+
         public bool ShowOneTapTooltip { get; set; }
 
         public bool HasLiked { get; set; }

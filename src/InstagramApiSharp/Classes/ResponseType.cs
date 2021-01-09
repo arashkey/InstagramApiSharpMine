@@ -85,6 +85,30 @@ namespace InstagramApiSharp.Classes
         /// <summary>
         ///     Network problem
         /// </summary>
-        NetworkProblem = 20
+        NetworkProblem = 20,
+        /// <summary>
+        ///     IP Block
+        /// </summary>
+        IPBlock = 21,
+        /// <summary>
+        ///     User not found
+        /// </summary>
+        UserNotFound = 22,
+        /// <summary>
+        ///     Private media (account is private)
+        /// </summary>
+        PrivateMedia = 23,
+        /// <summary>
+        ///     No media match (means post is removed or not available)
+        /// </summary>
+        NoMediaMatch = 24,
+        /// <summary>
+        ///     Challenge required vol 2., You must handle this with a browser
+        /// </summary>
+        ChallengeRequiredV2 = 10,
+        /// <summary>
+        ///     Comment/caption blocked
+        /// </summary>
+        CommentBlock = 25,
     }
 }

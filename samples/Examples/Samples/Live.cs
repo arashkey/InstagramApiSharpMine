@@ -153,12 +153,12 @@ EndAsync");
             Console.WriteLine("Be aware some of this methods only works on your own broadcasts!!!!");
             // live broadcast
             // first you need to call CreateAsync
-            var result = await InstaApi.LiveProcessor.CreateAsync(720, 1184, "My new live broadcast");
+            var result = await InstaApi.LiveProcessor.CreateAsync();
             if (result.Succeeded)
             {
                 var broadcastId = result.Value.BroadcastId.ToString();
                 // second you need to call StartAsync to instagram know you start filming!
-                await InstaApi.LiveProcessor.StartAsync(broadcastId, true);
+                await InstaApi.LiveProcessor.StartAsync(broadcastId);
                 Console.WriteLine("Broadcast " + result.Value.BroadcastId + " started");
                 // use uploadurl to stream your video to instagram
                 // note: I really don't know how RTMP server works, so there is no

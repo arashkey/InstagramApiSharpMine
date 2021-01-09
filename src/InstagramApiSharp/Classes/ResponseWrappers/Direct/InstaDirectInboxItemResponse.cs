@@ -69,5 +69,9 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("live_viewer_invite")] public InstaDirectBroadcastResponse LiveViewerInvite { get; set; }
 
         [JsonProperty("video_call_event")] public InstaVideoCallEventResponse VideoCallEvent { get; set; }
+
+        [JsonProperty("product_share")] public InstaProductContainerResponse ProductShare { get; set; }
+
+        [JsonProperty("ar_effect")] public InstaDirectArEffectResponse ArEffect { get; set; }
     }
 }

@@ -95,5 +95,12 @@ namespace InstagramApiSharp.API.Builder
         /// <returns></returns>
         IInstaApiBuilder SetSessionHandler(ISessionHandler sessionHandler);
 
+        /// <summary>
+        ///     Try to parse user agent and set it if possible
+        /// </summary>
+        /// <param name="userAgent">User agent</param>
+        /// <param name="deviceGuid">Device Guid, it's _uuid in Instagram requests</param>
+        /// <param name="phoneGuid">Phone Guid, it's phone_id in Instagram requests</param>
+        IInstaApiBuilder TryParseAndSetUserAgent(string userAgent, string deviceGuid = null, string phoneGuid = null);
     }
 }

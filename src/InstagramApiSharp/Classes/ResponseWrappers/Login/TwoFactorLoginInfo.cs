@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace InstagramApiSharp.Classes
 {
+    [Serializable]
     public class InstaTwoFactorLoginInfo
     {
         [JsonProperty("obfuscated_phone_number")]

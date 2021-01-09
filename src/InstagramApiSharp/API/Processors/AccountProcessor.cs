@@ -24,6 +24,7 @@ using System.Net;
 using InstagramApiSharp.Converters.Json;
 using InstagramApiSharp.Enums;
 using InstagramApiSharp.Classes.ResponseWrappers.Business;
+using System.Linq;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -55,7 +56,563 @@ namespace InstagramApiSharp.API.Processors
         }
         #endregion Properties and constructor
 
+
+        /// <summary>
+        ///     Change notification settings
+        /// </summary>
+        /// <param name="contentType">Notification content type</param>
+        /// <param name="settingValue">New setting value</param>
+        public async Task<IResult<bool>> ChangeNotificationsSettingsAsync(string contentType, string settingValue)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetChangeNotificationsSettingsUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"setting_value", settingValue},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"content_type", contentType},
+                };
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
+        /// <summary>
+        ///     Get Notifications
+        /// </summary>
+        /// <param name="contentType">
+        ///     Notification content type
+        ///     <para>Note: You should get content type from response of this function! the default value of content type is 'notifications'</para>
+        /// </param>
+        public async Task<IResult<InstaNotificationSettingsSectionList>> GetNotificationsSettingsAsync(string contentType = "notifications")
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetNotificationsSettingsUri(contentType);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaNotificationSettingsSectionList>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaNotificationSettings>(json);
+
+                return obj.IsSucceed ? Result.Success(obj.Sections) : Result.UnExpectedResponse<InstaNotificationSettingsSectionList>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaNotificationSettingsSectionList), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaNotificationSettingsSectionList>(exception);
+            }
+        }
+
+        /// <summary>
+        ///     Logout a session
+        /// </summary>
+        /// <param name="sessionId">Session identifier</param>
+        public async Task<IResult<bool>> LogoutSessionAsync(string sessionId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetLogoutSessionLoginActivityUri();
+                var clientContext = ExtensionHelper.GetThreadToken();
+                var data = new Dictionary<string, string>
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"session_id", sessionId},
+                    {"device_id", _deviceInfo.DeviceId}
+                };
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+        /// <summary>
+        ///     Accept a session that was me
+        /// </summary>
+        /// <param name="loginId">Login identifier</param>
+        /// <param name="timespan">Timespan</param>
+        public async Task<IResult<bool>> AcceptSessionAsMeAsync(string loginId, string timespan)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetAcceptThisIsMeSessionLoginActivityUri();
+                var clientContext = ExtensionHelper.GetThreadToken();
+                var data = new Dictionary<string, string>
+                {
+                    {"login_timestamp", timespan},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"login_id", loginId},
+                    {"device_id", _deviceInfo.DeviceId}
+                };
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+        /// <summary>
+        ///     Get Login Sessions
+        /// </summary>
+        public async Task<IResult<InstaLoginSessionRespond>> GetLoginSessionsAsync()
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetSessionLoginActivityUri(_deviceInfo.DeviceGuid.ToString());
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaLoginSessionRespond>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaLoginSessionRespond>(json);
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaLoginSessionRespond), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaLoginSessionRespond>(exception);
+            }
+        }
+        /// <summary>
+        ///     Get pending user tags asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetPendingUserTagsAsync(PaginationParameters paginationParameters)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            var userTags = new InstaMediaList();
+            try
+            {
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+
+                IEnumerable<InstaMedia> Convert(InstaMediaListResponse mediaListResponse)
+                {
+                    return mediaListResponse.Medias.Select(ConvertersFabric.Instance.GetSingleMediaConverter)
+                        .Select(converter => converter.Convert());
+                }
+                var mediaTags = await GetPendingUserTags(paginationParameters);
+                if (!mediaTags.Succeeded)
+                {
+                    if (mediaTags.Value != null)
+                    {
+                        userTags.AddRange(Convert(mediaTags.Value));
+                        return Result.Fail(mediaTags.Info, userTags);
+                    }
+                    else
+                        return Result.Fail(mediaTags.Info, default(InstaMediaList));
+                }
+                var mediaResponse = mediaTags.Value;
+                userTags.AddRange(Convert(mediaResponse));
+                userTags.NextMaxId = paginationParameters.NextMaxId = mediaResponse.NextMaxId;
+                paginationParameters.PagesLoaded++;
+
+                while (mediaResponse.MoreAvailable
+                       && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
+                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                {
+                    var nextMedia = await GetPendingUserTags(paginationParameters);
+                    if (!nextMedia.Succeeded)
+                        return Result.Fail(nextMedia.Info, userTags);
+
+                    userTags.AddRange(Convert(nextMedia.Value));
+                    userTags.NextMaxId = paginationParameters.NextMaxId = mediaResponse.NextMaxId = nextMedia.Value.NextMaxId;
+                    mediaResponse.AutoLoadMoreEnabled = nextMedia.Value.AutoLoadMoreEnabled;
+                    mediaResponse.MoreAvailable = nextMedia.Value.MoreAvailable;
+                    mediaResponse.RankToken = nextMedia.Value.RankToken;
+                    mediaResponse.TotalCount += nextMedia.Value.TotalCount;
+                    mediaResponse.ResultsCount += nextMedia.Value.ResultsCount;
+                }
+                userTags.PageSize = mediaResponse.ResultsCount;
+                userTags.Pages = paginationParameters.PagesLoaded;
+                return Result.Success(userTags);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, userTags, ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, userTags);
+            }
+        }
+        private async Task<IResult<InstaMediaListResponse>> GetPendingUserTags(PaginationParameters paginationParameters)
+        {
+            try
+            {
+                var uri = UriCreator.GetUserTagsPendingReviewMediaUri(_user.LoggedInUser.Pk, paginationParameters?.NextMaxId);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, uri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK) return Result.UnExpectedResponse<InstaMediaListResponse>(response, json);
+                var mediaResponse = JsonConvert.DeserializeObject<InstaMediaListResponse>(json,
+                    new InstaMediaListDataConverter());
+
+                return Result.Success(mediaResponse);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaMediaListResponse), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(InstaMediaListResponse));
+            }
+        }
+        /// <summary>
+        ///     Approve usertags
+        /// </summary>
+        /// <param name="mediaIds">Media identifiers</param>
+        public async Task<IResult<bool>> ApproveUsertagsAsync(params string[] mediaIds)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetUserTagsReviewUri();
+                var fields = new Dictionary<string, string>
+                {
+                    {"approve", string.Join(",", mediaIds)},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+        /// <summary>
+        ///     Enable manual tag
+        /// </summary>
+        public async Task<IResult<bool>> EnableManualTagAsync() => await EnableDisableManualTagAsync(true);
+        /// <summary>
+        ///     Disable manual tag
+        /// </summary>
+        public async Task<IResult<bool>> DisableManualTagAsync() => await EnableDisableManualTagAsync(false);
+        async Task<IResult<bool>> EnableDisableManualTagAsync(bool enable)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetUserTagsReviewPreferenceUri();
+                var fields = new Dictionary<string, string>
+                {
+                    {"enabled", enable ? "1":"0"},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
+        /// <summary>
+        ///     Hide usertag from profile
+        /// </summary>
+        /// <param name="mediaId">Media identifier</param>
+        public async Task<IResult<bool>> HideUsertagFromProfileAsync(string mediaId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetUserTagsReviewUri();
+                var fields = new Dictionary<string, string>
+                {
+                    {"remove", mediaId},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+        /// <summary>
+        ///     Unlink contacts
+        /// </summary>
+        public async Task<IResult<bool>> UnlinkContactsAsync()
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetUnSyncContactsUri();
+                var fields = new Dictionary<string, string>
+                {
+                    {"phone_id", _deviceInfo.PhoneGuid.ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"device_id", _deviceInfo.DeviceGuid.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"user_initiated", "true"}
+                };
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+        /// <summary>
+        ///     Get pending user tags count
+        /// </summary>
+        public async Task<IResult<int>> GetPendingUserTagsCountAsync()
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetUserTagsPendingReviewCountUri(_user.LoggedInUser.Pk);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
+
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<int>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaUserTagPending>(json);
+
+                return obj.IsSucceed ? Result.Success(obj.TotalCount) : Result.UnExpectedResponse<int>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(int), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<int>(exception);
+            }
+        }
         #region Profile edit
+
+
+        /// <summary>
+        ///     Set name and phone number.
+        /// </summary>
+        /// <param name="gender">Gender</param>
+        /// <param name="customGender">Custom gender
+        ///    <para>Note: must select <see cref="InstaGenderType.Custom"/> for setting custom gender</para> 
+        /// </param>        
+        public async Task<IResult<bool>> SetGenderAsync(InstaGenderType gender, string customGender = null)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetSetAccountGenderUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"gender", ((int)gender).ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"custom_gender", gender ==  InstaGenderType.Custom ? (customGender ?? "") : ""},
+                };
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return Result.Success(true);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return Result.Fail(obj.Message, false);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                return Result.Fail(exception, false);
+            }
+        }
+        /// <summary>
+        ///     Set birthday
+        /// </summary>
+        /// <param name="birthday">Birth date</param>
+        public async Task<IResult<bool>> SetBirthdayAsync(DateTime birthday)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetSetAccountBirthdayUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"day", birthday.ToString("dd")},
+                    {"year", birthday.ToString("yyyy")},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"month", birthday.ToString("MM")},
+                };
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return Result.Success(true);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return Result.Fail(obj.Message, false);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                return Result.Fail(exception, false);
+            }
+        }
         /// <summary>
         ///     Set current account private
         /// </summary>
@@ -175,11 +732,31 @@ namespace InstagramApiSharp.API.Processors
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk},
                     {"_csrftoken", _user.CsrfToken},
-                    {"old_password", oldPassword},
-                    {"new_password1", newPassword},
-                    {"new_password2", newPassword}
                 };
 
+                if (string.IsNullOrEmpty(_user.PublicKey))
+                    await _instaApi.SendRequestsBeforeLoginAsync();
+                var time = DateTime.UtcNow.ToUnixTime();
+
+                var enc1 = _instaApi.GetEncryptedPassword(oldPassword, time);
+                var enc2 = _instaApi.GetEncryptedPassword(newPassword, time);
+                var enc3 = _instaApi.GetEncryptedPassword(newPassword, time);
+                if (_httpHelper.IsNewerApis)
+                {
+                    data.Add("enc_old_password", enc1);
+                    data.Add("enc_new_password1", enc2);
+                    data.Add("enc_new_password2", enc3);
+                }
+                else
+                {
+                    data.Add("old_password", oldPassword);
+                    data.Add("new_password1", newPassword);
+                    data.Add("new_password2", newPassword);
+
+                    data.Add("enc_old_password", enc1);
+                    data.Add("enc_old_password", enc2);
+                    data.Add("enc_old_password", enc3);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Get, changePasswordUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -257,7 +834,6 @@ namespace InstagramApiSharp.API.Processors
                     {"email", email},
                 };
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Add("Host", "i.instagram.com");
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -403,9 +979,7 @@ namespace InstagramApiSharp.API.Processors
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     { "_csrftoken", _user.CsrfToken}
                 };
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Add("Host", "i.instagram.com");
-                var response = await _httpRequestProcessor.SendAsync(request);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);                var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaUserEdit>(response, json);
@@ -525,8 +1099,14 @@ namespace InstagramApiSharp.API.Processors
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"email", email},
-                    {"password", password}
-                };
+                }; 
+                
+                if (string.IsNullOrEmpty(_user.PublicKey))
+                    await _instaApi.SendRequestsBeforeLoginAsync();
+                string encryptedPassword = _instaApi.GetEncryptedPassword(password);
+                if (!_httpHelper.IsNewerApis)
+                    data.Add("password", password);
+                data.Add("enc_password", encryptedPassword);
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();

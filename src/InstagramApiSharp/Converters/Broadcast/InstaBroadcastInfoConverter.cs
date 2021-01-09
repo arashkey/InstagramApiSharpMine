@@ -11,6 +11,7 @@ using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
 using System;
+using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.Converters
 {
@@ -26,7 +27,6 @@ namespace InstagramApiSharp.Converters
             var broadcastInfo = new InstaBroadcastInfo
             {
                 BroadcastMessage = SourceObject.BroadcastMessage,
-                BroadcastStatus = SourceObject.BroadcastStatus,
                 CoverFrameUrl = SourceObject.CoverFrameUrl,
                 DashManifest = SourceObject.DashManifest,
                 EncodingTag = SourceObject.EncodingTag,
@@ -39,6 +39,11 @@ namespace InstagramApiSharp.Converters
                 ExpireAt = DateTimeHelper.FromUnixTimeSeconds(SourceObject.ExpireAt ?? unixTime),
                 PublishedTime = DateTimeHelper.FromUnixTimeSeconds(SourceObject.PublishedTime ?? unixTime),
             };
+            try
+            {
+                broadcastInfo.BroadcastStatusType = (InstaBroadcastStatusType)Enum.Parse(typeof(InstaBroadcastStatusType), SourceObject.BroadcastStatus?.Replace("_", ""), true);
+            }
+            catch { }
 
             if (SourceObject.BroadcastOwner != null)
                 broadcastInfo.BroadcastOwner = ConvertersFabric.Instance

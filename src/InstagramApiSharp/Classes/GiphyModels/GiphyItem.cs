@@ -50,6 +50,14 @@ namespace InstagramApiSharp.Classes
         public string Title { get; set; }
         [JsonProperty("images")]
         public GiphyImages Images { get; set; }
+        [JsonProperty("create_datetime")]
+        public string CreateDatetime { get; set; }
+        [JsonProperty("update_datetime")]
+        public string UpdateDatetime { get; set; }
+        [JsonProperty("content_url")]
+        public string ContentUrl { get; set; }
+        [JsonProperty("tags")]
+        public List<string> Tags { get; set; } = new List<string>();
     }
 
     public class GiphyUser

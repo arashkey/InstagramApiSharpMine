@@ -7,13 +7,15 @@
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.Enums;
+
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaBroadcastLiveHeartBeatViewerCount
     {
         public float ViewerCount { get; set; }
 
-        public string BroadcastStatus { get; set; }
+        public InstaBroadcastStatusType BroadcastStatusType { get; set; }
 
         public object[] CobroadcasterIds { get; set; }
 

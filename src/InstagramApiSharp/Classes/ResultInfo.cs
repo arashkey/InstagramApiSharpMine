@@ -39,6 +39,7 @@ namespace InstagramApiSharp.Classes
             Message = status?.Message;
             Challenge = status?.Challenge;
             ResponseType = responseType;
+            Spam = status?.Spam ?? false;
             HandleMessages(Message);
             switch (ResponseType)
             {
@@ -81,6 +82,8 @@ namespace InstagramApiSharp.Classes
         public bool Timeout { get; internal set; }
 
         public bool NeedsChallenge { get; internal set; }
+
+        public bool Spam { get; internal set; }
 
         public DateTime? ActionBlockEnd { get; internal set; }
 

@@ -21,6 +21,7 @@ using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using InstagramApiSharp.Enums;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -48,6 +49,299 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+
+        /// <summary>
+        ///     Add live broadcast to IGTV [ Save live as IGTV ]
+        /// </summary>
+        /// <param name="broadcastId">Broadcast identifier</param>
+        /// <param name="cover">Image cover for IGTV [MOST BE IN VERTICAL]</param>
+        /// <param name="title">Title</param>
+        /// <param name="description">Description</param>
+        /// <param name="sharePreviewToFeed">Show a preview on the feed</param>
+        /// <param name="igtvSeriesId">Igtv series indentifier => Optional => adds this video to a specific TV series.</param>
+        public async Task<IResult<bool>> AddLiveBroadcastToTVAsync(string broadcastId, InstaImage cover, string title,
+            string description, bool sharePreviewToFeed = false, string igtvSeriesId = null)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetMediaConfigureToIGTVUri(false);
+                var retryContext = HelperProcessor.GetRetryContext();
+                await _instaApi.LiveProcessor.GetPostLiveThumbnailsAsync(broadcastId);
+
+                var uploadId = await _instaApi.HelperProcessor.UploadSinglePhoto(null,
+                    new InstaImageUpload { ImageBytes = cover.ImageBytes, Uri = cover.Uri }, new InstaUploaderProgress(),
+                    ExtensionHelper.GetThreadToken(), false, null, broadcastId);
+                if (!uploadId.Succeeded)
+                    return Result.Fail<bool>(uploadId.Info.Message);
+
+                var data = new JObject
+                {
+                    {"igtv_ads_toggled_on", "0"},
+                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"source_type", "4"},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"keep_shoppable_products", "0"},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"title", title ?? string.Empty },
+                    {"caption", description ?? string.Empty},
+                    {"igtv_share_preview_to_feed", Convert.ToInt16(sharePreviewToFeed).ToString()},
+                    {"upload_id", uploadId.Value},
+                    {"igtv_composer_session_id", Guid.NewGuid().ToString()},
+                    {
+                        "device", new JObject{
+                            {"manufacturer", _deviceInfo.HardwareManufacturer},
+                            {"model", _deviceInfo.DeviceModelIdentifier},
+                            {"android_version", int.Parse(_deviceInfo.AndroidVer.APILevel)},
+                            {"android_release", _deviceInfo.AndroidVer.VersionNumber}
+                        }
+                    },
+                    {
+                        "extra", new JObject
+                        {
+                            {"source_width",  0},
+                            {"source_height", 0}
+                        }
+                    },
+                };
+                if (!string.IsNullOrEmpty(igtvSeriesId))
+                    data.Add("igtv_series_id", igtvSeriesId);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                request.Headers.AddHeader("retry_context", retryContext, _instaApi);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return Result.Success(true);
+                else
+                    return Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(bool));
+            }
+        }
+        /// <summary>
+        ///     Get creating tools availability for IG TV
+        /// </summary>
+        public async Task<IResult<bool>> GetTVCreationToolsAsync()
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetIgTvCreationToolsUri();
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return Result.Success(true);
+                else
+                    return Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(bool));
+            }
+        }
+        /// <summary>
+        ///     Get TV series of specific user
+        /// </summary>
+        /// <param name="userId">User id (pk) => channel owner</param>
+        public async Task<IResult<InstaTV>> GetUserTVSeriesAsync(long userId) => await GetTV(UriCreator.GetUserTVSeriesUri(userId, _instaApi.HttpHelper));
+
+        /// <summary>
+        ///     Remove episode from a TV series
+        /// </summary>
+        /// <param name="seriesId">TV series identifier</param>
+        /// <param name="mediaPk">Media pk</param>
+        public async Task<IResult<bool>> RemoveEpisodeFromTVSeriesAsync(string seriesId, string mediaPk) => await EpisodeTVSeriesAsync(UriCreator.GetRemoveEpisodeFromTvSeriesUri(seriesId), mediaPk);
+
+        /// <summary>
+        ///     Add episode to a TV series
+        /// </summary>
+        /// <param name="seriesId">TV series identifier</param>
+        /// <param name="mediaPk">Media pk</param>
+        public async Task<IResult<bool>> AddEpisodeToTVSeriesAsync(string seriesId, string mediaPk) => await EpisodeTVSeriesAsync(UriCreator.GetAddEpisodeToTvSeriesUri(seriesId), mediaPk);
+
+        /// <summary>
+        ///     Update a TV series
+        /// </summary>
+        /// <param name="seriesId">TV series identifier</param>
+        /// <param name="title">Title</param>
+        /// <param name="description">Description</param>
+        public async Task<IResult<bool>> UpdateTVSeriesAsync(string seriesId, string title, string description)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetUpdateTvSeriesUri(seriesId);
+                var fields = new Dictionary<string, string>
+                {
+                    {"description", description ?? string.Empty},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"title", title ?? string.Empty},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return Result.Success(true);
+                else
+                    return Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(bool));
+            }
+        }
+
+        /// <summary>
+        ///     Delete a TV series
+        /// </summary>
+        /// <param name="seriesId">TV series identifier</param>
+        public async Task<IResult<bool>> DeleteTVSeriesAsync(string seriesId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetDeleteTvSeriesUri(seriesId);
+                var fields = new Dictionary<string, string>
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return Result.Success(true);
+                else
+                    return Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(bool));
+            }
+        }
+
+        /// <summary>
+        ///     Create a TV series
+        /// </summary>
+        /// <param name="title">Title</param>
+        /// <param name="description">Description</param>
+        public async Task<IResult<InstaTVCreateSeries>> CreateTVSeriesAsync(string title, string description)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetCreateTvSeriesUri();
+                var fields = new Dictionary<string, string>
+                {
+                    {"description", description ?? string.Empty},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"title", title ?? string.Empty},
+                    {"igtv_composer_session_id", Guid.NewGuid().ToString()},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaTVCreateSeries>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaTVCreateSeries>(json);
+                if (obj.IsSucceed)
+                    return Result.Success(obj);
+                else
+                    return Result.UnExpectedResponse<InstaTVCreateSeries>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaTVCreateSeries), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(InstaTVCreateSeries));
+            }
+        }
+
+        /// <summary>
+        ///     Edit TV Media
+        /// </summary>
+        /// <param name="mediaId">TV Identifier</param>
+        /// <param name="title">Title</param>
+        /// <param name="description">Description</param>
+        public async Task<IResult<InstaMedia>> EditMediaAsync(string mediaId, string title, string description)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetEditMediaUri(mediaId);
+
+                var data = new JObject
+                {
+                    {"igtv_ads_toggled_on", "0"},
+                    {"caption_text", description ?? string.Empty},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"title", title ?? string.Empty},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var mediaResponse = JsonConvert.DeserializeObject<InstaMediaItemResponse>(json,
+                        new Converters.Json.InstaMediaDataConverter());
+                    var converter = ConvertersFabric.Instance.GetSingleMediaConverter(mediaResponse);
+                    return Result.Success(converter.Convert());
+                }
+                var error = JsonConvert.DeserializeObject<BadStatusResponse>(json);
+                return Result.Fail(error.Message, (InstaMedia)null);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaMedia), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaMedia>(exception);
+            }
+        }
+
 
         /// <summary>
         ///     Browse Feed
@@ -164,33 +458,7 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Get TV Guide (gets popular and suggested channels)
         /// </summary>
-        public async Task<IResult<InstaTV>> GetTVGuideAsync()
-        {
-            UserAuthValidator.Validate(_userAuthValidate);
-            try
-            {
-                var instaUri = UriCreator.GetIGTVGuideUri();
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                
-                if (response.StatusCode != HttpStatusCode.OK)
-                    return Result.UnExpectedResponse<InstaTV>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaTVResponse>(json);
-
-                return Result.Success(ConvertersFabric.Instance.GetTVConverter(obj).Convert());
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaTV), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<InstaTV>(exception);
-            }
-        }
+        public async Task<IResult<InstaTV>> GetTVGuideAsync() => await GetTV(UriCreator.GetIGTVGuideUri());
         /// <summary>
         ///     Search channels
         /// </summary>
@@ -393,6 +661,62 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaTVBrowseFeedResponse>(exception);
             }
         }
+        private async Task<IResult<bool>> EpisodeTVSeriesAsync(Uri instaUri, string mediaPk) 
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var fields = new Dictionary<string, string>
+                {
+                    {"media_id", mediaPk},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return Result.Success(true);
+                else
+                    return Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(bool));
+            }
+        }
 
+        private async Task<IResult<InstaTV>> GetTV(Uri instaUri)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaTV>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaTVResponse>(json);
+
+                return Result.Success(ConvertersFabric.Instance.GetTVConverter(obj).Convert());
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaTV), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaTV>(exception);
+            }
+        }
     }
 }

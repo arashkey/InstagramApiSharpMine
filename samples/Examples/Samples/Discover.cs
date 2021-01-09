@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using InstagramApiSharp;
 using InstagramApiSharp.API;
 using InstagramApiSharp.API.Processors;
 using InstagramApiSharp.Classes;
@@ -89,7 +90,7 @@ SearchPeopleAsync");
         {
             var search = "iran";
             var count = 30;
-            var result = await InstaApi.DiscoverProcessor.SearchPeopleAsync(search, count);
+            var result = await InstaApi.DiscoverProcessor.SearchPeopleAsync(search, PaginationParameters.MaxPagesToLoad(1), count);
             if (result.Succeeded)
             {
                 Console.WriteLine("User search count: " + result.Value.Users?.Count);

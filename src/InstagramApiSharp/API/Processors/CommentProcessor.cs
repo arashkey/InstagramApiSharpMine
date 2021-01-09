@@ -14,6 +14,7 @@ using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -41,6 +42,47 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+        /// <summary>
+        ///     Check offensive text for comment
+        /// </summary>
+        /// <param name="mediaId">Media identifier</param>
+        /// <param name="commentText">Comment text</param>
+        public async Task<IResult<InstaOffensiveText>> CheckOffensiveTextAsync(string mediaId, string commentText)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetCheckOffensiveTextUri();
+                var fields = new Dictionary<string, string>
+                {
+                    {"media_id", mediaId},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"comment_text", commentText ?? string.Empty},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaOffensiveText>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaOffensiveText>(json);
+                if (obj.IsSucceed)
+                    return Result.Success(obj);
+                else
+                    return Result.UnExpectedResponse<InstaOffensiveText>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaOffensiveText), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(InstaOffensiveText));
+            }
+        }
 
         /// <summary>
         ///     Block an user from commenting to medias
@@ -56,27 +98,33 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="mediaId">Media id</param>
         /// <param name="text">Comment text</param>
-        public async Task<IResult<InstaComment>> CommentMediaAsync(string mediaId, string text)
+        public async Task<IResult<InstaComment>> CommentMediaAsync(string mediaId, string text,
+            InstaCommentContainerModuleType containerModule = InstaCommentContainerModuleType.FeedTimeline,
+            uint feedPosition = 0, bool isCarouselBumpedPost = false, int? carouselIndex = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
+                text = text.Replace('\r', '\n');
                 var instaUri = UriCreator.GetPostCommetUri(mediaId);
                 var breadcrumb = CryptoHelper.GetCommentBreadCrumbEncoded(text);
                 var fields = new Dictionary<string, string>
                 {
                     {"user_breadcrumb", breadcrumb},
+                    {"delivery_class", "organic"},
                     {"idempotence_token", Guid.NewGuid().ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"radio_type", "wifi-none"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"device_id", _deviceInfo.DeviceId},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"comment_text", text},
-                    {"containermodule", "comments_feed_timeline"},
+                    {"is_carousel_bumped_post", isCarouselBumpedPost.ToString().ToLower()},
+                    {"container_module", containerModule.GetContainerType()},
+                    {"feed_position", feedPosition.ToString()},
                 };
-                var request =
-                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                if (carouselIndex.HasValue)
+                    fields.Add("carousel_index", carouselIndex.Value.ToString());
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -317,8 +365,9 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="mediaId">Media id</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="targetCommentId">Target comment id</param>
         public async Task<IResult<InstaCommentList>> GetMediaCommentsAsync(string mediaId,
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters, string targetCommentId = "")
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
@@ -326,9 +375,9 @@ namespace InstagramApiSharp.API.Processors
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                var commentsUri = UriCreator.GetMediaCommentsUri(mediaId, paginationParameters.NextMaxId);
+                var commentsUri = UriCreator.GetMediaCommentsUri(mediaId, paginationParameters.NextMaxId, targetCommentId);
                 if (!string.IsNullOrEmpty(paginationParameters.NextMinId))
-                    commentsUri = UriCreator.GetMediaCommentsMinIdUri(mediaId, paginationParameters.NextMinId);
+                    commentsUri = UriCreator.GetMediaCommentsMinIdUri(mediaId, paginationParameters.NextMinId, targetCommentId);
 
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, commentsUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -352,9 +401,9 @@ namespace InstagramApiSharp.API.Processors
                 {
                     IResult<InstaCommentListResponse> nextComments;
                     if(!string.IsNullOrEmpty(commentListResponse.NextMaxId))
-                        nextComments = await GetCommentListWithMaxIdAsync(mediaId, commentListResponse.NextMaxId,null);
+                        nextComments = await GetCommentListWithMaxIdAsync(mediaId, commentListResponse.NextMaxId,null, targetCommentId);
                     else 
-                        nextComments = await GetCommentListWithMaxIdAsync(mediaId,null, commentListResponse.NextMinId);
+                        nextComments = await GetCommentListWithMaxIdAsync(mediaId,null, commentListResponse.NextMinId, targetCommentId);
 
                     if (!nextComments.Succeeded)
                         return Result.Fail(nextComments.Info, Convert(commentListResponse));
@@ -498,27 +547,35 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaId">Media id</param>
         /// <param name="targetCommentId">Target comment id</param>
         /// <param name="text">Comment text</param>
-        public async Task<IResult<InstaComment>> ReplyCommentMediaAsync(string mediaId, string targetCommentId, string text)
+        public async Task<IResult<InstaComment>> ReplyCommentMediaAsync(string mediaId, string targetCommentId, string text,
+            InstaCommentContainerModuleType containerModule = InstaCommentContainerModuleType.FeedTimeline,
+            uint feedPosition = 0, bool isCarouselBumpedPost = false, int? carouselIndex = null,
+            InstaMediaInventorySource inventorySource = InstaMediaInventorySource.MediaOrAdd)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
+                text = text.Replace('\r', '\n');
                 var instaUri = UriCreator.GetPostCommetUri(mediaId);
                 var breadcrumb = CryptoHelper.GetCommentBreadCrumbEncoded(text);
                 var fields = new Dictionary<string, string>
                 {
                     {"user_breadcrumb", breadcrumb},
+                    {"inventory_source", inventorySource.GetInvetorySourceType()},
+                    {"delivery_class", "organic"},
                     {"idempotence_token", Guid.NewGuid().ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"replied_to_comment_id", targetCommentId},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"comment_text", text},
-                    {"containermodule", "comments_feed_timeline"},
-                    {"radio_type", "wifi-none"}
+                    {"is_carousel_bumped_post", isCarouselBumpedPost.ToString().ToLower()},
+                    {"container_module", containerModule.GetContainerType()},
+                    {"feed_position", feedPosition.ToString()},
                 };
-                var request =
-                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                if (carouselIndex.HasValue)
+                    fields.Add("carousel_index", carouselIndex.Value.ToString());
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -664,13 +721,13 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaCommentListResponse>> GetCommentListWithMaxIdAsync(string mediaId,
-                            string nextMaxId, string nextMinId)
+                            string nextMaxId, string nextMinId, string targetCommentId)
         {
             try
             {
-                var commentsUri = UriCreator.GetMediaCommentsUri(mediaId, nextMaxId);
+                var commentsUri = UriCreator.GetMediaCommentsUri(mediaId, nextMaxId, targetCommentId);
                 if (!string.IsNullOrEmpty(nextMinId))
-                    commentsUri = UriCreator.GetMediaCommentsMinIdUri(mediaId, nextMinId);
+                    commentsUri = UriCreator.GetMediaCommentsMinIdUri(mediaId, nextMinId, targetCommentId);
 
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, commentsUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);

@@ -1081,5 +1081,15 @@ namespace InstagramApiSharp.Converters
         {
             return new InstaTVBrowseFeedConverter { SourceObject = response };
         }
+        public IObjectConverter<InstaStoryAndLives, InstaStoryAndLivesResponse> GetStoryConverter(InstaStoryAndLivesResponse response)
+        {
+            return new InstaStoryAndLiveConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaDirectArEffect, InstaDirectArEffectResponse> GetDirectArEffectConverter(
+            InstaDirectArEffectResponse response)
+        {
+            return new InstaDirectArEffectConverter { SourceObject = response };
+        }
     }
 }

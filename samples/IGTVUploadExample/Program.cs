@@ -66,7 +66,14 @@ namespace IGTVUploadExample
 
                 var coverPhotoPath = "E:\\mycover.jpg";// Must be in Vertical 
 
+                // take a snapshot of video:
+                FFmpeg.ExtractImageFromVideo(videoPath, coverPhotoPath, TimeSpan.FromSeconds(2.5));
 
+                var resizedCoverPhotoPath = "E:\\mycoverResized.jpg";
+                // we need to resize the thumbnail to an acceptable size 720x1120 is OK  (must be vertical!)
+                FFmpeg.ResizeImage(coverPhotoPath, resizedCoverPhotoPath, new ImageSize(720, 1120));
+                await Task.Delay(500);;
+                coverPhotoPath = resizedCoverPhotoPath;
                 var outputFolder = "E:\\VideosToUpload"; // Must have read/write access!!!!
 
                 var segmentedFolderPath = await FFmpeg.SplitVideoAsync(videoPath, outputFolder); // Returns segmented folder path

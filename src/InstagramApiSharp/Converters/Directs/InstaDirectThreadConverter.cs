@@ -94,18 +94,19 @@ namespace InstagramApiSharp.Converters
                     var lastSeenJson = System.Convert.ToString(SourceObject.LastSeenAt);
                     var obj = JsonConvert.DeserializeObject<InstaLastSeenAtResponse>(lastSeenJson);
                     thread.LastSeenAt = new List<InstaLastSeen>();
-                    foreach (var extraItem in obj.Extras)
-                    {
-                        var convertedLastSeen = JsonConvert.DeserializeObject<InstaLastSeenItemResponse>(extraItem.Value.ToString(Formatting.None));
-                        var lastSeen = new InstaLastSeen
+                    if (obj.Extras?.Count > 0)
+                        foreach (var extraItem in obj.Extras)
                         {
-                            PK = long.Parse(extraItem.Key),
-                            ItemId = convertedLastSeen.ItemId,
-                        };
-                        if (convertedLastSeen.TimestampPrivate != null)
-                            lastSeen.SeenTime = DateTimeHelper.UnixTimestampMilisecondsToDateTime(convertedLastSeen.TimestampPrivate);
-                        thread.LastSeenAt.Add(lastSeen);
-                    }
+                            var convertedLastSeen = JsonConvert.DeserializeObject<InstaLastSeenItemResponse>(extraItem.Value.ToString(Formatting.None));
+                            var lastSeen = new InstaLastSeen
+                            {
+                                PK = long.Parse(extraItem.Key),
+                                ItemId = convertedLastSeen.ItemId,
+                            };
+                            if (convertedLastSeen.TimestampPrivate != null)
+                                lastSeen.SeenTime = DateTimeHelper.UnixTimestampMilisecondsToDateTime(convertedLastSeen.TimestampPrivate);
+                            thread.LastSeenAt.Add(lastSeen);
+                        }
                 }
                 catch { }
             }
@@ -128,6 +129,13 @@ namespace InstagramApiSharp.Converters
                 }
                 catch { }
             }
+            if (SourceObject.AdminUserIds?.Count > 0)
+                try
+                {
+                    foreach (var item in SourceObject.AdminUserIds)
+                        thread.AdminUserIds.Add(item);
+                }
+                catch { }
 
             return thread;
         }

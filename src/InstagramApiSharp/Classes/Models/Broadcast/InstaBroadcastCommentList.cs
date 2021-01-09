@@ -36,6 +36,6 @@ namespace InstagramApiSharp.Classes.Models
 
         public object SystemComments { get; set; }
 
-        public int CommentMuted { get; set; }
+        public bool CommentMuted { get; set; }
     }
 }

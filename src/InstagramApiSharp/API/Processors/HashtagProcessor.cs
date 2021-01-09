@@ -42,7 +42,57 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
-
+        /// <summary>
+        ///     Seen hashtag story as seen
+        /// </summary>
+        /// <param name="hashtagId">Hashtag Id</param>
+        /// <param name="storyMediaId">Story media identifier</param>
+        /// <param name="takenAtUnix">Taken at unix</param>
+        public async Task<IResult<bool>> MarkHashtagStoryAsSeenAsync(string hashtagId, string storyMediaId, long takenAtUnix)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetSeenMediaStoryUri();
+                var storyId = $"{storyMediaId}_{hashtagId}";
+                var dateTimeUnix = DateTime.UtcNow.ToUnixTime();
+                var reel = new JObject
+                {
+                    { storyId, new JArray($"{takenAtUnix}_{dateTimeUnix}") }
+                };
+                var data = new JObject
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"container_module", "hashtag_feed"},
+                    {"live_vods_skipped", new JObject()},
+                    {"nuxes_skipped", new JObject()},
+                    {"nuxes", new JObject()},
+                    {"reels", reel},
+                    {"live_vods", new JObject()},
+                    {"reel_media_skipped", new JObject()}
+                };
+                var request =
+                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
+                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
 
         /// <summary>
         ///     Get medias for hashtag channel
@@ -687,7 +737,7 @@ namespace InstagramApiSharp.API.Processors
                 {
                     supportedTabs.Add("top");
                     supportedTabs.Add("recent");
-                    supportedTabs.Add("discover");
+                    //supportedTabs.Add("discover");
                 }
                 else
                 {

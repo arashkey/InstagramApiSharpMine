@@ -51,7 +51,8 @@ namespace InstagramApiSharp.Converters
                 TotalViewerCount = SourceObject.TotalViewerCount ?? 0,
                 ViewerCursor = SourceObject.ViewerCursor,
                 HasSharedToFb = SourceObject.HasSharedToFb ?? 0,
-                CanReply = SourceObject.CanReply ?? false
+                CanReply = SourceObject.CanReply ?? false,
+                Audience = SourceObject.Audience
             };
 
             try

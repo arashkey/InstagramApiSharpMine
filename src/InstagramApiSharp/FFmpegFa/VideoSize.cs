@@ -1,4 +1,4 @@
-﻿#if !WINDOWS_UWP && !NETSTANDARD
+﻿#if NETSTANDARD
 
 /*
  * Credit Ramtin Jokar
@@ -8,6 +8,11 @@
 
 namespace InstagramApiSharp.FFmpegFa
 {
+    public class ImageSize : VideoSize
+    {
+        public ImageSize() : base() { }
+        public ImageSize(int width, int height) : base(width, height) { }
+    }
     public class VideoSize
     {
         public int Width { get; set; }

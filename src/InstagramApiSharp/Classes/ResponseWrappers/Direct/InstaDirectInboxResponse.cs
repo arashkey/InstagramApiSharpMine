@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
+using InstagramApiSharp.Classes.Models;
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
     public class InstaDirectInboxResponse : InstaDirectInboxThreadContainerResponse
@@ -18,5 +19,9 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
     public class InstaDirectInboxThreadContainerResponse
     {
         [JsonProperty("threads")] public List<InstaDirectInboxThreadResponse> Threads { get; set; }
+    }
+    public class InstaDirectInboxThreadSingleContainerResponse : InstaDefaultResponse
+    {
+        [JsonProperty("thread")] public InstaDirectInboxThreadResponse Thread { get; set; }
     }
 }

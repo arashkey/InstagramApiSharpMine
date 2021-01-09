@@ -11,6 +11,10 @@ using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.Models
 {
+    public class InstaSegmentedVideoUpload : InstaTVVideoUpload
+    {
+        public List<InstaUserTagVideoUpload> UserTags { get; set; } = new List<InstaUserTagVideoUpload>();
+    }
     public class InstaTVVideoUpload
     {
         public InstaImage VideoThumbnail { get; set; }
@@ -20,5 +24,6 @@ namespace InstagramApiSharp.Classes.Models
         public int Height { get; set; } = 0;
         public double Length { get; set; } = 0;
         public bool IsMuted { get; set; } = false;
+        public bool SharePreviewToFeed { get; set; } = false;
     }
 }

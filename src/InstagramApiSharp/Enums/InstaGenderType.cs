@@ -11,9 +11,10 @@ namespace InstagramApiSharp.Enums
 {
     public enum InstaGenderType
     {
-        //Gender (1 = male, 2 = female, 3 = unknown)
+        //Gender (1 = male, 2 = female, 3 = unknown, 4 = custom)
         Male = 1,
         Female = 2,
-        Unknown = 3
+        Unknown = 3,
+        Custom = 4
     }
 }

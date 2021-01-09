@@ -37,5 +37,9 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public bool? OutgoingRequest { get; set; }
         [JsonProperty("is_bestie")]
         public bool? IsBestie { get; set; }
+        [JsonProperty("is_blocking_reel")]
+        public bool? IsBlockingReel { get; set; }
+        [JsonProperty("is_muting_reel")]
+        public bool? IsMutingReel { get; set; }
     }
 }

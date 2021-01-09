@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.Logger
 {
@@ -18,7 +19,7 @@ namespace InstagramApiSharp.Logger
             _logLevel = loglevel;
         }
 
-        public void LogRequest(HttpRequestMessage request)
+        public async Task LogRequest(HttpRequestMessage request)
         {
             if (_logLevel < LogLevel.Request) return;
             WriteSeprator();
@@ -26,7 +27,7 @@ namespace InstagramApiSharp.Logger
             WriteHeaders(request.Headers);
             WriteProperties(request.Properties);
             if (request.Method == HttpMethod.Post)
-                WriteRequestContent(request.Content);
+                await WriteRequestContent(request.Content);
         }
 
         public void LogRequest(Uri uri)
@@ -35,11 +36,11 @@ namespace InstagramApiSharp.Logger
             Write($"Request: {uri}");
         }
 
-        public void LogResponse(HttpResponseMessage response)
+        public async Task LogResponse(HttpResponseMessage response)
         {
             if (_logLevel < LogLevel.Response) return;
             Write($"Response: {response.RequestMessage.Method} {response.RequestMessage.RequestUri} [{response.StatusCode}]");
-            WriteContent(response.Content, Formatting.None, 0);
+            await WriteContent(response.Content, Formatting.None, 0);
         }
 
         public void LogException(Exception ex)
@@ -76,7 +77,7 @@ namespace InstagramApiSharp.Logger
             Write($"Properties:\n{JsonConvert.SerializeObject(properties, Formatting.Indented)}");
         }
 
-        private async void WriteContent(HttpContent content, Formatting formatting, int maxLength = 0)
+        private async Task WriteContent(HttpContent content, Formatting formatting, int maxLength = 0)
         {
             Write("Content:");
             var raw = await content.ReadAsStringAsync();
@@ -86,7 +87,7 @@ namespace InstagramApiSharp.Logger
                 raw = raw.Substring(0, maxLength);
             Write(raw);
         }
-        private async void WriteRequestContent(HttpContent content,int maxLength = 0)
+        private async Task WriteRequestContent(HttpContent content,int maxLength = 0)
         {
             Write("Content:");
             var raw = await content.ReadAsStringAsync();

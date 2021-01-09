@@ -30,7 +30,7 @@ namespace InstagramApiSharp.Converters.Hashtags
                 NextMediaIds = SourceObject.NextMediaIds,
                 NextPage = SourceObject.NextPage ?? 0
             };
-            if (SourceObject.Sections != null)
+            if (SourceObject.Sections?.Count > 0)
             {
                 foreach (var section in SourceObject.Sections)
                 {
@@ -40,10 +40,13 @@ namespace InstagramApiSharp.Converters.Hashtags
                         {
                             if (section.LayoutContent.ChannelContainer?.Channel != null)
                                 media.Channel = ConvertersFabric.Instance.GetChannelConverter(section.LayoutContent.ChannelContainer.Channel).Convert();
+                            else if (section.LayoutContent.ChannelContainerX2?.Channel != null)
+                                media.Channel = ConvertersFabric.Instance.GetChannelConverter(section.LayoutContent.ChannelContainerX2.Channel).Convert();
                         }
-                        else
+                        else if (section.FeedType == "media")
                         {
-                            foreach (var item in section.LayoutContent.Medias)
+                            if (section.LayoutContent?.Medias?.Count > 0)
+                                foreach (var item in section.LayoutContent.Medias)
                             {
                                 try
                                 {

@@ -22,7 +22,84 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IAccountProcessor
     {
+        /// <summary>
+        ///     Change notification settings
+        /// </summary>
+        /// <param name="contentType">Notification content type</param>
+        /// <param name="settingValue">New setting value</param>
+        Task<IResult<bool>> ChangeNotificationsSettingsAsync(string contentType, string settingValue);
+        /// <summary>
+        ///     Get Notifications
+        /// </summary>
+        /// <param name="contentType">
+        ///     Notification content type
+        ///     <para>Note: You should get content type from response of this function! the default value of content type is 'notifications'</para>
+        /// </param>
+        Task<IResult<InstaNotificationSettingsSectionList>> GetNotificationsSettingsAsync(string contentType = "notifications");
+
+        /// <summary>
+        ///     Logout a session
+        /// </summary>
+        /// <param name="sessionId">Session identifier</param>
+        Task<IResult<bool>> LogoutSessionAsync(string sessionId);
+        /// <summary>
+        ///     Accept a session that was me
+        /// </summary>
+        /// <param name="loginId">Login identifier</param>
+        /// <param name="timespan">Timespan</param>
+        Task<IResult<bool>> AcceptSessionAsMeAsync(string loginId, string timespan);
+        /// <summary>
+        ///     Get Login Sessions
+        /// </summary>
+        Task<IResult<InstaLoginSessionRespond>> GetLoginSessionsAsync();
+        /// <summary>
+        ///     Get pending user tags asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetPendingUserTagsAsync(PaginationParameters paginationParameters);
+        /// <summary>
+        ///     Approve usertags
+        /// </summary>
+        /// <param name="mediaIds">Media identifiers</param>
+        Task<IResult<bool>> ApproveUsertagsAsync(params string[] mediaIds);
+        /// <summary>
+        ///     Disable manual tag
+        /// </summary>
+        Task<IResult<bool>> DisableManualTagAsync();
+        /// <summary>
+        ///     Enable manual tag
+        /// </summary>
+        Task<IResult<bool>> EnableManualTagAsync();
+        /// <summary>
+        ///     Hide usertag from profile
+        /// </summary>
+        /// <param name="mediaId">Media identifier</param>
+        Task<IResult<bool>> HideUsertagFromProfileAsync(string mediaId);
+        /// <summary>
+        ///     Unlink contacts
+        /// </summary>
+        Task<IResult<bool>> UnlinkContactsAsync();
+        /// <summary>
+        ///     Get pending user tags count
+        /// </summary>
+        Task<IResult<int>> GetPendingUserTagsCountAsync();
         #region Edit profile
+        /// <summary>
+        ///     Set name and phone number.
+        /// </summary>
+        /// <param name="gender">Gender</param>
+        /// <param name="customGender">Custom gender
+        ///    <para>Note: must select <see cref="InstaGenderType.Custom"/> for setting custom gender</para> 
+        /// </param>        
+        Task<IResult<bool>> SetGenderAsync(InstaGenderType gender, string customGender = null);
+        /// <summary>
+        ///     Set birthday
+        /// </summary>
+        /// <param name="birthday">Birth date</param>
+        Task<IResult<bool>> SetBirthdayAsync(DateTime birthday);
         /// <summary>
         ///     Change password
         /// </summary>

@@ -80,5 +80,6 @@ namespace InstagramApiSharp.Classes.Models
         public int ReadState { get; set; }
 
         public List<InstaDirectInboxItem> DirectStories { get; set; } = new List<InstaDirectInboxItem>();
+        public List<long> AdminUserIds { get; set; } = new List<long>();
     }
 }

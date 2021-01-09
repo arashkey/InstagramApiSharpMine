@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
+using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -9,6 +10,13 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface ICommentProcessor
     {
+
+        /// <summary>
+        ///     Check offensive text for comment
+        /// </summary>
+        /// <param name="mediaId">Media identifier</param>
+        /// <param name="commentText">Comment text</param>
+        Task<IResult<InstaOffensiveText>> CheckOffensiveTextAsync(string mediaId, string commentText);
 
         /// <summary>
         ///     Block an user from commenting to medias
@@ -21,7 +29,9 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="mediaId">Media id</param>
         /// <param name="text">Comment text</param>
-        Task<IResult<InstaComment>> CommentMediaAsync(string mediaId, string text);
+        Task<IResult<InstaComment>> CommentMediaAsync(string mediaId, string text,
+            InstaCommentContainerModuleType containerModule = InstaCommentContainerModuleType.FeedTimeline,
+            uint feedPosition = 0, bool isCarouselBumpedPost = false, int? carouselIndex = null);
 
         /// <summary>
         ///     Delete media comment
@@ -65,8 +75,9 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="mediaId">Media id</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="targetCommentId">Target comment id</param>
         Task<IResult<InstaCommentList>>
-            GetMediaCommentsAsync(string mediaId, PaginationParameters paginationParameters);
+            GetMediaCommentsAsync(string mediaId, PaginationParameters paginationParameters, string targetCommentId = "");
         /// <summary>
         ///     Get media inline comments
         /// </summary>
@@ -87,7 +98,10 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaId">Media id</param>
         /// <param name="targetCommentId">Target comment id</param>
         /// <param name="text">Comment text</param>
-        Task<IResult<InstaComment>> ReplyCommentMediaAsync(string mediaId, string targetCommentId, string text);
+        Task<IResult<InstaComment>> ReplyCommentMediaAsync(string mediaId, string targetCommentId, string text,
+            InstaCommentContainerModuleType containerModule = InstaCommentContainerModuleType.FeedTimeline,
+            uint feedPosition = 0, bool isCarouselBumpedPost = false, int? carouselIndex = null,
+            InstaMediaInventorySource inventorySource = InstaMediaInventorySource.MediaOrAdd);
 
         /// <summary>
         ///     Report media comment

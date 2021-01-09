@@ -7,6 +7,7 @@
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.Enums;
 using System;
 
 namespace InstagramApiSharp.Classes.Models
@@ -15,7 +16,7 @@ namespace InstagramApiSharp.Classes.Models
     {
         public long Id { get; set; }
 
-        public string BroadcastStatus { get; set; }
+        public InstaBroadcastStatusType BroadcastStatusType { get; set; }
 
         public string DashManifest { get; set; }
 

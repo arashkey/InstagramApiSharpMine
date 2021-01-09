@@ -26,5 +26,9 @@ namespace InstagramApiSharp.Classes.Models
         public bool OutgoingRequest { get; set; }
 
         public bool IsBestie { get; set; }
+
+        public bool IsBlockingReel { get; set; }
+
+        public bool IsMutingReel { get; set; }
     }
 }

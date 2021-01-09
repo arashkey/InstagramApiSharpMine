@@ -53,6 +53,23 @@ namespace InstagramApiSharp.API.Processors
             _httpHelper = httpHelper;
         }
         #endregion Properties and constructor
+
+        public async Task<IResult<byte[]>> GetBytesAsync(string url) => await GetBytesAsync(new Uri(url));
+        public async Task<IResult<byte[]>> GetBytesAsync(Uri uri)
+        {
+            using (var client = new HttpClient())
+            using (var request = new HttpRequestMessage(HttpMethod.Get, uri))
+            using (var response = await client.SendAsync(request))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var bytes = await response.Content.ReadAsByteArrayAsync();
+                    return Result.Success(bytes);
+                }
+                else
+                    return Result.Fail<byte[]>("Failed to download bytes");
+            }
+        }
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////// SINGLE UPLOADER ////////////////////////////////////////////////////////////
@@ -60,7 +77,8 @@ namespace InstagramApiSharp.API.Processors
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public async Task<IResult<string>> UploadSinglePhoto(Action<InstaUploaderProgress> progress, 
-            InstaImageUpload image, InstaUploaderProgress upProgress, string uploadId = null, bool album = true, string recipient = null)
+            InstaImageUpload image, InstaUploaderProgress upProgress, string uploadId = null,
+            bool album = true, string recipient = null, string broadcastId = null)
         {
             if (string.IsNullOrEmpty(uploadId))
                 uploadId = ApiRequestMessage.GenerateUploadId();
@@ -77,6 +95,11 @@ namespace InstagramApiSharp.API.Processors
             };
             if (album)
                 photoUploadParamsObj.Add("is_sidecar", "1");
+            if (!string.IsNullOrEmpty(broadcastId))
+            {
+                photoUploadParamsObj.Add("broadcast_id", broadcastId);
+                photoUploadParamsObj.Add("is_post_live_igtv", "1");
+            }
             upProgress.UploadState = InstaUploadState.UploadingThumbnail;
             progress?.Invoke(upProgress);
             var photoUploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
@@ -546,7 +569,7 @@ namespace InstagramApiSharp.API.Processors
                 catch { }
                 var instaUri = UriCreator.GetDirectConfigureVideoUri();
                 var retryContext = GetRetryContext();
-                var clientContext = Guid.NewGuid().ToString();
+                var clientContext = ExtensionHelper.GetThreadToken();
                 if (!string.IsNullOrEmpty(caption))
                     caption = caption.Replace("\r", "");
                 if (isDirectVideo)
@@ -557,6 +580,8 @@ namespace InstagramApiSharp.API.Processors
                          {"client_context",clientContext},
                          {"_csrftoken",_user.CsrfToken},
                          {"video_result",""},
+                         {"device_id", _deviceInfo.DeviceId},
+                         {"mutation_token", clientContext},
                          {"_uuid",_deviceInfo.DeviceGuid.ToString()},
                          {"upload_id",uploadId}
                     };
@@ -607,7 +632,7 @@ namespace InstagramApiSharp.API.Processors
                         {"video_result", ""},
                         {"_uid", _user.LoggedInUser.Pk.ToString()},
                         {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                        {"caption", caption ?? string.Empty},
+                        //{"caption", caption ?? string.Empty},
                         {"date_time_original", DateTime.Now.ToString("yyyy-dd-MMTh:mm:ss-0fffZ")},
                         {"capture_type", "normal"},
                         {"mas_opt_in", "NOT_PROMPTED"},
@@ -667,7 +692,16 @@ namespace InstagramApiSharp.API.Processors
                             {
                                 new JObject
                                 {
-                                    {"webUri", uri.ToString()}
+                                    {"linkType", 1},
+                                    {"webUri", uri.ToString()},
+                                    {"androidClass", ""},
+                                    {"package", ""},
+                                    {"deeplinkUri", ""},
+                                    {"callToActionTitle", ""},
+                                    {"redirectUri", null},
+                                    {"leadGenFormId", ""},
+                                    {"igUserId", ""},
+                                    {"appInstallObjectiveInvalidationBehavior", null}
                                 }
                             };
                             var storyCta = new JArray
@@ -929,7 +963,7 @@ namespace InstagramApiSharp.API.Processors
                     caption = caption.Replace("\r", "");
                 var instaUri = UriCreator.GetDirectConfigureVideoUri();
                 var retryContext = GetRetryContext();
-                var clientContext = Guid.NewGuid().ToString();
+                var clientContext = ExtensionHelper.GetThreadToken();
 
                 //if (isDirectVideo)
                 //{
@@ -1105,7 +1139,7 @@ namespace InstagramApiSharp.API.Processors
                     _instaApi.SetRequestDelay(currentDelay);
                 }
 
-                var uploadId = ApiRequestMessage.GenerateRandomUploadId();
+                var uploadId = ExtensionHelper.GenerateMediaUploadId();
                 var photoHashCode = Path.GetFileName(image.Uri ?? $"C:\\{13.GenerateRandomString()}.jpg").GetHashCode();
                 var photoEntityName = $"{uploadId}_0_{photoHashCode}";
                 var photoUri = UriCreator.GetStoryUploadPhotoUri(uploadId, photoHashCode);
@@ -1122,6 +1156,7 @@ namespace InstagramApiSharp.API.Processors
                     {"media_type", "1"},
                     {"upload_id", uploadId},
                     {"image_compression", "{\"lib_name\":\"moz\",\"lib_version\":\"3.1.m\",\"quality\":\"95\"}"},
+                    {"xsharing_user_ids", $"[\"{_instaApi.GetLoggedUser().LoggedInUser.Pk}\"]"}
                 };
 
                 //var uploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
@@ -1205,26 +1240,37 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetMediaConfigureUri();
                 var retryContext = GetRetryContext();
                 var rnd = new Random();
+                var spl = new string[] { "Camera", "Telegram", "Instagram", "GZ", "App", "Twitter", "YouTube" };
                 var data = new JObject
                 {
                     //{"date_time_digitalized", DateTime.UtcNow.ToString("yyyy:MM:dd+hh:mm:ss")},
                     //{"date_time_original", DateTime.UtcNow.ToString("yyyy:MM:dd+hh:mm:ss")},
                     //{"is_suggested_venue", "false"},
+                    {"scene_capture_type", ""},
                     {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
                     {"_csrftoken", _user.CsrfToken},
-                    {"media_folder", "Camera"},
+                    {"media_folder", spl[rnd.Next(spl.Length)]},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
                     {"caption", caption ?? string.Empty},
                     {"upload_id", uploadId},
+                    {"multi_sharing", "1"},
                     {
                         "device", new JObject{
                             {"manufacturer", _deviceInfo.HardwareManufacturer},
                             {"model", _deviceInfo.DeviceModelIdentifier},
                             {"android_release", _deviceInfo.AndroidVer.VersionNumber},
                             {"android_version", int.Parse(_deviceInfo.AndroidVer.APILevel)}
+                        }
+                    },
+                    {
+                        "edits", new JObject
+                        {
+                            {"crop_original_size", new JArray(1033.0, 1280.0)},
+                            {"crop_center", new JArray(0.0, -7.8125E-4)},
+                            {"crop_zoom", 1.2391094}
                         }
                     },
                     {
@@ -1266,7 +1312,12 @@ namespace InstagramApiSharp.API.Processors
                 request.Headers.Add("retry_context", retryContext);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                
+                if (!response.IsSuccessStatusCode)
+                {
+                    upProgress.UploadState = InstaUploadState.Error;
+                    progress?.Invoke(upProgress);
+                    return Result.UnExpectedResponse<InstaMedia>(response, json);
+                }
                 var mediaResponse =
                      JsonConvert.DeserializeObject<InstaMediaItemResponse>(json, new InstaMediaDataConverter());
                 var converter = ConvertersFabric.Instance.GetSingleMediaConverter(mediaResponse);
@@ -1581,7 +1632,7 @@ namespace InstagramApiSharp.API.Processors
                 catch { }
                 var instaUri = UriCreator.GetBroadcastVoiceUri();
                 var retryContext = GetRetryContext();
-                var clientContext = Guid.NewGuid().ToString();
+                var clientContext = ExtensionHelper.GetThreadToken();
                 var waveformData = audio.WaveformData?.Count > 0 ? string.Join(",", audio.WaveformData) : string.Empty;
 
                 var data = new Dictionary<string, string>
@@ -1590,7 +1641,7 @@ namespace InstagramApiSharp.API.Processors
                     {"client_context", clientContext},
                     {"_csrftoken", _user.CsrfToken},
                     {"device_id", _deviceInfo.DeviceId},
-                    {"mutation_token", Guid.NewGuid().ToString()},
+                    {"mutation_token", clientContext},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"waveform", $"[{waveformData}]"},
                     {"waveform_sampling_frequency_hz", audio.WaveformSamplingFrequencyHz.ToString()},
@@ -2046,13 +2097,15 @@ namespace InstagramApiSharp.API.Processors
         }
 
 
-        private async Task<IResult<InstaMedia>> ConfigureTVVideo(InstaTVVideoUpload video, string uploadId, string title, string caption)
+        private async Task<IResult<InstaMedia>> ConfigureTVVideo(InstaTVVideoUpload video, string uploadId, string title, string caption,
+            bool ignoreMediaDelay = false)
         {
             try
             {
                 try
                 {
-                    await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                    if (!ignoreMediaDelay)
+                        await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
                 }
                 catch { }
                 var instaUri = UriCreator.GetMediaConfigureToIGTVUri();
@@ -2071,7 +2124,10 @@ namespace InstagramApiSharp.API.Processors
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"title", title ?? string.Empty },
                     {"caption", caption ?? string.Empty},
+                    {"date_time_original", DateTime.Now.ToString("yyyy-dd-MMTh:mm:ss-0fffZ")},
+                    {"igtv_share_preview_to_feed", video.SharePreviewToFeed ? "1" : "0"},
                     {"upload_id", uploadId},
+                    {"igtv_composer_session_id", Guid.NewGuid().ToString()},
                     {
                         "device", new JObject{
                             {"manufacturer", _deviceInfo.HardwareManufacturer},
@@ -2092,10 +2148,405 @@ namespace InstagramApiSharp.API.Processors
                     {"poster_frame_index", 0},
                 };
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                request.Headers.Add("is_igtv_video", "1");
+                request.Headers.Add("retry_context", retryContext);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                // igtv:
+                //{"message": "Transcode error: Video's aspect ratio is too large 1.3333333333333", "status": "fail"}
+                //{"message": "Transcode error: Video's aspect ratio is too large 1.7777777777778", "status": "fail"}
+                //{"message": "Uploaded image isn't in an allowed aspect ratio", "status": "fail"}
+                //{"media": {"taken_at": 1536588655, "pk": 1865362680669764409, "id": "1865362680669764409_1647718432", "device_timestamp": 153658858130102, "media_type": 2, "code": "BnjGXmWl3s5", "client_cache_key": "MTg2NTM2MjY4MDY2OTc2NDQwOQ==.2", "filter_type": 0, "comment_likes_enabled": false, "comment_threading_enabled": false, "has_more_comments": false, "max_num_visible_preview_comments": 2, "preview_comments": [], "can_view_more_preview_comments": false, "comment_count": 0, "product_type": "igtv", "nearly_complete_copyright_match": false, "image_versions2": {"candidates": [{"width": 1080, "height": 1680, "url": "https://scontent-lga3-1.cdninstagram.com/vp/59b658bc87fac07bfb12fc493d810147/5B990274/t51.2885-15/e35/40958056_2159975094323981_8136119356155744850_n.jpg?se=7\u0026ig_cache_key=MTg2NTM2MjY4MDY2OTc2NDQwOQ%3D%3D.2"}, {"width": 240, "height": 373, "url": "https://scontent-lga3-1.cdninstagram.com/vp/524297318efe8ac05afbe7c267673f33/5B98BF5D/t51.2885-15/e35/p240x240/40958056_2159975094323981_8136119356155744850_n.jpg?ig_cache_key=MTg2NTM2MjY4MDY2OTc2NDQwOQ%3D%3D.2"}]}, "original_width": 1080, "original_height": 1680, "thumbnails": {}, "video_versions": [{"type": 101, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}, {"type": 103, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}, {"type": 102, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}], "has_audio": true, "video_duration": 122.669, "user": {"pk": 1647718432, "username": "kajokoleha", "full_name": "kajokoleha", "is_private": false, "profile_pic_url": "https://scontent-lga3-1.cdninstagram.com/vp/82572ce26b79cec0394c295ff1b486b7/5C203459/t51.2885-19/s150x150/29094366_375967546140243_535690319979610112_n.jpg", "profile_pic_id": "1746518311616597634_1647718432", "has_anonymous_profile_picture": false, "can_boost_post": false, "can_see_organic_insights": false, "show_insights_terms": false, "reel_auto_archive": "on", "is_unpublished": false, "allowed_commenter_type": "any"}, "caption": {"pk": 17977422871018862, "user_id": 1647718432, "text": "captioooooooooooooooooooon", "type": 1, "created_at": 1536588656, "created_at_utc": 1536588656, "content_type": "comment", "status": "Active", "bit_flags": 0, "user": {"pk": 1647718432, "username": "kajokoleha", "full_name": "kajokoleha", "is_private": false, "profile_pic_url": "https://scontent-lga3-1.cdninstagram.com/vp/82572ce26b79cec0394c295ff1b486b7/5C203459/t51.2885-19/s150x150/29094366_375967546140243_535690319979610112_n.jpg", "profile_pic_id": "1746518311616597634_1647718432", "has_anonymous_profile_picture": false, "can_boost_post": false, "can_see_organic_insights": false, "show_insights_terms": false, "reel_auto_archive": "on", "is_unpublished": false, "allowed_commenter_type": "any"}, "did_report_as_spam": false, "media_id": 1865362680669764409}, "title": "ramtin vid e o", "caption_is_edited": false, "photo_of_you": false, "can_viewer_save": true, "organic_tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjpmYWxzZSwidXVpZCI6IjgyYzkyZjU0Y2EyMzRhNjM5YzBiOTBlZDAzODcwODlhMTg2NTM2MjY4MDY2OTc2NDQwOSIsInNlcnZlcl90b2tlbiI6IjE1MzY1ODg2NTc4Mzd8MTg2NTM2MjY4MDY2OTc2NDQwOXwxNjQ3NzE4NDMyfGMwZjkxNmNmMjk2NTU4NzQ1MWRlZmU3NTY2NjY3ZDdiNjE4OTMxYjM3NTQ0YjdhYjg1NmUxYWEwZjhmMmM4MWIifSwic2lnbmF0dXJlIjoiIn0="}, "upload_id": "153658858130102", "status": "ok"}
+                var defResponse = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                if (response.StatusCode == HttpStatusCode.Accepted && defResponse?.Message != null)
+                {
+                    if (defResponse.Message.ToLower().Contains("transcode not finished yet"))
+                    {
+                        await Task.Delay(10000);
+                        return await ConfigureTVVideo(video, uploadId, title, caption, true);
+                    }
+                }
+                if (response.IsSuccessStatusCode)
+                {
+                    var mediaResponse = JsonConvert.DeserializeObject<InstaMediaItemResponse>(json, new InstaMediaDataConverter());
+                    var converter = ConvertersFabric.Instance.GetSingleMediaConverter(mediaResponse);
+
+                    return Result.Success(converter.Convert());
+                }
+                return Result.UnExpectedResponse<InstaMedia>(response, json);
+
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaMedia), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaMedia>(exception);
+            }
+        }
+
+        public async Task<IResult<InstaMedia>> SendSegmentedVideoAsync(InstaSegmentedVideoUpload video, string caption, InstaLocationShort location = null)
+        {
+            try
+            {
+                var uploadId = ApiRequestMessage.GenerateRandomUploadId() + new Random().Next(1000, 9999);
+
+                var randomId = Guid.NewGuid().ToString();
+
+                var waterfallId = ApiRequestMessage.GenerateRandomUploadId();//Guid.NewGuid().ToString();
+                var retryContext = GetRetryContext();
+                HttpRequestMessage request = null;
+                HttpResponseMessage response = null;
+                string videoUploadParams = null;
+                string json = null;
+
+                var instaUri = UriCreator.GetRUploadVideoStartUri(Guid.NewGuid().ToString());
+
+                var videoUploadParamsObj = new JObject
+                {
+                    {"upload_media_height", video.Height.ToString()},
+                    {"xsharing_user_ids", "[]"},
+                    {"upload_media_width", video.Width.ToString()},
+                    {"upload_media_duration_ms", (video.Length * 1000).ToString()},
+                    {"upload_id", uploadId},
+                    {"retry_context", retryContext},
+                    {"media_type", "2"},
+                };
+
+                videoUploadParams = JsonConvert.SerializeObject(videoUploadParamsObj);
+                request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, new Dictionary<string, string>());
+                request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                response = await _httpRequestProcessor.SendAsync(request);
+                json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaMedia>(response, json);
+
+                var obJResult = JsonConvert.DeserializeObject<InstaRUploadResponse>(json);
+
+                var streamId = obJResult.StreamId;
+
+                try
+                {
+                    var files = new Dictionary<string, byte[]>();
+
+                    if (!string.IsNullOrEmpty(video.SegmentedFolderPath))
+                    {
+                        var f = Directory.GetFiles(video.SegmentedFolderPath);
+                        if (f.Length > 0)
+                        {
+                            foreach (var item in f)
+                            {
+                                var bytes = File.ReadAllBytes(item);
+                                files.Add(item, bytes);
+                            }
+                        }
+                    }
+                    else
+                        files = video.SegmentedFilesBytes;
+
+                    int offset = 0;
+                    foreach (var segment in files)
+                    {
+                        var buffer = segment.Value;
+
+                        var videoContent = new ByteArrayContent(buffer);
+
+                        instaUri = UriCreator.GetRUploadVideoTransferUri(CryptoHelper.CalculateMd5(segment.Key), 0, buffer.Length);
+
+                        request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                        request.Headers.Add("Stream-Id", streamId);
+                        request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                        request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
+                        request.Headers.Add("Segment-Start-Offset", offset.ToString());
+                        request.Headers.Add("Segment-Type", segment.Key.Contains("xaudiox") ? "1" : "2");
+                        response = await _httpRequestProcessor.SendAsync(request);
+                        json = await response.Content.ReadAsStringAsync();
+
+
+                        request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
+                        request.Headers.Add("X-Entity-Length", buffer.Length.ToString());
+                        request.Headers.Add("X-Entity-Name", $"{CryptoHelper.CalculateMd5(segment.Key)}_0_{buffer.Length}");
+                        request.Headers.Add("Stream-Id", streamId);
+                        request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                        request.Headers.Add("X-Entity-Type", "video/mp4");
+                        request.Headers.Add("Segment-Start-Offset", offset.ToString());
+                        request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
+                        request.Headers.Add("Segment-Type", segment.Key.Contains("xaudiox") ? "1" : "2");
+                        request.Headers.Add("Offset", "0");
+                        request.Content = videoContent;
+                        response = await _httpRequestProcessor.SendAsync(request);
+                        json = await response.Content.ReadAsStringAsync();
+
+                        if (response.StatusCode != HttpStatusCode.OK)
+                        {
+                            return Result.UnExpectedResponse<InstaMedia>(response, json);
+                        }
+                        offset += buffer.Length;
+                    }
+                }
+                catch { }
+
+
+                instaUri = UriCreator.GetRUploadVideoEndUri(Guid.NewGuid().ToString());
+
+                request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, new Dictionary<string, string>());
+                request.Headers.Add("Stream-Id", streamId);
+                request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                response = await _httpRequestProcessor.SendAsync(request);
+                json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaMedia>(response, json);
+
+
+                var photoHashCode = Path.GetFileName(video.VideoThumbnail.Uri ?? $"C:\\{13.GenerateRandomString()}.jpg").GetHashCode();
+                var photoEntityName = $"{uploadId}_0_{photoHashCode}";
+                var photoUri = UriCreator.GetStoryUploadPhotoUri(uploadId, photoHashCode);
+
+                //X-Instagram-Rupload-Params: {"upload_id":"271400741803376","media_type":"2","retry_context":"{\"num_reupload\":0,\"num_step_auto_retry\":0,\"num_step_manual_retry\":0}","image_compression":"{\"lib_name\":\"moz\",\"lib_version\":\"3.1.m\",\"quality\":\"0\"}","xsharing_user_ids":"[\"1647718432\",\"5318277344\",\"8651542203\",\"14742041103\"]"} 
+                //,\"quality\":\"0\"} 
+                // quality chera sefre?:|
+                var photoUploadParamsObj = new JObject
+                {
+                    { "upload_id", uploadId},
+                    {"media_type", "2"},
+                    {"retry_context", retryContext},
+                    {"image_compression", "{\"lib_name\":\"moz\",\"lib_version\":\"3.1.m\",\"quality\":\"87\"}"},
+                    {"xsharing_user_ids", "[]"}
+                };
+                var photoUploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
+                var imageBytes = video.VideoThumbnail.ImageBytes ?? File.ReadAllBytes(video.VideoThumbnail.Uri);
+                var imageContent = new ByteArrayContent(imageBytes);
+                imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
+                imageContent.Headers.Add("Content-Type", "application/octet-stream");
+                request = _httpHelper.GetDefaultRequest(HttpMethod.Post, photoUri, _deviceInfo);
+                request.Content = imageContent;
+                request.Headers.Add("X-Entity-Type", "image/jpeg");
+                request.Headers.Add("Offset", "0");
+                request.Headers.Add("X-Instagram-Rupload-Params", photoUploadParams);
+                request.Headers.Add("X-Entity-Name", photoEntityName);
+                request.Headers.Add("X-Entity-Length", imageBytes.Length.ToString());
+                request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
+                response = await _httpRequestProcessor.SendAsync(request);
+                json = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await FinishSegmentedVideo(video, uploadId, caption, location);
+                }
+                return Result.UnExpectedResponse<InstaMedia>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaMedia), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaMedia>(exception);
+            }
+
+        }
+        private async Task<IResult<InstaMedia>> FinishSegmentedVideo(InstaSegmentedVideoUpload video, string uploadId, string caption, InstaLocationShort location,
+   bool ignoreMediaDelay = false)
+        {
+            try
+            {
+                try
+                {
+                    if (!ignoreMediaDelay)
+                        await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                }
+                catch { }
+                var instaUri = UriCreator.GetMediaUploadFinishVideoUri();
+                var retryContext = GetRetryContext();
+                var clientContext = Guid.NewGuid().ToString();
+
+                var rnd = new Random();
+                var data = new JObject
+                {
+                    {"filter_type", "0"},
+                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"source_type", "4"},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"caption", caption ?? string.Empty},
+                    {"date_time_original", DateTime.Now.ToString("yyyy-dd-MMTh:mm:ss-0fffZ")},
+                    {"upload_id", uploadId},
+                    {
+                        "device", new JObject{
+                            {"manufacturer", _deviceInfo.HardwareManufacturer},
+                            {"model", _deviceInfo.DeviceModelIdentifier},
+                            {"android_version", int.Parse(_deviceInfo.AndroidVer.APILevel)},
+                            {"android_release", _deviceInfo.AndroidVer.VersionNumber}
+                        }
+                    },
+                    {"length", video.Length},
+                    {
+                        "extra", new JObject
+                        {
+                            {"source_width", video.Width/*videoUploadOption.SourceWidth*/},
+                            {"source_height",video.Height /*videoUploadOption.SourceHeight*/}
+                        }
+                    },
+                    {"audio_muted", video.IsMuted},
+                    {"poster_frame_index", 0},
+                };
+                if (video.UserTags?.Count > 0)
+                {
+                    var tagArr = new JArray();
+                    foreach (var tag in video.UserTags)
+                    {
+                        if (tag.Pk != -1)
+                        {
+                            var position = new JArray(0.0, 0.0);
+                            var singleTag = new JObject
+                            {
+                                {"user_id", tag.Pk},
+                                {"position", position}
+                            };
+                            tagArr.Add(singleTag);
+                        }
+                    }
+
+                    var root = new JObject
+                    {
+                        {"in",  tagArr}
+                    };
+                    data.Add("usertags", root.ToString(Formatting.None));
+                }
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
                 request.Headers.Add("retry_context", retryContext);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
+                var defResponse = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                if (response.StatusCode == HttpStatusCode.Accepted && defResponse?.Message != null)
+                {
+                    if (defResponse.Message.ToLower().Contains("transcode not finished yet"))
+                    {
+                        await Task.Delay(10000);
+                        return await FinishSegmentedVideo(video, uploadId, caption, location, true);
+                    }
+                }
+                // igtv:
+                //{"message": "Transcode error: Video's aspect ratio is too large 1.3333333333333", "status": "fail"}
+                //{"message": "Transcode error: Video's aspect ratio is too large 1.7777777777778", "status": "fail"}
+                //{"message": "Uploaded image isn't in an allowed aspect ratio", "status": "fail"}
+                //{"media": {"taken_at": 1536588655, "pk": 1865362680669764409, "id": "1865362680669764409_1647718432", "device_timestamp": 153658858130102, "media_type": 2, "code": "BnjGXmWl3s5", "client_cache_key": "MTg2NTM2MjY4MDY2OTc2NDQwOQ==.2", "filter_type": 0, "comment_likes_enabled": false, "comment_threading_enabled": false, "has_more_comments": false, "max_num_visible_preview_comments": 2, "preview_comments": [], "can_view_more_preview_comments": false, "comment_count": 0, "product_type": "igtv", "nearly_complete_copyright_match": false, "image_versions2": {"candidates": [{"width": 1080, "height": 1680, "url": "https://scontent-lga3-1.cdninstagram.com/vp/59b658bc87fac07bfb12fc493d810147/5B990274/t51.2885-15/e35/40958056_2159975094323981_8136119356155744850_n.jpg?se=7\u0026ig_cache_key=MTg2NTM2MjY4MDY2OTc2NDQwOQ%3D%3D.2"}, {"width": 240, "height": 373, "url": "https://scontent-lga3-1.cdninstagram.com/vp/524297318efe8ac05afbe7c267673f33/5B98BF5D/t51.2885-15/e35/p240x240/40958056_2159975094323981_8136119356155744850_n.jpg?ig_cache_key=MTg2NTM2MjY4MDY2OTc2NDQwOQ%3D%3D.2"}]}, "original_width": 1080, "original_height": 1680, "thumbnails": {}, "video_versions": [{"type": 101, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}, {"type": 103, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}, {"type": 102, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}], "has_audio": true, "video_duration": 122.669, "user": {"pk": 1647718432, "username": "kajokoleha", "full_name": "kajokoleha", "is_private": false, "profile_pic_url": "https://scontent-lga3-1.cdninstagram.com/vp/82572ce26b79cec0394c295ff1b486b7/5C203459/t51.2885-19/s150x150/29094366_375967546140243_535690319979610112_n.jpg", "profile_pic_id": "1746518311616597634_1647718432", "has_anonymous_profile_picture": false, "can_boost_post": false, "can_see_organic_insights": false, "show_insights_terms": false, "reel_auto_archive": "on", "is_unpublished": false, "allowed_commenter_type": "any"}, "caption": {"pk": 17977422871018862, "user_id": 1647718432, "text": "captioooooooooooooooooooon", "type": 1, "created_at": 1536588656, "created_at_utc": 1536588656, "content_type": "comment", "status": "Active", "bit_flags": 0, "user": {"pk": 1647718432, "username": "kajokoleha", "full_name": "kajokoleha", "is_private": false, "profile_pic_url": "https://scontent-lga3-1.cdninstagram.com/vp/82572ce26b79cec0394c295ff1b486b7/5C203459/t51.2885-19/s150x150/29094366_375967546140243_535690319979610112_n.jpg", "profile_pic_id": "1746518311616597634_1647718432", "has_anonymous_profile_picture": false, "can_boost_post": false, "can_see_organic_insights": false, "show_insights_terms": false, "reel_auto_archive": "on", "is_unpublished": false, "allowed_commenter_type": "any"}, "did_report_as_spam": false, "media_id": 1865362680669764409}, "title": "ramtin vid e o", "caption_is_edited": false, "photo_of_you": false, "can_viewer_save": true, "organic_tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjpmYWxzZSwidXVpZCI6IjgyYzkyZjU0Y2EyMzRhNjM5YzBiOTBlZDAzODcwODlhMTg2NTM2MjY4MDY2OTc2NDQwOSIsInNlcnZlcl90b2tlbiI6IjE1MzY1ODg2NTc4Mzd8MTg2NTM2MjY4MDY2OTc2NDQwOXwxNjQ3NzE4NDMyfGMwZjkxNmNmMjk2NTU4NzQ1MWRlZmU3NTY2NjY3ZDdiNjE4OTMxYjM3NTQ0YjdhYjg1NmUxYWEwZjhmMmM4MWIifSwic2lnbmF0dXJlIjoiIn0="}, "upload_id": "153658858130102", "status": "ok"}
+                return await ConfigureSegmentedVideo(video, uploadId, caption, location, true);
+                //if (response.IsSuccessStatusCode)
+                //{
+                //    var mediaResponse = JsonConvert.DeserializeObject<InstaMediaItemResponse>(json, new InstaMediaDataConverter());
+                //    var converter = ConvertersFabric.Instance.GetSingleMediaConverter(mediaResponse);
+
+                //    return Result.Success(converter.Convert());
+                //}
+                //return Result.UnExpectedResponse<InstaMedia>(response, json);
+
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaMedia), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaMedia>(exception);
+            }
+        }
+        private async Task<IResult<InstaMedia>> ConfigureSegmentedVideo(InstaSegmentedVideoUpload video, string uploadId, string caption, InstaLocationShort location,
+            bool ignoreMediaDelay = false)
+        {
+            try
+            {
+                try
+                {
+                    if (!ignoreMediaDelay)
+                        await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                }
+                catch { }
+                var instaUri = UriCreator.GetMediaConfigureUri(true);
+                var retryContext = GetRetryContext();
+                var clientContext = Guid.NewGuid().ToString();
+
+                var rnd = new Random();
+                var data = new JObject
+                {
+                    {"filter_type", "0"},
+                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"source_type", "4"},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"caption", caption ?? string.Empty},
+                    {"date_time_original", DateTime.Now.ToString("yyyy-dd-MMTh:mm:ss-0fffZ")},
+                    {"upload_id", uploadId},
+                    {
+                        "device", new JObject{
+                            {"manufacturer", _deviceInfo.HardwareManufacturer},
+                            {"model", _deviceInfo.DeviceModelIdentifier},
+                            {"android_version", int.Parse(_deviceInfo.AndroidVer.APILevel)},
+                            {"android_release", _deviceInfo.AndroidVer.VersionNumber}
+                        }
+                    },
+                    {"length", video.Length},
+                    {
+                        "extra", new JObject
+                        {
+                            {"source_width", video.Width/*videoUploadOption.SourceWidth*/},
+                            {"source_height",video.Height /*videoUploadOption.SourceHeight*/}
+                        }
+                    },
+                    {"audio_muted", video.IsMuted},
+                    {"poster_frame_index", 0},
+                };
+                if (video.UserTags?.Count > 0)
+                {
+                    var tagArr = new JArray();
+                    foreach (var tag in video.UserTags)
+                    {
+                        if (tag.Pk != -1)
+                        {
+                            var position = new JArray(0.0, 0.0);
+                            var singleTag = new JObject
+                            {
+                                {"user_id", tag.Pk},
+                                {"position", position}
+                            };
+                            tagArr.Add(singleTag);
+                        }
+                    }
+
+                    var root = new JObject
+                    {
+                        {"in",  tagArr}
+                    };
+                    data.Add("usertags", root.ToString(Formatting.None));
+                }
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+
+                request.Headers.Add("retry_context", retryContext);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var defResponse = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                if (response.StatusCode == HttpStatusCode.Accepted && defResponse?.Message != null)
+                {
+                    if (defResponse.Message.ToLower().Contains("transcode not finished yet"))
+                    {
+                        await Task.Delay(10000);
+                        return await ConfigureSegmentedVideo(video, uploadId, caption, location, true);
+                    }
+                }
                 // igtv:
                 //{"message": "Transcode error: Video's aspect ratio is too large 1.3333333333333", "status": "fail"}
                 //{"message": "Transcode error: Video's aspect ratio is too large 1.7777777777778", "status": "fail"}
@@ -2123,8 +2574,6 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaMedia>(exception);
             }
         }
-
-
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////////////////////// OTHER FUNCTIONS /////////////////////////////////////////////////////////

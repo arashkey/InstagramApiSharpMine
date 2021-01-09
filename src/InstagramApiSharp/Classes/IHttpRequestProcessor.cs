@@ -11,11 +11,11 @@ namespace InstagramApiSharp.Classes
         ApiRequestMessage RequestMessage { get; }
         HttpClient Client { get; }
         void SetHttpClientHandler(HttpClientHandler handler);
-        Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage);
-        Task<HttpResponseMessage> GetAsync(Uri requestUri);
-        Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, HttpCompletionOption completionOption);
-        Task<string> SendAndGetJsonAsync(HttpRequestMessage requestMessage, HttpCompletionOption completionOption);
-        Task<string> GeJsonAsync(Uri requestUri);
+        Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, bool keepAlive = false);
+        Task<HttpResponseMessage> GetAsync(Uri requestUri, bool keepAlive = false);
+        Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, HttpCompletionOption completionOption, bool keepAlive = false);
+        Task<string> SendAndGetJsonAsync(HttpRequestMessage requestMessage, HttpCompletionOption completionOption, bool keepAlive = false);
+        Task<string> GeJsonAsync(Uri requestUri, bool keepAlive = false);
         IRequestDelay Delay { get; set; }
         IConfigureMediaDelay ConfigureMediaDelay { get; set; }
     }

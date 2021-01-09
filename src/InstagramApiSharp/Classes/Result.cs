@@ -183,6 +183,11 @@ namespace InstagramApiSharp.Classes
 
             if (status?.Message?.IndexOf("challenge_required") != -1)
                 responseType = ResponseType.ChallengeRequired;
+
+            if (!string.IsNullOrEmpty(status?.CommentErrorKey))
+                if (status.CommentErrorKey == "comment_si_blocked")
+                    responseType = ResponseType.CommentBlock;
+
             return responseType;
         }
     }

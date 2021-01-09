@@ -18,6 +18,12 @@ using Newtonsoft.Json;
 using InstagramApiSharp.Enums;
 using InstagramApiSharp.API.Versions;
 using InstagramApiSharp.Helpers;
+using System.Text;
+using System.Security.Cryptography;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Parameters;
 namespace InstagramApiSharp
 {
     internal static class ExtensionHelper
@@ -29,10 +35,32 @@ namespace InstagramApiSharp
             if (deviceInfo.AndroidVer == null)
                 deviceInfo.AndroidVer = AndroidVersion.GetRandomAndriodVersion();
 
-            return string.Format(InstaApiConstants.USER_AGENT, deviceInfo.Dpi, deviceInfo.Resolution, deviceInfo.HardwareManufacturer,
-                deviceInfo.DeviceModelIdentifier, deviceInfo.FirmwareBrand, deviceInfo.HardwareModel,
-                apiVersion.AppVersion, deviceInfo.AndroidVer.APILevel,
-                deviceInfo.AndroidVer.VersionNumber, apiVersion.AppApiVersionCode, deviceInfo.AndroidBoardName);
+            var lang = !string.IsNullOrEmpty(InstaApiConstants.ACCEPT_LANGUAGE) ?
+                InstaApiConstants.ACCEPT_LANGUAGE.Replace("-", "_") : "en_US";
+
+            var apiLevel = deviceInfo.AndroidVer.APILevel;
+
+            var versionParts = deviceInfo.AndroidVer.VersionNumber.Split('.');
+            var versionNumber = deviceInfo.AndroidVer.VersionNumber.Contains(".") ?
+                versionParts[0] : deviceInfo.AndroidVer.VersionNumber;
+
+            if (versionParts?.Length > 1)
+                if (apiLevel == "25" || apiLevel == "27")
+                    versionNumber = $"{versionParts[0]}.{versionParts[1]}";
+
+            return string.Format(InstaApiConstants.USER_AGENT,
+                apiVersion.AppVersion,
+                apiLevel,
+                versionNumber,
+                deviceInfo.Dpi,
+                deviceInfo.Resolution,
+                deviceInfo.HardwareManufacturer,
+                deviceInfo.AndroidBoardName,
+                deviceInfo.DeviceModelIdentifier,
+                deviceInfo.FirmwareBrand,
+                deviceInfo.HardwareModel,
+                lang,
+                apiVersion.AppApiVersionCode);
         }
         public static string GenerateFacebookUserAgent()
         {
@@ -102,6 +130,97 @@ namespace InstagramApiSharp
         {
             return System.Net.WebUtility.UrlEncode(data);
         }
+
+        public static string GenerateJazoest(string phoneid)
+        {
+            int ix = 0;
+            var chars = phoneid.ToCharArray();
+            foreach (var ch in chars)
+                ix += (int)ch;
+            return "2" + ix;
+        }
+
+        static private readonly SecureRandom secureRandom = new SecureRandom();
+
+        public static string GetEncryptedPassword(this IInstaApi api, string password, long? providedTime = null) 
+        {
+            var pubKey = api.GetLoggedUser().PublicKey;
+            var pubKeyId = api.GetLoggedUser().PublicKeyId;
+            byte[] randKey = new byte[32];
+            byte[] iv = new byte[12];
+            secureRandom.NextBytes(randKey, 0, randKey.Length);
+            secureRandom.NextBytes(iv, 0, iv.Length);
+            long time = providedTime ?? DateTime.UtcNow.ToUnixTime();
+            byte[] associatedData = Encoding.UTF8.GetBytes(time.ToString());
+            var pubKEY = Encoding.UTF8.GetString(Convert.FromBase64String(pubKey));
+            byte[] encryptedKey;
+            using (var rdr = PemKeyUtils.GetRSAProviderFromPemString(pubKEY.Trim()))
+                encryptedKey = rdr.Encrypt(randKey, false);
+
+            byte[] plaintext = Encoding.UTF8.GetBytes(password);
+
+            var cipher = new GcmBlockCipher(new AesEngine());
+            var parameters = new AeadParameters(new KeyParameter(randKey), 128, iv, associatedData);
+            cipher.Init(true, parameters);
+
+            var ciphertext = new byte[cipher.GetOutputSize(plaintext.Length)];
+            var len = cipher.ProcessBytes(plaintext, 0, plaintext.Length, ciphertext, 0);
+            cipher.DoFinal(ciphertext, len);
+
+            var con = new byte[plaintext.Length];
+            for (int i = 0; i < plaintext.Length; i++)
+                con[i] = ciphertext[i];
+            ciphertext = con;
+            var tag = cipher.GetMac();
+
+            byte[] buffersSize = BitConverter.GetBytes(Convert.ToInt16(encryptedKey.Length));
+            Console.WriteLine(Encoding.UTF8.GetString(encryptedKey));
+            Console.WriteLine(Encoding.UTF8.GetString(tag));
+            Console.WriteLine(Encoding.UTF8.GetString(ciphertext));
+            byte[] encKeyIdBytes = BitConverter.GetBytes(Convert.ToUInt16(pubKeyId));
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(encKeyIdBytes);
+            encKeyIdBytes[0] = 1; 
+            var payload = Convert.ToBase64String(encKeyIdBytes.Concat(iv).Concat(buffersSize).Concat(encryptedKey).Concat(tag).Concat(ciphertext).ToArray());
+
+            return $"#PWD_INSTAGRAM:4:{time}:{payload}";
+        }
+
+        public static string GetThreadToken()
+        {
+            var str = "";
+            // 6600286272511816379
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(1000, 9999);
+            str += Rnd.Next(11111, 99999);
+
+            str += Rnd.Next(2222, 6789);
+
+            return $"665{str}";
+        }
+
+        public static string GetLiveTransactionToken()
+        {
+            var str = "";
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(1000, 9999);
+            str += Rnd.Next(11111, 99999);
+            str += Rnd.Next(2222, 6789);
+            return $"144{str}";
+        }
+        static public string GenerateMediaUploadId()
+        {
+            //192855733414842
+            string r = "19";
+            for (int i = 0; i < 15; i++)
+                r += Rnd.Next(0, 9).ToString();
+            return r;
+        }
         public static string GetJson(this InstaLocationShort location)
         {
             if (location == null)
@@ -155,6 +274,85 @@ namespace InstagramApiSharp
 
             }
         }
+
+        public static string GetContainerType(this InstaMediaContainerModuleType module)
+        {
+            switch (module)
+            {
+                case InstaMediaContainerModuleType.FeedContextualCain:
+                    return "feed_contextual_chain";
+                case InstaMediaContainerModuleType.FeedContextualProfile:
+                    return "feed_contextual_profile";
+                case InstaMediaContainerModuleType.FeedTimeline:
+                    return "feed_timeline";
+                case InstaMediaContainerModuleType.IgtvExplorePinnedNav:
+                    return "igtv_explore_pinned_nav";
+                case InstaMediaContainerModuleType.PhotoViewOther:
+                    return "photo_view_other";
+                case InstaMediaContainerModuleType.VideoViewOther:
+                    return "video_view_other";
+                case InstaMediaContainerModuleType.IgtvProfile:
+                    return "igtv_profile";
+                default:
+                case InstaMediaContainerModuleType.None:
+                    return string.Empty;
+            }
+        }
+
+        public static string GetContainerType(this InstaCommentContainerModuleType module)
+        {
+            switch (module)
+            {
+                default:
+                case InstaCommentContainerModuleType.FeedTimeline:
+                    return "comments_v2_feed_timeline";
+                case InstaCommentContainerModuleType.FeedContextualProfile:
+                    return "comments_v2_feed_contextual_profile";
+                case InstaCommentContainerModuleType.FeedContextualChain:
+                    return "comments_v2_feed_contextual_chain";
+                case InstaCommentContainerModuleType.ExploreEventViewer:
+                    return "comments_v2_explore_event_viewer";
+                case InstaCommentContainerModuleType.IgtvExploreViewer:
+                    return "comments_v2_igtv_viewer";
+                case InstaCommentContainerModuleType.IgtvProfile:
+                    return "comments_v2_igtv_profile";
+                case InstaCommentContainerModuleType.SelfIgtvProfile:
+                    return "self_comments_v2_igtv_profile";
+                case InstaCommentContainerModuleType.SelfFeedContextualProfile:
+                    return "self_comments_v2_feed_contextual_self_profile";
+            }
+        }
+
+        public static string GetSurfaceType(this InstaMediaSurfaceType surfaceType)
+        {
+            switch (surfaceType)
+            {
+                case InstaMediaSurfaceType.FeedContextualCain:
+                    return "feed_contextual_chain";
+                case InstaMediaSurfaceType.FeedContextualProfile:
+                    return "feed_contextual_profile";
+                case InstaMediaSurfaceType.IgtvExplorePinnedNav:
+                    return "igtv_explore_pinned_nav";
+                case InstaMediaSurfaceType.Profile:
+                    return "profile";
+                default:
+                case InstaMediaSurfaceType.None:
+                    return string.Empty;
+            }
+        }
+        public static string GetInvetorySourceType(this InstaMediaInventorySource source)
+        {
+            switch (source)
+            {
+                case InstaMediaInventorySource.MediaOrAdd:
+                    return "media_or_ad";
+                case InstaMediaInventorySource.Clips:
+                    return "clips";
+                default:
+                case InstaMediaInventorySource.None:
+                    return string.Empty;
+            }
+        }
         public static string GetChannelDeviceType(this InstaPushChannelType type)
         {
             switch(type)
@@ -164,6 +362,30 @@ namespace InstagramApiSharp
                     return "android_mqtt";
                 case InstaPushChannelType.Gcm:
                     return "android_gcm";
+            }
+        }
+        public static string GetRequestSurface(this InstaGiphyRequestType type)
+        {
+            switch (type)
+            {
+                default:
+                case InstaGiphyRequestType.Direct:
+                    return "direct";
+                case InstaGiphyRequestType.Story:
+                    return "stories_asset_search_tray";
+            }
+        }
+        public static string GetFollowsOrderByType(this InstaFollowOrderType orderBy)
+        {
+            switch (orderBy)
+            {
+                case InstaFollowOrderType.DateFollowedEarliest:
+                    return "date_followed_earliest";
+                case InstaFollowOrderType.DateFollowedLatest:
+                    return "date_followed_late";
+                case InstaFollowOrderType.Default:
+                default:
+                    return "default";
             }
         }
         readonly static Random Rnd = new Random();

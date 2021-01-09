@@ -6,12 +6,12 @@
  * 
  * IRANIAN DEVELOPERS
  */
-namespace InstagramApiSharp.Enums
+using Newtonsoft.Json;
+namespace InstagramApiSharp.Classes.Models
 {
-    public enum InstaFollowingOrderType
+    public class InstaUserTagPending : InstaDefaultResponse
     {
-        Default,
-        DateFollowedEarliest,
-        DateFollowedLatest
+        [JsonProperty("total_count")]
+        public int TotalCount { get; set; }
     }
 }

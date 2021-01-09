@@ -2,7 +2,9 @@
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6 || NETSTANDARD2_0 || NETSTANDARD2_1 || NETSTANDARD2_2 || NETSTANDARD2_3
+using System;
+using InstagramApiSharp.Classes;
+#if NETFRAMEWORK || NETSTANDARD
 using System.Runtime.Serialization.Formatters.Binary;
 #endif
 namespace InstagramApiSharp.Helpers
@@ -12,8 +14,11 @@ namespace InstagramApiSharp.Helpers
         public static Stream SerializeToStream(object o)
         {
             var stream = new MemoryStream();
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6 || NETSTANDARD2_0 || NETSTANDARD2_1 || NETSTANDARD2_2 || NETSTANDARD2_3
-            IFormatter formatter = new BinaryFormatter();
+#if NETFRAMEWORK || NETSTANDARD
+            IFormatter formatter = new BinaryFormatter
+            {
+                Binder = new BinaryFormatterSerializationBinder()
+            };
             formatter.Serialize(stream, o);
             stream.Position = 0;
 #else
@@ -26,9 +31,12 @@ namespace InstagramApiSharp.Helpers
 
         public static T DeserializeFromStream<T>(Stream stream)
         {
-#if NET45 || NET451 || NET452 || NET46 || NET461 || NET462 || NET47 || NET471 || NET472 || NETSTANDARD1_4 || NETSTANDARD1_5 || NETSTANDARD1_6 || NETSTANDARD2_0 || NETSTANDARD2_1 || NETSTANDARD2_2 || NETSTANDARD2_3
+#if NETFRAMEWORK || NETSTANDARD
 
-            IFormatter formatter = new BinaryFormatter();
+            IFormatter formatter = new BinaryFormatter
+            {
+                Binder = new BinaryFormatterSerializationBinder()
+            };
             stream.Seek(0, SeekOrigin.Begin);
             return (T)formatter.Deserialize(stream);
 #else
@@ -46,4 +54,15 @@ namespace InstagramApiSharp.Helpers
             return JsonConvert.DeserializeObject<T>(json);
         }
     }
+#if NETFRAMEWORK || NETSTANDARD
+    class BinaryFormatterSerializationBinder : System.Runtime.Serialization.SerializationBinder
+    {
+        public override Type BindToType(string assemblyName, string typeName)
+        {
+            if (typeName.Equals(typeof(StateData).FullName))
+                return typeof(StateData);
+            return null;
+        }
+    }
+#endif
 }

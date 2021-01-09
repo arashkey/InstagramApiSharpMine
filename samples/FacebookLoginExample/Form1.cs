@@ -66,11 +66,13 @@ namespace FacebookLoginExample
             try
             {
                 // remove handler
-                FacebookWebBrowser.DocumentCompleted -= new WebBrowserDocumentCompletedEventHandler(FacebookWebBrowserDocumentCompleted);
+                FacebookWebBrowser.DocumentCompleted -= FacebookWebBrowserDocumentCompleted;
+                FacebookWebBrowser.Navigated -= FacebookWebBrowserNavigated;
             }
             catch { }
             // add handler
-            FacebookWebBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(FacebookWebBrowserDocumentCompleted);
+            FacebookWebBrowser.DocumentCompleted += FacebookWebBrowserDocumentCompleted;
+            FacebookWebBrowser.Navigated += FacebookWebBrowserNavigated;
 
             // Every time we want to login with another facebook account, we need to clear
             // all cached and cookies for facebook addresses.
@@ -94,45 +96,57 @@ namespace FacebookLoginExample
             }
             while (FacebookWebBrowser.ReadyState != WebBrowserReadyState.Complete);
         }
-        private async void FacebookWebBrowserDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs args)
+        private void FacebookWebBrowserNavigated(object sender, WebBrowserNavigatedEventArgs e)
+        {
+            //fbconnect://success/#granted_scopes=email%2Cads_management%2Cpublic_profile&denied_scopes=..........
+            if (InstaFbHelper.IsLoggedInFromUrl(e.Url.ToString()))
+                DoLogin(e.Url.ToString(), InstaFbHelper.FacebookAddress);
+        }
+        private void FacebookWebBrowserDocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs args)
         {
             try
             {
                 var html = FacebookWebBrowser.DocumentText;
                 if (InstaFbHelper.IsLoggedIn(html))
+                    DoLogin(html, args.Url);
+            }
+            catch { }
+        }
+        async void DoLogin(string html, Uri url)
+        {
+            try
+            {
+                var fbToken = InstaFbHelper.GetAccessToken(html);
+                var cookies = GetUriCookies(url);
+                InstaApi = BuildApi();
+                Text = $"{AppName} Connecting";
+                FacebookWebBrowser.Visible = false;
+                var loginResult = await InstaApi.LoginWithFacebookAsync(fbToken, cookies);
+
+                if (loginResult.Succeeded)
                 {
-                    var cookies = GetUriCookies(args.Url);
-                    var fbToken = InstaFbHelper.GetAccessToken(html);
-
-                    InstaApi = BuildApi();
-                    Text = $"{AppName} Connecting";
-                    var loginResult = await InstaApi.LoginWithFacebookAsync(fbToken, cookies);
-
-                    if (loginResult.Succeeded)
-                    {
-                        Text = $"{AppName} Connected";
-                        GetFeedButton.Visible = true;
-                        SaveSession();
-                    }
-                    else
-                    {
-                        switch (loginResult.Value)
-                        {
-                            case InstaLoginResult.BadPassword:
-                                MessageBox.Show("Wrong Password");
-                                break;
-                            case InstaLoginResult.ChallengeRequired:
-                            case InstaLoginResult.TwoFactorRequired:
-                                MessageBox.Show("You must combine Challenge Example to your project");
-                                break;
-                            default:
-                                MessageBox.Show($"ERR: {loginResult.Value}\r\n{loginResult.Info.Message}");
-                                break;
-                        }
-                        Text = $"{AppName} ERROR";
-                    }
-
+                    Text = $"{AppName} Connected";
+                    GetFeedButton.Visible = true;
+                    SaveSession();
                 }
+                else
+                {
+                    switch (loginResult.Value)
+                    {
+                        case InstaLoginResult.BadPassword:
+                            MessageBox.Show("Wrong Password");
+                            break;
+                        case InstaLoginResult.ChallengeRequired:
+                        case InstaLoginResult.TwoFactorRequired:
+                            MessageBox.Show("You must combine Challenge Example to your project");
+                            break;
+                        default:
+                            MessageBox.Show($"ERR: {loginResult.Value}\r\n{loginResult.Info.Message}");
+                            break;
+                    }
+                    Text = $"{AppName} ERROR";
+                }
+
             }
             catch { }
         }

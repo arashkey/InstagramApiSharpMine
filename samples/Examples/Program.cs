@@ -37,13 +37,15 @@ namespace Examples
                 // create user session data and provide login details
                 var userSession = new UserSessionData
                 {
-                    UserName = "Username",
-                    Password = "Password"
+                    UserName = "username",
+                    Password = "password"
                 };
                 // if you want to set custom device (user-agent) please check this:
                 // https://github.com/ramtinak/InstagramApiSharp/wiki/Set-custom-device(user-agent)
 
-                var delay = RequestDelay.FromSeconds(2, 2);
+                //var delay = RequestDelay.FromSeconds(2, 2);
+
+                var delay = RequestDelay.FromSeconds(1, 1);
                 // create new InstaApi instance using Builder
                 InstaApi = InstaApiBuilder.CreateBuilder()
                     .SetUser(userSession)

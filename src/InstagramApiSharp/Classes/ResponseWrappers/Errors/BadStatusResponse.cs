@@ -13,6 +13,8 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("spam")] public bool Spam { get; set; }
 
+        [JsonProperty("comment_error_key")] public string CommentErrorKey { get; set; }
+
         [JsonProperty("feedback_title")] public string FeedbackTitle { get; set; }
 
         [JsonProperty("feedback_message")] public string FeedbackMessage { get; set; }

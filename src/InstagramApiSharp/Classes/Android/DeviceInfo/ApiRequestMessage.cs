@@ -3,20 +3,28 @@ using InstagramApiSharp.API;
 using InstagramApiSharp.Helpers;
 using Newtonsoft.Json;
 using InstagramApiSharp.API.Versions;
+
 namespace InstagramApiSharp.Classes.Android.DeviceInfo
 {
     internal class ApiRequestChallengeMessage : ApiRequestMessage
     {
-        [JsonProperty("_csrftoken")]
-        public string CsrtToken { get; set; }
     }
     public class ApiRequestMessage
     {
+        
+        private string _phoneId;
         readonly static Random Rnd = new Random();
+        [JsonProperty("jazoest")]
+        public string Jazoest { get; set; }
         [JsonProperty("country_codes")]
-        public string CountryCodes { get; set; } = "[{\"country_code\":\"1\",\"source\":[\"default\"]},{\"country_code\":\"98\",\"source\":[\"uig_via_phone_id\"]}]";
+        public string CountryCodes { get; set; } = "[{\"country_code\":\"1\",\"source\":[\"default\"]}]";
         [JsonProperty("phone_id")]
-        public string PhoneId { get; set; }
+        public string PhoneId { get { return _phoneId; } set { _phoneId = value; Jazoest = ExtensionHelper.GenerateJazoest(value); } }
+        [JsonProperty("enc_password")]
+        public string EncPassword { get; set; }
+
+        [JsonProperty("_csrftoken")]
+        public string CsrfToken { get; set; }
         [JsonProperty("username")]
         public string Username { get; set; }
         [JsonProperty("adid")]
@@ -34,63 +42,26 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         [JsonProperty("login_attempt_count")]
         public string LoginAttemptCount { get; set; } = "0";
         public static ApiRequestMessage CurrentDevice { get; private set; }
-        internal string GetMessageString()
+        internal string GetMessageString(bool isNewerApi)
         {
-            var json = JsonConvert.SerializeObject(this);
+            var pass = Password;
+            if (isNewerApi)
+                Password = null;
+            var json = JsonConvert.SerializeObject(this,
+                            Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore
+                            });
+            Password = pass;
             return json;
         }
-        internal string GetChallengeMessageString(string csrfToken)
-        {
-            var api = new ApiRequestChallengeMessage
-            {
-                CsrtToken = csrfToken,
-                DeviceId = DeviceId,
-                Guid = Guid,
-                LoginAttemptCount = "0",
-                Password = Password,
-                PhoneId = PhoneId,
-                Username = Username,
-                AdId = AdId,
-                CountryCodes = CountryCodes
-            };
-            var json = JsonConvert.SerializeObject(api);
-            return json;
-        }
-        internal string GetMessageStringForChallengeVerificationCodeSend(int Choice = 1)
-        {
-            return JsonConvert.SerializeObject(new { choice = Choice.ToString(), _csrftoken = "ReplaceCSRF", Guid, DeviceId });
-        }
-        internal string GetChallengeVerificationCodeSend(string verify)
-        {
-            return JsonConvert.SerializeObject(new { security_code = verify, _csrftoken = "ReplaceCSRF", Guid, DeviceId });
-        }
-        internal string GenerateSignature(InstaApiVersion apiVersion, string signatureKey, out string deviceid)
+        internal string GenerateSignature(InstaApiVersion apiVersion, string signatureKey, bool isNewerApi, out string deviceid)
         {
             if (string.IsNullOrEmpty(signatureKey))
                 signatureKey = apiVersion.SignatureKey;
             var res = CryptoHelper.CalculateHash(signatureKey,
-                JsonConvert.SerializeObject(this));
-            deviceid = DeviceId;
-            return res;
-        }
-        internal string GenerateChallengeSignature(InstaApiVersion apiVersion, string signatureKey,string csrfToken, out string deviceid)
-        {
-            if (string.IsNullOrEmpty(signatureKey))
-                signatureKey = apiVersion.SignatureKey;
-            var api = new ApiRequestChallengeMessage
-            {
-                CsrtToken = csrfToken,
-                DeviceId = DeviceId,
-                Guid = Guid,
-                LoginAttemptCount = "0",
-                Password = Password,
-                PhoneId = PhoneId,
-                Username = Username,
-                AdId = AdId,
-                CountryCodes = CountryCodes
-            };
-            var res = CryptoHelper.CalculateHash(signatureKey,
-                JsonConvert.SerializeObject(api));
+                GetMessageString(isNewerApi));
             deviceid = DeviceId;
             return res;
         }

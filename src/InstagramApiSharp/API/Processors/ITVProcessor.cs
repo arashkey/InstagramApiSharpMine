@@ -20,6 +20,64 @@ namespace InstagramApiSharp.API.Processors
     public interface ITVProcessor
     {
         /// <summary>
+        ///     Add live broadcast to IGTV [ Save live as IGTV ]
+        /// </summary>
+        /// <param name="broadcastId">Broadcast identifier</param>
+        /// <param name="cover">Image cover for IGTV [MOST BE IN VERTICAL]</param>
+        /// <param name="title">Title</param>
+        /// <param name="description">Description</param>
+        /// <param name="sharePreviewToFeed">Show a preview on the feed</param>
+        /// <param name="igtvSeriesId">Igtv series indentifier => Optional => adds this video to a specific TV series.</param>
+        Task<IResult<bool>> AddLiveBroadcastToTVAsync(string broadcastId, InstaImage cover, string title,
+            string description, bool sharePreviewToFeed = false, string igtvSeriesId = null);
+        /// <summary>
+        ///     Get creating tools availability for IG TV
+        /// </summary>
+        Task<IResult<bool>> GetTVCreationToolsAsync();
+        /// <summary>
+        ///     Get TV series of specific user
+        /// </summary>
+        /// <param name="userId">User id (pk) => channel owner</param>
+        Task<IResult<InstaTV>> GetUserTVSeriesAsync(long userId);
+        /// <summary>
+        ///     Remove episode from a TV series
+        /// </summary>
+        /// <param name="seriesId">TV series identifier</param>
+        /// <param name="mediaPk">Media pk</param>
+        Task<IResult<bool>> RemoveEpisodeFromTVSeriesAsync(string seriesId, string mediaPk);
+        /// <summary>
+        ///     Add episode to a TV series
+        /// </summary>
+        /// <param name="seriesId">TV series identifier</param>
+        /// <param name="mediaPk">Media pk</param>
+        Task<IResult<bool>> AddEpisodeToTVSeriesAsync(string seriesId, string mediaPk); 
+        /// <summary>
+        ///     Update a TV series
+        /// </summary>
+        /// <param name="seriesId">TV series identifier</param>
+        /// <param name="title">Title</param>
+        /// <param name="description">Description</param>
+        Task<IResult<bool>> UpdateTVSeriesAsync(string seriesId, string title, string description);
+        /// <summary>
+        ///     Delete a TV series
+        /// </summary>
+        /// <param name="seriesId">TV series identifier</param>
+        Task<IResult<bool>> DeleteTVSeriesAsync(string seriesId);
+        /// <summary>
+        ///     Create a TV series
+        /// </summary>
+        /// <param name="title">Title</param>
+        /// <param name="description">Description</param>
+        Task<IResult<InstaTVCreateSeries>> CreateTVSeriesAsync(string title, string description);
+
+        /// <summary>
+        ///     Edit TV Media
+        /// </summary>
+        /// <param name="mediaId">TV Identifier</param>
+        /// <param name="title">Title</param>
+        /// <param name="description">Description</param>
+        Task<IResult<InstaMedia>> EditMediaAsync(string mediaId, string title, string description);
+        /// <summary>
         ///     Browse Feed
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>

@@ -6,6 +6,7 @@ using InstagramApiSharp.Logger;
 using InstagramApiSharp.Enums;
 using InstagramApiSharp.Classes.SessionHandlers;
 using System.Net;
+using System.Linq;
 
 namespace InstagramApiSharp.API.Builder
 {
@@ -81,7 +82,7 @@ namespace InstagramApiSharp.API.Builder
                     new HttpRequestProcessor(_delay, _httpClient, _httpHandler, _requestMessage, _logger);
 
             if (_apiVersionType == null)
-                _apiVersionType = InstaApiVersionType.Version100;
+                _apiVersionType = InstaApiVersionType.Version164;
 
             var instaApi = new InstaApi(_user, _logger, _device, _httpRequestProcessor, _apiVersionType.Value, _configureMediaDelay);
             if (_sessionHandler != null)
@@ -114,6 +115,9 @@ namespace InstagramApiSharp.API.Builder
         /// </returns>
         public IInstaApiBuilder UseHttpClient(HttpClient httpClient)
         {
+            if (httpClient != null)
+                httpClient.BaseAddress = new Uri(InstaApiConstants.INSTAGRAM_URL);
+                
             _httpClient = httpClient;
             return this;
         }
@@ -235,10 +239,68 @@ namespace InstagramApiSharp.API.Builder
         /// </returns>
         public IInstaApiBuilder SetHttpRequestProcessor(IHttpRequestProcessor httpRequestProcessor)
         {
+            if (httpRequestProcessor.Client != null)
+                httpRequestProcessor.Client.BaseAddress = new Uri(InstaApiConstants.INSTAGRAM_URL);
+            if (httpRequestProcessor.HttpHandler != null)
+                httpRequestProcessor.HttpHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
             _httpRequestProcessor = httpRequestProcessor;
             return this;
         }
 
+        /// <summary>
+        ///     Try to parse user agent and set it if possible
+        /// </summary>
+        /// <param name="userAgent">User agent</param>
+        /// <param name="deviceGuid">Device Guid, it's _uuid in Instagram requests</param>
+        /// <param name="phoneGuid">Phone Guid, it's phone_id in Instagram requests</param>
+        public IInstaApiBuilder TryParseAndSetUserAgent(string userAgent, string deviceGuid = null, string phoneGuid = null)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(userAgent))
+                    return this;
+                var parts = userAgent.Substring(userAgent.IndexOf(" (") + 2).TrimEnd(')').Split(';')
+                                .Select(xx => xx.Trim())?.ToArray();
+                if (parts?.Length == 9)
+                {
+                    var toDeviceGuid = string.IsNullOrEmpty(deviceGuid) ? Guid.NewGuid() : new Guid(deviceGuid);
+                    var toPhoneGuid = string.IsNullOrEmpty(phoneGuid) ? Guid.NewGuid() : new Guid(phoneGuid);
+
+                    var f1 = parts[0].Split('/');
+                    var lang = parts[7].Replace("_", "-");
+                    var part3 = parts[3].Split('/');
+
+                    var androidVer = new AndroidVersion
+                    {
+                        Codename = f1[0],
+                        APILevel = f1[0],
+                        VersionNumber = f1[1]
+                    };
+                    var device = new AndroidDevice
+                    {
+                        Dpi = parts[1],
+                        Resolution = parts[2],
+                        HardwareManufacturer = part3.Length > 0 ? part3[0] : parts[3],
+                        AndroidBoardName = part3.Length > 1 ? part3[2] : parts[3].ToLower(),
+                        DeviceModelIdentifier = parts[4],
+                        FirmwareBrand = parts[5],
+                        HardwareModel = parts[6],
+                        DeviceGuid = toDeviceGuid,
+                        PhoneGuid = toPhoneGuid,
+                        DeviceId = ApiRequestMessage.GenerateDeviceIdFromGuid(toDeviceGuid),
+                        AndroidVer = androidVer
+                    };
+
+                    InstaApiConstants.ACCEPT_LANGUAGE = lang;
+
+                    return SetDevice(device);
+                }
+            }
+            catch { }
+
+            return this;
+        }
         /// <summary>
         ///     Creates the builder.
         /// </summary>

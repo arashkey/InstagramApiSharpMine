@@ -41,5 +41,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         public string IGBandwidthTotalBytesB { get; set; } = "1219685";
         public string IGBandwidthTotalTimeMS { get; set; } = "949";
 
+        public const string CPU_ABI = "armeabi-v7a:armeabi";
+
     }
 }

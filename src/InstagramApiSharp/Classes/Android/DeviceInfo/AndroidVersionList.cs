@@ -13,12 +13,6 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
                 new AndroidVersion
                 {
                     Codename = "Lollipop",
-                    VersionNumber = "5.0.0",
-                    APILevel = "21"
-                },
-                new AndroidVersion
-                {
-                    Codename = "Lollipop",
                     VersionNumber = "5.1.0",
                     APILevel = "22"
                 },
@@ -58,12 +52,18 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
                     VersionNumber = "9.0.0",
                     APILevel = "28"
                 },
-                //new AndroidVersion
-                //{
-                //    Codename = "Q",
-                //    VersionNumber = "10.0.0",
-                //    APILevel = "29"
-                //}
+                new AndroidVersion
+                {
+                    Codename = "Android 10",
+                    VersionNumber = "10.0.0",
+                    APILevel = "29"
+                },
+                new AndroidVersion
+                {
+                    Codename = "Android 11",
+                    VersionNumber = "11.0.0",
+                    APILevel = "30"
+                }
             };
         }
     }

@@ -38,7 +38,8 @@ namespace InstagramApiSharp.Classes.Models
 
         public int MediaCount { get; set; }
         public string ReelType { get; set; }
-        public bool IsHashtag => /*ReelType?.ToLower() == "mas_reel" && */Id.ToLower().StartsWith("tag:");
+        public bool IsHashtag => Id.ToLower().StartsWith("tag:");
+        public bool IsElection => Id.ToLower().StartsWith("election:");
         public InstaHashtagOwner Owner { get; set; }
         public bool Muted { get; set; }
         string _title = null;

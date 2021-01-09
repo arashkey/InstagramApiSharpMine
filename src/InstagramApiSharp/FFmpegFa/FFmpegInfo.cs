@@ -1,4 +1,4 @@
-﻿#if !WINDOWS_UWP && !NETSTANDARD
+﻿#if NETSTANDARD
 
 /*
  * Credit Ramtin Jokar

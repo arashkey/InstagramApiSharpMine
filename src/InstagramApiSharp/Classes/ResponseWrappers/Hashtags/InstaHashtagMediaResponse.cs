@@ -62,6 +62,8 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public List<InstaMediaAlbumResponse> Medias { get; set; }
         [JsonProperty("full_item")]
         public InstaSectionChannelLayoutContentResponse ChannelContainer { get; set; }
+        [JsonProperty("two_by_two_item")]
+        public InstaSectionChannelLayoutContentResponse ChannelContainerX2 { get; set; }
     }
     public class InstaSectionChannelLayoutContentResponse
     {

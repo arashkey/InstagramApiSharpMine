@@ -17,6 +17,7 @@ using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -51,6 +52,38 @@ namespace InstagramApiSharp.API.Processors
         }
 
 
+        public async Task<IResult<bool>> DismissUserSuggestionAsync(string targetIdHashtagIdOrStoryId, string algorithm = "ig_normal_followings_of_normal_followings_algorithm")
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetDismissDiscoverUserSuggestionUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"target_id", targetIdHashtagIdOrStoryId},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"algorithm", algorithm},
+                };
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
         /// <summary>
         ///     Clear Recent searches
         /// </summary>
@@ -354,31 +387,95 @@ namespace InstagramApiSharp.API.Processors
         ///     Search user people
         /// </summary>
         /// <param name="query">Text to search</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="count">Count</param>
-        public async Task<IResult<InstaDiscoverSearchResult>> SearchPeopleAsync(string query, int count = 30)
+        public async Task<IResult<InstaDiscoverSearchResult>> SearchPeopleAsync(string query, PaginationParameters paginationParameters, int count = 30)
+        {
+            var searchResult = new InstaDiscoverSearchResult();
+            try
+            {
+
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+                InstaDiscoverSearchResult Convert(InstaDiscoverSearchResultResponse discoverSearchResultResponse)
+                {
+                    return ConvertersFabric.Instance.GetDiscoverSearchResultConverter(discoverSearchResultResponse).Convert();
+                }
+                var search = await SearchPeople(query, paginationParameters, count);
+                if (!search.Succeeded)
+                {
+                    if (search.Value != null)
+                        return Result.Fail(search.Info, Convert(search.Value));
+                    else
+                        return Result.Fail(search.Info, (InstaDiscoverSearchResult)null);
+                }
+                var searchResponse = search.Value;
+                searchResult = Convert(searchResponse);
+                if (searchResponse.Users?.Count > 0)
+                    paginationParameters.ExcludeList.AddRange(searchResponse.Users.Select(i => i.Pk));
+                paginationParameters.RankToken = searchResponse.RankToken;
+                if (searchResponse.HasMore != null)
+                    paginationParameters.NextMaxId = searchResponse.HasMore.HasValue ? "TRUE" : null;
+                else paginationParameters.NextMaxId = null;
+
+                while (searchResponse.HasMore != null && searchResponse.HasMore.HasValue
+                && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
+                && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
+                {
+                    var nextSearch = await SearchPeople(query, paginationParameters, count);
+                    if (!nextSearch.Succeeded)
+                        return Result.Fail(nextSearch.Info, searchResult);
+                    var nextSearchResponse = nextSearch.Value;
+                    if (nextSearchResponse.Users?.Count > 0)
+                        paginationParameters.ExcludeList.AddRange(nextSearchResponse.Users.Select(i => i.Pk));
+                    paginationParameters.RankToken = nextSearchResponse.RankToken;
+                    if (searchResponse.HasMore != null)
+                        paginationParameters.NextMaxId = nextSearchResponse.HasMore.HasValue ? "TRUE" : null;
+                    else paginationParameters.NextMaxId = null;
+                    searchResponse.HasMore = nextSearchResponse.HasMore;
+                    searchResponse.NumResults = nextSearchResponse.NumResults;
+                    searchResponse.RankToken = nextSearchResponse.RankToken;
+                    searchResponse.Users.AddRange(nextSearchResponse.Users);
+                    paginationParameters.PagesLoaded++;
+                }
+                searchResult = Convert(searchResponse);
+                return Result.Success(searchResult);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, searchResult, ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, searchResult);
+            }
+        }
+        async Task<IResult<InstaDiscoverSearchResultResponse>> SearchPeople(string query, PaginationParameters paginationParameters, int count = 30)
         {
             try
             {
-                var instaUri = UriCreator.GetSearchUserUri(query, count);
+                var instaUri = UriCreator.GetSearchUserUri(query, count, paginationParameters.ExcludeList, paginationParameters.RankToken);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
-                    return Result.UnExpectedResponse<InstaDiscoverSearchResult>(response, json);
+                    return Result.UnExpectedResponse<InstaDiscoverSearchResultResponse>(response, json);
 
                 var obj = JsonConvert.DeserializeObject<InstaDiscoverSearchResultResponse>(json);
-                return Result.Success(ConvertersFabric.Instance.GetDiscoverSearchResultConverter(obj).Convert());
+                return Result.Success(obj);
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaDiscoverSearchResult), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, default(InstaDiscoverSearchResultResponse), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaDiscoverSearchResult>(exception);
+                return Result.Fail<InstaDiscoverSearchResultResponse>(exception);
             }
         }
         #region Other functions

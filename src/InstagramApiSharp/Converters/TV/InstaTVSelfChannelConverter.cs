@@ -32,7 +32,9 @@ namespace InstagramApiSharp.Converters
                 Id = SourceObject.Id,
                 MaxId = SourceObject.MaxId,
                 Title = SourceObject.Title,
-                Type = SourceObject.Type
+                Type = SourceObject.Type,
+                ApproxTotalVideos = SourceObject.ApproxTotalVideos ?? 0,
+                Description = SourceObject.Description
             };
 
             if (SourceObject.Items != null && SourceObject.Items.Any())

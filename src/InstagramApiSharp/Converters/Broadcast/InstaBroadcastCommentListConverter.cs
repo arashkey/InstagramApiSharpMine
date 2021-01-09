@@ -25,7 +25,7 @@ namespace InstagramApiSharp.Converters
                 CaptionIsEdited = SourceObject.CaptionIsEdited ?? false,
                 CommentCount = SourceObject.CommentCount ?? 0,
                 CommentLikesEnabled = SourceObject.CommentLikesEnabled ?? false,
-                CommentMuted = SourceObject.CommentMuted ?? 0,
+                CommentMuted = System.Convert.ToBoolean(SourceObject.CommentMuted ?? 0),
                 HasMoreComments = SourceObject.HasMoreComments ?? false,
                 HasMoreHeadloadComments = SourceObject.HasMoreHeadloadComments ?? false,
                 IsFirstFetch = SourceObject.IsFirstFetch,

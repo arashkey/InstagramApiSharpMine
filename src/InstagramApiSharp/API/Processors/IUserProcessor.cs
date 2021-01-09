@@ -12,6 +12,18 @@ namespace InstagramApiSharp.API.Processors
     public interface IUserProcessor
     {
         /// <summary>
+        ///     
+        /// </summary>
+        Task<IResult<bool>> MarkDiscoverMarkSuSeenAsync();
+        /// <summary>
+        ///     Mark activities news inbox
+        /// </summary>
+        Task<IResult<bool>> MarkActivitesInboxSeenAsync();
+        /// <summary>
+        ///     Get recent followers.
+        /// </summary>
+        Task<IResult<InstaPendingRequest>> GetRecentFollowersAsync();
+        /// <summary>
         ///     Get mutual friends or suggestions for an specific id
         /// </summary>
         /// <param name="userId">User id/pk</param>
@@ -56,7 +68,8 @@ namespace InstagramApiSharp.API.Processors
         ///     Follow user
         /// </summary>
         /// <param name="userId">User id</param>
-        Task<IResult<InstaFriendshipFullStatus>> FollowUserAsync(long userId);
+        Task<IResult<InstaFriendshipFullStatus>> FollowUserAsync(long userId,
+            InstaMediaSurfaceType surfaceType = InstaMediaSurfaceType.None, string mediaIdAttribution = null);
 
         /// <summary>
         ///     Get self best friends (besties)
@@ -175,11 +188,14 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="username">Username</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="searchQuery">Search string to locate specific followers</param>
+        /// <param name="mutualsfirst">Mutual followers</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
+        /// <param name="orderBy">Order by latest, earliest or default</param>
         /// <returns>
         ///     <see cref="InstaUserShortList" />
         /// </returns>
         Task<IResult<InstaUserShortList>> GetUserFollowersAsync(string username,
-            PaginationParameters paginationParameters, string searchQuery = "", bool mutualsfirst = false);
+            PaginationParameters paginationParameters, string searchQuery = "", bool mutualsfirst = false, string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default);
 
         /// <summary>
         ///     Get followers list by user id(pk) asynchronously
@@ -187,11 +203,14 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="userId">User id(pk)</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="searchQuery">Search string to locate specific followers</param>
+        /// <param name="mutualsfirst">Mutual followers</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
+        /// <param name="orderBy">Order by latest, earliest or default</param>
         /// <returns>
         ///     <see cref="InstaUserShortList" />
         /// </returns>
         Task<IResult<InstaUserShortList>> GetUserFollowersByIdAsync(long userId,
-            PaginationParameters paginationParameters, string searchQuery = "", bool mutualsfirst = false);
+            PaginationParameters paginationParameters, string searchQuery = "", bool mutualsfirst = false, string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default);
 
         /// <summary>
         ///     Get following list by username asynchronously
@@ -200,11 +219,12 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="searchQuery">Search string to locate specific followings</param>
         /// <param name="orderBy">Order by latest, earliest or default</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
         /// <returns>
         ///     <see cref="InstaUserShortList" />
         /// </returns>
         Task<IResult<InstaUserShortList>> GetUserFollowingAsync(string username,
-            PaginationParameters paginationParameters, string searchQuery = "", InstaFollowingOrderType orderBy = InstaFollowingOrderType.Default);
+            PaginationParameters paginationParameters, string searchQuery = "", InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null);
 
         /// <summary>
         ///     Get following list by user id(pk) asynchronously
@@ -213,11 +233,12 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="searchQuery">Search string to locate specific followings</param>
         /// <param name="orderBy">Order by latest, earliest or default</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
         /// <returns>
         ///     <see cref="InstaUserShortList" />
         /// </returns>
         Task<IResult<InstaUserShortList>> GetUserFollowingByIdAsync(long userId,
-            PaginationParameters paginationParameters, string searchQuery = "", InstaFollowingOrderType orderBy = InstaFollowingOrderType.Default);
+            PaginationParameters paginationParameters, string searchQuery = "", InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null);
 
         /// <summary>
         ///     Gets the user extended information (followers count, following count, bio, etc) by user identifier.
@@ -342,7 +363,8 @@ namespace InstagramApiSharp.API.Processors
         ///     Stop follow user
         /// </summary>
         /// <param name="userId">User id</param>
-        Task<IResult<InstaFriendshipFullStatus>> UnFollowUserAsync(long userId);
+        Task<IResult<InstaFriendshipFullStatus>> UnFollowUserAsync(long userId,
+            InstaMediaSurfaceType surfaceType = InstaMediaSurfaceType.None, string mediaIdAttribution = null);
         
         /// <summary>
         ///     Unhide my story from specific user

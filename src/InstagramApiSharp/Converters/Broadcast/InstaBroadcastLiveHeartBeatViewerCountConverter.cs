@@ -10,6 +10,7 @@
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using System;
+using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.Converters
 {
@@ -23,13 +24,17 @@ namespace InstagramApiSharp.Converters
             if (SourceObject == null) throw new ArgumentNullException($"Source object");
             var heartbeat = new InstaBroadcastLiveHeartBeatViewerCount
             {
-                BroadcastStatus = SourceObject.BroadcastStatus,
                 CobroadcasterIds = SourceObject.CobroadcasterIds,
                 IsTopLiveEligible = SourceObject.IsTopLiveEligible,
                 OffsetToVideoStart = SourceObject.OffsetToVideoStart,
                 TotalUniqueViewerCount = SourceObject.TotalUniqueViewerCount,
                 ViewerCount = SourceObject.ViewerCount
             };
+            try
+            {
+                heartbeat.BroadcastStatusType = (InstaBroadcastStatusType)Enum.Parse(typeof(InstaBroadcastStatusType), SourceObject.BroadcastStatus?.Replace("_", ""), true);
+            }
+            catch { }
             return heartbeat;
         }
     }

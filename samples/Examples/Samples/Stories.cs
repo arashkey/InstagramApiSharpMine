@@ -153,7 +153,7 @@ namespace Examples.Samples
             // First Answer
             quiz.Options.Add(new InstaStoryQuizAnswer
             {
-                Text = "Me" 
+                Text = "Me"
             });
             // Second Answer
             quiz.Options.Add(new InstaStoryQuizAnswer

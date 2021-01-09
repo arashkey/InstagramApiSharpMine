@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
-
+using InstagramApiSharp.Enums;
 namespace InstagramApiSharp.API.Processors
 {
     /// <summary>
@@ -91,7 +91,10 @@ namespace InstagramApiSharp.API.Processors
         ///     Like media (photo or video)
         /// </summary>
         /// <param name="mediaId">Media id</param>
-        Task<IResult<bool>> LikeMediaAsync(string mediaId);
+        Task<IResult<bool>> LikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
+            uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
+            bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
+            string parentMediaPK = null, string chainingSessionId = null);
 
         /// <summary>
         ///     Report media
@@ -117,7 +120,10 @@ namespace InstagramApiSharp.API.Processors
         ///     Remove like from media (photo or video)
         /// </summary>
         /// <param name="mediaId">Media id</param>
-        Task<IResult<bool>> UnLikeMediaAsync(string mediaId);
+        Task<IResult<bool>> UnLikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
+            uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
+            bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
+            string parentMediaPK = null, string chainingSessionId = null);
 
         /// <summary>
         ///     Unsave media
@@ -195,5 +201,13 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="caption">Caption</param>
         /// <param name="location">Location => Optional (get it from <seealso cref="LocationProcessor.SearchLocationAsync"/></param>
         Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string caption, InstaLocationShort location = null);
+
+        /// <summary>
+        ///     Upload segmented video to timeline
+        /// </summary>
+        /// <param name="video">Video to upload</param>
+        /// <param name="caption">Caption</param>
+        /// <param name="location">Location => Optional (get it from <seealso cref="LocationProcessor.SearchLocationAsync"/></param>
+        Task<IResult<InstaMedia>> UploadSegmentedVideoAsync(InstaSegmentedVideoUpload video, string caption, InstaLocationShort location = null);
     }
 }

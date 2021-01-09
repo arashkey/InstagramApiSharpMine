@@ -410,6 +410,12 @@ namespace InstagramApiSharp.API.Processors
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
+                if (json?.ToLower() == "private media")
+                    return Result.Fail("Private media", ResponseType.PrivateMedia, default(string));
+
+                if (json?.ToLower() == "no media match")
+                    return Result.Fail("No Media Match", ResponseType.NoMediaMatch, default(string));
+
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<string>(response, json);
 
@@ -500,9 +506,13 @@ namespace InstagramApiSharp.API.Processors
         ///     Like media (photo or video)
         /// </summary>
         /// <param name="mediaId">Media id</param>
-        public async Task<IResult<bool>> LikeMediaAsync(string mediaId)
+        public async Task<IResult<bool>> LikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
+            uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
+            bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
+            string parentMediaPK = null, string chainingSessionId = null)
         {
-            return await LikeUnlikeArchiveUnArchiveMediaInternal(mediaId, UriCreator.GetLikeMediaUri(mediaId));
+            return await LikeUnlikeMediaInternal(UriCreator.GetLikeMediaUri(mediaId), mediaId, containerModule,
+               feedPosition, inventorySource, isCarouselBumpedPost, carouselIndex, exploreSourceToken, parentMediaPK, chainingSessionId);
         }
 
         /// <summary>
@@ -593,9 +603,13 @@ namespace InstagramApiSharp.API.Processors
         ///     Remove like from media (photo or video)
         /// </summary>
         /// <param name="mediaId">Media id</param>
-        public async Task<IResult<bool>> UnLikeMediaAsync(string mediaId)
+        public async Task<IResult<bool>> UnLikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
+           uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
+            bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
+            string parentMediaPK = null, string chainingSessionId = null)
         {
-            return await LikeUnlikeArchiveUnArchiveMediaInternal(mediaId, UriCreator.GetUnLikeMediaUri(mediaId));
+            return await LikeUnlikeMediaInternal(UriCreator.GetUnLikeMediaUri(mediaId), mediaId, containerModule,
+               feedPosition, inventorySource, isCarouselBumpedPost, carouselIndex, exploreSourceToken, parentMediaPK, chainingSessionId);
         }
 
         /// <summary>
@@ -1154,7 +1168,17 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaMedia>(exception);
             }
         }
-
+        /// <summary>
+        ///     Upload segmented video to timeline 
+        /// </summary>
+        /// <param name="video">Video to upload</param>
+        /// <param name="caption">Caption</param>
+        /// <param name="location">Location => Optional (get it from <seealso cref="LocationProcessor.SearchLocationAsync"/></param>
+        public async Task<IResult<InstaMedia>> UploadSegmentedVideoAsync(InstaSegmentedVideoUpload video, string caption, InstaLocationShort location = null)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            return await _instaApi.HelperProcessor.SendSegmentedVideoAsync(video, caption, location);
+        }
         private async Task<IResult<InstaMedia>> ConfigureAlbumAsync(Action<InstaUploaderProgress> progress, InstaUploaderProgress upProgress, Dictionary<string, InstaImageUpload> imagesUploadIds, Dictionary<string, InstaVideoUpload> videos, string caption, InstaLocationShort location)
         {
             try
@@ -1335,12 +1359,12 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("usertags", root.ToString(Formatting.None));
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, UriCreator.GetMediaUploadFinishUri(), _deviceInfo, data);
-                request.Headers.Host = "i.instagram.com";
+                
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
                 request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Host = "i.instagram.com";
+                
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
@@ -1377,6 +1401,59 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaMedia>(exception);
             }
         }
+        private async Task<IResult<bool>> LikeUnlikeMediaInternal(Uri instaUri, string mediaId,
+            InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
+            uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None, bool? isCarouselBumpedPost = false,
+            int? carouselIndex = null, string exploreSourceToken = null, string parentMediaPK = null, string chainingSessionId = null)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var data = new Dictionary<string, string>
+                {
+                    {"media_id", mediaId},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"radio_type", "wifi-none"},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"feed_position", feedPosition.ToString()},
+                };
+                var containerType = containerModule.GetContainerType();
+                var inventorySourceString = inventorySource.GetInvetorySourceType();
+                if (!string.IsNullOrEmpty(inventorySourceString))
+                    data.Add("inventory_source", inventorySourceString);
+                if (!string.IsNullOrEmpty(containerType))
+                    data.Add("container_module", containerType);
+                if (isCarouselBumpedPost != null)
+                    data.Add("is_carousel_bumped_post", isCarouselBumpedPost.Value.ToString().ToLower());
+                if (carouselIndex != null)
+                    data.Add("carousel_index", carouselIndex.Value.ToString());
+                if (!string.IsNullOrEmpty(exploreSourceToken))
+                    data.Add("explore_source_token", exploreSourceToken);
+                if (!string.IsNullOrEmpty(parentMediaPK))
+                    data.Add("parent_m_pk", parentMediaPK);
+                if (!string.IsNullOrEmpty(chainingSessionId))
+                    data.Add("chaining_session_id", chainingSessionId);
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data, true);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                return response.StatusCode == HttpStatusCode.OK
+                    ? Result.Success(true)
+                    : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                return Result.Fail<bool>(exception);
+            }
+        }
+
         private async Task<IResult<bool>> ArchiveUnArchiveMediaInternal(string mediaId, Uri instaUri)
         {
             UserAuthValidator.Validate(_userAuthValidate);

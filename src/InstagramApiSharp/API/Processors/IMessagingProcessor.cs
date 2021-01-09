@@ -11,6 +11,68 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IMessagingProcessor
     {
+
+        /// <summary>
+        ///     Mark direct visual message as seen
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        /// <param name="itemId">Message id (item id)</param>
+        Task<IResult<bool>> MarkDirectVisualThreadAsSeenAsync(string threadId, string itemId);
+        /// <summary>
+        ///     Send direct ar effect
+        /// </summary>
+        /// <param name="effectId">Effect id</param>
+        /// <param name="queryId">Query id</param>
+        /// <param name="threadIds">Thread ids</param>
+        Task<IResult<bool>> SendDirectArEffectAsync(string effectId, string queryId, params string[] threadIds);
+        /// <summary>
+        ///     Send/share product to direct thread
+        /// </summary>
+        /// <param name="merchantId">Merchant id</param>
+        /// <param name="productId">Product id</param>
+        /// <param name="threadIds">Thread ids</param>
+        Task<IResult<InstaDirectRespondPayload>> SendDirectProductAsync(string merchantId, string productId, params string[] threadIds);
+        Task<IResult<InstaDirectInboxThread>> GetThreadByParticipantsAsync(int seqId, params long[] userIds);
+        /// <summary>
+        ///     Create group thread
+        /// </summary>
+        /// <param name="title">Group title</param>
+        /// <param name="userIds">User ids (pk)</param>
+        Task<IResult<InstaDirectInboxThread>> CreateGroupAsync(string title, params long[] userIds);
+        /// <summary>
+        ///    Remove a user from group thread
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        /// <param name="userId">User id (pk)</param>
+        Task<IResult<bool>> RemoveUserFromGroupAsync(string threadId, long userId);
+        /// <summary>
+        ///    Add new admin for group thread
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        /// <param name="userId">User id (pk)</param>
+        Task<IResult<bool>> AddNewGroupAdminAsync(string threadId, long userId);
+
+        /// <summary>
+        ///    Remove group thread's admin
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        /// <param name="userId">User id (pk)</param>
+        Task<IResult<bool>> RemoveGroupAdminAsync(string threadId, long userId);
+        /// <summary>
+        ///    Approval is NOT required for new members in group [Admin Only]
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        Task<IResult<bool>> DisableApprovalForJoiningDirectThreadAsync(string threadId);
+        /// <summary>
+        ///     Approval required for new members in group [Admin Only]
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        Task<IResult<bool>> EnableApprovalForJoiningDirectThreadAsync(string threadId);
+        /// <summary>
+        ///     End chat for a direct group will remove group members from the group
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        Task<IResult<bool>> EndChatDirectThreadAsync(string threadId);
         /// <summary>
         ///     Add users to group thread
         /// </summary>
@@ -213,7 +275,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="hashtag">Hashtag to send</param>
         /// <param name="threadIds">Thread ids</param>
         /// <returns>Returns True if hashtag sent</returns>
-        Task<IResult<bool>> SendDirectHashtagAsync(string text, string hashtag, params string[] threadIds);
+        Task<IResult<InstaDirectRespondPayload>> SendDirectHashtagAsync(string text, string hashtag, params string[] threadIds);
 
         /// <summary>
         ///     Send hashtag to direct thread
@@ -223,7 +285,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadIds">Thread ids</param>
         /// <param name="recipients">Recipients ids</param>
         /// <returns>Returns True if hashtag sent</returns>
-        Task<IResult<bool>> SendDirectHashtagAsync(string text, string hashtag, string[] threadIds, string[] recipients);
+        Task<IResult<InstaDirectRespondPayload>> SendDirectHashtagAsync(string text, string hashtag, string[] threadIds, string[] recipients);
 
         /// <summary>
         ///     Send hashtag to direct thread
@@ -232,7 +294,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="hashtag">Hashtag to send</param>
         /// <param name="recipients">Recipients ids</param>
         /// <returns>Returns True if hashtag sent</returns>
-        Task<IResult<bool>> SendDirectHashtagToRecipientsAsync(string text, string hashtag, params string[] recipients);
+        Task<IResult<InstaDirectRespondPayload>> SendDirectHashtagToRecipientsAsync(string text, string hashtag, params string[] recipients);
 
         /// <summary>
         ///     Send link address to direct thread
@@ -268,7 +330,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="externalId">External id (get it from <seealso cref="LocationProcessor.SearchLocationAsync"/></param>
         /// <param name="threadIds">Thread ids</param>
         /// <returns>Returns True if location sent</returns>
-        Task<IResult<bool>> SendDirectLocationAsync(string externalId, params string[] threadIds);
+        Task<IResult<InstaDirectRespondPayload>> SendDirectLocationAsync(string externalId, params string[] threadIds);
 
         /// <summary>
         ///     Send photo to direct thread (single) with progress

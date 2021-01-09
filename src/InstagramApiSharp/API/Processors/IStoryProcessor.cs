@@ -12,6 +12,11 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IStoryProcessor
     {
+        /// <summary>
+        ///     Get user story and lives
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        Task<IResult<InstaStoryAndLives>> GetUserStoryAndLivesAsync(long userId);
 
         /// <summary>
         ///     Request for joing chats from story
@@ -167,6 +172,13 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="storiesWithTakenAt">Story media identifier with taken at unix times</param>
         Task<IResult<bool>> MarkMultipleStoriesAsSeenAsync(Dictionary<string, long> storiesWithTakenAt);
+
+        /// <summary>
+        ///     Seen multiple election stories
+        /// </summary>
+        /// <param name="storiesWithTakenAt">Story media identifier with taken at unix times</param>
+        Task<IResult<bool>> MarkMultipleElectionStoriesAsSeenAsync(List<InstaStoryElectionKeyValue> storiesWithTakenAt);
+
         /// <summary>
         ///     Seen story
         /// </summary>
@@ -372,6 +384,12 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadIds">Thread ids</param>
         Task<IResult<bool>> UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, Uri uri,
             InstaStoryType storyType = InstaStoryType.SelfStory, InstaStoryUploadOptions uploadOptions = null, params string[] threadIds);
+
+        /// <summary>
+        ///     Validate uri for adding to story link
+        /// </summary>
+        /// <param name="uri">Uri address</param>
+        Task<IResult<bool>> ValidateUriAsync(Uri uri);
 
         /// <summary>
         ///     Vote to an story poll
