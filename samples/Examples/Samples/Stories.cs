@@ -250,6 +250,10 @@ namespace Examples.Samples
 
                     // Vote So story slider
                     VoteToStorySlider(result);
+
+
+                    // Send story reaction
+                    SendStoryReaction(result);
                 }
             }
         }
@@ -360,7 +364,6 @@ namespace Examples.Samples
         }
 
 
-
         public async void VoteToStorySlider(InstaStory reelStory)
         {
             var storyItem = reelStory.Items.FirstOrDefault(x => x.StorySliders?.Count > 1); // choose a story that has a Story slider
@@ -384,6 +387,23 @@ namespace Examples.Samples
                    .VoteStorySliderAsync(storyItem.Id, storySlider.SliderSticker.SliderId.ToString(), myAnswer);
             Console.WriteLine($"{storyItem.Id} '{storySlider.SliderSticker.Question}'\t\t" +
                 $"answered to: {storySlider.SliderSticker.SliderId} '{myAnswer * 10} / 10' result: {result.Succeeded}");
+        }
+
+
+        public async void SendStoryReaction(InstaStory reelStory)
+        {
+            var storyItem = reelStory.Items[0]; // choose a story
+
+            // note that don't send anything except these stickers!
+            var allReactionsText = new[] { "😂", "😮", "😍", "😢", "👏", "🔥", "🎉", "💯" };
+
+            // choose one above reactions!
+            var myReaction = allReactionsText.LastOrDefault(); // 💯
+
+            var result = await InstaApi.StoryProcessor
+                                 .SendReactionToStoryAsync(storyItem.User.Pk, storyItem.Id, myReaction);
+
+            Console.WriteLine($"{storyItem.Id}\t\treacted {myReaction} result: {result.Succeeded}");
         }
     }
 }
