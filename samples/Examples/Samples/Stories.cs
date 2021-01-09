@@ -236,9 +236,14 @@ namespace Examples.Samples
 
                     // Vote to Story Poll
                     VoteStoryPolls(result);
+
+                    // Answer to Story question
+                    AnswerToStoryQuestion(result);
                 }
             }
         }
+
+
         public async void MarkStoryAsSeen(InstaStory reelStory)
         {
             var storyItem1 = reelStory.Items[0]; // choose a story
@@ -291,7 +296,30 @@ namespace Examples.Samples
             var votePoll = await InstaApi.StoryProcessor.VoteStoryPollAsync(storyItem.Id,
                 storyPoll.PollSticker.PollId.ToString(), myVote);
 
-            Console.WriteLine($"{storyItem.Id} voted to {storyPoll.PollSticker.PollId} as {myVote} result: {votePoll.Succeeded}");
+            Console.WriteLine($"{storyItem.Id} '{storyPoll.PollSticker.Question}'\t\tvoted to {storyPoll.PollSticker.PollId} as {myVote} result: {votePoll.Succeeded}");
         }
+
+
+        public async void AnswerToStoryQuestion(InstaStory reelStory)
+        {
+            var storyItem = reelStory.Items.FirstOrDefault(x => x.StoryQuestions?.Count > 1); // choose a story that has a Story question
+            if (storyItem == null)
+            {
+                Console.WriteLine("No story question exist.");
+                return;
+            }
+
+            var storyQuestion = storyItem.StoryQuestions[0]; // gets first story question
+
+            var myAnswer = "I'm with InstagramApiSharp's library";
+            myAnswer = myAnswer.Trim().Replace("\r", ""); // trim and replace \r
+
+            var answerToQuestion = await InstaApi.StoryProcessor
+                .AnswerToStoryQuestionAsync(storyItem.Id, storyQuestion.QuestionSticker.QuestionId, myAnswer);
+
+            Console.WriteLine($"{storyItem.Id} '{storyQuestion.QuestionSticker.Question}'\t\t" +
+                $"answered to: {storyQuestion.QuestionSticker.QuestionId} as '{myAnswer}' result: {answerToQuestion.Succeeded}");
+        }
+
     }
 }
