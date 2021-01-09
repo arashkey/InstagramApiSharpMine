@@ -113,7 +113,7 @@ EndAsync");
 
                 Console.WriteLine("BroadcastMessage: " + result.Value.BroadcastMessage);
                 Console.WriteLine("BroadcastOwner: " + result.Value.BroadcastOwner);
-                Console.WriteLine("BroadcastStatus: " + result.Value.BroadcastStatus);
+                Console.WriteLine("BroadcastStatus: " + result.Value.BroadcastStatusType);
                 Console.WriteLine("CoverFrameUrl: " + result.Value.CoverFrameUrl);
             }
             else
@@ -198,14 +198,6 @@ EndAsync");
 
                 // get broadcast likes count
                 await InstaApi.LiveProcessor.GetLikeCountAsync(broadcastId, 0);
-
-
-                // add broadcast to post live
-                await InstaApi.LiveProcessor.AddToPostLiveAsync(broadcastId);
-                // delete broadcast from post live
-                await InstaApi.LiveProcessor.DeletePostLiveAsync(broadcastId);
-
-
 
 
                 // end live broadcast

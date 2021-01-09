@@ -11,9 +11,9 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.5.0.0</Version>
-    <AssemblyVersion>2.5.0.0</AssemblyVersion>
-    <FileVersion>2.5.0.0</FileVersion>
+    <Version>2.6.0.0</Version>
+    <AssemblyVersion>2.6.0.0</AssemblyVersion>
+    <FileVersion>2.6.0.0</FileVersion>
     <Description>A complete Private Instagram API for .NET. With Notifications and Realtime client support.
 
 
@@ -38,7 +38,67 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
-    <PackageReleaseNotes>v2.5.0
+    <PackageReleaseNotes>v2.6.0
+- [Deprecate] AddToPostLiveAsync, DeletePostLiveAsync [API deprecated by Instagram]
+- [Bugfix] for serialization/deserialization in .NET 5.0 
+- [Bugfix] for DM last seen
+- [Bugfix] for short comments
+- [Bugfix] for SearchPeopleAsync
+- [Rename] InstaFollowingOrderType to InstaFollowOrderType
+- [Update] UserFollowers Uri
+- [Update] GetUserFollowers functions to support OrderBy
+- [Update] GetGiphyTrendingAsync
+- [Update] SearchGiphyAsync
+- [Update] supported capabalities
+- [Update] ConfirmJoinBroadcastAsync
+- [Update] GetMediaCommentsAsync
+- [Update] GetUserStoryAndLivesAsync url
+- [Update] LikeThreadMessageAsync token
+- [Update] UploadSinglePhoto in HelperProcessor
+- [Update] InstaBroadcastCommentList class
+- [Update] GenerateUserAgent function
+- [Update] GetHashtagSection
+- [Add] TryParseAndSetUserAgent to IInstaApiBuilder
+- [Add] MarkMultipleElectionStoriesAsSeenAsync to StoryProcessor
+- [Add] GetUserTVSeriesAsync to TVProcessor
+- [Add] GetPostLiveThumbnailsAsync to LiveProcessor
+- [Add] GetTVCreationToolsAsync to TVProcessor
+- [Add] GetBytesAsync to HelperProcessor
+- [Add] AddHeader function to HttpExtensions
+- [Add] AddLiveBroadcastToTVAsync to TVProcessor
+- [Add] IsMutingReel, IsBlockingReel properties to InstaFriendshipFullStatus
+- [Add] JoinBroadcastAsync to LiveProcessor 
+- [Add] ConfirmJoinBroadcastAsync to LiveProcessor 
+- [Add] GetLiveTransactionToken to ExtensionHelper
+- [Add] InviteToBroadcastAsync to LiveProcessor 
+- [Add] LeaveBroadcastAsync to LiveProcessor 
+- [Add] BroadcastEventAsync to LiveProcessor
+- [Add] Creator to InstaAccountType
+- [Add] support for BroadcastStatusType in InstaBroadcastLiveHeartBeatViewerCount class
+- [Add] support for BroadcastStatusType in InstaBroadcastInfo class
+- [Add] SendDirectTextAsync to RealtimeClient
+- [Add] SendDirectTextToRecipientAsync to RealtimeClient
+- [Add] SendDirectLinkAsync to RealtimeClient
+- [Add] SendDirectLinkToRecipientsAsync to RealtimeClient
+- [Add] SendDirectLocationAsync to RealtimeClient
+- [Add] SendDirectLocationToRecipientsAsync to RealtimeClient
+- [Add] SendDirectProfileAsync to RealtimeClient
+- [Add] SendDirectProfileToRecipientsAsync to RealtimeClient
+- [Add] ShareMediaToThreadAsync to RealtimeClient
+- [Add] ShareMediaToUserAsync to RealtimeClient
+- [Add] SendDirectFelixShareAsync to RealtimeClient
+- [Add] SendDirectFelixShareToRecipientsAsync to RealtimeClient
+- [Add] SendDirectHashtagAsync to RealtimeClient
+- [Add] SendDirectHashtagToRecipientsAsync to RealtimeClient
+- [Add] SendDirectLikeAsync to RealtimeClient
+- [Add] SendDirectLikeToRecipientsAsync to RealtimeClient
+- [Add] MarkDirectThreadAsSeenAsync to RealtimeClient
+- [Add] LikeThreadMessageAsync to RealtimeClient
+- [Add] IndicateActivityAsync to RealtimeClient
+- [Add] IsElection to InstaReelFeed class
+- [Add] notifications sample
+
+v2.5.0
 - [Update] Api version and headers to v164.0.0.46.123 [it's default now] 
    also added 157.0.0.37.120
 - [Bugfix] for v146 and newer apis Login 
