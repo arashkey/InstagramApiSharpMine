@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InstagramApiSharp.API;
+using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
+using InstagramApiSharp.Helpers;
 /////////////////////////////////////////////////////////////////////
 ////////////////////// IMPORTANT NOTE ///////////////////////////////
 // Please check wiki pages for more information:
@@ -216,5 +219,56 @@ namespace Examples.Samples
                 ? $"Story created from an media post: {result.Value.Media.Pk}"
                 : $"Unable to share media as story: {result.Info.Message}");
         }
+
+        public async void SetStoryStuffs()
+        {
+            var userResult = await InstaApi.UserProcessor.GetUserAsync("instagram");
+
+            if (userResult.Succeeded)
+            {
+                var stories = await InstaApi.StoryProcessor.GetUserStoryAsync(userResult.Value.Pk); // getting user's stories
+                if (stories.Succeeded && stories.Value?.Items?.Count > 0)
+                {
+
+                    // Seen a story
+                    MarkStoryAsSeen(stories.Value);
+
+                }
+            }
+        }
+        public async void MarkStoryAsSeen(InstaStory reelStory)
+        {
+            var storyItem1 = reelStory.Items[0]; // choose a story
+
+            // Mark a story as seen>
+            // Since there are 3 different API for seen a story, you have to checks them first
+
+            if (reelStory.IsElection)// checks for election story
+            {
+                var dic = new List<InstaStoryElectionKeyValue>
+                {
+                    new InstaStoryElectionKeyValue
+                    {
+                        StoryId = reelStory.Id,
+                        StoryItemId = storyItem1.Id,
+                        TakenAtUnix = storyItem1.TakenAt.ToUnixTime().ToString()
+                    }
+                };
+                var seen = await InstaApi.StoryProcessor.MarkMultipleElectionStoriesAsSeenAsync(dic);
+                Console.WriteLine($"{storyItem1.Id} seen result: {seen.Succeeded}");
+            }
+            else // otherwise it's a normal story or hashtag story
+            {
+                var dic = new Dictionary<string, long>
+                {
+                    {storyItem1.Id, storyItem1.TakenAt.ToUnixTime()},
+                    // you can mark multiple stories in here!
+                };
+                var seen = await InstaApi.StoryProcessor.MarkMultipleStoriesAsSeenAsync(dic);
+                Console.WriteLine($"{storyItem1.Id} seen result: {seen.Succeeded}");
+            }
+        }
+    }
+
     }
 }
