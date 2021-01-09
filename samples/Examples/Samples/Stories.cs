@@ -239,6 +239,10 @@ namespace Examples.Samples
 
                     // Answer to Story question
                     AnswerToStoryQuestion(result);
+
+
+                    // Answer to Story quizz
+                    AnswerToStoryQuiz(result);
                 }
             }
         }
@@ -319,6 +323,33 @@ namespace Examples.Samples
 
             Console.WriteLine($"{storyItem.Id} '{storyQuestion.QuestionSticker.Question}'\t\t" +
                 $"answered to: {storyQuestion.QuestionSticker.QuestionId} as '{myAnswer}' result: {answerToQuestion.Succeeded}");
+        }
+
+
+        public async void AnswerToStoryQuiz(InstaStory reelStory)
+        {
+            var storyItem = reelStory.Items.FirstOrDefault(x => x.StoryQuizs?.Count > 1); // choose a story that has a Story quiz
+            if (storyItem == null)
+            {
+                Console.WriteLine("No story quiz exist.");
+                return;
+            }
+
+            var storyQuiz = storyItem.StoryQuizs[0]; // gets first story quiz
+
+            // checks for answer, maybe we already voted
+            if (storyQuiz.QuizSticker.ViewerAnswer != -1 || storyQuiz.QuizSticker.Finished)
+                return;
+            int myAnswer = 0;
+            // story quiz answers can be 2,3 or 4 options ,
+            // so we can get the Tallies property in QuizSticker to find out how many options we have
+            myAnswer = storyQuiz.QuizSticker.Tallies.Count - 1; // select latest tallies
+
+            var result = await InstaApi.StoryProcessor
+                .AnswerToStoryQuizAsync(storyItem.Pk, storyQuiz.QuizSticker.QuizId, myAnswer);
+
+            Console.WriteLine($"{storyItem.Id} '{storyQuiz.QuizSticker.Question}'\t\t" +
+                $"answered to: {storyQuiz.QuizSticker.QuizId} '{storyQuiz.QuizSticker.Tallies.Count}' selected '{myAnswer}' result: {result.Succeeded}");
         }
 
     }
