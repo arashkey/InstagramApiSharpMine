@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using InstagramApiSharp.API;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
+using InstagramApiSharp.Enums;
 using InstagramApiSharp.Helpers;
 /////////////////////////////////////////////////////////////////////
 ////////////////////// IMPORTANT NOTE ///////////////////////////////
@@ -229,10 +230,12 @@ namespace Examples.Samples
                 var stories = await InstaApi.StoryProcessor.GetUserStoryAsync(userResult.Value.Pk); // getting user's stories
                 if (stories.Succeeded && stories.Value?.Items?.Count > 0)
                 {
-
+                    var result = stories.Value;
                     // Seen a story
-                    MarkStoryAsSeen(stories.Value);
+                    MarkStoryAsSeen(result);
 
+                    // Vote to Story Poll
+                    VoteStoryPolls(result);
                 }
             }
         }
@@ -268,7 +271,27 @@ namespace Examples.Samples
                 Console.WriteLine($"{storyItem1.Id} seen result: {seen.Succeeded}");
             }
         }
-    }
 
+
+        public async void VoteStoryPolls(InstaStory reelStory)
+        {
+            var storyItem = reelStory.Items.FirstOrDefault(x=> x.StoryPolls?.Count > 1); // choose a story that has a Story poll
+            if (storyItem == null)
+            {
+                Console.WriteLine("No story poll exist.");
+                return;
+            }
+
+            var storyPoll = storyItem.StoryPolls[0]; // gets first poll
+            // checks for answer, maybe we already voted
+            if (storyPoll.PollSticker.ViewerVote != -1 || storyPoll.PollSticker.Finished)
+                return;
+            var myVote = InstaStoryPollVoteType.Yes;
+            // for example we marked the poll as Yes
+            var votePoll = await InstaApi.StoryProcessor.VoteStoryPollAsync(storyItem.Id,
+                storyPoll.PollSticker.PollId.ToString(), myVote);
+
+            Console.WriteLine($"{storyItem.Id} voted to {storyPoll.PollSticker.PollId} as {myVote} result: {votePoll.Succeeded}");
+        }
     }
 }
