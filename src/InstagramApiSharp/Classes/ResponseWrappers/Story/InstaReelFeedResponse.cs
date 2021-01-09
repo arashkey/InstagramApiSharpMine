@@ -12,7 +12,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("can_reshare")] public string CanReshare { get; set; }
 
-        [JsonProperty("can_reply")] public bool? CanReply { get; set; }
+        [JsonProperty("can_reply")] public string CanReply { get; set; }
 
         [JsonProperty("expiring_at")] public long? ExpiringAt { get; set; }
 

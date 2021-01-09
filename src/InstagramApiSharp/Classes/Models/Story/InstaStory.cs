@@ -3,40 +3,17 @@ using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaStory
+    public class InstaStory : InstaReelFeed
     {
         public long TakenAtUnix { get; set; }
 
-        public bool CanReply { get; set; }
-
-        public DateTime ExpiringAt { get; set; }
-
-        public InstaUserShortFriendshipFull User { get; set; }
-
-        public InstaUserShort Owner { get; set; }
-
         public string SourceToken { get; set; }
-
-        public DateTime Seen { get; set; }
-
-        public string LatestReelMedia { get; set; }
-
-        public string Id { get; set; }
 
         public int RankedPosition { get; set; }
 
-        public bool Muted { get; set; }
-
         public int SeenRankedPosition { get; set; }
 
-        public List<InstaStoryItem> Items { get; set; } = new List<InstaStoryItem>();
-
-        public int PrefetchCount { get; set; }
-
         public string SocialContext { get; set; }
-
-
-
 
         public string ClientCacheKey { get; set; }
 
@@ -54,10 +31,8 @@ namespace InstagramApiSharp.Classes.Models
 
         public DateTime ImportedTakenAt { get; set; }
 
-        public bool CanReshare { get; set; }
-
         public bool SupportsReelReactions { get; set; }
-        
+
         public bool HasSharedToFb { get; set; }
 
         public List<InstaReelMention> StoryHashtags { get; set; } = new List<InstaReelMention>();

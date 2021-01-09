@@ -15,7 +15,6 @@ namespace InstagramApiSharp.Converters
             if (SourceObject == null) throw new ArgumentNullException($"Source object");
             var reelFeed = new InstaReelFeed
             {
-                CanReply = SourceObject.CanReply ?? false,
                 ExpiringAt = DateTimeHelper.UnixTimestampToDateTime(SourceObject?.ExpiringAt ?? 0),
                 Id = SourceObject.Id,
                 LatestReelMedia = SourceObject.LatestReelMedia ?? 0,
@@ -26,6 +25,21 @@ namespace InstagramApiSharp.Converters
                 Muted = SourceObject.Muted ?? false,
                 CreatedAt = DateTimeHelper.UnixTimestampToDateTime(SourceObject?.CreatedAt ?? DateTime.UtcNow.ToUnixTime())
             };
+            try
+            {
+                var canReply = SourceObject.CanReply;
+                if (string.IsNullOrEmpty(canReply))
+                    canReply = "true";
+                else
+                {
+                    if (!canReply.ToLower().Contains("true") && !canReply.ToLower().Contains("false"))
+                        canReply = System.Convert.ToBoolean(int.Parse(SourceObject.CanReply)).ToString();
+                }
+                reelFeed.CanReshare = System.Convert.ToBoolean(canReply);
+                if (!string.IsNullOrEmpty(SourceObject.CanReshare))
+                    reelFeed.CanReshare = bool.Parse(SourceObject.CanReshare);
+            }
+            catch { }
             try
             {
                 if (!string.IsNullOrEmpty(SourceObject.CanReshare))
