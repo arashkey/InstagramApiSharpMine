@@ -668,6 +668,36 @@ namespace InstagramApiSharp.API.Processors
             }
         }
         /// <summary>
+        ///     Get user story feed (stories from users followed by current user).
+        /// </summary>
+        public async Task<IResult<InstaStoryFeed>> GetStoryFeedAsync()
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var storyFeedUri = UriCreator.GetStoryFeedUri();
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, storyFeedUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                
+                if (response.StatusCode != HttpStatusCode.OK) return Result.UnExpectedResponse<InstaStoryFeed>(response, json);
+                var storyFeedResponse = JsonConvert.DeserializeObject<InstaStoryFeedResponse>(json);
+                var instaStoryFeed = ConvertersFabric.Instance.GetStoryFeedConverter(storyFeedResponse).Convert();
+                return Result.Success(instaStoryFeed);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaStoryFeed), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaStoryFeed>(exception);
+            }
+        }
+
+        /// <summary>
         ///     Get user story feed with POST method requests (new API)
         /// </summary>
         public async Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(bool refresh = false, string[] preloadedReelIds = null)
@@ -675,22 +705,6 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                //supported_capabilities_new=[{}]&
-                //reason=cold_start&
-                //_csrftoken=fghjf&
-                //_uuid=6rtrgt&
-                //preloaded_reel_ids=8651542203,7470273225,7293779140,4137323183,4728340654,5412390834,3935014064,9129640961,5702637159,8233674376&
-                //preloaded_reel_timestamp=1555780890,1555765386,1555654998,1555608277,1555582894,1555572328,1555275303,1554736759,1554732984,1554732411
-
-                //supported_capabilities_new=[{"name":"SUPPORTED_SDK_VERSIONS","value":"13.0,14.0,15.0,16.0,17.0,18.0,19.0,20.0,21.0,22.0,23.0,24.0,25.0,26.0,27.0,28.0,29.0,30.0,31.0,32.0,33.0,34.0,35.0,36.0,37.0,38.0,39.0,40.0,41.0,42.0,43.0,44.0,45.0,46.0,47.0,48.0,49.0,50.0,51.0,52.0,53.0,54.0,55.0,56.0,57.0,58.0,59.0,60.0,61.0"},{"name":"FACE_TRACKER_VERSION","value":"12"},{"name":"segmentation","value":"segmentation_enabled"},{"name":"COMPRESSION","value":"ETC2_COMPRESSION"},{"name":"world_tracker","value":"world_tracker_enabled"},{"name":"gyroscope","value":"gyroscope_enabled"}]&
-                //reason=pull_to_refresh&
-                //_csrftoken=defrghdf&
-                //_uuid=c6a2rtyhrt
-                //preloaded_reel_ids=8062492058,7641914022,1593584454,7748367602,7694284101,374897883,1341582726,6179437947,6798340126,3405354889&
-                //preloaded_reel_timestamp=1556806882,1556781054,1556760190,1556746331,1556698368,1556666696,1556644081,1556618908,1556614565,1556531878
-
-
-
                 var storyFeedUri = UriCreator.GetStoryFeedUri();
                 var data = new Dictionary<string, string>
                 {
@@ -727,34 +741,60 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
+
         /// <summary>
-        ///     Get user story feed (stories from users followed by current user).
+        ///     Get user story feed with POST method requests and Pagination support (new API)
         /// </summary>
-        public async Task<IResult<InstaStoryFeed>> GetStoryFeedAsync()
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="forceRefresh">Force to use pull refresh</param>
+        public async Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(PaginationParameters paginationParameters, bool forceRefresh = false)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                //supported_capabilities_new=[{}]&
-                //reason=cold_start&
-                //_csrftoken=ttttttt&
-                //_uuid=aaaaaaaaaaaa&
-                //preloaded_reel_ids=8651542203,7470273225,7293779140,4137323183,4728340654,5412390834,3935014064,9129640961,5702637159,8233674376&
-                //preloaded_reel_timestamp=1555780890,1555765386,1555654998,1555608277,1555582894,1555572328,1555275303,1554736759,1554732984,1554732411
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
+                InstaStoryFeed Convert(InstaStoryFeedResponse instaStoryFeedResponse)
+                {
+                    return ConvertersFabric.Instance.GetStoryFeedConverter(instaStoryFeedResponse).Convert();
+                }
+                bool HasMore(PaginationParameters pagination) => !string.IsNullOrEmpty(pagination.SessionId) &&
+                    pagination.NextIdsToFetch?.Count > 0 && int.TryParse(pagination.NextMaxId, out int count) && count <= pagination.NextIdsToFetch?.Count;
 
+                var feedResponse = await GetStoryFeedWithPostMethod(paginationParameters, forceRefresh);
+                if (!feedResponse.Succeeded)
+                {
+                    if (feedResponse.Value != null)
+                        Result.Fail(feedResponse.Info, Convert(feedResponse.Value));
+                    else
+                        Result.Fail(feedResponse.Info, default(InstaStoryFeed));
+                }
+                if (feedResponse.Value == null)
+                    Result.Fail(feedResponse.Info, default(InstaStoryFeed));
+                while (HasMore(paginationParameters)
+                    && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                {
+                    var moreMedias = await GetStoryFeedWithPostMethod(paginationParameters, false);
+                    if (!moreMedias.Succeeded)
+                    {
+                        if (feedResponse.Value.Tray?.Count > 0)
+                            return Result.Success(Convert(feedResponse.Value));
+                        else
+                            return Result.Fail(moreMedias.Info, Convert(feedResponse.Value));
+                    }
+                    if (feedResponse.Value.Tray?.Count > 0)
+                        feedResponse.Value.Tray.AddRange(feedResponse.Value.Tray);
+                    //feedResponse.Value.MoreAvailable = moreMedias.Value.MoreAvailable;
+                    //feedResponse.Value.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
+                    //feedResponse.Value.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
+                    //feedResponse.Value.NextMediaIds = paginationParameters.NextMediaIds = moreMedias.Value.NextMediaIds;
+                    //feedResponse.Value.NextPage = paginationParameters.NextPage = moreMedias.Value.NextPage;
+                    //feedResponse.Value.Sections.AddRange(moreMedias.Value.Sections);
+                    paginationParameters.PagesLoaded++;
+                }
 
-
-
-                var storyFeedUri = UriCreator.GetStoryFeedUri();
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, storyFeedUri, _deviceInfo);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                
-                if (response.StatusCode != HttpStatusCode.OK) return Result.UnExpectedResponse<InstaStoryFeed>(response, json);
-                var storyFeedResponse = JsonConvert.DeserializeObject<InstaStoryFeedResponse>(json);
-                var instaStoryFeed = ConvertersFabric.Instance.GetStoryFeedConverter(storyFeedResponse).Convert();
-                return Result.Success(instaStoryFeed);
+                return Result.Success(Convert(feedResponse.Value));
             }
             catch (HttpRequestException httpException)
             {
@@ -767,6 +807,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaStoryFeed>(exception);
             }
         }
+
         /// <summary>
         ///     Get story media viewers
         /// </summary>
@@ -2582,6 +2623,81 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail(ex, false);
             }
         }
+
+
+        private async Task<IResult<InstaStoryFeedResponse>> GetStoryFeedWithPostMethod(PaginationParameters pagination, bool forceRefresh = false, string[] preloadedReelIds = null)
+        {
+            try
+            {
+                bool HasMore(bool force) => string.IsNullOrEmpty(pagination.SessionId) || force ||
+                    pagination.NextIdsToFetch == null || pagination.NextIdsToFetch?.Count == 0 || string.IsNullOrEmpty(pagination.NextMaxId);
+
+                var isFreshPagination = HasMore(forceRefresh);
+
+                if (isFreshPagination)
+                    pagination.SessionId = Guid.NewGuid().ToString();
+
+                var storyFeedUri = UriCreator.GetStoryFeedUri();
+
+                var data = new Dictionary<string, string>
+                {
+                    {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None)},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"tray_session_id", pagination.SessionId},
+                    {"request_id", Guid.NewGuid().ToString()}
+                };
+                if (forceRefresh)
+                    data.Add("reason", "pull_to_refresh");
+                else
+                    data.Add("reason", "cold_start");
+                string nextId = "50";
+                if (isFreshPagination || forceRefresh)
+                {
+                    nextId = "50";
+                    data.Add(InstaApiConstants.HEADER_TIMEZONE, InstaApiConstants.TIMEZONE_OFFSET.ToString());
+                    data.Add("page_size", "50");
+                }
+                else
+                {
+                    int skipId = int.Parse(string.IsNullOrEmpty(pagination.NextMaxId) ? "50" : pagination.NextMaxId);
+                    nextId = (skipId + 50).ToString();
+                    data.Add("current_highest_ranked_position", skipId.ToString());
+                    data["reason"] = "second_page_of_tray";
+                    var l = new List<string>();
+                    var idsToFetch = pagination.NextIdsToFetch?.Skip(skipId).Take(50);
+                    if (idsToFetch != null)
+                        foreach (var u in idsToFetch)
+                            l.Add(u.ToString());
+
+                    var jArr = new JArray(idsToFetch);
+                    data.Add("reel_ids_to_fetch", jArr.ToString(Formatting.None));
+                }
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, storyFeedUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK) return Result.UnExpectedResponse<InstaStoryFeedResponse>(response, json);
+                var storyFeedResponse = JsonConvert.DeserializeObject<InstaStoryFeedResponse>(json);
+                if (storyFeedResponse.RemainingReelIdsToFetch?.Count > 0)
+                    pagination.NextIdsToFetch = storyFeedResponse.RemainingReelIdsToFetch;
+                if (int.TryParse(nextId, out int ix) && ix > pagination.NextIdsToFetch.Count && !forceRefresh)
+                    nextId = null;
+                pagination.NextMaxId = nextId;
+                return Result.Success(storyFeedResponse);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaStoryFeedResponse), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaStoryFeedResponse>(exception);
+            }
+        }
+
         #region Old functions
 
         private async Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsyncOLD(Action<InstaUploaderProgress> progress, InstaImage image,

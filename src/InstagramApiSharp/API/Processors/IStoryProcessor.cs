@@ -141,6 +141,13 @@ namespace InstagramApiSharp.API.Processors
         ///     Get user story feed (stories from users followed by current user).
         /// </summary>
         Task<IResult<InstaStoryFeed>> GetStoryFeedAsync();
+
+        /// <summary>
+        ///     Get user story feed (stories from users followed by current user) with pagination.
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="forceRefresh">Force to use pull refresh</param>
+        Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(PaginationParameters paginationParameters, bool forceRefresh = false);
         /// <summary>
         ///     Get story media viewers
         /// </summary>
