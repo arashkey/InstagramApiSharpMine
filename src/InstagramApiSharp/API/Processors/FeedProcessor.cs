@@ -627,7 +627,7 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("reason", "pull_to_refresh");
                     data.Add("is_pull_to_refresh", "1");
                 }
-                else //reason=cold_start_fetch&
+                else 
                 {
                     if (string.IsNullOrEmpty(paginationParameters.NextMaxId))
                     {
