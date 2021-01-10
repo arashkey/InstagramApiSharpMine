@@ -388,6 +388,9 @@ namespace InstagramApiSharp
                     return "default";
             }
         }
+        public static string GetPaginationSource(this InstaFeedPaginationSource source) =>
+            source == InstaFeedPaginationSource.PastPosts ? "past_posts" : "feed_recs";
+
         readonly static Random Rnd = new Random();
         public static string GenerateRandomString(this int length)
         {
