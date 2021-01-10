@@ -7,7 +7,7 @@
  *                      IRANIAN DEVELOPERS
  *        
  *        
- *                            2019
+ *                            2021
  *  
  *  
  */
@@ -154,6 +154,11 @@ namespace InstagramApiSharp.API
         ///     Push notification helper processor
         /// </summary>
         IPushProcessor PushProcessor { get; }
+
+        /// <summary>
+        ///     Creative api functions
+        /// </summary>
+        ICreativeProcessor CreativeProcessor { get; }
         /// <summary>
         ///     Session handler
         /// </summary>

@@ -203,6 +203,11 @@ namespace InstagramApiSharp.API
         /// </summary>
         public IPushProcessor PushProcessor => _pushProcessor;
 
+        /// <summary>
+        ///     Creative api functions
+        /// </summary>
+        public ICreativeProcessor CreativeProcessor { get; private set; }
+
         public InstaApiVersionType ApiVersionType { get; set; }
 
 #endregion Processors
@@ -3208,6 +3213,7 @@ namespace InstagramApiSharp.API
             _webProcessor = new WebProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
             _videoCallProcessor = new VideoCallProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
             _pushProcessor = new PushProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
+            CreativeProcessor = new CreativeProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
 
         }
 
