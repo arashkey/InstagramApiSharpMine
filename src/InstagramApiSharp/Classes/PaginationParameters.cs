@@ -12,6 +12,7 @@ namespace InstagramApiSharp
         {
         }
 
+        public string SessionId { get; set; } = string.Empty;
         public string RankToken { get; set; } = string.Empty;
         public string NextMaxId { get; set; } = string.Empty;
         /// <summary>
