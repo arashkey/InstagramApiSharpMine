@@ -2918,5 +2918,12 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for creative assets");
             return instaUri;
         }
+        public static Uri GetWriteSupportedCapabilitiesUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.CREATIVE_WRITE_SUPPORTED_CAPABILITIES,
+                out var instaUri))
+                throw new Exception("Can't create URI for creatives write supported capabilities");
+            return instaUri;
+        }
     }
 }

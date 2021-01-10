@@ -13,6 +13,7 @@ namespace InstagramApiSharp.API.Processors
 {
     public interface ICreativeProcessor
     {
+        Task<IResult<bool>> WriteSupportedCapablititiesAsync();
         Task<IResult<InstaStickers>> GetAssetsAsync();
     }
 }

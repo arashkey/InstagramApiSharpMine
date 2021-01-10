@@ -466,6 +466,7 @@ namespace InstagramApiSharp.API
         public const string CREATIVES_STORY_MEDIA_SEARCH_KEYED_FORMAT = API_SUFFIX + "/creatives/story_media_search_keyed_format/";
 
         public const string CREATIVE_ASSETS = API_SUFFIX + "/creatives/assets/";
+        public const string CREATIVE_WRITE_SUPPORTED_CAPABILITIES = API_SUFFIX + "/creatives/write_supported_capabilities/";
         #endregion Creatives endpoints constants
 
         #region Direct endpoints constants
