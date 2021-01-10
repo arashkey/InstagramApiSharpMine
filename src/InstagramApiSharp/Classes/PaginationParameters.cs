@@ -28,14 +28,14 @@ namespace InstagramApiSharp
         /// <summary>
         ///     Only for location and hashtag feeds 
         /// </summary>
-        public List<long> NextMediaIds { get; set; }
+        public List<long> NextMediaIds { get; set; } = new List<long>();
+
+        public List<string> NextIdsToFetch { get; set; } = new List<string>();
 
         public static PaginationParameters Empty => MaxPagesToLoad(int.MaxValue);
 
-        public static PaginationParameters MaxPagesToLoad(int maxPagesToLoad)
-        {
-            return new PaginationParameters {MaximumPagesToLoad = maxPagesToLoad};
-        }
+        public static PaginationParameters MaxPagesToLoad(int maxPagesToLoad) =>
+            new PaginationParameters {MaximumPagesToLoad = maxPagesToLoad};
 
         public PaginationParameters StartFromMaxId(string maxId)
         {
