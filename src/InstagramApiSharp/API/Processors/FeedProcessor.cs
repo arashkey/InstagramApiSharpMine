@@ -615,7 +615,6 @@ namespace InstagramApiSharp.API.Processors
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceGuid.ToString()},
                     {"phone_id", _deviceInfo.PhoneGuid.ToString()},
-                    {"client_session_id", Guid.NewGuid().ToString()},
                     {"session_id", Guid.NewGuid().ToString()},
                     {"timezone_offset", _instaApi.GetTimezoneOffset().ToString()},
                     {"battery_level", "100"},
