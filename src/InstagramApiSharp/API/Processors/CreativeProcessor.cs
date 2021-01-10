@@ -49,5 +49,47 @@ namespace InstagramApiSharp.API.Processors
         }
         #endregion Properties and constructor
 
+        public async Task<IResult<InstaStickers>> GetAssetsAsync()
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetCreativeAssetsUri();
+                var fields = new JObject
+                {
+                    {"horizontalAccuracy", "20.0"},
+                    {"alt", "0.0"},
+                    {"lat", "0.0"},
+                    {"lng", "0.0"},
+                    {"type", "static_stickers"},
+                    {"speed", "0.0"},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaStickers>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaStickers>(json);
+
+                return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<InstaStickers>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaStickers), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaStickers>(exception);
+            }
+        }
     }
 }

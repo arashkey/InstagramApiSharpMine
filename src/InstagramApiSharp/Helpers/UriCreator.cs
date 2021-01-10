@@ -2912,5 +2912,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for broadcast event");
             return instaUri;
         }
+        public static Uri GetCreativeAssetsUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.CREATIVE_ASSETS, out var instaUri))
+                throw new Exception("Cant create URI for creative assets");
+            return instaUri;
+        }
     }
 }
