@@ -3047,9 +3047,9 @@ namespace InstagramApiSharp.API
             }
 
             if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version164;
+                data.InstaApiVersion = InstaApiVersionType.Version169;
             if(!LoadApiVersionFromSessionFile)
-                data.InstaApiVersion = InstaApiVersionType.Version164;
+                data.InstaApiVersion = InstaApiVersionType.Version169;
             ApiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(ApiVersionType);
             _httpHelper = new HttpHelper(_apiVersion, _httpRequestProcessor, this);
@@ -3094,9 +3094,9 @@ namespace InstagramApiSharp.API
             }
 
             if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version164;
+                data.InstaApiVersion = InstaApiVersionType.Version169;
             if (!LoadApiVersionFromSessionFile)
-                data.InstaApiVersion = InstaApiVersionType.Version164;
+                data.InstaApiVersion = InstaApiVersionType.Version169;
             ApiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(ApiVersionType);
             _httpHelper = new HttpHelper(_apiVersion, _httpRequestProcessor, this);
@@ -3143,9 +3143,9 @@ namespace InstagramApiSharp.API
             }
 
             if (stateData.InstaApiVersion == null)
-                stateData.InstaApiVersion = InstaApiVersionType.Version164;
+                stateData.InstaApiVersion = InstaApiVersionType.Version169;
             if (!LoadApiVersionFromSessionFile)
-                stateData.InstaApiVersion = InstaApiVersionType.Version164;
+                stateData.InstaApiVersion = InstaApiVersionType.Version169;
             ApiVersionType = stateData.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(ApiVersionType);
             _httpHelper = new HttpHelper(_apiVersion, _httpRequestProcessor, this);

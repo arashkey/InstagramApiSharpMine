@@ -122,9 +122,10 @@ namespace InstagramApiSharp.API
         public const string HEADER_X_IG_BLOKS_VERSION_ID = "X-Bloks-Version-Id";
         public const string HEADER_X_IG_BLOKS_IS_LAYOUT_RTL = "X-Bloks-Is-Layout-RTL";
         public const string HEADER_X_IG_BLOKS_ENABLE_RENDERCODE = "X-Bloks-Enable-RenderCore";
+        public const string HEADER_X_IG_BLOKS_PANORAMA_ENABLED = "X-Bloks-Is-Panorama-Enabled";
         public const string HEADER_X_IG_DEVICE_ID = "X-IG-Device-ID";
         public const string HEADER_X_IG_ANDROID_ID = "X-IG-Android-ID";
-        public const string CURRENT_BLOKS_VERSION_ID = "d43b6b50d0644a8d433f1914592fdff0b1a60932deead2b1090e9d7723dc75db";
+        public const string CURRENT_BLOKS_VERSION_ID = "fe808146fcbce04d3a692219680092ef89873fda1e6ef41c09a5b6a9852bed94";
 
         public const string ACCEPT_ENCODING = "gzip, deflate, sdch";
         public const string API = "/api";
@@ -169,25 +170,25 @@ namespace InstagramApiSharp.API
         public const string USER_AGENT =
                                     "Instagram {0} Android ({1}/{2}; {3}; {4}; {5}/{6}; {7}; {8}; {9}; {10}; {11})";
         public const string USER_AGENT_DEFAULT =
-        "Instagram 126.0.0.25.121 Android (24/7.0; 480dpi; 1080x1794; HUAWEI/HONOR; PRA-LA1; HWPRA-H; hi6250; en_US; 195435560)";
+        "Instagram 169.3.0.30.135 Android (26/8; 480dpi; 1080x1794; HUAWEI/HONOR; PRA-LA1; HWPRA-H; hi6250; en_US; 264009049)";
         public static readonly JArray SupportedCapabalities = new JArray
         {
             new JObject
             {
                 {"name","SUPPORTED_SDK_VERSIONS"},
-                {"value","66.0,67.0,68.0,69.0,70.0,71.0,72.0,73.0,74.0,75.0,76.0,77.0,78.0,79.0,80.0,81.0,82.0,83.0"+
-                    "84.0,85.0,86.0,87.0,88.0,89.0,90.0,91.0,92.0,93.0,94.0,95.0,96.0,97.0,98.0,99.0,100.0,101.0"}
+                {"value","69.0,70.0,71.0,72.0,73.0,74.0,75.0,76.0,77.0,78.0,79.0,80.0,81.0,82.0,83.0"+
+                    "84.0,85.0,86.0,87.0,88.0,89.0,90.0,91.0,92.0,93.0,94.0,95.0,96.0,97.0,98.0,99.0,100.0,101.0,102.0,103.0,104.0"}
             },
             new JObject
             {
                 {"name","FACE_TRACKER_VERSION"},
                 {"value","14"}
             },
-            //new JObject
-            //{
-            //    {"name","segmentation"},
-            //    {"value","segmentation_enabled"}
-            //},
+            new JObject
+            {
+                {"name","segmentation"},
+                {"value","segmentation_enabled"}
+            },
             new JObject
             {
                 {"name","COMPRESSION"},
