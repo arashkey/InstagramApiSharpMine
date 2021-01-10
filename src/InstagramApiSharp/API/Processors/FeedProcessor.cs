@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using InstaRecentActivityConverter = InstagramApiSharp.Converters.Json.InstaRecentActivityConverter;
 using System.Diagnostics;
 using System.Collections.Generic;
+using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -364,10 +365,13 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="seenMediaIds">Id of the posts seen till now</param>
         /// <param name="refreshRequest">Request refresh feeds</param>
+        /// <param name="paginationSource">Pagination source</param>
         /// <returns>
         ///     <see cref="InstaFeed" />
         /// </returns>
-        public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters, string[] seenMediaIds = null, bool refreshRequest = false)
+        public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters, 
+            string[] seenMediaIds = null, bool refreshRequest = false,
+            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var feed = new InstaFeed();
@@ -380,7 +384,8 @@ namespace InstagramApiSharp.API.Processors
                 {
                     return ConvertersFabric.Instance.GetFeedConverter(instaFeedResponse).Convert();
                 }
-                var timelineFeeds = await GetUserTimelineFeed(paginationParameters, seenMediaIds, refreshRequest);
+                var timelineFeeds = await GetUserTimelineFeed(paginationParameters,
+                    seenMediaIds, refreshRequest, paginationSource);
                 if (!timelineFeeds.Succeeded)
                     return Result.Fail(timelineFeeds.Info, feed);
 
@@ -394,7 +399,7 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
-                    var nextFeed = await GetUserTimelineFeed(paginationParameters);
+                    var nextFeed = await GetUserTimelineFeed(paginationParameters, null, false, paginationSource);
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, feed);
 
@@ -596,7 +601,9 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        private async Task<IResult<InstaFeedResponse>> GetUserTimelineFeed(PaginationParameters paginationParameters, string[] seenMediaIds = null, bool refreshRequest = false)
+        private async Task<IResult<InstaFeedResponse>> GetUserTimelineFeed(PaginationParameters paginationParameters, 
+            string[] seenMediaIds = null, bool refreshRequest = false,
+            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None)
         {
             try
             {
@@ -616,16 +623,25 @@ namespace InstagramApiSharp.API.Processors
                     {"rti_delivery_backend", "0"},
                     {"is_async_ads_double_request", "0"},
                     {"is_async_ads_rti", "0"},
-                    {"will_sound_on", "0"}
+                    {"will_sound_on", "0"},
+                    {"bloks_versioning_id", _instaApi.GetApiVersionInfo().BloksVersionId},
+                    {"is_dark_mode", "0"},
+                    {"skip_source_and_rank", "0"},
+                    {"request_id", Guid.NewGuid().ToString()},
+                    {"skip_ads_controller", "0"},
                 };
 
                 if (seenMediaIds != null)
                     data.Add("seen_posts", seenMediaIds.EncodeList(false));
 
+                if (paginationSource != InstaFeedPaginationSource.None)
+                    data.Add("pagination_source", paginationSource.GetPaginationSource());
+
                 if (refreshRequest)
                 {
                     data.Add("reason", "pull_to_refresh");
                     data.Add("is_pull_to_refresh", "1");
+                    data.Add("is_split_head_load", "0");
                 }
                 else 
                 {
@@ -633,6 +649,7 @@ namespace InstagramApiSharp.API.Processors
                     {
                         data.Add("reason", "cold_start_fetch");
                         //data.Add("reason", "warm_start_fetch");
+                        data.Add("is_split_head_load", "0");
                     }
                     else
                     {
@@ -643,12 +660,12 @@ namespace InstagramApiSharp.API.Processors
                 }
 
                 var request = await _httpHelper.GetDefaultGZipRequestAsync(HttpMethod.Post, userFeedUri, _deviceInfo, data);
-                request.Headers.Add("X-Ads-Opt-Out", "0");
-                request.Headers.Add("X-Google-AD-ID", _deviceInfo.GoogleAdId.ToString());
-                request.Headers.Add("X-DEVICE-ID", _deviceInfo.DeviceGuid.ToString());
+                request.Headers.AddHeader("X-Ads-Opt-Out", "0", _instaApi);
+                request.Headers.AddHeader("X-Google-AD-ID", _deviceInfo.GoogleAdId.ToString(), _instaApi);
+                request.Headers.AddHeader("X-DEVICE-ID", _deviceInfo.DeviceGuid.ToString(), _instaApi);
+                request.Headers.AddHeader("X-FB", "1", _instaApi);
 
                 var response = await _httpRequestProcessor.SendAsync(request);
-                //response.EnsureSuccessStatusCode();
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)

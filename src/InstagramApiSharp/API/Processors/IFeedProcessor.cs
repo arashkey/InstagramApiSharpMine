@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
+using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -79,10 +80,13 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="seenMediaIds">Id of the posts seen till now</param>
         /// <param name="refreshRequest">Request refresh feeds</param>
+        /// <param name="paginationSource">Pagination source</param>
         /// <returns>
         ///     <see cref="InstaFeed" />
         /// </returns>
-        Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters, string[] seenMediaIds = null, bool refreshRequest = false);
+        Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters, 
+            string[] seenMediaIds = null, bool refreshRequest = false,
+            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None);
 
         /// <summary>
         ///     Get user topical explore feeds asynchronously
