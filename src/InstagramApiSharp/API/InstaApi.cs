@@ -962,7 +962,7 @@ namespace InstagramApiSharp.API
 
                 var result = await AcceptFirstStepConsentAsync();
                 await Task.Delay(delay.Value);
-                if (result.Succeeded && result.Value.ScreenKey.ToLower() == "dob")
+                if (result.Succeeded && result.Value?.ScreenKey?.ToLower() == "dob")
                 {
                     await SetBirthdayConsentAsync();
                 }
