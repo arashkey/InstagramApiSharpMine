@@ -19,5 +19,7 @@ namespace InstagramApiSharp.Classes.Models
         public List<InstaBroadcastAddToPostLive> PostLives { get; set; } = new List<InstaBroadcastAddToPostLive>();
 
         public List<InstaHashtagStory> HashtagStories { get; set; } = new List<InstaHashtagStory>();
+
+        public List<string> RemainingReelIdsToFetch { get; set; } = new List<string>();
     }
 }

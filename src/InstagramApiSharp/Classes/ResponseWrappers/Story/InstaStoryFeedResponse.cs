@@ -22,5 +22,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("broadcasts")] public List<InstaBroadcastResponse> Broadcasts { get; set; }
 
         [JsonProperty("post_live")] public InstaBroadcastAddToPostLiveContainerResponse PostLives { get; set; }
+
+        [JsonProperty("remaining_reel_ids_to_fetch")] public List<string> RemainingReelIdsToFetch { get; set; }
     }
 }

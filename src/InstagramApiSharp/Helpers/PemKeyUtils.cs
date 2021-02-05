@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -11,7 +10,6 @@ using System.Text;
 
 namespace InstagramApiSharp.Helpers
 {
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
 #pragma warning disable IDE0051 // Remove unused private members
 

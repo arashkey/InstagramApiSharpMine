@@ -23,6 +23,8 @@ namespace InstagramApiSharp.Converters
                 StoryRankingToken = SourceObject.StoryRankingToken
             };
 
+            if (SourceObject.RemainingReelIdsToFetch?.Count > 0)
+                feed.RemainingReelIdsToFetch.AddRange(SourceObject.RemainingReelIdsToFetch);
             if (SourceObject.Tray?.Count > 0)
             {
                 foreach (var itemResponse in SourceObject.Tray)
