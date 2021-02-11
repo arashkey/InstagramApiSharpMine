@@ -91,7 +91,7 @@ namespace InstagramApiSharp.Classes
 
         public override string ToString()
         {
-            return $"{ResponseType.ToString()}: {Message}.";
+            return $"{ResponseType}: {Message}.";
         }
     }
 }

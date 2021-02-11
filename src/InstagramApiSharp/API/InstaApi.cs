@@ -1187,10 +1187,11 @@ namespace InstagramApiSharp.API
                 var uri = new Uri(InstaApiConstants.INSTAGRAM_URL);
                 cookies = cookies.Replace(';', ',');
                 _httpRequestProcessor.HttpHandler.CookieContainer.SetCookies(uri, cookies);
-                _user = UserSessionData.Empty;
-                user = user ?? "AlakiMasalan";
+                if (_user == null)
+                    _user = UserSessionData.Empty;
+                user = _user.UserName ?? (user ?? "AlakiMasalan");
                 _user.UserName = _httpRequestProcessor.RequestMessage.Username = user;
-                _user.Password = "AlakiMasalan";
+                _user.Password = _user.Password ?? "AlakiMasalan";
                 _user.LoggedInUser = new InstaUserShort
                 {
                     UserName = user
