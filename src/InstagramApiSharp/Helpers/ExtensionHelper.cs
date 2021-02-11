@@ -174,9 +174,6 @@ namespace InstagramApiSharp
             var tag = cipher.GetMac();
 
             byte[] buffersSize = BitConverter.GetBytes(Convert.ToInt16(encryptedKey.Length));
-            Console.WriteLine(Encoding.UTF8.GetString(encryptedKey));
-            Console.WriteLine(Encoding.UTF8.GetString(tag));
-            Console.WriteLine(Encoding.UTF8.GetString(ciphertext));
             byte[] encKeyIdBytes = BitConverter.GetBytes(Convert.ToUInt16(pubKeyId));
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(encKeyIdBytes);
