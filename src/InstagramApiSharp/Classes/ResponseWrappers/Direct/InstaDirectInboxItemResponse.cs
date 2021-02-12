@@ -79,5 +79,8 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("is_shh_mode")] public bool? IsShhMode { get; set; }
 
         [JsonProperty("replied_to_message")] public InstaDirectInboxItemResponse RepliedToMessage { get; set; }
+
+        [JsonProperty("reactions")] public InstaDirectReactionResponse Reactions { get; set; }
+
     }
 }

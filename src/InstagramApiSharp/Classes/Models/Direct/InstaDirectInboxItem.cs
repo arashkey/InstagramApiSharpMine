@@ -72,5 +72,7 @@ namespace InstagramApiSharp.Classes.Models
         public bool ShowForwardAttribution { get; set; }
         public bool IsShhMode { get; set; }
         public InstaDirectInboxItem RepliedToMessage { get; set; }
+
+        public InstaDirectReaction Reactions { get; set; } = new InstaDirectReaction();
     }
 }

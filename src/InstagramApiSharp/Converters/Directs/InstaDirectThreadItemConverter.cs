@@ -37,6 +37,12 @@ namespace InstagramApiSharp.Converters
             catch { }
             try
             {
+                if (SourceObject.Reactions != null)
+                    threadItem.Reactions = ConvertersFabric.Instance.GetDirectReactionConverter(SourceObject.Reactions).Convert();
+            }
+            catch { }
+            try
+            {
                 if (SourceObject.RepliedToMessage != null)
                     threadItem.RepliedToMessage = ConvertersFabric.Instance.GetDirectThreadItemConverter(SourceObject.RepliedToMessage).Convert();
             }

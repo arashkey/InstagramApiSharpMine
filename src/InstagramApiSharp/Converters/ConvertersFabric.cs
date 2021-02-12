@@ -1091,5 +1091,18 @@ namespace InstagramApiSharp.Converters
         {
             return new InstaDirectArEffectConverter { SourceObject = response };
         }
+
+        public IObjectConverter<InstaDirectLikeReaction, InstaDirectLikeReactionResponse> GetDirectLikeReactionConverter(
+            InstaDirectLikeReactionResponse response)
+        {
+            return new InstaDirectLikeReactionConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaDirectReaction, InstaDirectReactionResponse> GetDirectReactionConverter(
+            InstaDirectReactionResponse response)
+        {
+            return new InstaDirectReactionConverter { SourceObject = response };
+        }
+
     }
 }
