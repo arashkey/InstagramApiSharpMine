@@ -195,7 +195,7 @@ namespace InstagramApiSharp
 
             str += Rnd.Next(2222, 6789);
 
-            return $"665{str}";
+            return $"676{str}";
         }
 
         public static string GetLiveTransactionToken()
