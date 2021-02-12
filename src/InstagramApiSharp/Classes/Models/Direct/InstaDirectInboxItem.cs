@@ -67,7 +67,10 @@ namespace InstagramApiSharp.Classes.Models
 
         public InstaProduct ProductShare { get; set; }
 
-
         public InstaDirectArEffect ArEffect { get; set; }
+
+        public bool ShowForwardAttribution { get; set; }
+        public bool IsShhMode { get; set; }
+        public InstaDirectInboxItem RepliedToMessage { get; set; }
     }
 }

@@ -35,6 +35,12 @@ namespace InstagramApiSharp.Converters
                         threadItem.PreviewMedias.Add(ConvertersFabric.Instance.GetSingleMediaConverter(item).Convert());
             }
             catch { }
+            try
+            {
+                if (SourceObject.RepliedToMessage != null)
+                    threadItem.RepliedToMessage = ConvertersFabric.Instance.GetDirectThreadItemConverter(SourceObject.RepliedToMessage).Convert();
+            }
+            catch { }
             if (threadItem.ItemType == InstaDirectThreadItemType.Link && SourceObject.Link != null)
             {
                 threadItem.Text = SourceObject.Link.Text;

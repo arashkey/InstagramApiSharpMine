@@ -73,5 +73,11 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("product_share")] public InstaProductContainerResponse ProductShare { get; set; }
 
         [JsonProperty("ar_effect")] public InstaDirectArEffectResponse ArEffect { get; set; }
+
+        [JsonProperty("show_forward_attribution")] public bool? ShowForwardAttribution { get; set; }
+
+        [JsonProperty("is_shh_mode")] public bool? IsShhMode { get; set; }
+
+        [JsonProperty("replied_to_message")] public InstaDirectInboxItemResponse RepliedToMessage { get; set; }
     }
 }
