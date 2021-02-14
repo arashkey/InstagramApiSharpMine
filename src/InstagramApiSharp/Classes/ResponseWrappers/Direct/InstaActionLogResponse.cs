@@ -14,5 +14,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
     public class InstaActionLogResponse
     {
         [JsonProperty("description")] public string Description { get; set; }
+
+        [JsonProperty("is_reaction_log")] public bool? IsReactionLog { get; set; }
     }
 }

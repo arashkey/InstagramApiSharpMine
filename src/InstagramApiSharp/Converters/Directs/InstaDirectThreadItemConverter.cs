@@ -148,7 +148,8 @@ namespace InstagramApiSharp.Converters
             {
                 threadItem.ActionLog = new InstaActionLog
                 {
-                    Description = SourceObject.ActionLogMedia.Description
+                    Description = SourceObject.ActionLogMedia.Description,
+                    IsReactionLog = SourceObject.ActionLogMedia.IsReactionLog ?? false
                 };
             }
             else if (threadItem.ItemType == InstaDirectThreadItemType.Profile && SourceObject.ProfileMedia != null)
