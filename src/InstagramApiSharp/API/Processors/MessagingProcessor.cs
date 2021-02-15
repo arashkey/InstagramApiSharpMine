@@ -121,13 +121,15 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="userIdToReply">User id (pk) to reply(the sender of the message)</param>
         /// <param name="clientContextOfMessage">Client-context to reply (Client-context of the message)</param>
         /// <param name="messageType">Message type [ what was the message type ? ]</param>
+        /// <param name="vanishMode">Vanish mode [ it's related to new direct ]</param>
         public async Task<IResult<InstaDirectRespondPayload>> ReplyDirectMessageAsync(string threadId,
             string text,
             string itemIdToReply,
             long userIdToReply,
             string clientContextOfMessage,
-            string messageType = "text") =>
-            await SendDirectMessage(null, threadId, text, true, itemIdToReply, userIdToReply, clientContextOfMessage, messageType);
+            string messageType = "text",
+            bool vanishMode = false) =>
+            await SendDirectMessage(null, threadId, text, true, itemIdToReply, userIdToReply, clientContextOfMessage, messageType, vanishMode);
 
 
         /// <summary>
@@ -2485,7 +2487,8 @@ namespace InstagramApiSharp.API.Processors
             string itemIdToReply = null,
             long userIdToReply = 0,
             string clientContextOfMessage = null,
-            string messageType = "text")
+            string messageType = "text",
+            bool vanishMode = false)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
@@ -2518,7 +2521,7 @@ namespace InstagramApiSharp.API.Processors
                 if (isReply)
                 {
                     // 0 1
-                    data.Add("is_shh_mode", Convert.ToInt32(false).ToString());
+                    data.Add("is_shh_mode", Convert.ToInt32(vanishMode).ToString());
                     data.Add("send_attribution", "inbox");
                     data.Add("replied_to_client_context", clientContextOfMessage);
                     data.Add("replied_to_action_source", "long_press");

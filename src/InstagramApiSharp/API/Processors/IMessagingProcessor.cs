@@ -34,12 +34,14 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="userIdToReply">User id (pk) to reply(the sender of the message)</param>
         /// <param name="clientContextOfMessage">Client-context to reply (Client-context of the message)</param>
         /// <param name="messageType">Message type [ what was the message type ? ]</param>
+        /// <param name="vanishMode">Vanish mode [ it's related to new direct ]</param>
         Task<IResult<InstaDirectRespondPayload>> ReplyDirectMessageAsync(string threadId,
             string text,
             string itemIdToReply,
             long userIdToReply,
             string clientContextOfMessage,
-            string messageType = "text");
+            string messageType = "text",
+            bool vanishMode = false);
         /// <summary>
         ///     Mark direct visual message as seen
         /// </summary>
