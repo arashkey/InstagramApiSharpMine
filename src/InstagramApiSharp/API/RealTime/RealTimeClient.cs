@@ -3,7 +3,7 @@
  * Donation link: [ https://paypal.me/rmt4006 ] 
  * Donation email: RamtinJokar@outlook.com
  * 
- * Copyright (c) 2020 Summer [ Tabestaan 1399 ]
+ * Copyright (c) 2021 Winter [ Zemestaan 1399 ]
  */
 using DotNetty.Buffers;
 using DotNetty.Codecs.Mqtt.Packets;
@@ -15,6 +15,8 @@ using InstagramApiSharp.API.Push;
 using InstagramApiSharp.API.Push.PacketHelpers;
 using InstagramApiSharp.API.RealTime.Handlers;
 using InstagramApiSharp.API.RealTime.Helpers;
+using InstagramApiSharp.API.RealTime.Responses.Models;
+using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Helpers;
 using Newtonsoft.Json;
 using System;
@@ -29,8 +31,10 @@ namespace InstagramApiSharp.API.RealTime
 {
     public sealed partial class RealTimeClient
     {
+        public event EventHandler<List<InstaDirectInboxItem>> DirectItemChanged;
+        public event EventHandler<InstaBroadcastEventArgs> BroadcastChanged;
         public event EventHandler<PresenceEventEventArgs> PresenceChanged;
-        public event EventHandler<ThreadTypingEventsArgs> TypingChanged;
+        public event EventHandler<List<InstaRealtimeTypingEventArgs>> TypingChanged;
         private readonly IInstaApi _instaApi;
         private SingleThreadEventLoop _loopGroup;
         Bootstrap Bootstrap;
@@ -214,15 +218,17 @@ namespace InstagramApiSharp.API.RealTime
             }
         }
 
-
-        internal void OnPresenceChanged(PresenceEventEventArgs args)
-        {
+        internal void OnPresenceChanged(PresenceEventEventArgs args) =>
             PresenceChanged?.Invoke(this, args);
-        }
-        internal void OnTypingChanged(ThreadTypingEventsArgs args)
-        {
+
+        internal void OnTypingChanged(List<InstaRealtimeTypingEventArgs> args) =>
             TypingChanged?.Invoke(this, args);
-        }
+
+        internal void OnBroadcastChanged(InstaBroadcastEventArgs args) =>
+            BroadcastChanged?.Invoke(this, args);
+
+        internal void OnDirectItemChanged(List<InstaDirectInboxItem> args) =>
+            DirectItemChanged?.Invoke(this, args);
     }
 
 }

@@ -10,7 +10,11 @@ using DotNetty.Codecs.Mqtt.Packets;
 using DotNetty.Transport.Channels;
 using InstagramApiSharp.API.Push.PacketHelpers;
 using InstagramApiSharp.API.RealTime.Handlers;
+using InstagramApiSharp.API.RealTime.Responses.Models;
+using InstagramApiSharp.API.RealTime.Responses.Wrappers;
+using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using InstagramApiSharp.Converters;
 using InstagramApiSharp.Helpers;
 using Ionic.Zlib;
 using Newtonsoft.Json;
@@ -64,7 +68,7 @@ namespace InstagramApiSharp.API.RealTime
                     if (publishPacket.QualityOfService == QualityOfService.AtLeastOnce)
                         await ctx.WriteAndFlushAsync(PubAckPacket.InResponseTo(publishPacket));
                     var payload = DecompressPayload(publishPacket.Payload);
-                    var json = Encoding.UTF8.GetString(payload);
+                    var json = await GetJsonFromThrift(payload);
                     Debug.WriteLine(json);
                     switch (publishPacket.TopicName)
                     {
@@ -91,35 +95,93 @@ namespace InstagramApiSharp.API.RealTime
                                 catch { }
                             }
                             break;
-                        default:
-                            try
+                        case "88":
                             {
-                                json = await HandleThrift(payload);
-
-                                var container = JsonConvert.DeserializeObject<JObject>(json);
-                                if (container["presence_event"] != null)
+                                var obj = JsonConvert.DeserializeObject<InstaRealtimeRespondResponse>(json);
+                                if (obj?.Data?.Length > 0)
                                 {
-                                    var presence = JsonConvert.DeserializeObject<PresenceContainer>(json);
-                                    _client.OnPresenceChanged(presence.PresenceEvent);
+                                    var typing = new List<InstaRealtimeTypingEventArgs>();
+                                    var dm = new List<InstaDirectInboxItem>();
+                                    for (int i = 0; i < obj.Data.Length; i++)
+                                    {
+                                        var item = obj.Data[i];
+                                        if (item != null)
+                                        {
+                                            if (item.IsTyping)
+                                            {
+                                                var typingResponse = JsonConvert.DeserializeObject<InstaRealtimeTypingResponse>(item.Value);
+                                                if (typingResponse != null)
+                                                {
+                                                    try
+                                                    {
+                                                        var tr = new InstaRealtimeTypingEventArgs
+                                                        {
+                                                            SenderId = typingResponse.SenderId,
+                                                            ActivityStatus = typingResponse.ActivityStatus,
+                                                            RealtimeOp = item.Op,
+                                                            RealtimePath = item.Path,
+                                                            TimestampUnix = typingResponse.Timestamp,
+                                                            Timestamp = DateTimeHelper.FromUnixTimeMiliSeconds(typingResponse.Timestamp),
+                                                            Ttl = typingResponse.Ttl
+                                                        };
+                                                        typing.Add(tr);
+                                                    }
+                                                    catch { }
+                                                }
+                                            }
+                                            else if (item.IsBroadcast)
+                                            {
+                                                if (item.HasItemInValue)
+                                                {
+                                                    var broadcastEventArgs = JsonConvert.DeserializeObject<InstaBroadcastEventArgs>(item.Value);
+                                                    if (broadcastEventArgs != null)
+                                                        _client.OnBroadcastChanged(broadcastEventArgs);
+                                                }
+                                            }
+                                            else if (item.IsThreadItem || item.IsThreadParticipants)
+                                            {
+                                                if (item.HasItemInValue)
+                                                {
+                                                    var directItemResponse = JsonConvert.DeserializeObject<InstaDirectInboxItemResponse>(item.Value);
+                                                    if (directItemResponse != null)
+                                                    {
+                                                        try
+                                                        {
+                                                            var dI = ConvertersFabric.Instance.GetDirectThreadItemConverter(directItemResponse).Convert();
+                                                            dI.RealtimeOp = item.Op;
+                                                            dI.RealtimePath = item.Path;
+                                                            dm.Add(dI);
+                                                        }
+                                                        catch { }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    var dI = new InstaDirectInboxItem
+                                                    {
+                                                        RealtimeOp = item.Op,
+                                                        RealtimePath = item.Path,
+                                                        ItemId = item.Value
+                                                    };
+                                                    dm.Add(dI);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (typing.Count > 0)
+                                        _client.OnTypingChanged(typing);
+                                    if (dm.Count > 0)
+                                        _client.OnDirectItemChanged(dm);
                                 }
-                                else if (container["event"] != null)
-                                {
-                                    var typing = JsonConvert.DeserializeObject<ThreadTypingContainer>(json);
 
-                                    if (typing.Data?.Length > 0)
-                                        for (int i = 0; i < typing.Data.Length; i++)
-                                            _client.OnTypingChanged(typing.Data[i]);
-                                }
                             }
-                            catch { }
-                            Debug.WriteLine($"Unknown topic received:{msg.PacketType} :  {publishPacket.TopicName} : {json}");
                             break;
 
                     }
                     break;
             }
         }
-        async Task<string> HandleThrift(byte[] bytes)
+        async Task<string> GetJsonFromThrift(byte[] bytes)
         {
             try
             {

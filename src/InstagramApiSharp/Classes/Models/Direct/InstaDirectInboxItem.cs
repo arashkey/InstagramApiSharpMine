@@ -75,5 +75,7 @@ namespace InstagramApiSharp.Classes.Models
 
         public InstaDirectReaction Reactions { get; set; } = new InstaDirectReaction();
         public bool HideInThread { get; set; }
+        public string RealtimePath { get; set; }
+        public string RealtimeOp { get; set; } = "add";
     }
 }
