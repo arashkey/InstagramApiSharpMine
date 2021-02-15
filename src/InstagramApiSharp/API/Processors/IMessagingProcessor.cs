@@ -11,7 +11,21 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IMessagingProcessor
     {
-
+        /// <summary>
+        ///     Reply a message
+        /// </summary>
+        /// <param name="threadId">Message thread id</param>
+        /// <param name="text">Message text</param>
+        /// <param name="itemIdToReply">Item id to reply (item id of the message)</param>
+        /// <param name="userIdToReply">User id (pk) to reply(the sender of the message)</param>
+        /// <param name="clientContextOfMessage">Client-context to reply (Client-context of the message)</param>
+        /// <param name="messageType">Message type [ what was the message type ? ]</param>
+        Task<IResult<InstaDirectRespondPayload>> ReplyDirectMessageAsync(string threadId,
+            string text,
+            string itemIdToReply,
+            long userIdToReply,
+            string clientContextOfMessage,
+            string messageType = "text");
         /// <summary>
         ///     Mark direct visual message as seen
         /// </summary>

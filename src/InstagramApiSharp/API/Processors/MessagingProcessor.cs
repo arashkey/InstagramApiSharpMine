@@ -54,6 +54,24 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
+        ///     Reply a message
+        /// </summary>
+        /// <param name="threadId">Message thread id</param>
+        /// <param name="text">Message text</param>
+        /// <param name="itemIdToReply">Item id to reply (item id of the message)</param>
+        /// <param name="userIdToReply">User id (pk) to reply(the sender of the message)</param>
+        /// <param name="clientContextOfMessage">Client-context to reply (Client-context of the message)</param>
+        /// <param name="messageType">Message type [ what was the message type ? ]</param>
+        public async Task<IResult<InstaDirectRespondPayload>> ReplyDirectMessageAsync(string threadId,
+            string text,
+            string itemIdToReply,
+            long userIdToReply,
+            string clientContextOfMessage,
+            string messageType = "text") =>
+            await SendDirectMessage(null, threadId, text, true, itemIdToReply, userIdToReply, clientContextOfMessage, messageType);
+
+
+        /// <summary>
         ///     Mark direct visual message as seen
         /// </summary>
         /// <param name="threadId">Thread id</param>
@@ -1706,55 +1724,8 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="text">Message text</param>
         /// <returns>List of threads</returns>
         public async Task<IResult<InstaDirectRespondPayload>> SendDirectTextAsync(string recipients, string threadIds,
-            string text)
-        {
-            UserAuthValidator.Validate(_userAuthValidate);
-            try
-            {
-                var directSendMessageUri = UriCreator.GetDirectSendMessageUri();
-                var token = ExtensionHelper.GetThreadToken();
-                var data = new Dictionary<string, string>
-                {
-                    {"mentioned_user_ids", "[]"},
-                    {"action", "send_item"},
-                    {"client_context", token},
-                    {"_csrftoken", _user.CsrfToken},
-                    {"text", text},
-                    {"device_id", _deviceInfo.DeviceId},
-                    {"mutation_token", token},
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"offline_threading_id", token}
-                };
-                if (!string.IsNullOrEmpty(recipients))
-                    data.Add("recipient_users", "[[" + recipients + "]]");
-                else
-                    data.Add("recipient_users", "[]");
-
-                if (!string.IsNullOrEmpty(threadIds))
-                    data.Add("thread_ids", "[" + threadIds + "]");
-
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, directSendMessageUri, _deviceInfo, data);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-
-                if (response.StatusCode != HttpStatusCode.OK)
-                    return Result.UnExpectedResponse<InstaDirectRespondPayload>(response, json);
-                var result = JsonConvert.DeserializeObject<InstaDirectRespondResponse>(json);
-               
-                return result.IsSucceed ? Result.Success(ConvertersFabric.Instance
-                    .GetDirectRespondConverter(result).Convert().Payload) : Result.Fail<InstaDirectRespondPayload>(result.StatusCode);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaDirectRespondPayload), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<InstaDirectRespondPayload>(exception);
-            }
-        }
+            string text) =>
+            await SendDirectMessage(recipients, threadIds, text);
 
         /// <summary>
         ///     Send video to direct thread (single)
@@ -2447,6 +2418,75 @@ namespace InstagramApiSharp.API.Processors
             {
                 _logger?.LogException(exception);
                 return Result.Fail<InstaDirectInboxThread>(exception);
+            }
+        }
+        private async Task<IResult<InstaDirectRespondPayload>> SendDirectMessage(string recipients, string threadIds,
+            string text,
+            bool isReply = false,
+            string itemIdToReply = null,
+            long userIdToReply = 0,
+            string clientContextOfMessage = null,
+            string messageType = "text")
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var directSendMessageUri = UriCreator.GetDirectSendMessageUri();
+                var token = ExtensionHelper.GetThreadToken();
+                var data = new Dictionary<string, string>
+                {
+                    {"mentioned_user_ids", "[]"},
+                    {"action", "send_item"},
+                    {"client_context", token},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"text", text},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"mutation_token", token},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"offline_threading_id", token}
+                };
+                if (!isReply)
+                {
+                    if (!string.IsNullOrEmpty(recipients))
+                        data.Add("recipient_users", "[[" + recipients + "]]");
+                    else
+                        data.Add("recipient_users", "[]");
+                }
+
+                if (!string.IsNullOrEmpty(threadIds))
+                    data.Add("thread_ids", "[" + threadIds + "]");
+
+                if (isReply)
+                {
+                    // 0 1
+                    data.Add("is_shh_mode", Convert.ToInt32(false).ToString());
+                    data.Add("send_attribution", "inbox");
+                    data.Add("replied_to_client_context", clientContextOfMessage);
+                    data.Add("replied_to_action_source", "long_press");
+                    data.Add("replied_to_item_id", itemIdToReply);
+                    data.Add("replied_to_target_type", messageType);
+                    data.Add("replied_to_user_id", userIdToReply.ToString());
+                }
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, directSendMessageUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaDirectRespondPayload>(response, json);
+                var result = JsonConvert.DeserializeObject<InstaDirectRespondResponse>(json);
+
+                return result.IsSucceed ? Result.Success(ConvertersFabric.Instance
+                    .GetDirectRespondConverter(result).Convert().Payload) : Result.Fail<InstaDirectRespondPayload>(result.StatusCode);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaDirectRespondPayload), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaDirectRespondPayload>(exception);
             }
         }
     }
