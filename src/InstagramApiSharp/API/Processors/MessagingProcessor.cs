@@ -52,7 +52,66 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+        /// <summary>
+        ///     Forward a direct message
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        /// <param name="text">Text to send</param>
+        /// <param name="forwardedThreadId">Forwarded thread id</param>
+        /// <param name="forwardedThreadItemId">Forwarded thread item id</param>
+        /// <param name="vanishMode">Vanish mode [ it's related to new direct ]</param>
+        public async Task<IResult<InstaDirectRespondPayload>> ForwardDirectMessageAsync(string threadId,
+            string text,
+            string forwardedThreadId,
+            string forwardedThreadItemId,
+            bool vanishMode = false)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var directSendMessageUri = UriCreator.GetBroadcastForwardUri();
+                var token = ExtensionHelper.GetThreadToken();
 
+                var data = new Dictionary<string, string>
+                {
+                    {"action", "send_item"},
+                    {"client_context", token},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"text", text},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"mutation_token", token},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"offline_threading_id", token},
+                    {"thread_ids", "[" + threadId + "]"},
+                    {"offline_threading_id", token},
+                    {"is_shh_mode", Convert.ToInt32(vanishMode).ToString()},
+                    {"send_attribution", "direct_forwarding_sheet"},
+                    {"forwarded_from_thread_id", forwardedThreadId},
+                    {"forwarded_from_thread_item_id", forwardedThreadItemId},
+                };
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, directSendMessageUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaDirectRespondPayload>(response, json);
+                var result = JsonConvert.DeserializeObject<InstaDirectRespondResponse>(json);
+
+                return result.IsSucceed ? Result.Success(ConvertersFabric.Instance
+                    .GetDirectRespondConverter(result).Convert().Payload) : Result.Fail<InstaDirectRespondPayload>(result.StatusCode);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaDirectRespondPayload), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaDirectRespondPayload>(exception);
+            }
+        }
         /// <summary>
         ///     Reply a message
         /// </summary>

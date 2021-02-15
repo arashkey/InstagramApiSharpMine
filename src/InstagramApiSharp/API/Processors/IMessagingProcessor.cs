@@ -12,6 +12,20 @@ namespace InstagramApiSharp.API.Processors
     public interface IMessagingProcessor
     {
         /// <summary>
+        ///     Forward a direct message
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        /// <param name="text">Text to send</param>
+        /// <param name="forwardedThreadId">Forwarded thread id</param>
+        /// <param name="forwardedThreadItemId">Forwarded thread item id</param>
+        /// <param name="vanishMode">Vanish mode [ it's related to new direct ]</param>
+        Task<IResult<InstaDirectRespondPayload>> ForwardDirectMessageAsync(string threadId,
+            string text,
+            string forwardedThreadId,
+            string forwardedThreadItemId,
+            bool vanishMode = false);
+
+        /// <summary>
         ///     Reply a message
         /// </summary>
         /// <param name="threadId">Message thread id</param>

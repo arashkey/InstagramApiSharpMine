@@ -489,6 +489,7 @@ namespace InstagramApiSharp.API
         public const string DIRECT_BROADCAST_REEL_REACT = API_SUFFIX + "/direct_v2/threads/broadcast/reel_react/";
         public const string DIRECT_BROADCAST_PRODUCT_SHARE = API_SUFFIX + "/direct_v2/threads/broadcast/product_share/";
         public const string DIRECT_BROADCAST_AR_EFFECT = API_SUFFIX + "/direct_v2/threads/broadcast/ar_effect/";
+        public const string DIRECT_BROADCAST_FORWARD = API_SUFFIX + "/direct_v2/threads/broadcast/forward/";
 
         /// <summary>
         /// post data:

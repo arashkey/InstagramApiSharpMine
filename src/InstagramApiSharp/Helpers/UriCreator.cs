@@ -2925,5 +2925,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Can't create URI for creatives write supported capabilities");
             return instaUri;
         }
+        public static Uri GetBroadcastForwardUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DIRECT_BROADCAST_FORWARD, out var instaUri))
+                throw new Exception("Cant create URI for direct broadcast forward");
+            return instaUri;
+        }
     }
 }
