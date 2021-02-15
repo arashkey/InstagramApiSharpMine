@@ -334,6 +334,51 @@ namespace InstagramApiSharp.API.RealTime
             }
         }
         /// <summary>
+        ///     Send/edit a reaction to a message
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        /// <param name="itemId">Message item id</param>
+        /// <param name="emoji">Emoji to send</param>
+        public async Task<IResult<bool>> SendReactionMessageAsync(string threadId, string itemId, string emoji)
+        {
+            try
+            {
+
+                var token = ExtensionHelper.GetThreadToken();
+                var data = new Dictionary<string, string>
+                {
+                    {"action", "send_item"},
+                    {"item_type", "reaction"},
+                    {"reaction_type", "like"},
+                    {"node_type", "item"},
+                    {"reaction_status", "created"},
+                    {"thread_id", threadId},
+                    {"client_context", token},
+                    {"item_id", itemId},
+                    {"emoji", emoji},
+                };
+                var json = JsonConvert.SerializeObject(data);
+                var bytes = Encoding.UTF8.GetBytes(json);
+                var publishPacket = new PublishPacket(QualityOfService.AtLeastOnce, false, false)
+                {
+                    Payload = Unpooled.CopiedBuffer(ZlibHelper.Compress(bytes)),
+                    PacketId = new Random().Next(1, ushort.MaxValue),
+                    TopicName = "132"
+                };
+                await RealtimeChannel.WriteAndFlushAsync(publishPacket);
+                return Result.Success(true);
+            }
+            catch (SocketException socketException)
+            {
+                return Result.Fail(socketException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                return Result.Fail<bool>(exception);
+            }
+        }
+
+        /// <summary>
         ///     Indicate activity
         /// </summary>
         /// <param name="threadId">Thread id</param>
