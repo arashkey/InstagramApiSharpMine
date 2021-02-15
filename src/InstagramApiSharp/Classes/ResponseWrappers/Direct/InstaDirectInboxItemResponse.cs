@@ -82,5 +82,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("reactions")] public InstaDirectReactionResponse Reactions { get; set; }
 
+        [JsonProperty("hide_in_thread")] public int? HideInThread { get; set; }
+
     }
 }

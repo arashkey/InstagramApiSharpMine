@@ -12,6 +12,7 @@ namespace InstagramApiSharp.Classes.Models
 {
     public class InstaDirectReaction
     {
+        public List<InstaDirectEmojiReaction> Emojis { get; set; } = new List<InstaDirectEmojiReaction>();
         public List<InstaDirectLikeReaction> Likes { get; set; } = new List<InstaDirectLikeReaction>();
 
         public int LikesCount { get; set; }

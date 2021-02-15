@@ -16,5 +16,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public List<InstaDirectLikeReactionResponse> Likes { get; set; }
         [JsonProperty("likes_count")]
         public int LikesCount { get; set; }
+        [JsonProperty("emojis")]
+        public List<InstaDirectEmojiReactionResponse> Emojis { get; set; }
     }
 }

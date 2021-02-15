@@ -18,7 +18,8 @@ namespace InstagramApiSharp.Converters
             var threadItem = new InstaDirectInboxItem
             {
                 ClientContext = SourceObject.ClientContext,
-                ItemId = SourceObject.ItemId
+                ItemId = SourceObject.ItemId,
+                HideInThread = System.Convert.ToBoolean(SourceObject.HideInThread ?? 0)
             };
 
             threadItem.TimeStamp = DateTimeHelper.UnixTimestampMilisecondsToDateTime(SourceObject.TimeStamp);

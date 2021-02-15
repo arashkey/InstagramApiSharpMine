@@ -32,6 +32,13 @@ namespace InstagramApiSharp.Converters
                         reaction.Likes.Add(ConvertersFabric.Instance.GetDirectLikeReactionConverter(item).Convert());
             }
             catch { }
+            try
+            {
+                if (SourceObject.Likes?.Count > 0)
+                    foreach (var item in SourceObject.Emojis)
+                        reaction.Emojis.Add(ConvertersFabric.Instance.GetDirectEmojiReactionConverter(item).Convert());
+            }
+            catch { }
             return reaction;
         }
     }

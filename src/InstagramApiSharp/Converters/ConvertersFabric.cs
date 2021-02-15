@@ -1104,5 +1104,11 @@ namespace InstagramApiSharp.Converters
             return new InstaDirectReactionConverter { SourceObject = response };
         }
 
+        public IObjectConverter<InstaDirectEmojiReaction, InstaDirectEmojiReactionResponse> GetDirectEmojiReactionConverter(
+            InstaDirectEmojiReactionResponse response)
+        {
+            return new InstaDirectEmojiReactionConverter { SourceObject = response };
+        }
+
     }
 }

@@ -74,5 +74,6 @@ namespace InstagramApiSharp.Classes.Models
         public InstaDirectInboxItem RepliedToMessage { get; set; }
 
         public InstaDirectReaction Reactions { get; set; } = new InstaDirectReaction();
+        public bool HideInThread { get; set; }
     }
 }
