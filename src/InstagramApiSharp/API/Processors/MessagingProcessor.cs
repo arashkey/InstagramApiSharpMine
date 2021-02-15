@@ -52,6 +52,16 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+
+
+
+        /// <summary>
+        ///     Enable vanish mode [ ssh mode ] for a specific thread
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        public async Task<IResult<bool>> EnableThreadVanishModeAsync(string threadId) =>
+            await EnableDisableVanishMode(threadId, true);
+
         /// <summary>
         ///     Forward a direct message
         /// </summary>
@@ -112,6 +122,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaDirectRespondPayload>(exception);
             }
         }
+
         /// <summary>
         ///     Reply a message
         /// </summary>
@@ -2549,6 +2560,38 @@ namespace InstagramApiSharp.API.Processors
             {
                 _logger?.LogException(exception);
                 return Result.Fail<InstaDirectRespondPayload>(exception);
+            }
+        }
+        public async Task<IResult<bool>> EnableDisableVanishMode(string threadId, bool flag)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetDirectThreadSshVanishModeUri(threadId);
+
+                var data = new Dictionary<string, string>
+                {
+                    {"enable_shh_mode", flag.ToString().ToLower()},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
             }
         }
     }

@@ -525,7 +525,8 @@ namespace InstagramApiSharp.API
         public const string GET_RANKED_RECIPIENTS = API_SUFFIX + "/direct_v2/ranked_recipients/";
         public const string GET_RECENT_RECIPIENTS = API_SUFFIX + "/direct_share/recent_recipients/";
         public const string STORY_SHARE = API_SUFFIX + "/direct_v2/threads/broadcast/story_share/?media_type={0}";
-        public const string DIRECT_THREAD_DELETE_MESSAGE = API_SUFFIX + "/direct_v2/threads/{0}/items/{1}/delete/"; 
+        public const string DIRECT_THREAD_DELETE_MESSAGE = API_SUFFIX + "/direct_v2/threads/{0}/items/{1}/delete/";
+        public const string DIRECT_THREAD_TOGGLE_SSH_MODE = API_SUFFIX + "/direct_v2/threads/{0}/toggle_shh_mode/";
 
         #endregion Direct endpoints constants
 

@@ -12,6 +12,12 @@ namespace InstagramApiSharp.API.Processors
     public interface IMessagingProcessor
     {
         /// <summary>
+        ///     Enable vanish mode [ ssh mode ] for a specific thread
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        Task<IResult<bool>> EnableThreadVanishModeAsync(string threadId);
+
+        /// <summary>
         ///     Forward a direct message
         /// </summary>
         /// <param name="threadId">Thread id</param>

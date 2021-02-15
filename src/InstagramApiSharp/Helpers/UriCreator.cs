@@ -2931,5 +2931,12 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for direct broadcast forward");
             return instaUri;
         }
+        public static Uri GetDirectThreadSshVanishModeUri(string threadId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.DIRECT_THREAD_TOGGLE_SSH_MODE, threadId),
+                out var instaUri))
+                throw new Exception("Cant create URI for direct thread ssh [vanish] mode");
+            return instaUri;
+        }
     }
 }
