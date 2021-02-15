@@ -36,7 +36,8 @@ namespace InstagramApiSharp.Converters
                         ItemId = SourceObject.Payload.ItemId,
                         ThreadId = SourceObject.Payload.ThreadId,
                         Timestamp = SourceObject.Payload.Timestamp,
-                        Message = SourceObject.Payload.Message
+                        Message = SourceObject.Payload.Message,
+                        ClientFacingErrorMessage = SourceObject.Payload.ClientFacingErrorMessage
                     };
 
                     if (SourceObject.Payload.ParticipantIds?.Length > 0)

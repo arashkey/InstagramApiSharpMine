@@ -31,6 +31,7 @@ namespace InstagramApiSharp.Classes.Models
         public string Message { get; set; }
 
         public List<long> ParticipantIds { get; set; } = new List<long>();
+        public string ClientFacingErrorMessage { get; set; }
 
         public bool UnloadableParticipant
         {

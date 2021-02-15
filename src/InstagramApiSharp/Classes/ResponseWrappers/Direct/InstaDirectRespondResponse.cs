@@ -53,5 +53,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public long[] ParticipantIds { get; set; }
         [JsonProperty("message")]
         public string Message { get; set; }
+        [JsonProperty("client_facing_error_message")]
+        public string ClientFacingErrorMessage { get; set; }
     }
 }
