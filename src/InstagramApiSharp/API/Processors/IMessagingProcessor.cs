@@ -11,6 +11,13 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IMessagingProcessor
     {
+
+        /// <summary>
+        ///     Disable vanish mode [ ssh mode ] for a specific thread
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        Task<IResult<bool>> DisableThreadVanishModeAsync(string threadId);
+
         /// <summary>
         ///     Enable vanish mode [ ssh mode ] for a specific thread
         /// </summary>
@@ -48,6 +55,7 @@ namespace InstagramApiSharp.API.Processors
             string clientContextOfMessage,
             string messageType = "text",
             bool vanishMode = false);
+
         /// <summary>
         ///     Mark direct visual message as seen
         /// </summary>

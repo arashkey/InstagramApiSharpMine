@@ -54,6 +54,12 @@ namespace InstagramApiSharp.API.Processors
         }
 
 
+        /// <summary>
+        ///     Disable vanish mode [ ssh mode ] for a specific thread
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        public async Task<IResult<bool>> DisableThreadVanishModeAsync(string threadId) =>
+            await EnableDisableVanishMode(threadId, false);
 
         /// <summary>
         ///     Enable vanish mode [ ssh mode ] for a specific thread
