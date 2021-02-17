@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using InstagramApiSharp;
 using InstagramApiSharp.API;
 using InstagramApiSharp.API.Builder;
+using InstagramApiSharp.API.RealTime.Responses.Models;
 using InstagramApiSharp.Classes;
+using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Logger;
+using System.Linq;
 /////////////////////////////////////////////////////////////////////
 ////////////////////// IMPORTANT NOTE ///////////////////////////////
 //
@@ -47,7 +51,11 @@ namespace NotificationsExample
     class Program
     {
         private static IInstaApi InstaApi;
+        // You should get threads from the logged in account, to understand what is going on in the receiver's events
+        private static List<InstaDirectInboxThread> Threads = new List<InstaDirectInboxThread>();
+#pragma warning disable IDE0060 // Remove unused parameter
         static void Main(string[] args)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             Task.Run(MainAsync).GetAwaiter().GetResult();
             Console.ReadKey();
@@ -113,6 +121,9 @@ namespace NotificationsExample
             // You can use realtime to send direct items as well
             // Note that you MUST Start the realtime client first! if you want to use Realtime client functions
 
+            var inboxResult = await InstaApi.MessagingProcessor.GetDirectInboxAsync(PaginationParameters.MaxPagesToLoad(1));
+            if (inboxResult.Succeeded)
+                Threads = inboxResult.Value.Inbox.Threads;
             // i.e: Send a message to someone>
             var user = await InstaApi.UserProcessor.GetUserAsync("ministaapp");
             if (user.Succeeded)
@@ -135,19 +146,47 @@ namespace NotificationsExample
         //////////////////// REALTIME CLIENT /////////////////////
         //////////////////////////////////////////////////////////
 
-        private async static void RealTimeClientTypingChanged(object sender, InstagramApiSharp.API.RealTime.Handlers.ThreadTypingEventsArgs e)
+        private static void RealTimeClientTypingChanged(object sender, List<InstaRealtimeTypingEventArgs> e)
         {
             try
             {
-                // who is typing?
-                if (!string.IsNullOrEmpty(e?.TypingData?.SenderId))
+
+                if (e?.Count > 0)
                 {
-                    var userId = long.Parse(e.TypingData.SenderId);
+                    var start = "direct_v2/threads/";
+                    var typings = e
+                        .Where(x => x.RealtimePath?.Contains(start) ?? false)// is it a thread or not?!
+                        .Select(x =>
+                        {
+                            // /direct_v2/threads/340282366841710300949128154931298634193/activity_indicator_id/6685320955800332013
+                            try
+                            {
+                                var threadId = x.RealtimePath.Substring(x.RealtimePath.IndexOf(start) + start.Length);
+                                x.RealtimePath = threadId.Substring(0, threadId.IndexOf("/"));
+                            }
+                            catch { }
+                            return x;
+                        }).ToList();
 
-                    // get username>
-                    var user = await InstaApi.UserProcessor.GetUserInfoByIdAsync(userId).ConfigureAwait(false);
+                    foreach (var item in typings)
+                    {
+                        var userId = long.Parse(item.SenderId); // sender
+                        var findThread = Threads.FirstOrDefault(x => x.ThreadId == item.RealtimePath); // find the current thread, if loaded
+                        if (findThread != null)
+                        {
+                            var findUser = findThread.Users.FirstOrDefault(x => x.Pk == userId);
 
-                    Console.WriteLine($"@{user.Value.UserName} is typing....");
+                            Console.WriteLine($"@{findUser.UserName} is typing....");
+                        }
+                        else // if thread not found in the Threads list, we have to ignore it, but you can do it
+                        {
+                            // WARNING: don't do this as much as possible!!! because it might block your account 
+                            // bad idea for doing this>
+                            //var user = await InstaApi.UserProcessor.GetUserInfoByIdAsync(userId).ConfigureAwait(false);
+                            //Console.WriteLine($"@{user.Value.UserName} is typing....");
+                        }
+
+                    }
                 }
             }
             catch { }
