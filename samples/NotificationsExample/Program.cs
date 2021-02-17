@@ -10,6 +10,7 @@ using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Logger;
 using System.Linq;
+using InstagramApiSharp.Classes.SessionHandlers;
 /////////////////////////////////////////////////////////////////////
 ////////////////////// IMPORTANT NOTE ///////////////////////////////
 //
@@ -36,7 +37,7 @@ using System.Linq;
 //| - | Microsoft.Extensions.Logging | 3.1.4 | Important for Thrift |
 //| - | Microsoft.Extensions.Logging.Abstractions | 3.1.4 | Important for Thrift |
 //| - | Microsoft.Extensions.Options | 3.1.4 | Important for Thrift |
-
+//| - | System.Threading.Tasks.Extensions | 4.5.4 | Important for Thrift |
 
 
 //- Note 1: You MUST reference [Portable.BouncyCastle](https://www.nuget.org/packages/Portable.BouncyCastle/)'s package to your projects.
@@ -51,6 +52,7 @@ namespace NotificationsExample
     class Program
     {
         private static IInstaApi InstaApi;
+        const string StateFile = "state.bin";
         // You should get threads from the logged in account, to understand what is going on in the receiver's events
         private static List<InstaDirectInboxThread> Threads = new List<InstaDirectInboxThread>();
 #pragma warning disable IDE0060 // Remove unused parameter
@@ -80,8 +82,9 @@ namespace NotificationsExample
                 .SetUser(userSession)
                 .UseLogger(new DebugLogger(LogLevel.All)) // use logger for requests and debug messages
                 .SetRequestDelay(delay)
+                .SetSessionHandler(new FileSessionHandler { FilePath = StateFile })
                 .Build();
-
+            LoadSession();
             // Load your data
             if (!InstaApi.IsUserAuthenticated)
             {
@@ -95,6 +98,7 @@ namespace NotificationsExample
                     Console.WriteLine($"Unable to login: {logInResult.Info.Message}");
                     return;
                 }
+                SaveSession();
             }
 
             // save your data
@@ -110,20 +114,22 @@ namespace NotificationsExample
 
             //////////////////////////////////////////////////////
 
+            var inboxResult = await InstaApi.MessagingProcessor.GetDirectInboxAsync(PaginationParameters.MaxPagesToLoad(1));
+            if (inboxResult.Succeeded)
+                Threads = inboxResult.Value.Inbox.Threads;
 
             // Realtime client [for direct messaging]
             // - Configurations>
             InstaApi.RealTimeClient.PresenceChanged += RealTimeClientPresenceChanged;
             InstaApi.RealTimeClient.TypingChanged += RealTimeClientTypingChanged;
+            InstaApi.RealTimeClient.DirectItemChanged += RealTimeClientDirectItemChanged;
             // Starting realtime client listener
             await InstaApi.RealTimeClient.Start();
             Console.WriteLine($"Realtime client listener started");
             // You can use realtime to send direct items as well
             // Note that you MUST Start the realtime client first! if you want to use Realtime client functions
 
-            var inboxResult = await InstaApi.MessagingProcessor.GetDirectInboxAsync(PaginationParameters.MaxPagesToLoad(1));
-            if (inboxResult.Succeeded)
-                Threads = inboxResult.Value.Inbox.Threads;
+ 
             // i.e: Send a message to someone>
             var user = await InstaApi.UserProcessor.GetUserAsync("ministaapp");
             if (user.Succeeded)
@@ -137,7 +143,10 @@ namespace NotificationsExample
         {
             // do whatever you want to do with notifications
             if (e?.NotificationContent != null)
+            {
                 Console.WriteLine($"Notification received >>> {e.NotificationContent.Message}");
+                System.Diagnostics.Debug.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(e.NotificationContent));
+            }
         }
 
 
@@ -195,7 +204,7 @@ namespace NotificationsExample
         private async static void RealTimeClientPresenceChanged(object sender, InstagramApiSharp.API.RealTime.Handlers.PresenceEventEventArgs e)
         {
             // presence changed...Online status of someone changed
-            if(!string.IsNullOrEmpty(e?.UserId))
+            if (!string.IsNullOrEmpty(e?.UserId))
             {
                 var userId = long.Parse(e.UserId);
                 // get username>
@@ -204,5 +213,65 @@ namespace NotificationsExample
             }
         }
 
+        private static void RealTimeClientDirectItemChanged(object sender, List<InstaDirectInboxItem> e)
+        {
+            string GetUserOrUserId(string user, long userId) =>
+                !string.IsNullOrEmpty(user) ? user : userId.ToString();
+
+            // Direct item changed means that a specific thread sends a specific update to our side.
+            // this means maybe they deleted a message or sends a new one to our side
+            if (e?.Count > 0)
+            {
+                var start = "direct_v2/threads/";
+                var threadItems = e
+                    .Where(x => x.RealtimePath?.Contains(start) ?? false)// is it a thread or not?!
+                    .Select(x => x).ToList();
+
+                foreach (var item in threadItems)
+                {
+                    var userId = item.UserId; // sender
+                    var threadId = item.RealtimePath.Substring(item.RealtimePath.IndexOf(start) + start.Length);
+                    threadId = threadId.Substring(0, threadId.IndexOf("/"));
+                    var findThread = Threads.FirstOrDefault(x => x.ThreadId == item.RealtimePath);
+                    var findUser = findThread?.Users?.FirstOrDefault(x => x.Pk == userId);
+                    var senderUser = GetUserOrUserId(findUser?.UserName, userId);
+
+                    if (item.RealtimePath?.Contains("/items/") ?? false && !item.HideInThread)// new message or replace!
+                    {
+
+                        var itemId = item.RealtimePath.Substring(item.RealtimePath.IndexOf("/items/") + "/items/".Length);
+                        if (itemId.Contains("/"))
+                            itemId = itemId.Substring(0, itemId.IndexOf("/"));
+
+                        if (item.RealtimeOp == "remove")
+                            Console.WriteLine($"{senderUser} has deleted one his message with item id: {itemId}.");
+                        else
+                            Console.WriteLine($"{senderUser} sent you a message with this type: {item.ItemType} => {item.Text}.");
+                    }
+                    else if (item.RealtimePath?.Contains("/participants/") ?? false) // your messages has seen by the user
+                    {
+                        if (item.RealtimePath?.Contains("/has_seen") ?? false)
+                        {
+                            if (item.RealtimeOp == "replace")
+                            {
+                                Console.WriteLine($"{senderUser} has seen your messages.");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        static void LoadSession() =>
+            InstaApi?.SessionHandler?.Load();
+
+
+        static void SaveSession()
+        {
+            if (InstaApi == null)
+                return;
+            if (!InstaApi.IsUserAuthenticated)
+                return;
+            InstaApi?.SessionHandler?.Save();
+        }
     }
 }
