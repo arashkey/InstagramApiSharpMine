@@ -47,7 +47,11 @@ using NotificationsExample;
 /////////////////////////////////////////////////////////////////////
 
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
-public class ExtendedProgram 
+#pragma warning disable CA1050 // Declare types in namespaces
+#pragma warning disable IDE0057 // Use range operator
+#pragma warning disable IDE0062 // Make local function 'static'
+public class ExtendedProgram
+#pragma warning restore CA1050 // Declare types in namespaces
 {
     private static IInstaApi InstaApi;
     const string StateFile = "state.bin";
@@ -298,8 +302,8 @@ public class ExtendedProgram
                     .Where(x => x.RealtimePath?.Contains(start) ?? false)// is it a thread or not?!
                     .Select(x =>
                     {
-                            // /direct_v2/threads/340282366841710300949128154931298634193/activity_indicator_id/6685320955800332013
-                            try
+                        // /direct_v2/threads/340282366841710300949128154931298634193/activity_indicator_id/6685320955800332013
+                        try
                         {
                             var threadId = x.RealtimePath.Substring(x.RealtimePath.IndexOf(start) + start.Length);
                             x.RealtimePath = threadId.Substring(0, threadId.IndexOf("/"));
@@ -405,3 +409,5 @@ public class ExtendedProgram
 }
 
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
+#pragma warning restore IDE0057 // Use range operator
+#pragma warning restore IDE0062 // Make local function 'static'

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\NotificationsExample\ExtendedProgram.cs" Link="ExtendedProgram.cs" />
+    <Compile Include="..\NotificationsExample\HelperExtensions.cs" Link="HelperExtensions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\InstagramApiSharp\InstagramApiSharp.NET5.WithNotification.csproj" />
+    <ProjectReference Include="..\..\src\Thrift\Thrift.NET5.csproj" />
+  </ItemGroup>
+
+</Project>
