@@ -240,6 +240,15 @@ namespace InstagramApiSharp.Helpers
                 fields.Add("d", "0");
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(fields);
+#if NET
+            request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
+
+            if (!IsNewerApis)
+                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
+                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
+            if (appendD)
+                request.Options.TryAdd("d", "0");
+#else
             request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
 
             if (!IsNewerApis)
@@ -247,6 +256,7 @@ namespace InstagramApiSharp.Helpers
                 InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
             if (appendD)
                 request.Properties.Add("d", "0");
+#endif
             return request;
         }
         public HttpRequestMessage GetSignedRequest(HttpMethod method,
@@ -267,10 +277,19 @@ namespace InstagramApiSharp.Helpers
                 fields.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(fields);
+#if NET
+            request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
+
+            if (!IsNewerApis)
+                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
+                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
+#else
             request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
+
             if (!IsNewerApis)
                 request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
                 InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
+#endif
             return request;
         }
 
@@ -296,12 +315,23 @@ namespace InstagramApiSharp.Helpers
                 fields.Add("d", "0");
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(fields);
+#if NET
+            request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
+
+            if (!IsNewerApis)
+                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
+                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
+            if (appendD)
+                request.Options.TryAdd("d", "0");
+#else
             request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
+
             if (!IsNewerApis)
                 request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
                 InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
             if (appendD)
                 request.Properties.Add("d", "0");
+#endif
             return request;
         }
 
@@ -324,12 +354,23 @@ namespace InstagramApiSharp.Helpers
                 fields.Add("d", "0");
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(fields);
+#if NET
+            request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
+
+            if (!IsNewerApis)
+                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
+                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
+            if (appendD)
+                request.Options.TryAdd("d", "0");
+#else
             request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
+
             if (!IsNewerApis)
                 request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
                 InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
             if (appendD)
                 request.Properties.Add("d", "0");
+#endif
             return request;
         }
 

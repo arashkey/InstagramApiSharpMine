@@ -2375,7 +2375,7 @@ namespace InstagramApiSharp.API
         /// <param name="timeout">Timeout (set more than 100 seconds!)</param>
         public void SetTimeout(TimeSpan timeout)
         {
-            if (timeout == null)
+            if (timeout == TimeSpan.Zero)
                 timeout = TimeSpan.FromSeconds(350);
 
             HttpClient.Timeout = timeout;

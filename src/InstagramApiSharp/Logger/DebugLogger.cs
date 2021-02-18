@@ -25,7 +25,11 @@ namespace InstagramApiSharp.Logger
             WriteSeprator();
             Write($"Request: {request.Method} {request.RequestUri}");
             WriteHeaders(request.Headers);
+#if NET
+            WriteProperties(request.Options);
+#else
             WriteProperties(request.Properties);
+#endif
             if (request.Method == HttpMethod.Post)
                 await WriteRequestContent(request.Content);
         }

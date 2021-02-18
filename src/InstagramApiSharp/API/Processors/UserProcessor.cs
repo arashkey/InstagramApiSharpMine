@@ -644,11 +644,17 @@ namespace InstagramApiSharp.API.Processors
             {
                 var userUri = UriCreator.GetUserUri(username);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, userUri, _deviceInfo);
+#if NET
+                request.Options.TryAdd(InstaApiConstants.HEADER_TIMEZONE, InstaApiConstants.TIMEZONE_OFFSET.ToString());
+                request.Options.TryAdd(InstaApiConstants.HEADER_COUNT, "1");
+                request.Options.TryAdd(InstaApiConstants.HEADER_RANK_TOKEN, _user.RankToken);
+#else
                 request.Properties.Add(new KeyValuePair<string, object>(InstaApiConstants.HEADER_TIMEZONE,
                     InstaApiConstants.TIMEZONE_OFFSET.ToString()));
                 request.Properties.Add(new KeyValuePair<string, object>(InstaApiConstants.HEADER_COUNT, "1"));
                 request.Properties.Add(
                     new KeyValuePair<string, object>(InstaApiConstants.HEADER_RANK_TOKEN, _user.RankToken));
+#endif
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
@@ -1471,9 +1477,9 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<string>(exception);
             }
         }
-        #endregion public parts
+#endregion public parts
 
-        #region private parts
+#region private parts
 
         private async Task<IResult<InstaFriendshipShortStatusList>> AddBestFriends(long[] userIdsToAdd, long[] userIdsToRemove)
         {
@@ -2108,7 +2114,7 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        #endregion private parts
+#endregion private parts
 
     }
 }

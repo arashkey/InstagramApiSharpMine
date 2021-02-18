@@ -90,10 +90,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\InstagramApiSharp\InstagramApiSharp.csproj">
-      <Project>{2a588963-cebe-47ec-bfbb-2f3d405e4c80}</Project>
-      <Name>InstagramApiSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Thrift\Thrift.csproj">
       <Project>{bd0528e0-a77d-4486-979c-8e88273ed10e}</Project>
       <Name>Thrift</Name>

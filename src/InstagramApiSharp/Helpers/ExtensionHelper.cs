@@ -20,10 +20,12 @@ using InstagramApiSharp.API.Versions;
 using InstagramApiSharp.Helpers;
 using System.Text;
 using System.Security.Cryptography;
+#if NETSTANDARD
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Parameters;
+#endif
 namespace InstagramApiSharp
 {
     internal static class ExtensionHelper
@@ -139,7 +141,7 @@ namespace InstagramApiSharp
                 ix += (int)ch;
             return "2" + ix;
         }
-
+#if NETSTANDARD
         static private readonly SecureRandom secureRandom = new SecureRandom();
 
         public static string GetEncryptedPassword(this IInstaApi api, string password, long? providedTime = null) 
@@ -182,7 +184,45 @@ namespace InstagramApiSharp
 
             return $"#PWD_INSTAGRAM:4:{time}:{payload}";
         }
+#elif NET || NETCOREAPP3_1
+        private readonly static RNGCryptoServiceProvider RngProvider = new RNGCryptoServiceProvider();
+        private readonly static RSACryptoServiceProvider RsaProvider = new RSACryptoServiceProvider();
 
+        public static string GetEncryptedPassword(this IInstaApi api, string password, long? providedTime = null)
+        {
+            var pubKey = api.GetLoggedUser().PublicKey;
+            var pubKeyId = api.GetLoggedUser().PublicKeyId;
+            byte[] randKey = new byte[32];
+            byte[] iv = new byte[12];
+            RngProvider.GetBytes(randKey);
+            RngProvider.GetBytes(iv);
+
+            long time = providedTime ?? DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            byte[] pubKEY = Convert.FromBase64String(pubKey);
+            string decodedPubKey = Encoding.UTF8.GetString(pubKEY, 0, pubKEY.Length);
+            decodedPubKey = decodedPubKey.Replace("-----BEGIN PUBLIC KEY-----", "").Replace("-----END PUBLIC KEY-----", "");
+            byte[] publicKeyBytes = Convert.FromBase64String(decodedPubKey.Trim());
+            RsaProvider.ImportSubjectPublicKeyInfo(publicKeyBytes, out _);
+            byte[] encryptedKey = RsaProvider.Encrypt(randKey, false);
+
+            var plaintext = Encoding.UTF8.GetBytes(password);
+
+            byte[] ciphertext = new byte[plaintext.Length];
+            byte[] tag = new byte[16];
+            byte[] associatedData = Encoding.UTF8.GetBytes(time.ToString());
+            AesGcm aesGsm = new AesGcm(randKey);
+            aesGsm.Encrypt(iv, plaintext, ciphertext, tag, associatedData);
+
+            byte[] encKeyIdBytes = BitConverter.GetBytes(Convert.ToUInt16(pubKeyId));
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(encKeyIdBytes);
+            encKeyIdBytes[0] = 1;
+            byte[] buffersSize = BitConverter.GetBytes(Convert.ToInt16(encryptedKey.Length));
+            var payload = Convert.ToBase64String(encKeyIdBytes.Concat(iv).Concat(buffersSize).Concat(encryptedKey).Concat(tag).Concat(ciphertext).ToArray());
+
+            return $"#PWD_INSTAGRAM:4:{time}:{payload}";
+        }
+#endif
         public static string GetThreadToken()
         {
             var str = "";

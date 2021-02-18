@@ -634,9 +634,15 @@ namespace InstagramApiSharp.API.Processors
                 var signature = $"{hash}.{Uri.EscapeDataString(payload)}";
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
                 request.Content = new FormUrlEncodedContent(fields);
+#if NET
+                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
+                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
+                    InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
+#else
                 request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
                 request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
                     InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
+#endif
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -680,9 +686,15 @@ namespace InstagramApiSharp.API.Processors
                 var signature = $"{hash}.{Uri.EscapeDataString(payload)}";
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
                 request.Content = new FormUrlEncodedContent(fields);
+#if NET
+                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
+                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
+                    InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
+#else
                 request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
                 request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
                     InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
+#endif
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -1134,9 +1146,9 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidator.Validate(_userAuthValidate);
             return await _instaApi.HelperProcessor.SendMediaPhotoAsync(null, nametagImage.ConvertToImageUpload(), null, null, true);
         }
-        #endregion Profile edit
+#endregion Profile edit
 
-        #region Story settings
+#region Story settings
         /// <summary>
         ///     Remove trusted device
         /// </summary>        
@@ -1473,9 +1485,9 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaAccountCheck>(exception);
             }
         }
-        #endregion Story settings
+#endregion Story settings
 
-        #region two factor authentication enable/disable
+#region two factor authentication enable/disable
         
         /// <summary>
         ///     Get Security settings (two factor authentication and backup codes).
@@ -1813,9 +1825,9 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<TwoFactorRegenBackupCodes>(exception);
             }
         }
-        #endregion two factor authentication enable/disable
+#endregion two factor authentication enable/disable
 
-        #region Other functions
+#region Other functions
 
         /// <summary>
         ///     Enable presence (people can track your activities and you can see their activies too)
@@ -2032,9 +2044,9 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<bool>(exception);
             }
         }
-        #endregion Other functions
+#endregion Other functions
 
-        #region NOT COMPLETE FUNCTIONS
+#region NOT COMPLETE FUNCTIONS
 
 
         //NOT COMPLETE
@@ -2069,7 +2081,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<object>(exception);
             }
         }
-        #endregion NOT COMPLETE FUNCTIONS
+#endregion NOT COMPLETE FUNCTIONS
 
     }
 }
