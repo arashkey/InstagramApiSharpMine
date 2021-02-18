@@ -11,6 +11,7 @@ using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Logger;
 using System.Linq;
 using InstagramApiSharp.Classes.SessionHandlers;
+using InstagramApiSharp.Helpers;
 /////////////////////////////////////////////////////////////////////
 ////////////////////// IMPORTANT NOTE ///////////////////////////////
 //
@@ -47,6 +48,9 @@ using InstagramApiSharp.Classes.SessionHandlers;
 
 ////////////////////// IMPORTANT NOTE ///////////////////////////////
 /////////////////////////////////////////////////////////////////////
+
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable IDE0060 // Remove unused parameter
 namespace NotificationsExample
 {
     class Program
@@ -55,9 +59,7 @@ namespace NotificationsExample
         const string StateFile = "state.bin";
         // You should get threads from the logged in account, to understand what is going on in the receiver's events
         private static List<InstaDirectInboxThread> Threads = new List<InstaDirectInboxThread>();
-#pragma warning disable IDE0060 // Remove unused parameter
         static void Main(string[] args)
-#pragma warning restore IDE0060 // Remove unused parameter
         {
             Task.Run(MainAsync).GetAwaiter().GetResult();
             Console.ReadKey();
@@ -85,6 +87,8 @@ namespace NotificationsExample
                 .SetSessionHandler(new FileSessionHandler { FilePath = StateFile })
                 .Build();
             LoadSession();
+
+
             // Load your data
             if (!InstaApi.IsUserAuthenticated)
             {
@@ -139,13 +143,148 @@ namespace NotificationsExample
         //////////////////////////////////////////////////////////
         /////////////////////// NOTIFICATIONS ////////////////////
         //////////////////////////////////////////////////////////
-        private static void PushClientMessageReceived(object sender, InstagramApiSharp.API.Push.MessageReceivedEventArgs e)
+        private async static void PushClientMessageReceived(object sender, InstagramApiSharp.API.Push.MessageReceivedEventArgs e)
         {
             // do whatever you want to do with notifications
             if (e?.NotificationContent != null)
             {
-                Console.WriteLine($"Notification received >>> {e.NotificationContent.Message}");
-                System.Diagnostics.Debug.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(e.NotificationContent));
+                // A notification sample:
+
+                //{
+                //  "Title": null,
+                //  "Message": "rmt.jokar1373: hello minista",
+                //  "TickerText": null,
+                //  "IgAction": "direct_v2?id=340282366841710300949128237381813611847&x=29765750603588088089900975323611136",
+                //  "CollapseKey": "direct_v2_message",
+                //  "OptionalImage": null,
+                //  "OptionalAvatarUrl": "https://scontent.cdninstagram.com/v/t51.2885-19/s150x150/148613314_446359293380085_3388830789281106916_n.jpg?_nc_ht=scontent.cdninstagram.com&_nc_ohc=zZhKdVwXXEQAX8X3d1j&tp=1&oh=62258a612e97175aa3c2d1561b6767cf&oe=6055AFED",
+                //  "Sound": "default",
+                //  "PushId": "5bb904ddc5975H62363020H5bb9097725c47H29",
+                //  "PushCategory": null,
+                //  "IntendedRecipientUserId": "1647718432",
+                //  "SourceUserId": "44579558127",
+                //  "IgActionOverride": null,
+                //  "BadgeCount": {
+                //    "Direct": 5,
+                //    "Ds": 0,
+                //    "Activities": 0
+                //  },
+                //  "InAppActors": null
+                //}
+
+                var notification = e.NotificationContent;
+                Console.WriteLine($"Notification received >>> {notification.Message}");
+    
+                var action = notification.IgAction;
+                var queries = HttpUtility.ParseQueryString(action, out string type);
+
+                var collapsedKey = notification.CollapseKey;            // type of message
+                var sourceUserId = notification.SourceUserId;           // user id of sender
+                var pushCategory = notification.PushCategory;           // category
+                var id = queries.GetValueIfPossible("id")?.Trim();      // thread id (if available)
+                var itemId = queries.GetValueIfPossible("x");           // item id (if available)
+
+                if (type == "direct_v2") // related to direct
+                {
+                    // Example:
+                    // IgAction:        direct_v2?id=340282366841710300949128237381813611847&x=29765750603588088089900975323611136
+                    // Message:         rmt.jokar1373: hello minista
+                    // Message:         rmt.jokar1373 wants to send you a message.
+
+                    var threadId = id;
+                    var messageId = id;
+                    var userId = await InstaApi.GetUserId(sourceUserId);
+
+                    if (string.IsNullOrEmpty(pushCategory) || pushCategory == "direct_v2_message") // messaging
+                    {
+                        // Do whatever you want to do with this message
+
+                        //// Send a message for example:
+                        //await InstaApi.MessagingProcessor.SendDirectTextAsync(null, threadId, "Hello from notification");
+
+                    }
+                    else if (pushCategory == "direct_v2_pending") // pending message
+                    {
+                        // Accept   Delete   Block
+
+                        //// Accept
+                        //await InstaApi.MessagingProcessor.ApproveDirectPendingRequestAsync(id);
+
+                        //// Decline
+                        //await InstaApi.MessagingProcessor.DeclineDirectPendingRequestsAsync(id);
+
+                        //// Delete (Decline and block user)
+                        //await InstaApi.MessagingProcessor.DeclineDirectPendingRequestsAsync(id);
+                        //await InstaApi.UserProcessor.BlockUserAsync(userId);
+                    }
+                }
+                else if (collapsedKey == "private_user_follow_request") // follow request
+                {
+                    // Example:
+                    // IgAction:        user?username=rmtjj73&sourceUserId=14564882672
+                    // Message:         Minista App (@ministaapp) has requested to follow you.
+
+                    long userPk = await InstaApi.GetUserId(sourceUserId, queries["username"]);
+                    if (userPk == -1) return;
+
+                    // Accept follow request
+                    //await InstaApi.UserProcessor.AcceptFriendshipRequestAsync(userPk);
+
+                    // Ignore/decline follow request
+                    //await InstaApi.UserProcessor.IgnoreFriendshipRequestAsync(userPk);
+                }
+                else if (type == "broadcast" && collapsedKey == "live_broadcast")
+                {
+                    // Example:
+                    // IgAction:        broadcast?id=18035667694304049&reel_id=1647718432&published_time=1607056892
+                    // Message:         ministaapp started a live video.
+
+                    // do whatever you want to do
+                }
+                else if (collapsedKey == "post")
+                {
+                    // Example:
+                    // IgAction:        media?id=2455052815714850188_1647718432&media_id=2455052815714850188_1647718432
+                    // Message:         ministaapp just posted a photo.
+
+                    // Like post
+                    //await InstaApi.MediaProcessor.LikeMediaAsync(id);
+
+                    //// Comment
+                    //await InstaApi.CommentProcessor.CommentMediaAsync(id, "Woooow");
+                }
+                else if (collapsedKey == "comment")
+                {
+                    // Example:
+                    // IgAction:        comments_v2?media_id=2450763156807842703_44428109093&target_comment_id=17915232835518492&permalink_enabled=True
+                    // Message:         ministaapp commented: \"😉😉😉😉😉😉\"
+
+                    var mediaId = id ?? queries.GetValueIfPossible("media_id");
+                    var targetMediaId = queries.GetValueIfPossible("target_comment_id");
+
+                    //// Like comment
+                    ////await InstaApi.CommentProcessor.LikeCommentAsync(targetMediaId);
+
+                    //// Reply a comment
+                    ////await InstaApi.CommentProcessor.ReplyCommentMediaAsync(mediaId, targetMediaId, "I replied to you");
+                }
+                else if (collapsedKey == "subscribed_igtv_post")
+                {
+                    // Example:
+                    // IgAction:        tv_viewer?id=2457476214378560971
+                    // Message:         ministaapp just posted an IGTV video.
+
+                    if (string.IsNullOrEmpty(id)) return;
+                    // tv_viewer?id=2457476214378560971
+                    var mediaInfo = await InstaApi.MediaProcessor.GetMediaByIdAsync(id);
+                    if (!mediaInfo.Succeeded) return;
+                    var mediaId = mediaInfo.Value.InstaIdentifier;
+                    //// Like IGTV
+                    ////await InstaApi.CommentProcessor.LikeCommentAsync(mediaId);
+
+                    //// Send a comment
+                    ////await InstaApi.CommentProcessor.CommentMediaAsync(mediaId, "I liked your awesome IGTV");
+                }
             }
         }
 
@@ -194,7 +333,6 @@ namespace NotificationsExample
                             //var user = await InstaApi.UserProcessor.GetUserInfoByIdAsync(userId).ConfigureAwait(false);
                             //Console.WriteLine($"@{user.Value.UserName} is typing....");
                         }
-
                     }
                 }
             }
@@ -264,7 +402,6 @@ namespace NotificationsExample
         static void LoadSession() =>
             InstaApi?.SessionHandler?.Load();
 
-
         static void SaveSession()
         {
             if (InstaApi == null)
@@ -275,3 +412,5 @@ namespace NotificationsExample
         }
     }
 }
+#pragma warning restore IDE0060 // Remove unused parameter
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
