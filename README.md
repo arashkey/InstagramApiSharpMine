@@ -43,6 +43,7 @@ For [InstagramApiSharp.WithNotification.sln] with Push Notifications/realtime cl
 | - | Microsoft.Extensions.Logging | 3.1.4 | Important for Thrift |
 | - | Microsoft.Extensions.Logging.Abstractions | 3.1.4 | Important for Thrift |
 | - | Microsoft.Extensions.Options | 3.1.4 | Important for Thrift |
+| - | System.Threading.Tasks.Extensions | 4.5.4 | Important for Thrift |
 
 - Note 1: You MUST reference [Portable.BouncyCastle](https://www.nuget.org/packages/Portable.BouncyCastle/)'s package to your projects.
 - Note 2: You MUST reference Thrift's project (InstagramApiSharp's port) to your project.
