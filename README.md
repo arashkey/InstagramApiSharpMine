@@ -17,6 +17,10 @@ Since Push notifications and RealtimeClient has a lot of external libraries, I d
 
 [InstagramApiSharp.WithNotification.sln] -> Support Push notifcations/realtime client, so you HAVE to add any external libraries except Portable.BouncyCastle.
 
+[InstagramApiSharp.NET5.sln] -> Doesn't support Push notifcations/realtime client, so you don't need to add any external libraries.
+
+[InstagramApiSharp.NET5.WithNotification.sln] -> Support Push notifcations/realtime client, so you HAVE to add any external libraries.
+
 #### Important Note about Packages:
 You must/should reference following packages to your projects, if you got any error:
 
@@ -48,6 +52,33 @@ For [InstagramApiSharp.WithNotification.sln] with Push Notifications/realtime cl
 - Note 1: You MUST reference [Portable.BouncyCastle](https://www.nuget.org/packages/Portable.BouncyCastle/)'s package to your projects.
 - Note 2: You MUST reference Thrift's project (InstagramApiSharp's port) to your project.
 - Note 3: All other realtime/push libraries is not necessarily IF YOU DON'T WANT TO USE PUSH NOTIFICATIONS/REAL TIME CLIENT.
+
+--
+For .NET5 and .NETCore 3.1 you DON'T need to add Portable.BouncyCastle because encryption is supported in the .NETCore 3.1 and NET5.
+
+
+For [InstagramApiSharp.NET5.sln]
+| Target | Package name | Version | Level | 
+| ------ | ------ | ------ | ------ |
+| Json wrapper | Newtonsoft.Json | 12.0.3 or newer | Important for InstagramApiSharp |
+| GZip | Iconic.Zlib.NetstandardUwp | 1.0.2 or newer |  Important for InstagramApiSharp |
+
+For [InstagramApiSharp.NET5.WithNotification.sln] with Push Notifications/realtime client support
+| Target | Package name | Version | Level | 
+| ------ | ------ | ------ | ------ |
+| Json wrapper | Newtonsoft.Json | 12.0.3 or newer | Important for InstagramApiSharp.NET5 |
+| GZip | Iconic.Zlib.NetstandardUwp | 1.0.1 or newer |  Important for InstagramApiSharp.NET5 |
+| Push/Realtime | Thrift.NET5 | InstagramApiSharp.NET5's Port | Important for Push notifications/Realtime client |
+| Push/Realtime | DotNetty.Codecs.Mqtt | 0.6.0 | Important for Push notifications/Realtime client |
+| Push/Realtime | DotNetty.Handlers | 0.6.0 | Important for Push notifications/Realtime client |
+| Push/Realtime | DotNetty.Buffers | 0.6.0 | Important for Push notifications/Realtime client |
+| Push/Realtime | DotNetty.Handlers | 0.6.0 | Important for Push notifications/Realtime client |
+| - | Microsoft.Extensions.Logging | 3.1.4 | Important for Thrift.NET5 |
+| - | Microsoft.Extensions.Logging.Abstractions | 3.1.4 | Important for Thrift.NET5 |
+| - | Microsoft.Extensions.Options | 3.1.4 | Important for Thrift.NET5 |
+
+- Note 1: You MUST reference Thrift.NET5's project (InstagramApiSharp.NET5's port) to your project.
+- Note 2: All other realtime/push libraries is not necessarily IF YOU DON'T WANT TO USE PUSH NOTIFICATIONS/REAL TIME CLIENT.
 
 
 #### Version changes
