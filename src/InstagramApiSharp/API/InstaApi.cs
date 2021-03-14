@@ -3521,7 +3521,7 @@ namespace InstagramApiSharp.API
 
                 var uri = UriCreator.GetQeSyncUri();
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
-                request.Headers.Add("X-DEVICE-ID", _deviceInfo.DeviceGuid.ToString());
+                request.Headers.AddHeader("X-DEVICE-ID", _deviceInfo.DeviceGuid.ToString(), this);
                 var response = await _httpRequestProcessor.SendAsync(request);
             }
             catch (HttpRequestException httpException)

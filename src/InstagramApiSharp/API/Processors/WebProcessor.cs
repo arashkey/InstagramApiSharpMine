@@ -290,8 +290,8 @@ namespace InstagramApiSharp.API.Processors
             {
                 var request = _httpHelper.GetWebRequest(HttpMethod.Get, instaUri, _deviceInfo);
 
-                request.Headers.Add("upgrade-insecure-requests", "1");
-                request.Headers.Add("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+                request.Headers.AddHeader("upgrade-insecure-requests", "1", _instaApi);
+                request.Headers.AddHeader("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8", _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var html = await response.Content.ReadAsStringAsync();
 

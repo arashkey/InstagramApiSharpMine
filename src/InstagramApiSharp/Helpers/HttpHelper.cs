@@ -36,6 +36,8 @@ namespace InstagramApiSharp.Helpers
 
         public HttpRequestMessage GetDefaultRequest(HttpMethod method, Uri uri, AndroidDevice deviceInfo)
         {
+            var currentCulture = GetCurrentCulture();
+            System.Globalization.CultureInfo.CurrentCulture = EnglishCulture;
             var userAgent = deviceInfo.GenerateUserAgent(_apiVersion);
 
             var request = new HttpRequestMessage(method, uri);
@@ -169,6 +171,8 @@ namespace InstagramApiSharp.Helpers
                 : InstaApiConstants.HEADER_X_FB_HTTP_IP, "True");
             //request.Properties.Add(new KeyValuePair<string, object>(InstaApiConstants.HEADER_XGOOGLE_AD_IDE,
             //    deviceInfo.GoogleAdId.ToString()));
+
+            System.Globalization.CultureInfo.CurrentCulture = currentCulture;
             return request;
         }
         public HttpRequestMessage GetDefaultRequest(HttpMethod method, Uri uri, AndroidDevice deviceInfo, Dictionary<string, string> data)

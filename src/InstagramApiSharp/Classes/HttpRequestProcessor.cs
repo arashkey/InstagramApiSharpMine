@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
+using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 #pragma warning disable IDE0068
 namespace InstagramApiSharp.Classes
@@ -33,6 +34,9 @@ namespace InstagramApiSharp.Classes
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, bool keepAlive = false)
         {
+            var currentCulture = HttpHelper.GetCurrentCulture();
+            System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
+
             if (!keepAlive)
             {
                 Client.DefaultRequestHeaders.ConnectionClose = true;
@@ -44,6 +48,7 @@ namespace InstagramApiSharp.Classes
                 requestMessage.Headers.Add("Connection", "Keep-Alive");
             }
 
+            System.Globalization.CultureInfo.CurrentCulture = currentCulture;
             LogHttpRequest(requestMessage);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);
@@ -69,6 +74,9 @@ namespace InstagramApiSharp.Classes
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage,
             HttpCompletionOption completionOption, bool keepAlive = false)
         {
+            var currentCulture = HttpHelper.GetCurrentCulture();
+            System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
+
             if (!keepAlive)
             {
                 Client.DefaultRequestHeaders.ConnectionClose = true;
@@ -81,6 +89,7 @@ namespace InstagramApiSharp.Classes
             }
 
 
+            System.Globalization.CultureInfo.CurrentCulture = currentCulture;
             LogHttpRequest(requestMessage);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);
@@ -92,6 +101,9 @@ namespace InstagramApiSharp.Classes
         public async Task<string> SendAndGetJsonAsync(HttpRequestMessage requestMessage,
             HttpCompletionOption completionOption, bool keepAlive = false)
         {
+            var currentCulture = HttpHelper.GetCurrentCulture();
+            System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
+
             if (!keepAlive)
             {
                 Client.DefaultRequestHeaders.ConnectionClose = true;
@@ -102,6 +114,7 @@ namespace InstagramApiSharp.Classes
                 Client.DefaultRequestHeaders.ConnectionClose = false;
                 requestMessage.Headers.Add("Connection", "Keep-Alive");
             }
+            System.Globalization.CultureInfo.CurrentCulture = currentCulture;
             LogHttpRequest(requestMessage);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);

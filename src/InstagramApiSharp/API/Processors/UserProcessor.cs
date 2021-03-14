@@ -719,8 +719,8 @@ namespace InstagramApiSharp.API.Processors
                     fileBytes = nametagImage.ImageBytes;
 
                 var imageContent = new ByteArrayContent(fileBytes);
-                imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
-                imageContent.Headers.Add("Content-Type", "application/octet-stream");
+                imageContent.Headers.AddHeader("Content-Transfer-Encoding", "binary", _instaApi);
+                imageContent.Headers.AddHeader("Content-Type", "application/octet-stream", _instaApi);
                 requestContent.Add(imageContent, "photo_0", "photo_0");
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
                 request.Content = requestContent;

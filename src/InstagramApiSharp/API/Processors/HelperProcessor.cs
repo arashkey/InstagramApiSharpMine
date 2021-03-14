@@ -105,16 +105,16 @@ namespace InstagramApiSharp.API.Processors
             var photoUploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
             var imageBytes = image.ImageBytes ?? File.ReadAllBytes(image.Uri);
             var imageContent = new ByteArrayContent(imageBytes);
-            imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
-            imageContent.Headers.Add("Content-Type", "application/octet-stream");
+            imageContent.Headers.AddHeader("Content-Transfer-Encoding", "binary", _instaApi);
+            imageContent.Headers.AddHeader("Content-Type", "application/octet-stream", _instaApi);
             var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, photoUri, _deviceInfo);
             request.Content = imageContent;
-            request.Headers.Add("X-Entity-Type", "image/jpeg");
-            request.Headers.Add("Offset", "0");
-            request.Headers.Add("X-Instagram-Rupload-Params", photoUploadParams);
-            request.Headers.Add("X-Entity-Name", photoEntityName);
-            request.Headers.Add("X-Entity-Length", imageBytes.Length.ToString());
-            request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", Guid.NewGuid().ToString());
+            request.Headers.AddHeader("X-Entity-Type", "image/jpeg", _instaApi);
+            request.Headers.AddHeader("Offset", "0", _instaApi);
+            request.Headers.AddHeader("X-Instagram-Rupload-Params", photoUploadParams, _instaApi);
+            request.Headers.AddHeader("X-Entity-Name", photoEntityName, _instaApi);
+            request.Headers.AddHeader("X-Entity-Length", imageBytes.Length.ToString(), _instaApi);
+            request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", Guid.NewGuid().ToString(), _instaApi);
             var response = await _httpRequestProcessor.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
 
@@ -157,8 +157,8 @@ namespace InstagramApiSharp.API.Processors
 
             var videoUploadParams = JsonConvert.SerializeObject(videoUploadParamsObj);
             var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, videoUri, _deviceInfo);
-            request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
-            request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+            request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
+            request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
             var response = await _httpRequestProcessor.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
 
@@ -183,15 +183,15 @@ namespace InstagramApiSharp.API.Processors
             progress?.Invoke(upProgress);
             var vidExt = Path.GetExtension(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").Replace(".", "").ToLower();
             if (vidExt == "mov")
-                request.Headers.Add("X-Entity-Type", "video/quicktime");
+                request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
             else
-                request.Headers.Add("X-Entity-Type", "video/mp4");
+                request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
 
-            request.Headers.Add("Offset", "0");
-            request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
-            request.Headers.Add("X-Entity-Name", videoEntityName);
-            request.Headers.Add("X-Entity-Length", videoBytes.Length.ToString());
-            request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
+            request.Headers.AddHeader("Offset", "0", _instaApi);
+            request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
+            request.Headers.AddHeader("X-Entity-Name", videoEntityName, _instaApi);
+            request.Headers.AddHeader("X-Entity-Length", videoBytes.Length.ToString(), _instaApi);
+            request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
             response = await _httpRequestProcessor.SendAsync(request);
             json = await response.Content.ReadAsStringAsync();
 
@@ -386,8 +386,8 @@ namespace InstagramApiSharp.API.Processors
 
                     videoUploadParams = JsonConvert.SerializeObject(videoUploadParamsObj);
                     request = _httpHelper.GetDefaultRequest(HttpMethod.Get, videoUri, _deviceInfo);
-                    request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
-                    request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                    request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
+                    request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
                     response = await _httpRequestProcessor.SendAsync(request);
                     json = await response.Content.ReadAsStringAsync();
 
@@ -454,8 +454,8 @@ namespace InstagramApiSharp.API.Processors
                     }
                     videoUploadParams = JsonConvert.SerializeObject(videoUploadParamsObj);
                     request = _httpHelper.GetDefaultRequest(HttpMethod.Get, videoUri, _deviceInfo);
-                    request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
-                    request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                    request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
+                    request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
                     response = await _httpRequestProcessor.SendAsync(request);
                     json = await response.Content.ReadAsStringAsync();
 
@@ -486,15 +486,15 @@ namespace InstagramApiSharp.API.Processors
                 progress?.Invoke(upProgress);
                 var vidExt = Path.GetExtension(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").Replace(".", "").ToLower();
                 if (vidExt == "mov")
-                    request.Headers.Add("X-Entity-Type", "video/quicktime");
+                    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
                 else
-                    request.Headers.Add("X-Entity-Type", "video/mp4");
+                    request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
 
-                request.Headers.Add("Offset", "0");
-                request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
-                request.Headers.Add("X-Entity-Name", videoEntityName);
-                request.Headers.Add("X-Entity-Length", videoBytes.Length.ToString());
-                request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
+                request.Headers.AddHeader("Offset", "0", _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
+                request.Headers.AddHeader("X-Entity-Name", videoEntityName, _instaApi);
+                request.Headers.AddHeader("X-Entity-Length", videoBytes.Length.ToString(), _instaApi);
+                request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -529,16 +529,16 @@ namespace InstagramApiSharp.API.Processors
                     else
                         imageBytes = video.VideoThumbnail.ImageBytes;
                     var imageContent = new ByteArrayContent(imageBytes);
-                    imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
-                    imageContent.Headers.Add("Content-Type", "application/octet-stream");
+                    imageContent.Headers.AddHeader("Content-Transfer-Encoding", "binary", _instaApi);
+                    imageContent.Headers.AddHeader("Content-Type", "application/octet-stream", _instaApi);
                     request = _httpHelper.GetDefaultRequest(HttpMethod.Post, photoUri, _deviceInfo);
                     request.Content = imageContent;
-                    request.Headers.Add("X-Entity-Type", "image/jpeg");
-                    request.Headers.Add("Offset", "0");
-                    request.Headers.Add("X-Instagram-Rupload-Params", photoUploadParams);
-                    request.Headers.Add("X-Entity-Name", photoEntityName);
-                    request.Headers.Add("X-Entity-Length", imageBytes.Length.ToString());
-                    request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
+                    request.Headers.AddHeader("X-Entity-Type", "image/jpeg", _instaApi);
+                    request.Headers.AddHeader("Offset", "0", _instaApi);
+                    request.Headers.AddHeader("X-Instagram-Rupload-Params", photoUploadParams, _instaApi);
+                    request.Headers.AddHeader("X-Entity-Name", photoEntityName, _instaApi);
+                    request.Headers.AddHeader("X-Entity-Length", imageBytes.Length.ToString(), _instaApi);
+                    request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", waterfallId, _instaApi);
                     response = await _httpRequestProcessor.SendAsync(request);
                     json = await response.Content.ReadAsStringAsync();
                     upProgress.UploadState = InstaUploadState.ThumbnailUploaded;
@@ -593,7 +593,7 @@ namespace InstagramApiSharp.API.Processors
                     instaUri = UriCreator.GetDirectConfigureVideoUri();
                     var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
                     request.Content = new FormUrlEncodedContent(data);
-                    request.Headers.Add("retry_context", retryContext);
+                    request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                     var response = await _httpRequestProcessor.SendAsync(request);
                     var json = await response.Content.ReadAsStringAsync();
 
@@ -798,7 +798,7 @@ namespace InstagramApiSharp.API.Processors
                     instaUri = UriCreator.GetVideoStoryConfigureUri(true);
                     var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                  
-                    request.Headers.Add("retry_context", retryContext);
+                    request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                     var response = await _httpRequestProcessor.SendAsync(request);
                     var json = await response.Content.ReadAsStringAsync();
 
@@ -891,8 +891,8 @@ namespace InstagramApiSharp.API.Processors
 
                 var uploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Get, photoUri, _deviceInfo);
-                request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
-                request.Headers.Add("X-Instagram-Rupload-Params", uploadParams);
+                request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", waterfallId, _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", uploadParams, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -911,20 +911,20 @@ namespace InstagramApiSharp.API.Processors
                 byte[] imageBytes;
                 imageBytes = image.ImageBytes ?? File.ReadAllBytes(image.Uri);
                 var imageContent = new ByteArrayContent(imageBytes);
-                imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
-                imageContent.Headers.Add("Content-Type", "application/octet-stream");
+                imageContent.Headers.AddHeader("Content-Transfer-Encoding", "binary", _instaApi);
+                imageContent.Headers.AddHeader("Content-Type", "application/octet-stream", _instaApi);
                 //var progressContent = new ProgressableStreamContent(imageContent, 4096, progress)
                 //{
                 //    UploaderProgress = upProgress
                 //};
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Post, photoUri, _deviceInfo);
                 request.Content = imageContent;
-                request.Headers.Add("X-Entity-Type", "image/jpeg");
-                request.Headers.Add("Offset", "0");
-                request.Headers.Add("X-Instagram-Rupload-Params", photoUploadParams);
-                request.Headers.Add("X-Entity-Name", photoEntityName);
-                request.Headers.Add("X-Entity-Length", imageBytes.Length.ToString());
-                request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
+                request.Headers.AddHeader("X-Entity-Type", "image/jpeg", _instaApi);
+                request.Headers.AddHeader("Offset", "0", _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", photoUploadParams, _instaApi);
+                request.Headers.AddHeader("X-Entity-Name", photoEntityName, _instaApi);
+                request.Headers.AddHeader("X-Entity-Length", imageBytes.Length.ToString(), _instaApi);
+                request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", waterfallId, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
                 //upProgress = progressContent?.UploaderProgress;
@@ -1069,7 +1069,7 @@ namespace InstagramApiSharp.API.Processors
                     instaUri = UriCreator.GetVideoStoryConfigureUri(false);
                     var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
-                    request.Headers.Add("retry_context", retryContext);
+                    request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                     var response = await _httpRequestProcessor.SendAsync(request);
                     var json = await response.Content.ReadAsStringAsync();
 
@@ -1161,8 +1161,8 @@ namespace InstagramApiSharp.API.Processors
 
                 //var uploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
                 //request = _httpHelper.GetDefaultRequest(HttpMethod.Get, photoUri, _deviceInfo);
-                //request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
-                //request.Headers.Add("X-Instagram-Rupload-Params", uploadParams);
+                //request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", waterfallId);
+                //request.Headers.AddHeader("X-Instagram-Rupload-Params", uploadParams);
                 //response = await _httpRequestProcessor.SendAsync(request);
                 //json = await response.Content.ReadAsStringAsync();
 
@@ -1178,8 +1178,8 @@ namespace InstagramApiSharp.API.Processors
                 var photoUploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
                 var imageBytes = image.ImageBytes ?? File.ReadAllBytes(image.Uri);
                 var imageContent = new ByteArrayContent(imageBytes);
-                imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
-                imageContent.Headers.Add("Content-Type", "application/octet-stream");
+                imageContent.Headers.AddHeader("Content-Transfer-Encoding", "binary", _instaApi);
+                imageContent.Headers.AddHeader("Content-Type", "application/octet-stream", _instaApi);
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Post, photoUri, _deviceInfo);
 
                 //var progressContent = new ProgressableStreamContent(imageContent, 4096, progress)
@@ -1187,12 +1187,12 @@ namespace InstagramApiSharp.API.Processors
                 //    UploaderProgress = upProgress
                 //};
                 request.Content = imageContent;
-                request.Headers.Add("X-Entity-Type", "image/jpeg");
-                request.Headers.Add("Offset", "0");
-                request.Headers.Add("X-Instagram-Rupload-Params", photoUploadParams);
-                request.Headers.Add("X-Entity-Name", photoEntityName);
-                request.Headers.Add("X-Entity-Length", imageBytes.Length.ToString());
-                request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
+                request.Headers.AddHeader("X-Entity-Type", "image/jpeg", _instaApi);
+                request.Headers.AddHeader("Offset", "0", _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", photoUploadParams, _instaApi);
+                request.Headers.AddHeader("X-Entity-Name", photoEntityName, _instaApi);
+                request.Headers.AddHeader("X-Entity-Length", imageBytes.Length.ToString(), _instaApi);
+                request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", waterfallId, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
@@ -1309,7 +1309,7 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("usertags", root.ToString(Formatting.None));
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Add("retry_context", retryContext);
+                request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
@@ -1377,7 +1377,7 @@ namespace InstagramApiSharp.API.Processors
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()}
                 };
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Add("retry_context", retryContext);
+                request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
@@ -1472,8 +1472,8 @@ namespace InstagramApiSharp.API.Processors
 
                 voiceUploadParams = JsonConvert.SerializeObject(voiceUploadParamsObj);
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Get, videoUri, _deviceInfo);
-                request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
-                request.Headers.Add("X-Instagram-Rupload-Params", voiceUploadParams);
+                request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", voiceUploadParams, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -1502,12 +1502,12 @@ namespace InstagramApiSharp.API.Processors
                 upProgress.UploadState = InstaUploadState.Uploading;
                 progress?.Invoke(upProgress);
                 var vidExt = Path.GetExtension(audio.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").Replace(".", "").ToLower();
-                request.Headers.Add("X-Entity-Type", "audio/mp4");
-                request.Headers.Add("Offset", "0");
-                request.Headers.Add("X-Instagram-Rupload-Params", voiceUploadParams);
-                request.Headers.Add("X-Entity-Name", videoEntityName);
-                request.Headers.Add("X-Entity-Length", videoBytes.Length.ToString());
-                request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
+                request.Headers.AddHeader("X-Entity-Type", "audio/mp4", _instaApi);
+                request.Headers.AddHeader("Offset", "0", _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", voiceUploadParams, _instaApi);
+                request.Headers.AddHeader("X-Entity-Name", videoEntityName, _instaApi);
+                request.Headers.AddHeader("X-Entity-Length", videoBytes.Length.ToString(), _instaApi);
+                request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -1582,9 +1582,9 @@ namespace InstagramApiSharp.API.Processors
                 //X-IG-Bandwidth-TotalBytes-B: 0
                 //X-IG-Bandwidth-TotalTime-MS: 0
                 //retry_context: {"num_reupload":0,"num_step_auto_retry":0,"num_step_manual_retry":0}
-                //request.Headers.Add("X-Pigeon-Session-Id", pigeonSessionId);
-                //request.Headers.Add("X-Pigeon-Rawclienttime", DateTime.UtcNow.ToUnixTime().ToString());
-                request.Headers.Add("retry_context", retryContext);
+                //request.Headers.AddHeader("X-Pigeon-Session-Id", pigeonSessionId);
+                //request.Headers.AddHeader("X-Pigeon-Rawclienttime", DateTime.UtcNow.ToUnixTime().ToString());
+                request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
@@ -1653,7 +1653,7 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("thread_ids", $"[{threadId}]");
 
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Add("retry_context", retryContext);
+                request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
@@ -1739,8 +1739,8 @@ namespace InstagramApiSharp.API.Processors
 
                 videoUploadParams = JsonConvert.SerializeObject(videoUploadParamsObj);
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Get, videoUri, _deviceInfo);
-                request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
-                request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
                
@@ -1767,15 +1767,15 @@ namespace InstagramApiSharp.API.Processors
                 progress?.Invoke(upProgress);
                 var vidExt = Path.GetExtension(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").Replace(".", "").ToLower();
                 if (vidExt == "mov")
-                    request.Headers.Add("X-Entity-Type", "video/quicktime");
+                    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
                 else
-                    request.Headers.Add("X-Entity-Type", "video/mp4");
+                    request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
 
-                request.Headers.Add("Offset", "0");
-                request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
-                request.Headers.Add("X-Entity-Name", videoEntityName);
-                request.Headers.Add("X-Entity-Length", videoBytes.Length.ToString());
-                request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
+                request.Headers.AddHeader("Offset", "0", _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
+                request.Headers.AddHeader("X-Entity-Name", videoEntityName, _instaApi);
+                request.Headers.AddHeader("X-Entity-Length", videoBytes.Length.ToString(), _instaApi);
+                request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
                 //Debug.WriteLine(json);
@@ -1804,16 +1804,16 @@ namespace InstagramApiSharp.API.Processors
                 var photoUploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
                 var imageBytes = video.VideoThumbnail.ImageBytes ?? File.ReadAllBytes(video.VideoThumbnail.Uri);
                 var imageContent = new ByteArrayContent(imageBytes);
-                imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
-                imageContent.Headers.Add("Content-Type", "application/octet-stream");
+                imageContent.Headers.AddHeader("Content-Transfer-Encoding", "binary", _instaApi);
+                imageContent.Headers.AddHeader("Content-Type", "application/octet-stream", _instaApi);
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Post, photoUri, _deviceInfo);
                 request.Content = imageContent;
-                request.Headers.Add("X-Entity-Type", "image/jpeg");
-                request.Headers.Add("Offset", "0");
-                request.Headers.Add("X-Instagram-Rupload-Params", photoUploadParams);
-                request.Headers.Add("X-Entity-Name", photoEntityName);
-                request.Headers.Add("X-Entity-Length", imageBytes.Length.ToString());
-                request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
+                request.Headers.AddHeader("X-Entity-Type", "image/jpeg", _instaApi);
+                request.Headers.AddHeader("Offset", "0", _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", photoUploadParams, _instaApi);
+                request.Headers.AddHeader("X-Entity-Name", photoEntityName, _instaApi);
+                request.Headers.AddHeader("X-Entity-Length", imageBytes.Length.ToString(), _instaApi);
+                request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", waterfallId, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -1892,7 +1892,7 @@ namespace InstagramApiSharp.API.Processors
                 };
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
-                request.Headers.Add("retry_context", retryContext);
+                request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 // igtv:
@@ -1965,7 +1965,7 @@ namespace InstagramApiSharp.API.Processors
 
                 videoUploadParams = JsonConvert.SerializeObject(videoUploadParamsObj);
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, new Dictionary<string, string>());
-                request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -2005,25 +2005,25 @@ namespace InstagramApiSharp.API.Processors
                         instaUri = UriCreator.GetRUploadVideoTransferUri(CryptoHelper.CalculateMd5(segment.Key), 0, buffer.Length);
 
                         request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
-                        request.Headers.Add("Stream-Id", streamId);
-                        request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
-                        request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
-                        request.Headers.Add("Segment-Start-Offset", offset.ToString());
-                        request.Headers.Add("Segment-Type", segment.Key.Contains("xaudiox") ? "1" : "2");
+                        request.Headers.AddHeader("Stream-Id", streamId, _instaApi);
+                        request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
+                        request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
+                        request.Headers.AddHeader("Segment-Start-Offset", offset.ToString(), _instaApi);
+                        request.Headers.AddHeader("Segment-Type", segment.Key.Contains("xaudiox") ? "1" : "2", _instaApi);
                         response = await _httpRequestProcessor.SendAsync(request);
                         json = await response.Content.ReadAsStringAsync();
 
 
                         request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
-                        request.Headers.Add("X-Entity-Length", buffer.Length.ToString());
-                        request.Headers.Add("X-Entity-Name", $"{CryptoHelper.CalculateMd5(segment.Key)}_0_{buffer.Length}");
-                        request.Headers.Add("Stream-Id", streamId);
-                        request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
-                        request.Headers.Add("X-Entity-Type", "video/mp4");
-                        request.Headers.Add("Segment-Start-Offset", offset.ToString());
-                        request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
-                        request.Headers.Add("Segment-Type", segment.Key.Contains("xaudiox") ? "1" : "2");
-                        request.Headers.Add("Offset", "0");
+                        request.Headers.AddHeader("X-Entity-Length", buffer.Length.ToString(), _instaApi);
+                        request.Headers.AddHeader("X-Entity-Name", $"{CryptoHelper.CalculateMd5(segment.Key)}_0_{buffer.Length}", _instaApi);
+                        request.Headers.AddHeader("Stream-Id", streamId, _instaApi);
+                        request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
+                        request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
+                        request.Headers.AddHeader("Segment-Start-Offset", offset.ToString(), _instaApi);
+                        request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
+                        request.Headers.AddHeader("Segment-Type", segment.Key.Contains("xaudiox") ? "1" : "2", _instaApi);
+                        request.Headers.AddHeader("Offset", "0", _instaApi);
                         request.Content = videoContent;
                         response = await _httpRequestProcessor.SendAsync(request);
                         json = await response.Content.ReadAsStringAsync();
@@ -2041,8 +2041,8 @@ namespace InstagramApiSharp.API.Processors
                 instaUri = UriCreator.GetRUploadVideoEndUri(Guid.NewGuid().ToString());
 
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, new Dictionary<string, string>());
-                request.Headers.Add("Stream-Id", streamId);
-                request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                request.Headers.AddHeader("Stream-Id", streamId, _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -2064,16 +2064,16 @@ namespace InstagramApiSharp.API.Processors
                 var photoUploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
                 var imageBytes = video.VideoThumbnail.ImageBytes ?? File.ReadAllBytes(video.VideoThumbnail.Uri);
                 var imageContent = new ByteArrayContent(imageBytes);
-                imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
-                imageContent.Headers.Add("Content-Type", "application/octet-stream");
+                imageContent.Headers.AddHeader("Content-Transfer-Encoding", "binary", _instaApi);
+                imageContent.Headers.AddHeader("Content-Type", "application/octet-stream", _instaApi);
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Post, photoUri, _deviceInfo);
                 request.Content = imageContent;
-                request.Headers.Add("X-Entity-Type", "image/jpeg");
-                request.Headers.Add("Offset", "0");
-                request.Headers.Add("X-Instagram-Rupload-Params", photoUploadParams);
-                request.Headers.Add("X-Entity-Name", photoEntityName);
-                request.Headers.Add("X-Entity-Length", imageBytes.Length.ToString());
-                request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
+                request.Headers.AddHeader("X-Entity-Type", "image/jpeg", _instaApi);
+                request.Headers.AddHeader("Offset", "0", _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", photoUploadParams, _instaApi);
+                request.Headers.AddHeader("X-Entity-Name", photoEntityName, _instaApi);
+                request.Headers.AddHeader("X-Entity-Length", imageBytes.Length.ToString(), _instaApi);
+                request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", waterfallId, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -2148,8 +2148,8 @@ namespace InstagramApiSharp.API.Processors
                     {"poster_frame_index", 0},
                 };
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Add("is_igtv_video", "1");
-                request.Headers.Add("retry_context", retryContext);
+                request.Headers.AddHeader("is_igtv_video", "1", _instaApi);
+                request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 // igtv:
@@ -2218,7 +2218,7 @@ namespace InstagramApiSharp.API.Processors
 
                 videoUploadParams = JsonConvert.SerializeObject(videoUploadParamsObj);
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, new Dictionary<string, string>());
-                request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -2258,25 +2258,25 @@ namespace InstagramApiSharp.API.Processors
                         instaUri = UriCreator.GetRUploadVideoTransferUri(CryptoHelper.CalculateMd5(segment.Key), 0, buffer.Length);
 
                         request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
-                        request.Headers.Add("Stream-Id", streamId);
-                        request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
-                        request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
-                        request.Headers.Add("Segment-Start-Offset", offset.ToString());
-                        request.Headers.Add("Segment-Type", segment.Key.Contains("xaudiox") ? "1" : "2");
+                        request.Headers.AddHeader("Stream-Id", streamId, _instaApi);
+                        request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
+                        request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
+                        request.Headers.AddHeader("Segment-Start-Offset", offset.ToString(), _instaApi);
+                        request.Headers.AddHeader("Segment-Type", segment.Key.Contains("xaudiox") ? "1" : "2", _instaApi);
                         response = await _httpRequestProcessor.SendAsync(request);
                         json = await response.Content.ReadAsStringAsync();
 
 
                         request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
-                        request.Headers.Add("X-Entity-Length", buffer.Length.ToString());
-                        request.Headers.Add("X-Entity-Name", $"{CryptoHelper.CalculateMd5(segment.Key)}_0_{buffer.Length}");
-                        request.Headers.Add("Stream-Id", streamId);
-                        request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
-                        request.Headers.Add("X-Entity-Type", "video/mp4");
-                        request.Headers.Add("Segment-Start-Offset", offset.ToString());
-                        request.Headers.Add("X_FB_VIDEO_WATERFALL_ID", waterfallId);
-                        request.Headers.Add("Segment-Type", segment.Key.Contains("xaudiox") ? "1" : "2");
-                        request.Headers.Add("Offset", "0");
+                        request.Headers.AddHeader("X-Entity-Length", buffer.Length.ToString(), _instaApi);
+                        request.Headers.AddHeader("X-Entity-Name", $"{CryptoHelper.CalculateMd5(segment.Key)}_0_{buffer.Length}", _instaApi);
+                        request.Headers.AddHeader("Stream-Id", streamId, _instaApi);
+                        request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
+                        request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
+                        request.Headers.AddHeader("Segment-Start-Offset", offset.ToString(), _instaApi);
+                        request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
+                        request.Headers.AddHeader("Segment-Type", segment.Key.Contains("xaudiox") ? "1" : "2", _instaApi);
+                        request.Headers.AddHeader("Offset", "0", _instaApi);
                         request.Content = videoContent;
                         response = await _httpRequestProcessor.SendAsync(request);
                         json = await response.Content.ReadAsStringAsync();
@@ -2294,8 +2294,8 @@ namespace InstagramApiSharp.API.Processors
                 instaUri = UriCreator.GetRUploadVideoEndUri(Guid.NewGuid().ToString());
 
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, new Dictionary<string, string>());
-                request.Headers.Add("Stream-Id", streamId);
-                request.Headers.Add("X-Instagram-Rupload-Params", videoUploadParams);
+                request.Headers.AddHeader("Stream-Id", streamId, _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -2321,16 +2321,16 @@ namespace InstagramApiSharp.API.Processors
                 var photoUploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
                 var imageBytes = video.VideoThumbnail.ImageBytes ?? File.ReadAllBytes(video.VideoThumbnail.Uri);
                 var imageContent = new ByteArrayContent(imageBytes);
-                imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
-                imageContent.Headers.Add("Content-Type", "application/octet-stream");
+                imageContent.Headers.AddHeader("Content-Transfer-Encoding", "binary", _instaApi);
+                imageContent.Headers.AddHeader("Content-Type", "application/octet-stream", _instaApi);
                 request = _httpHelper.GetDefaultRequest(HttpMethod.Post, photoUri, _deviceInfo);
                 request.Content = imageContent;
-                request.Headers.Add("X-Entity-Type", "image/jpeg");
-                request.Headers.Add("Offset", "0");
-                request.Headers.Add("X-Instagram-Rupload-Params", photoUploadParams);
-                request.Headers.Add("X-Entity-Name", photoEntityName);
-                request.Headers.Add("X-Entity-Length", imageBytes.Length.ToString());
-                request.Headers.Add("X_FB_PHOTO_WATERFALL_ID", waterfallId);
+                request.Headers.AddHeader("X-Entity-Type", "image/jpeg", _instaApi);
+                request.Headers.AddHeader("Offset", "0", _instaApi);
+                request.Headers.AddHeader("X-Instagram-Rupload-Params", photoUploadParams, _instaApi);
+                request.Headers.AddHeader("X-Entity-Name", photoEntityName, _instaApi);
+                request.Headers.AddHeader("X-Entity-Length", imageBytes.Length.ToString(), _instaApi);
+                request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", waterfallId, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
 
@@ -2424,7 +2424,7 @@ namespace InstagramApiSharp.API.Processors
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
-                request.Headers.Add("retry_context", retryContext);
+                request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 var defResponse = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
@@ -2535,7 +2535,7 @@ namespace InstagramApiSharp.API.Processors
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
-                request.Headers.Add("retry_context", retryContext);
+                request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 var defResponse = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
