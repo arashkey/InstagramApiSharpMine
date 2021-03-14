@@ -181,7 +181,7 @@ namespace Examples.Samples
             };
             storyOptions.StoryChats.Add(chat);
 
-
+            storyOptions.ShareAsReel = true; // Share story as Reel
 
             var image = new InstaImage { Uri = @"c:\someawesomepicture.jpg" };
 
