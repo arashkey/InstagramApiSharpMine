@@ -497,10 +497,11 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="video">Video to upload (aspect ratio is very important for thumbnail and video | range 0.5 - 1.0 | Width = 480, Height = 852)</param>
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
-        /// <param name="videoUploadOption">Video options</param>
-        public async Task<IResult<InstaMedia>> UploadVideoAsync(InstaVideoUpload video, string title, string caption/*, InstaVideoUploadOption videoUploadOption = null*/)
+        /// <param name="sharePreviewToFeed">Show a preview on the feed</param>
+        public async Task<IResult<InstaMedia>> UploadVideoAsync(InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false
+            /*, InstaVideoUploadOption videoUploadOption = null*/)
         {
-            return await UploadVideoAsync(null, video, title, caption/*, videoUploadOption*/);
+            return await UploadVideoAsync(null, video, title, caption, sharePreviewToFeed/*, videoUploadOption*/);
         }
 
         /// <summary>
@@ -510,11 +511,12 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="video">Video to upload (aspect ratio is very important for thumbnail and video | range 0.5 - 1.0 | Width = 480, Height = 852)</param>
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
-        /// <param name="videoUploadOption">Video options</param>
-        public async Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string title, string caption/*, InstaVideoUploadOption videoUploadOption = null*/)
+        /// <param name="sharePreviewToFeed">Show a preview on the feed</param>
+        public async Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress, 
+            InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false/*, InstaVideoUploadOption videoUploadOption = null*/)
         {
             UserAuthValidator.Validate(_userAuthValidate);
-            return await _instaApi.HelperProcessor.SendIGTVVideoAsync(progress, video, title, caption/*, videoUploadOption*/);
+            return await _instaApi.HelperProcessor.SendIGTVVideoAsync(progress, video, title, caption, sharePreviewToFeed/*, videoUploadOption*/);
         }
 
         /// <summary>

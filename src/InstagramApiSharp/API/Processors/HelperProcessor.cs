@@ -1702,7 +1702,8 @@ namespace InstagramApiSharp.API.Processors
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public async Task<IResult<InstaMedia>> SendIGTVVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string title, string caption)
+        public async Task<IResult<InstaMedia>> SendIGTVVideoAsync(Action<InstaUploaderProgress> progress,
+            InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false)
         {
             var upProgress = new InstaUploaderProgress
             {
@@ -1822,7 +1823,7 @@ namespace InstagramApiSharp.API.Processors
                     //upProgress = progressContent?.UploaderProgress;
                     upProgress.UploadState = InstaUploadState.ThumbnailUploaded;
                     progress?.Invoke(upProgress);
-                    return await ConfigureIGTVVideo(progress, upProgress, uploadId, title, caption, video);
+                    return await ConfigureIGTVVideo(progress, upProgress, uploadId, title, caption, video, sharePreviewToFeed);
                 }
                 upProgress.UploadState = InstaUploadState.Error;
                 progress?.Invoke(upProgress);
@@ -1843,7 +1844,8 @@ namespace InstagramApiSharp.API.Processors
 
         }
 
-        private async Task<IResult<InstaMedia>> ConfigureIGTVVideo(Action<InstaUploaderProgress> progress, InstaUploaderProgress upProgress, string uploadId, string title,  string caption, InstaVideoUpload video)
+        private async Task<IResult<InstaMedia>> ConfigureIGTVVideo(Action<InstaUploaderProgress> progress,
+            InstaUploaderProgress upProgress, string uploadId, string title,  string caption, InstaVideoUpload video, bool sharePreviewToFeed = false)
         {
             try
             {
@@ -1870,6 +1872,7 @@ namespace InstagramApiSharp.API.Processors
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"title", title ?? string.Empty },
                     {"caption", caption ?? string.Empty},
+                    {"igtv_share_preview_to_feed", Convert.ToInt16(sharePreviewToFeed).ToString()},
                     {"upload_id", uploadId},
                     {
                         "device", new JObject{
@@ -1934,7 +1937,7 @@ namespace InstagramApiSharp.API.Processors
 
 
 
-        public async Task<IResult<InstaMedia>> SendTVVideoAsync(InstaTVVideoUpload video, string title, string caption)
+        public async Task<IResult<InstaMedia>> SendTVVideoAsync(InstaTVVideoUpload video, string title, string caption, bool sharePreviewToFeed = false)
         {
             try
             {
