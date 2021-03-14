@@ -2255,7 +2255,8 @@ namespace InstagramApiSharp.API.Processors
                     caption = caption.Replace("\r", "");
                 try
                 {
-                    await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
+                    if (_httpRequestProcessor.ConfigureMediaDelay != null)
+                        await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
                 }
                 catch { }
                 var instaUri = UriCreator.GetVideoStoryConfigureUri(true);
