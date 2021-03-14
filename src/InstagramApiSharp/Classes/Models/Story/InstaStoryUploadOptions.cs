@@ -13,6 +13,8 @@ namespace InstagramApiSharp.Classes.Models
 {
     public class InstaStoryUploadOptions
     {
+        public bool ShareAsReel { get; set; } = false;
+
         public List<InstaStoryLocationUpload> Locations { get; set; } = new List<InstaStoryLocationUpload>();
 
         public List<InstaStoryHashtagUpload> Hashtags { get; set; } = new List<InstaStoryHashtagUpload>();

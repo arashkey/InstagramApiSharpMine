@@ -223,6 +223,19 @@ namespace InstagramApiSharp
             return $"#PWD_INSTAGRAM:4:{time}:{payload}";
         }
 #endif
+
+        public static string GetStoryToken()
+        {
+            var str = "";
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(11111, 99999);
+
+            str += Rnd.Next(2222, 6789);
+
+            return $"718{str}";
+        }
         public static string GetThreadToken()
         {
             var str = "";

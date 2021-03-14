@@ -888,7 +888,8 @@ namespace InstagramApiSharp.API
 
         public const string UPLOAD_PHOTO = INSTAGRAM_URL + "/rupload_igphoto/{0}_0_{1}";
         public const string UPLOAD_PHOTO_OLD = API_SUFFIX + "/upload/photo/";
-        public const string UPLOAD_VIDEO = INSTAGRAM_URL + "/rupload_igvideo/{0}_0_{1}";
+        //public const string UPLOAD_VIDEO = INSTAGRAM_URL + "/rupload_igvideo/{0}_0_{1}";
+        public const string UPLOAD_VIDEO2 = INSTAGRAM_URL + "/rupload_igvideo/{0}-0-{1}";
         public const string UPLOAD_VIDEO_OLD = API_SUFFIX + "/upload/video/";
 
         #endregion Upload endpoints constants
