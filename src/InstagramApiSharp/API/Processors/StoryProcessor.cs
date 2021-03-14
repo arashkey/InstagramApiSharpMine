@@ -2335,27 +2335,6 @@ namespace InstagramApiSharp.API.Processors
                     {
                         data.Add("original_media_type", "video");
                         data.Add("creation_surface", "clips");
-                        //data.Add("capture_type", "clips_v2");
-                        //{
-                        //  "num_segments": 1,
-                        //  "clips_segments": [
-                        //    {
-                        //      "index": 0,
-                        //      "face_effect_id": null,
-                        //      "speed": 100,
-                        //      "source": "camera",
-                        //      "duration_ms": 2515,
-                        //      "audio_type": "original",
-                        //      "from_draft": "0",
-                        //      "camera_position": 2,
-                        //      "media_folder": null,
-                        //      "media_type": "video",
-                        //      "original_media_type": "video"
-                        //    }
-                        //  ]
-                        //}
-                        //
-
 
                         var clipsSegments = new JArray
                         {
