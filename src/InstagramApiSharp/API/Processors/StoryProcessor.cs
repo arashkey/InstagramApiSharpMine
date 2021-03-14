@@ -2258,7 +2258,7 @@ namespace InstagramApiSharp.API.Processors
                     await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
                 }
                 catch { }
-                var instaUri = UriCreator.GetVideoStoryConfigureUri(false);
+                var instaUri = UriCreator.GetVideoStoryConfigureUri(true);
                 var rnd = new Random();
                 var shareAsReel = uploadOptions?.ShareAsReel ?? false;
                 var data = new JObject
