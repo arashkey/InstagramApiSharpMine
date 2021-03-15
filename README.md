@@ -10,7 +10,7 @@ Private version of [InstagramApiSharp](https://github.com/ramtinak/InstagramApiS
 #### How to build the project?
 Check this youtube video: https://www.youtube.com/watch?v=AFjKryHz9nM
 
-#### Why Two Solutions ?
+#### Why Different Solutions ?
 Since Push notifications and RealtimeClient has a lot of external libraries, I decided to exlcude it from original project.
 
 [InstagramApiSharp.sln] -> Doesn't support Push notifcations/realtime client, so you don't need to add any external libraries except Portable.BouncyCastle.
