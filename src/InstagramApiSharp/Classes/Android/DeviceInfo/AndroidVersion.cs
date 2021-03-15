@@ -46,5 +46,11 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
 
             return AndroidVersionList.GetVersionList().AndroidVersions().FirstOrDefault(api => api.APILevel == apiLevel);
         }
+        public static AndroidVersion GetAndroid9()
+        {
+            var androidVer = AndroidVersionList.GetVersionList().AndroidVersions().FirstOrDefault(api => api.VersionNumber == "9.0.0");
+            androidVer.VersionNumber = "9";
+            return androidVer;
+        }
     }
 }
