@@ -615,20 +615,6 @@ namespace InstagramApiSharp
                 {"rotation", storyMention.Rotation},
                 {"user_id", storyMention.Pk}
             };
-            //{
-            //    "x": 0.3609583,
-            //    "y": 0.695802,
-            //    "z": 0,
-            //    "width": 0.6388889,
-            //    "height": 0.09739583,
-            //    "rotation": 0.0,
-            //    "type": "mention",
-            //    "user_id": "46082179393",
-            //    "is_sticker": true,
-            //    "display_type": "mention_username",
-            //    "tap_state": 0,
-            //    "tap_state_str_id": "mention_sticker_gradient"
-            //}
             if(isNew)
             {
                 jObj.Add("type", "mention");

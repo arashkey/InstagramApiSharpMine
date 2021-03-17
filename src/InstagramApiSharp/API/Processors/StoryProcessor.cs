@@ -2090,7 +2090,6 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="image">Photo to configure</param>
         /// <param name="uploadId">Upload id</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
         private async Task<IResult<InstaStoryMedia>> ConfigureStoryPhotoAsync(Action<InstaUploaderProgress> progress, InstaUploaderProgress upProgress, InstaImage image, string uploadId,
             Uri uri, InstaStoryUploadOptions uploadOptions = null)
@@ -2312,7 +2311,6 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="video">Video to configure</param>
         /// <param name="uploadId">Upload id</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
         private async Task<IResult<InstaStoryMedia>> ConfigureStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaUploaderProgress upProgress, InstaVideoUpload video, string uploadId,
             Uri uri, InstaStoryUploadOptions uploadOptions = null)
