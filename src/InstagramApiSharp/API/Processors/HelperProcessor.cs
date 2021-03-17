@@ -139,7 +139,7 @@ namespace InstagramApiSharp.API.Processors
             var videoHashCode = Path.GetFileName(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").GetHashCode();
             var waterfallId = Guid.NewGuid().ToString();
             var videoEntityName = $"{uploadId}_0_{videoHashCode}";
-            var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode);
+            var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode.ToString());
             var retryContext = GetRetryContext();
 
             var videoUploadParamsObj = new JObject
@@ -362,7 +362,7 @@ namespace InstagramApiSharp.API.Processors
                 var videoHashCode = Path.GetFileName(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").GetHashCode();
                 var waterfallId = Guid.NewGuid().ToString();
                 var videoEntityName = $"{uploadId}_0_{videoHashCode}";
-                var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode);
+                var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode.ToString());
                 var retryContext = GetRetryContext();
                 HttpRequestMessage request = null;
                 HttpResponseMessage response = null;
@@ -1441,7 +1441,7 @@ namespace InstagramApiSharp.API.Processors
                 var videoHashCode = Path.GetFileName(audio.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").GetHashCode();
                 var waterfallId = Guid.NewGuid().ToString();
                 var videoEntityName = $"{uploadId}_0_{videoHashCode}";
-                var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode);
+                var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode.ToString());
                 var retryContext = GetRetryContext();
                 HttpRequestMessage request = null;
                 HttpResponseMessage response = null;
@@ -1717,7 +1717,7 @@ namespace InstagramApiSharp.API.Processors
                 var videoHashCode = Path.GetFileName(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").GetHashCode();
                 var waterfallId = ApiRequestMessage.GenerateRandomUploadId();//Guid.NewGuid().ToString();
                 var videoEntityName = $"{uploadId}_0_{videoHashCode}";
-                var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode);
+                var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode.ToString());
                 var retryContext = GetRetryContext();
                 HttpRequestMessage request = null;
                 HttpResponseMessage response = null;

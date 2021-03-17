@@ -1720,6 +1720,61 @@ namespace InstagramApiSharp.API.Processors
             };
             try
             {
+                if (uploadOptions?.Mentions?.Count > 0)
+                {
+                    var currentDelay = _instaApi.GetRequestDelay();
+                    _instaApi.SetRequestDelay(RequestDelay.FromSeconds(1, 2));
+                    foreach (var t in uploadOptions.Mentions)
+                    {
+                        try
+                        {
+                            bool tried = false;
+                        TryLabel:
+                            var u = await _instaApi.UserProcessor.GetUserAsync(t.Username);
+                            if (!u.Succeeded)
+                            {
+                                if (!tried)
+                                {
+                                    tried = true;
+                                    goto TryLabel;
+                                }
+                            }
+                            else
+                                t.Pk = u.Value.Pk;
+                        }
+                        catch { }
+                    }
+                    _instaApi.SetRequestDelay(currentDelay);
+                }
+                if (uploadOptions?.Questions?.Count > 0)
+                {
+                    try
+                    {
+                        bool tried = false;
+                        var profilePicture = string.Empty;
+                    TryToGetMyUser:
+                        // get latest profile picture
+                        var myUser = await _instaApi.UserProcessor.GetUserAsync(_user.UserName.ToLower());
+                        if (!myUser.Succeeded)
+                        {
+                            if (!tried)
+                            {
+                                tried = true;
+                                goto TryToGetMyUser;
+                            }
+                            else
+                                profilePicture = _user.LoggedInUser.ProfilePicture;
+                        }
+                        else
+                            profilePicture = myUser.Value.ProfilePicture;
+
+
+                        foreach (var question in uploadOptions.Questions)
+                            question.ProfilePicture = profilePicture;
+                    }
+                    catch { }
+                }
+
                 var uploadId = ExtensionHelper.GetStoryToken();
                 var uploadUrlId = Guid.NewGuid().ToString().Replace("-", "");
                 var videoBytes = video.Video.VideoBytes ?? File.ReadAllBytes(video.Video.Uri);
@@ -1732,7 +1787,8 @@ namespace InstagramApiSharp.API.Processors
 
 
                 var videoEntityName = $"{uploadUrlId}-0-{videoBytesLength}";
-                var videoUri = UriCreator.GetStoryUploadVideoUri(uploadUrlId, videoBytesLength);
+                var unixMilisec = DateTime.UtcNow.ToUnixTimeMiliSeconds();
+                var videoUri = UriCreator.GetStoryUploadVideoUri(uploadUrlId, $"{videoBytesLength}-{unixMilisec}-{unixMilisec}");
                 upProgress.UploadId = uploadId;
                 progress?.Invoke(upProgress);
 
@@ -2278,37 +2334,37 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None)},
                     {"filter_type", "0"},
+                    {"original_media_type", "video"},
                     {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"client_shared_at", (long.Parse(ApiRequestMessage.GenerateUploadId())- rnd.Next(25,55)).ToString()},
-                    {"story_media_creation_date", (long.Parse(ApiRequestMessage.GenerateUploadId())- rnd.Next(50,70)).ToString()},
+                    //{"story_media_creation_date", (long.Parse(ApiRequestMessage.GenerateUploadId())- rnd.Next(50,70)).ToString()},
                     {"media_folder", "Camera"},
                     {"configure_mode", "1"},
-                    {"source_type", "4"},
+                    {"source_type", "3"}, //4 bod
                     {"video_result", ""},
                     {"device_id", _deviceInfo.DeviceId},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    //{"caption", caption},
-                    {"date_time_original", DateTime.Now.ToString("yyyy-dd-MMTh:mm:ss-0fffZ")},
+                    {"date_time_original", DateTime.Now.ToString("yyyyddMMThmmss0.fffZ")},
                     {"capture_type", shareAsReel ? "clips_v2" :"normal"},
-                    {"mas_opt_in", "NOT_PROMPTED"},
+                    //{"mas_opt_in", "NOT_PROMPTED"},
                     {"upload_id", uploadId},
                     {"client_timestamp", ApiRequestMessage.GenerateUploadId()},
                     {
                         "device", new JObject{
                             {"manufacturer", _deviceInfo.HardwareManufacturer},
-                            {"model", _deviceInfo.DeviceModelIdentifier},
-                            {"android_release", _deviceInfo.AndroidVer.VersionNumber},
-                            {"android_version", _deviceInfo.AndroidVer.APILevel}
+                            {"model", _deviceInfo.DeviceModelIdentifier.Replace(" ", "+")},
+                            {"android_release", _deviceInfo.AndroidVer.VersionNumber.Replace(".0.0", "").Replace(".0", "")},
+                            {"android_version", int.Parse(_deviceInfo.AndroidVer.APILevel)}
                         }
                     },
-                    {"length", 0},
+                    {"length", video.Video?.Length ?? 0},
                     {
                         "extra", new JObject
                         {
-                            {"source_width", 0},
-                            {"source_height", 0}
+                            {"source_width", video.Video?.Width ?? 0},
+                            {"source_height", video.Video?.Height ??  0}
                         }
                     },
                     {"audio_muted", false},
@@ -2345,7 +2401,6 @@ namespace InstagramApiSharp.API.Processors
                 {
                     if (uploadOptions.ShareAsReel)
                     {
-                        data.Add("original_media_type", "video");
                         data.Add("creation_surface", "clips");
 
                         var clipsSegments = new JArray
@@ -2372,6 +2427,7 @@ namespace InstagramApiSharp.API.Processors
                         };
                         data.Add("clips_segments_metadata", clipsSegmentsMetaData.ToString());
                     }
+
                     if (uploadOptions.Hashtags?.Count > 0)
                     {
                         var hashtagArr = new JArray();
@@ -2397,8 +2453,8 @@ namespace InstagramApiSharp.API.Processors
                         };
 
                         data.Add("story_sliders", sliderArr.ToString(Formatting.None));
-                        if (uploadOptions.Slider.IsSticker)
-                            data.Add("story_sticker_ids", $"emoji_slider_{uploadOptions.Slider.Emoji}");
+                        if (uploadOptions.Slider.IsSticker && data["story_sticker_ids"] == null)
+                            data.Add("story_sticker_ids", $"{uploadOptions.Slider.Emoji}");
                     }
                     else
                     {
@@ -2419,7 +2475,27 @@ namespace InstagramApiSharp.API.Processors
                             data.Add("story_questions", questionArr.ToString(Formatting.None));
                         }
                     }
+                    if (uploadOptions.MediaStory != null)
+                    {
+                        var mediaStory = new JArray
+                        {
+                            uploadOptions.MediaStory.ConvertToJson()
+                        };
 
+                        data.Add("attached_media", mediaStory.ToString(Formatting.None));
+                    }
+
+                    if (uploadOptions.Mentions?.Count > 0)
+                    {
+                        var mentionArr = new JArray();
+                        foreach (var item in uploadOptions.Mentions)
+                            mentionArr.Add(item.ConvertToJson(true));
+                        data.Add("tap_models", mentionArr.ToString(Formatting.None));
+                        if (data["story_sticker_ids"] == null)
+                            data.Add("story_sticker_ids", "mention_sticker");
+                        // old way>
+                        //data.Add("reel_mentions", mentionArr.ToString(Formatting.None));
+                    }
                     if (uploadOptions.Countdown != null)
                     {
                         var countdownArr = new JArray
@@ -2428,7 +2504,8 @@ namespace InstagramApiSharp.API.Processors
                         };
 
                         data.Add("story_countdowns", countdownArr.ToString(Formatting.None));
-                        data.Add("story_sticker_ids", "countdown_sticker_time");
+                        if (data["story_sticker_ids"] == null)
+                            data.Add("story_sticker_ids", "countdown_sticker_time");
                     }
                     if (uploadOptions.StoryQuiz != null)
                     {
@@ -2438,7 +2515,8 @@ namespace InstagramApiSharp.API.Processors
                         };
 
                         data.Add("story_quizs", storyQuizArr.ToString(Formatting.None));
-                        data.Add("story_sticker_ids", "quiz_story_sticker_default");
+                        if (data["story_sticker_ids"] == null)
+                            data.Add("story_sticker_ids", "quiz_story_sticker_default");
                     }
                     if (uploadOptions.StoryChats?.Count > 0)
                     {
@@ -2448,7 +2526,8 @@ namespace InstagramApiSharp.API.Processors
 
                         data.Add("story_chats", chatArr.ToString(Formatting.None));
                         data.Add("internal_features", "chat_sticker");
-                        data.Add("story_sticker_ids", "chat_sticker_id");
+                        if (data["story_sticker_ids"] == null)
+                            data.Add("story_sticker_ids", "chat_sticker_id");
                     }
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);

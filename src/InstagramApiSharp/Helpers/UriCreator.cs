@@ -1487,7 +1487,7 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetStoryUploadVideoUri(string uploadId, int fileHashCode)
+        public static Uri GetStoryUploadVideoUri(string uploadId, string fileHashCode)
         {
             if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.UPLOAD_VIDEO2, uploadId, fileHashCode), out var instaUri))
                 throw new Exception("Cant create URI for story upload video");
