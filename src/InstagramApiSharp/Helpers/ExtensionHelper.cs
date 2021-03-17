@@ -241,7 +241,6 @@ namespace InstagramApiSharp
         public static string GetThreadToken()
         {
             var str = "";
-            // 6600286272511816379
             str += Rnd.Next(0, 9);
             str += Rnd.Next(0, 9);
             str += Rnd.Next(0, 9);
@@ -250,7 +249,7 @@ namespace InstagramApiSharp
 
             str += Rnd.Next(2222, 6789);
 
-            return $"676{str}";
+            return $"897{str}";
         }
 
         public static string GetLiveTransactionToken()
