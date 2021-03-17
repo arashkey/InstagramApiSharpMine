@@ -57,12 +57,12 @@ namespace Examples.Samples
         {
             var video = new InstaVideoUpload
             {
-                Video = new InstaVideo(@"c:\video1.mp4", 0, 0),
-                VideoThumbnail = new InstaImage(@"c:\video thumbnail 1.jpg", 0, 0)
+                Video = new InstaVideo(@"c:\video1.mp4", 0, 0)
+                // No need to set a thumbnail for uploading videos
             };
-            var result = await InstaApi.MediaProcessor.UploadVideoAsync(video, "ramtinak");
+            var result = await InstaApi.StoryProcessor.UploadStoryVideoAsync(video);
             Console.WriteLine(result.Succeeded
-                ? $"Story created: {result.Value.Pk}"
+                ? $"Story created: {result.Value.Media.Pk}"
                 : $"Unable to upload video story: {result.Info.Message}");
         }
 
@@ -187,7 +187,12 @@ namespace Examples.Samples
 
             var result = await InstaApi.StoryProcessor.UploadStoryPhotoAsync(image, storyOptions);
             // upload video
-            //var result = await InstaApi.MediaProcessor.UploadVideoAsync(video, "ramtinak", storyOptions);
+            //var video = new InstaVideoUpload
+            //{
+            //    Video = new InstaVideo(@"c:\video1.mp4", 0, 0)
+            //    // No need to set a thumbnail for uploading videos
+            //};
+            //var result = await InstaApi.StoryProcessor.UploadStoryVideoAsync(video, storyOptions);
             Console.WriteLine(result.Succeeded
                 ? $"Story created: {result.Value.Media.Pk}"
                 : $"Unable to upload photo story: {result.Info.Message}");
