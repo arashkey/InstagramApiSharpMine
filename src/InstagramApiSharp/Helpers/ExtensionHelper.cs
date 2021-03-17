@@ -227,14 +227,16 @@ namespace InstagramApiSharp
         public static string GetStoryToken()
         {
             var str = "";
+            str += Rnd.Next(1, 3);
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(0, 9);
+            str += Rnd.Next(0, 9);
             str += Rnd.Next(0, 9);
             str += Rnd.Next(0, 9);
             str += Rnd.Next(0, 9);
             str += Rnd.Next(11111, 99999);
-
             str += Rnd.Next(2222, 6789);
-
-            return $"718{str}";
+            return str;
         }
         public static string GetThreadToken()
         {
