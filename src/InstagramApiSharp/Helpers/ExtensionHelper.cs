@@ -262,7 +262,7 @@ namespace InstagramApiSharp
             str += Rnd.Next(1000, 9999);
             str += Rnd.Next(11111, 99999);
             str += Rnd.Next(2222, 6789);
-            return $"144{str}";
+            return $"179{str}";
         }
         static public string GenerateMediaUploadId()
         {
