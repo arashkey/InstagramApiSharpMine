@@ -47,7 +47,7 @@ namespace Examples.Samples
         {
             var image = new InstaImage { Uri = @"c:\someawesomepicture.jpg" };
 
-            var result = await InstaApi.StoryProcessor.UploadStoryPhotoAsync(image, "someawesomepicture");
+            var result = await InstaApi.StoryProcessor.UploadStoryPhotoAsync(image);
             Console.WriteLine(result.Succeeded
                 ? $"Story created: {result.Value.Media.Pk}"
                 : $"Unable to upload photo story: {result.Info.Message}");
@@ -185,7 +185,7 @@ namespace Examples.Samples
 
             var image = new InstaImage { Uri = @"c:\someawesomepicture.jpg" };
 
-            var result = await InstaApi.StoryProcessor.UploadStoryPhotoAsync(image, "someawesomepicture", storyOptions);
+            var result = await InstaApi.StoryProcessor.UploadStoryPhotoAsync(image, storyOptions);
             // upload video
             //var result = await InstaApi.MediaProcessor.UploadVideoAsync(video, "ramtinak", storyOptions);
             Console.WriteLine(result.Succeeded
