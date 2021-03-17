@@ -147,7 +147,7 @@ namespace InstagramApiSharp.Classes
                         break;
                 }
 
-            if (!status.IsOk() && status.Message.Contains("wait a few minutes"))
+            if (!status.IsOk() && !string.IsNullOrEmpty(status.Message) && status.Message.Contains("wait a few minutes"))
                 responseType = ResponseType.RequestsLimit;
 
             if (!string.IsNullOrEmpty(status.Message) && status.Message.Contains("consent_required"))

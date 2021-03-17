@@ -1549,8 +1549,8 @@ namespace InstagramApiSharp.API.Processors
                     catch { }
                 }
 
-                var uploadId = ApiRequestMessage.GenerateRandomUploadId();
-                var photoHashCode = Path.GetFileName(image.Uri ?? $"C:\\{13.GenerateRandomString()}.jpg").GetHashCode();
+                var uploadId = ExtensionHelper.GetStoryToken();
+                var photoHashCode = Path.GetFileName(image.Uri ?? $"C:\\{13.GenerateRandomString()}.jpg").GetPositiveHashCode();
 
                 var waterfallId = Guid.NewGuid().ToString();
 
@@ -1559,41 +1559,22 @@ namespace InstagramApiSharp.API.Processors
 
                 upProgress.UploadId = uploadId;
                 progress?.Invoke(upProgress);
-                var videoMediaInfoData = new JObject
-                {
-                    {"_csrftoken", _user.CsrfToken},
-                    {"_uid", _user.LoggedInUser.Pk},
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"media_info", new JObject
-                        {
-                              {"capture_mode", "normal"},
-                              {"media_type", 1},
-                              {"caption", string.Empty},
-                              {"mentions", new JArray()},
-                              {"hashtags", new JArray()},
-                              {"locations", new JArray()},
-                              {"stickers", new JArray()},
-                        }
-                    }
-                };
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, UriCreator.GetStoryMediaInfoUploadUri(), _deviceInfo, videoMediaInfoData);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-               
+
                 var photoUploadParamsObj = new JObject
                 {
                     {"upload_id", uploadId},
                     {"media_type", "1"},
                     {"retry_context", "{\"num_step_auto_retry\":0,\"num_reupload\":0,\"num_step_manual_retry\":0}"},
-
-                    {"image_compression", "{\"lib_name\":\"moz\",\"lib_version\":\"3.1.m\",\"quality\":\"95\"}"}
+                    {"image_compression", "{\"lib_name\":\"moz\",\"lib_version\":\"3.1.m\",\"quality\":\"" + 
+                              ExtensionHelper.GetRandomQuality() + "\",\"ssim\":" + ExtensionHelper.GetSSIM() +"}"},
+                    {"xsharing_user_ids", $"[\"{ _user.LoggedInUser.Pk}\"]"}
                 };
                 var photoUploadParams = JsonConvert.SerializeObject(photoUploadParamsObj);
-                request = _httpHelper.GetDefaultRequest(HttpMethod.Get, photoUri, _deviceInfo);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, photoUri, _deviceInfo);
                 request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", waterfallId, _instaApi);
                 request.Headers.AddHeader("X-Instagram-Rupload-Params", photoUploadParams, _instaApi);
-                response = await _httpRequestProcessor.SendAsync(request);
-                json = await response.Content.ReadAsStringAsync();
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     upProgress.UploadState = InstaUploadState.Error;
@@ -2054,7 +2035,7 @@ namespace InstagramApiSharp.API.Processors
                     await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
                 }
                 catch { }
-                var instaUri = UriCreator.GetVideoStoryConfigureUri();// UriCreator.GetStoryConfigureUri();
+                var instaUri = UriCreator.GetVideoStoryConfigureUri();
                 var rnd = new Random();
                 var data = new JObject
                 {
@@ -2062,6 +2043,9 @@ namespace InstagramApiSharp.API.Processors
                     {"allow_multi_configures", "1"},
                     {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
                     {"_csrftoken", _user.CsrfToken},
+                    {"original_media_type", "photo"},
+                    {"has_original_sound", "1"},
+                    {"date_time_digitalized", DateTime.UtcNow.ToString("yyyy:MM:dd+HH:mm:ss")},
                     {"client_shared_at", (DateTime.UtcNow.ToUnixTime() - rnd.Next(10, 25)).ToString()},
                     {"configure_mode", "1"},
                     {"source_type", "3"},
@@ -2071,11 +2055,13 @@ namespace InstagramApiSharp.API.Processors
                     {"audience", "default"},
                     {"upload_id", uploadId},
                     {"client_timestamp", DateTime.UtcNow.ToUnixTime().ToString()},
+                    {"software", "lavender-user+10+QKQ1.190910.002+V12.0.1.0.QFGMIXM+release-keys"},
+                    {"scene_type", "?"},
                     {"camera_position", "unknown"},
                     {
                         "device", new JObject{
                             {"manufacturer", _deviceInfo.HardwareManufacturer},
-                            {"model", _deviceInfo.DeviceModelIdentifier},
+                            {"model", _deviceInfo.DeviceModelIdentifier.Replace(" ", "+")},
                             {"android_release", _deviceInfo.AndroidVer.VersionNumber},
                             {"android_version", _deviceInfo.AndroidVer.APILevel}
                         }
@@ -2142,7 +2128,7 @@ namespace InstagramApiSharp.API.Processors
                         };
 
                         data.Add("story_sliders", sliderArr.ToString(Formatting.None));
-                        if (uploadOptions.Slider.IsSticker)
+                        if (uploadOptions.Slider.IsSticker && data["story_sticker_ids"] == null)
                             data.Add("story_sticker_ids", $"{uploadOptions.Slider.Emoji}");
                     }
                     else
@@ -2178,9 +2164,12 @@ namespace InstagramApiSharp.API.Processors
                     {
                         var mentionArr = new JArray();
                         foreach (var item in uploadOptions.Mentions)
-                            mentionArr.Add(item.ConvertToJson());
-
-                        data.Add("reel_mentions", mentionArr.ToString(Formatting.None));
+                            mentionArr.Add(item.ConvertToJson(true));
+                        data.Add("tap_models", mentionArr.ToString(Formatting.None));
+                        if (data["story_sticker_ids"] == null)
+                            data.Add("story_sticker_ids", "mention_sticker");
+                        // old way>
+                        //data.Add("reel_mentions", mentionArr.ToString(Formatting.None));
                     }
                     if (uploadOptions.Countdown != null)
                     {
@@ -2190,7 +2179,8 @@ namespace InstagramApiSharp.API.Processors
                         };
 
                         data.Add("story_countdowns", countdownArr.ToString(Formatting.None));
-                        data.Add("story_sticker_ids", "countdown_sticker_time");
+                        if (data["story_sticker_ids"] == null)
+                            data.Add("story_sticker_ids", "countdown_sticker_time");
                     }
                     if (uploadOptions.StoryQuiz != null)
                     {
@@ -2200,7 +2190,8 @@ namespace InstagramApiSharp.API.Processors
                         };
 
                         data.Add("story_quizs", storyQuizArr.ToString(Formatting.None));
-                        data.Add("story_sticker_ids", "quiz_story_sticker_default");
+                        if (data["story_sticker_ids"] == null)
+                            data.Add("story_sticker_ids", "quiz_story_sticker_default");
                     }
                     if (uploadOptions.StoryChats?.Count > 0)
                     {
@@ -2210,7 +2201,8 @@ namespace InstagramApiSharp.API.Processors
 
                         data.Add("story_chats", chatArr.ToString(Formatting.None));
                         data.Add("internal_features", "chat_sticker");
-                        data.Add("story_sticker_ids", "chat_sticker_id");
+                        if (data["story_sticker_ids"] == null)
+                            data.Add("story_sticker_ids", "chat_sticker_id");
                     }
 
                 }

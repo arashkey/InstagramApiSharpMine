@@ -223,9 +223,23 @@ namespace InstagramApiSharp
             return $"#PWD_INSTAGRAM:4:{time}:{payload}";
         }
 #endif
+        public static int GetPositiveHashCode(this string text)
+        {
+            var hashCode = text.GetHashCode();
+            return hashCode > 0 ? hashCode : hashCode * -1;
+        }
+
+        public static string GetSSIM()
+        {
+            string str = "";
+            for (int i = 0; i < 14; i++)
+                str += Rnd.Next(1, 9);
+            return $"0.92{str}";
+        }
+
         public static string GetRandomQuality()
         {
-            var qualities = new string[] { "95", "90", "85", "88", "97", "92"};
+            var qualities = new string[] { "95", "90", "85", "88", "97"};
 
             return qualities[Rnd.Next(qualities.Length)];
         }
@@ -461,7 +475,7 @@ namespace InstagramApiSharp
         {
             System.Diagnostics.Debug.WriteLine(Convert.ToString(obj));
         }
-        public static string EncodeTime(this TimeSpan span) => $"{span.Hours.ToString("00")}:{span.Minutes.ToString("00")}:{span.Seconds.ToString("00")}";
+        public static string EncodeTime(this TimeSpan span) => $"{span.Hours:00}:{span.Minutes:00}:{span.Seconds:00}";
 
         public static InstaImageUpload ConvertToImageUpload(this InstaImage instaImage, InstaUserTagUpload[] userTags = null)
         {
@@ -589,9 +603,9 @@ namespace InstagramApiSharp
             };
         }
 
-        public static JObject ConvertToJson(this InstaStoryMentionUpload storyMention)
+        public static JObject ConvertToJson(this InstaStoryMentionUpload storyMention, bool isNew = false)
         {
-            return new JObject
+            var jObj = new JObject
             {
                 {"x", storyMention.X},
                 {"y", storyMention.Y},
@@ -601,6 +615,29 @@ namespace InstagramApiSharp
                 {"rotation", storyMention.Rotation},
                 {"user_id", storyMention.Pk}
             };
+            //{
+            //    "x": 0.3609583,
+            //    "y": 0.695802,
+            //    "z": 0,
+            //    "width": 0.6388889,
+            //    "height": 0.09739583,
+            //    "rotation": 0.0,
+            //    "type": "mention",
+            //    "user_id": "46082179393",
+            //    "is_sticker": true,
+            //    "display_type": "mention_username",
+            //    "tap_state": 0,
+            //    "tap_state_str_id": "mention_sticker_gradient"
+            //}
+            if(isNew)
+            {
+                jObj.Add("type", "mention");
+                jObj.Add("is_sticker", true);
+                jObj.Add("display_type", "mention_username");
+                jObj.Add("tap_state", 0);
+                jObj.Add("tap_state_str_id", "mention_sticker_gradient");
+            }
+            return jObj;
         }
 
         public static JObject ConvertToJson(this InstaStoryQuestionUpload question)
