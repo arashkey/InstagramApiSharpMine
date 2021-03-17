@@ -223,6 +223,12 @@ namespace InstagramApiSharp
             return $"#PWD_INSTAGRAM:4:{time}:{payload}";
         }
 #endif
+        public static string GetRandomQuality()
+        {
+            var qualities = new string[] { "95", "90", "85", "88", "97", "92"};
+
+            return qualities[Rnd.Next(qualities.Length)];
+        }
 
         public static string GetStoryToken()
         {
