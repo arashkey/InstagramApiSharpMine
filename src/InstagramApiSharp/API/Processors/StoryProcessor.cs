@@ -1624,29 +1624,46 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
+        [Obsolete()]
+        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(InstaVideoUpload video, 
+            string caption, InstaStoryUploadOptions uploadOptions = null) =>
+            await UploadStoryVideoAsync(null, video, uploadOptions);
+
+        [Obsolete()]
+        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string caption,
+            InstaStoryUploadOptions uploadOptions = null) =>
+            await UploadStoryVideoWithUrlAsync(progress, video, null, uploadOptions);
+
+        [Obsolete()]
+        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(InstaVideoUpload video, string caption, Uri uri,
+            InstaStoryUploadOptions uploadOptions = null) =>
+            await UploadStoryVideoWithUrlAsync(null, video, uri, uploadOptions);
+
+        [Obsolete()]
+        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress> progress,
+            InstaVideoUpload video, string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null) =>
+            await UploadStoryVideoWithUrlAsync(progress, video, uri, uploadOptions);
+
+
+
+
         /// <summary>
         ///     Upload story video (to self story)
         /// </summary>
         /// <param name="video">Video to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
-        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(InstaVideoUpload video, string caption, InstaStoryUploadOptions uploadOptions = null)
-        {
-            return await UploadStoryVideoAsync(null, video, caption, uploadOptions);
-        }
+        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(InstaVideoUpload video, InstaStoryUploadOptions uploadOptions = null) =>
+            await UploadStoryVideoAsync(null, video, uploadOptions);
 
         /// <summary>
         ///     Upload story video (to self story) with progress
         /// </summary>
         /// <param name="progress">Progress action</param>
         /// <param name="video">Video to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
         public async Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, 
-            string caption, InstaStoryUploadOptions uploadOptions = null)
-        {
-            return await UploadStoryVideoWithUrlAsync(progress, video, caption, null, uploadOptions);
-        }
+            InstaStoryUploadOptions uploadOptions = null) =>
+            await UploadStoryVideoWithUrlAsync(progress, video, null, uploadOptions);
 
         /// <summary>
         ///     Upload story video (to self story)
@@ -1676,16 +1693,12 @@ namespace InstagramApiSharp.API.Processors
         ///     Upload story video (to self story) with adding link address
         ///     <para>Note: this function only works with verified account or you have more than 10k followers.</para>
         /// </summary>
-        /// <param name="progress">Progress action</param>
         /// <param name="video">Video to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
-        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(InstaVideoUpload video, string caption, Uri uri,
-            InstaStoryUploadOptions uploadOptions = null)
-        {
-            return await UploadStoryVideoWithUrlAsync(null, video, caption, uri, uploadOptions);
-        }
+        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(InstaVideoUpload video, Uri uri,
+            InstaStoryUploadOptions uploadOptions = null) =>
+            await UploadStoryVideoWithUrlAsync(null, video, uri, uploadOptions);
 
         /// <summary>
         ///     Upload story video (to self story) with adding link address (with progress)
@@ -1697,12 +1710,12 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="uri">Uri to add</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
         public async Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress> progress,
-            InstaVideoUpload video, string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null)
+            InstaVideoUpload video, Uri uri, InstaStoryUploadOptions uploadOptions = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var upProgress = new InstaUploaderProgress
             {
-                Caption = caption ?? string.Empty,
+                Caption = string.Empty,
                 UploadState = InstaUploadState.Preparing
             };
             try
@@ -1790,7 +1803,7 @@ namespace InstagramApiSharp.API.Processors
                 upProgress.UploadState = InstaUploadState.ThumbnailUploaded;
                 progress?.Invoke(upProgress);
                 await Task.Delay(15000);
-                return await ConfigureStoryVideoAsync(progress, upProgress, video, uploadId, caption, uri, uploadOptions);
+                return await ConfigureStoryVideoAsync(progress, upProgress, video, uploadId, uri, uploadOptions);
             }
             catch (HttpRequestException httpException)
             {
@@ -2246,14 +2259,12 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
         private async Task<IResult<InstaStoryMedia>> ConfigureStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaUploaderProgress upProgress, InstaVideoUpload video, string uploadId,
-            string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null)
+            Uri uri, InstaStoryUploadOptions uploadOptions = null)
         {
             try
             {
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
-                if (!string.IsNullOrEmpty(caption))
-                    caption = caption.Replace("\r", "");
                 try
                 {
                     if (_httpRequestProcessor.ConfigureMediaDelay != null)

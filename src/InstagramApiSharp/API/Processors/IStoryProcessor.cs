@@ -293,7 +293,7 @@ namespace InstagramApiSharp.API.Processors
             InstaStoryUploadOptions uploadOptions = null);
 
         [Obsolete("UploadStoryPhotoWithUrlAsync is deprecated. Use UploadStoryPhotoWithUrlAsync(InstaImage, Uri, InstaStoryUploadOptions) instead." +
-    "\r\nThis function will be removed in the future releases.", true)]
+            "\r\nThis function will be removed in the future releases.", true)]
         Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(InstaImage image, string caption, Uri uri,
             InstaStoryUploadOptions uploadOptions = null);
 
@@ -337,19 +337,34 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(Action<InstaUploaderProgress> progress, InstaImage image,
             Uri uri, InstaStoryUploadOptions uploadOptions = null);
 
+        [Obsolete("UploadStoryVideoAsync is deprecated. Use UploadStoryVideoAsync(InstaVideoUpload, InstaStoryUploadOptions) instead." +
+            "\r\nThis function will be removed in the future releases.", true)]
+        Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(InstaVideoUpload video, string caption, InstaStoryUploadOptions uploadOptions = null);
+        
+        [Obsolete("UploadStoryVideoAsync is deprecated. Use UploadStoryVideoAsync(Action<InstaUploaderProgress>, InstaVideoUpload, InstaStoryUploadOptions) instead." +
+            "\r\nThis function will be removed in the future releases.", true)]
+        Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string caption, InstaStoryUploadOptions uploadOptions = null);
+        
+        [Obsolete("UploadStoryVideoWithUrlAsync is deprecated. Use UploadStoryVideoWithUrlAsync(InstaVideoUpload, Uri, InstaStoryUploadOptions) instead." +
+            "\r\nThis function will be removed in the future releases.", true)]
+        Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(InstaVideoUpload video, string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null);
+        
+        [Obsolete("UploadStoryVideoWithUrlAsync is deprecated. Use UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress>, InstaVideoUpload, Uri, InstaStoryUploadOptions) instead." +
+            "\r\nThis function will be removed in the future releases.", true)]
+        Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress> progress,
+            InstaVideoUpload video, string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null);
+
         /// <summary>
         ///     Upload story video (to self story)
         /// </summary>
         /// <param name="video">Video to upload</param>
-        /// <param name="caption">Caption</param>
-        Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(InstaVideoUpload video, string caption, InstaStoryUploadOptions uploadOptions = null);
+        Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(InstaVideoUpload video, InstaStoryUploadOptions uploadOptions = null);
         /// <summary>
         ///     Upload story video (to self story) with progress
         /// </summary>
         /// <param name="progress">Progress action</param>
         /// <param name="video">Video to upload</param>
-        /// <param name="caption">Caption</param>
-        Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string caption, InstaStoryUploadOptions uploadOptions = null);
+        Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, InstaStoryUploadOptions uploadOptions = null);
         /// <summary>
         ///     Upload story video [to self story, to direct threads or both(self and direct)]
         /// </summary>
@@ -373,21 +388,18 @@ namespace InstagramApiSharp.API.Processors
         ///     Upload story video (to self story) with adding link address
         ///     <para>Note: this function only works with verified account or you have more than 10k followers.</para>
         /// </summary>
-        /// <param name="progress">Progress action</param>
         /// <param name="video">Video to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
-        Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(InstaVideoUpload video, string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null);
+        Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(InstaVideoUpload video, Uri uri, InstaStoryUploadOptions uploadOptions = null);
         /// <summary>
         ///     Upload story video (to self story) with adding link address (with progress)
         ///     <para>Note: this function only works with verified account or you have more than 10k followers.</para>
         /// </summary>
         /// <param name="progress">Progress action</param>
         /// <param name="video">Video to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
         Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress> progress,
-            InstaVideoUpload video, string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null);
+            InstaVideoUpload video, Uri uri, InstaStoryUploadOptions uploadOptions = null);
         /// <summary>
         ///     Upload story video [to self story, to direct threads or both(self and direct)] with adding link address
         ///     <para>Note: this function only works with verified account or you have more than 10k followers.</para>
