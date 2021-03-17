@@ -283,43 +283,60 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="countdownId">Countdown id (<see cref="InstaStoryCountdownStickerItem.CountdownId"/>)</param>
         Task<IResult<bool>> UnFollowCountdownStoryAsync(long countdownId);
 
+        [Obsolete("UploadStoryPhotoAsync is deprecated. Use UploadStoryPhotoAsync(InstaImage, InstaStoryUploadOptions) instead." +
+            "\r\nThis function will be removed in the future releases.", true)]
+        Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(InstaImage image, string caption, InstaStoryUploadOptions uploadOptions = null);
+
+        [Obsolete("UploadStoryPhotoAsync is deprecated. Use UploadStoryPhotoAsync(Action<InstaUploaderProgress>, InstaImage, InstaStoryUploadOptions) instead." +
+            "\r\nThis function will be removed in the future releases.", true)]
+        Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(Action<InstaUploaderProgress> progress, InstaImage image, string caption,
+            InstaStoryUploadOptions uploadOptions = null);
+
+        [Obsolete("UploadStoryPhotoWithUrlAsync is deprecated. Use UploadStoryPhotoWithUrlAsync(InstaImage, Uri, InstaStoryUploadOptions) instead." +
+    "\r\nThis function will be removed in the future releases.", true)]
+        Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(InstaImage image, string caption, Uri uri,
+            InstaStoryUploadOptions uploadOptions = null);
+
+        [Obsolete("UploadStoryPhotoWithUrlAsync is deprecated. Use UploadStoryPhotoWithUrlAsync(Action<InstaUploaderProgress>, InstaImage, Uri, InstaStoryUploadOptions) instead." +
+            "\r\nThis function will be removed in the future releases.", true)]
+        Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(Action<InstaUploaderProgress> progress, InstaImage image,
+            string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null);
+
         /// <summary>
         ///     Upload story photo
         /// </summary>
         /// <param name="image">Photo to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
-        Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(InstaImage image, string caption, InstaStoryUploadOptions uploadOptions = null);
+        Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(InstaImage image, InstaStoryUploadOptions uploadOptions = null);
         /// <summary>
         ///     Upload story photo with progress
         /// </summary>
         /// <param name="progress">Progress action</param>
         /// <param name="image">Photo to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
-        Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(Action<InstaUploaderProgress> progress, InstaImage image, string caption,
+        Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(Action<InstaUploaderProgress> progress, InstaImage image,
             InstaStoryUploadOptions uploadOptions = null);
         /// <summary>
         ///     Upload story photo with adding link address
         ///     <para>Note: this function only works with verified account or you have more than 10k followers.</para>
         /// </summary>
         /// <param name="image">Photo to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
-        Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(InstaImage image, string caption, Uri uri,
+        Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(InstaImage image, Uri uri,
             InstaStoryUploadOptions uploadOptions = null);
+
         /// <summary>
         ///     Upload story photo with adding link address (with progress)
         ///     <para>Note: this function only works with verified account or you have more than 10k followers.</para>
         /// </summary>
         /// <param name="progress">Progress action</param>
         /// <param name="image">Photo to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
         Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(Action<InstaUploaderProgress> progress, InstaImage image,
-            string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null);
+            Uri uri, InstaStoryUploadOptions uploadOptions = null);
+
         /// <summary>
         ///     Upload story video (to self story)
         /// </summary>

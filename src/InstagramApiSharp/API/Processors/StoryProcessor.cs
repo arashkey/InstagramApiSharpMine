@@ -1295,7 +1295,7 @@ namespace InstagramApiSharp.API.Processors
             if (mediaStoryUpload == null)
                 return Result.Fail<InstaStoryMedia>("Media story upload option cannot be null");
 
-            return await UploadStoryPhotoWithUrlAsync(progress, image, string.Empty, null, new InstaStoryUploadOptions { MediaStory = mediaStoryUpload });
+            return await UploadStoryPhotoWithUrlAsync(progress, image, null, new InstaStoryUploadOptions { MediaStory = mediaStoryUpload });
         }
 
         /// <summary>
@@ -1423,42 +1423,57 @@ namespace InstagramApiSharp.API.Processors
         {
             return await FollowUnfollowCountdown(UriCreator.GetStoryUnFollowCountdownUri(countdownId));
         }
+        [Obsolete]
+        public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(InstaImage image, string caption,
+            InstaStoryUploadOptions uploadOptions = null) =>
+            await UploadStoryPhotoAsync(null, image, caption, uploadOptions);
+
+        [Obsolete]
+        public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(Action<InstaUploaderProgress> progress, InstaImage image, string caption,
+            InstaStoryUploadOptions uploadOptions = null) =>
+            await UploadStoryPhotoWithUrlAsync(progress, image, caption, null, uploadOptions);
+
+        [Obsolete]
+        public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(InstaImage image, string caption, Uri uri,
+            InstaStoryUploadOptions uploadOptions = null) =>
+             await UploadStoryPhotoWithUrlAsync(null, image, caption, uri, uploadOptions);
+
+        [Obsolete]
+        public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(Action<InstaUploaderProgress> progress,
+            InstaImage image, string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null) =>
+            await UploadStoryPhotoWithUrlAsync(progress, image, uri, uploadOptions);
 
         /// <summary>
         ///     Upload story photo
         /// </summary>
         /// <param name="image">Photo to upload</param>
-        /// <param name="caption">Caption</param>
-        /// param name="uploadOptions">Upload options => Optional</param>
-        public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(InstaImage image, string caption,
-            InstaStoryUploadOptions uploadOptions = null)
+        /// <param name="uploadOptions">Upload options => Optional</param>
+        public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(InstaImage image, InstaStoryUploadOptions uploadOptions = null)
         {
-            return await UploadStoryPhotoAsync(null, image, caption, uploadOptions);
+            return await UploadStoryPhotoAsync(null, image,  uploadOptions);
         }
         /// <summary>
         ///     Upload story photo with progress
         /// </summary>
         /// <param name="progress">Progress action</param>
         /// <param name="image">Photo to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
-        public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(Action<InstaUploaderProgress> progress, InstaImage image, string caption,
+        public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(Action<InstaUploaderProgress> progress, InstaImage image,
             InstaStoryUploadOptions uploadOptions = null)
         {
-            return await UploadStoryPhotoWithUrlAsync(progress, image, caption, null, uploadOptions);
+            return await UploadStoryPhotoWithUrlAsync(progress, image, null, uploadOptions);
         }
         /// <summary>
         ///     Upload story photo with adding link address
         ///     <para>Note: this function only works with verified account or you have more than 10k followers.</para>
         /// </summary>
         /// <param name="image">Photo to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
-        public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(InstaImage image, string caption, Uri uri,
+        public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(InstaImage image, Uri uri,
             InstaStoryUploadOptions uploadOptions = null)
         {
-            return await UploadStoryPhotoWithUrlAsync(null, image, caption, uri, uploadOptions);
+            return await UploadStoryPhotoWithUrlAsync(null, image, uri, uploadOptions);
         }
         /// <summary>
         ///     Upload story photo with adding link address (with progress)
@@ -1466,16 +1481,15 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="progress">Progress action</param>
         /// <param name="image">Photo to upload</param>
-        /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
         public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsync(Action<InstaUploaderProgress> progress,
-            InstaImage image, string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null)
+            InstaImage image, Uri uri, InstaStoryUploadOptions uploadOptions = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var upProgress = new InstaUploaderProgress
             {
-                Caption = caption ?? string.Empty,
+                Caption = string.Empty,
                 UploadState = InstaUploadState.Preparing
             };
             try
@@ -1554,7 +1568,7 @@ namespace InstagramApiSharp.API.Processors
                         {
                               {"capture_mode", "normal"},
                               {"media_type", 1},
-                              {"caption", caption},
+                              {"caption", string.Empty},
                               {"mentions", new JArray()},
                               {"hashtags", new JArray()},
                               {"locations", new JArray()},
@@ -1609,7 +1623,7 @@ namespace InstagramApiSharp.API.Processors
                     upProgress.UploadState = InstaUploadState.Uploaded;
                     progress?.Invoke(upProgress);
                     await Task.Delay(5000);
-                    return await ConfigureStoryPhotoAsync(progress, upProgress, image, uploadId, caption, uri, uploadOptions);
+                    return await ConfigureStoryPhotoAsync(progress, upProgress, image, uploadId, uri, uploadOptions);
                 }
                 upProgress.UploadState = InstaUploadState.Error;
                 progress?.Invoke(upProgress);
@@ -2029,14 +2043,12 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="caption">Caption</param>
         /// <param name="uri">Uri to add</param>
         private async Task<IResult<InstaStoryMedia>> ConfigureStoryPhotoAsync(Action<InstaUploaderProgress> progress, InstaUploaderProgress upProgress, InstaImage image, string uploadId,
-            string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null)
+            Uri uri, InstaStoryUploadOptions uploadOptions = null)
         {
             try
             {
                 upProgress.UploadState = InstaUploadState.Configuring;
                 progress?.Invoke(upProgress);
-                if (!string.IsNullOrEmpty(caption))
-                    caption = caption.Replace("\r", "");
                 try
                 {
                     await Task.Delay(_httpRequestProcessor.ConfigureMediaDelay.Value);
@@ -2057,11 +2069,8 @@ namespace InstagramApiSharp.API.Processors
                     {"device_id", _deviceInfo.DeviceId},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"audience", "default"},
-                    //{"caption", caption},
                     {"upload_id", uploadId},
                     {"client_timestamp", DateTime.UtcNow.ToUnixTime().ToString()},
-                    //{"edits", new JObject()},
-                    //{"disable_comments", false},
                     {"camera_position", "unknown"},
                     {
                         "device", new JObject{
@@ -2673,107 +2682,5 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaStoryFeedResponse>(exception);
             }
         }
-
-        #region Old functions
-
-        private async Task<IResult<InstaStoryMedia>> UploadStoryPhotoWithUrlAsyncOLD(Action<InstaUploaderProgress> progress, InstaImage image,
-            string caption, Uri uri,
-            InstaStoryUploadOptions uploadOptions = null)
-        {
-            UserAuthValidator.Validate(_userAuthValidate);
-            var upProgress = new InstaUploaderProgress
-            {
-                Caption = caption ?? string.Empty,
-                UploadState = InstaUploadState.Preparing
-            };
-            try
-            {
-                if (uploadOptions?.Mentions?.Count > 0)
-                {
-                    var currentDelay = _instaApi.GetRequestDelay();
-                    _instaApi.SetRequestDelay(RequestDelay.FromSeconds(1, 2));
-                    foreach (var t in uploadOptions.Mentions)
-                    {
-                        try
-                        {
-                            bool tried = false;
-                        TryLabel:
-                            var u = await _instaApi.UserProcessor.GetUserAsync(t.Username);
-                            if (!u.Succeeded)
-                            {
-                                if (!tried)
-                                {
-                                    tried = true;
-                                    goto TryLabel;
-                                }
-                            }
-                            else
-                                t.Pk = u.Value.Pk;
-                        }
-                        catch { }
-                    }
-                    _instaApi.SetRequestDelay(currentDelay);
-                }
-                var instaUri = UriCreator.GetUploadPhotoUri();
-                var uploadId = ApiRequestMessage.GenerateUploadId();
-                upProgress.UploadId = uploadId;
-                progress?.Invoke(upProgress);
-                var requestContent = new MultipartFormDataContent(uploadId)
-                {
-                    {new StringContent(uploadId), "\"upload_id\""},
-                    //{new StringContent(_deviceInfo.DeviceGuid.ToString()), "\"_uuid\""},
-                    //{new StringContent(_user.CsrfToken), "\"_csrftoken\""},
-                    {
-                        new StringContent("{\"lib_name\":\"jt\",\"lib_version\":\"1.3.0\",\"quality\":\"87\"}"),
-                        "\"image_compression\""
-                    }
-                };
-                byte[] imageBytes;
-                if (image.ImageBytes == null)
-                    imageBytes = File.ReadAllBytes(image.Uri);
-                else
-                    imageBytes = image.ImageBytes;
-                var imageContent = new ByteArrayContent(imageBytes);
-                imageContent.Headers.Add("Content-Transfer-Encoding", "binary");
-                imageContent.Headers.Add("Content-Type", "application/octet-stream");
-
-                //var progressContent = new ProgressableStreamContent(imageContent, 4096, progress)
-                //{
-                //    UploaderProgress = upProgress
-                //};
-                upProgress.UploadState = InstaUploadState.Uploading;
-                progress?.Invoke(upProgress);
-                requestContent.Add(imageContent, "photo", $"pending_media_{ApiRequestMessage.GenerateUploadId()}.jpg");
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo);
-                request.Content = requestContent;
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    upProgress.UploadState = InstaUploadState.Uploaded;
-                    progress?.Invoke(upProgress);
-                    //upProgress = progressContent?.UploaderProgress;
-                    return await ConfigureStoryPhotoAsync(progress, upProgress, image, uploadId, caption, uri, uploadOptions);
-                }
-                upProgress.UploadState = InstaUploadState.Error;
-                progress?.Invoke(upProgress);
-                return Result.UnExpectedResponse<InstaStoryMedia>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaStoryMedia), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                upProgress.UploadState = InstaUploadState.Error;
-                progress?.Invoke(upProgress);
-                _logger?.LogException(exception);
-                return Result.Fail<InstaStoryMedia>(exception);
-            }
-        }
-
-        #endregion Old functions
     }
 }
