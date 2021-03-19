@@ -81,8 +81,8 @@ namespace InstagramApiSharp.API.Processors
             bool album = true, string recipient = null, string broadcastId = null)
         {
             if (string.IsNullOrEmpty(uploadId))
-                uploadId = ApiRequestMessage.GenerateUploadId();
-            var photoHashCode = Path.GetFileName(image.Uri ?? $"C:\\{13.GenerateRandomString()}.jpg").GetHashCode();
+                uploadId = ApiRequestMessage.GenerateUnknownUploadId();
+            var photoHashCode = Path.GetFileName(image.Uri ?? $"C:\\{13.GenerateRandomString()}.jpg").GetPositiveHashCode();
             var photoEntityName = $"{uploadId}_0_{photoHashCode}";
             var photoUri = UriCreator.GetStoryUploadPhotoUri(uploadId, photoHashCode);
             var photoUploadParamsObj = new JObject
@@ -120,7 +120,6 @@ namespace InstagramApiSharp.API.Processors
 
             if (response.IsSuccessStatusCode)
             {
-                //upProgress = progressContent?.UploaderProgress;
                 upProgress.UploadState = InstaUploadState.Uploaded;
                 progress?.Invoke(upProgress);
                 return Result.Success(uploadId);

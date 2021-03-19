@@ -1035,7 +1035,7 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var instaUri = UriCreator.GetChangeProfilePictureUri();
-                var uploadId = ApiRequestMessage.GenerateRandomUploadId();
+                var uploadId = ApiRequestMessage.GenerateUnknownUploadId();
                 upProgress.UploadId = uploadId;
                 progress?.Invoke(upProgress);
 
@@ -1054,8 +1054,6 @@ namespace InstagramApiSharp.API.Processors
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
             
-                //if (progressContent.UploaderProgress != null)
-                //    upProgress = progressContent.UploaderProgress;
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     upProgress.UploadState = InstaUploadState.Error;
