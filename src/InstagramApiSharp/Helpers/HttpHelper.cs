@@ -169,8 +169,9 @@ namespace InstagramApiSharp.Helpers
 
             request.Headers.Add(IsNewerApis ? InstaApiConstants.HEADER_X_FB_HTTP_IP.ToLower()
                 : InstaApiConstants.HEADER_X_FB_HTTP_IP, "True");
-            //request.Properties.Add(new KeyValuePair<string, object>(InstaApiConstants.HEADER_XGOOGLE_AD_IDE,
-            //    deviceInfo.GoogleAdId.ToString()));
+
+            request.Headers.Add(IsNewerApis ? InstaApiConstants.HEADER_X_FB_SERVER_CLUSTER.ToLower()
+                : InstaApiConstants.HEADER_X_FB_SERVER_CLUSTER, "True");
 
             System.Globalization.CultureInfo.CurrentCulture = currentCulture;
             return request;

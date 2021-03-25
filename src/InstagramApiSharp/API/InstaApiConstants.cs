@@ -107,6 +107,7 @@ namespace InstagramApiSharp.API
         public static string HEADER_IG_APP_STARTUP_COUNTRY_VALUE = "US"; // IR
         public const string HEADER_X_FB_HTTP_ENGINE = "X-FB-HTTP-Engine";
         public const string HEADER_X_FB_HTTP_IP = "X-FB-CLIENT-IP";
+        public const string HEADER_X_FB_SERVER_CLUSTER = "X-FB-SERVER-CLUSTER";
         public const string HEADER_X_IG_APP_LOCALE = "X-IG-App-Locale";
         public const string HEADER_X_IG_DEVICE_LOCALE = "X-IG-Device-Locale";
         public const string HEADER_X_MID = "X-MID";
