@@ -4,8 +4,8 @@ Private version of [InstagramApiSharp](https://github.com/ramtinak/InstagramApiS
 
 | Target | Branch | Version | Download |
 | ------ | ------ | ------ | ------ |
-| Github | master | v2.6.0 | [v2.6.0](https://github.com/rmt4006/InstagramApiSharpMine/archive/master.zip) |
-| Release | master | v2.6.0 | [v2.6.0](https://github.com/rmt4006/InstagramApiSharpMine/releases/) |
+| Github | master | v2.7.0 | [v2.7.0](https://github.com/rmt4006/InstagramApiSharpMine/archive/master.zip) |
+| Release | master | v2.7.0 | [v2.7.0](https://github.com/rmt4006/InstagramApiSharpMine/releases/) |
 
 #### How to build the project?
 Check this youtube video: https://www.youtube.com/watch?v=AFjKryHz9nM
@@ -82,6 +82,53 @@ For [InstagramApiSharp.NET5.WithNotification.sln] with Push Notifications/realti
 
 
 #### Version changes
+v2.7.0
+- [Update] Api version and headers to v180.0.0.31.119 [it's default now]
+  also added v169.3.0.30.135
+- [Deprecate] UploadStoryPhotoAsync(InstaImage, string, InstaStoryUploadOptions) (caption is deprecated, use new function)
+- [Deprecate] UploadStoryPhotoAsync(Action<InstaUploaderProgress>, InstaImage, string, InstaStoryUploadOptions) (caption is deprecated, use new function)
+- [Deprecate] UploadStoryPhotoWithUrlAsync(InstaImage, string, Uri, InstaStoryUploadOptions) (caption is deprecated, use new function)
+- [Deprecate] UploadStoryPhotoWithUrlAsync(Action<InstaUploaderProgress> progress, InstaImage image, string, Uri, InstaStoryUploadOptions) (caption is deprecated, use new function)
+- [Deprecate] UploadStoryVideoAsync(InstaVideoUpload, string, InstaStoryUploadOptions)
+- [Deprecate] UploadStoryVideoAsync(Action<InstaUploaderProgress>, InstaVideoUpload, string, InstaStoryUploadOptions)
+- [Deprecate] UploadStoryVideoWithUrlAsync(InstaVideoUpload, string, Uri uri, InstaStoryUploadOptions)
+- [Deprecate] UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress>, InstaVideoUpload, string, Uri uri, InstaStoryUploadOptions)
+- [Bugfix] for LoginWithCookiesAsync
+- [Tiny fix] for AcceptConsentAsync
+- [Tiny fix] for DebugLogger for .NET 5 and .NETCore 3.1
+- [Tiny fix] for ConfigureStoryVideoAsync
+- [Tiny fix] for ConfigureStoryVideoAsync
+- [Update] GetUserTimeFeedAsync
+- [Update] GetThreadToken
+- [Update] GetStoryToken
+- [Update] UploadStoryPhotoAsync/UploadStoryPhotoWithUrlAsync to the latest API 
+- [Update] UploadStoryVideoAsync/UploadStoryVideoWithUrlAsync to support mentions and other story stuffs 
+- [Update] ChangeProfilePictureAsync
+- [Update] TypingChanged in RealtimeClient
+- [Update] adding header to prevent some bugs related to different culture
+- [Add] support for .NET 5 and .NETCore 3.1
+- [Add] NextIdsToFetch to PaginationParameters
+- [Add] GetStoryFeedWithPostMethod(PaginationParameters,string) to StoryProcessor
+- [Add] SessionId to PaginationParameters
+- [Add] CreativeProcessor to IInstaApi
+- [Add] GetAssetsAsync to CreativeProcessor
+- [Add] WriteSupportedCapablititiesAsync to CreativeProcessor
+- [Add] support for RepliedToMessage to InstaDirectInboxItem
+- [Add] support for Reactions to InstaDirectInboxItem
+- [Add] IsReactionLog property to InstaActionLog
+- [Add] emoji support to InstaDirectReaction class
+- [Add] ClientFacingErrorMessage property to InstaDirectRespondPayload
+- [Add] ReplyDirectMessageAsync to MessagingProcessor
+- [Add] ForwardDirectMessageAsync to MessagingProcessor
+- [Add] EnableThreadVanishModeAsync to MessagingProcessor
+- [Add] DisableThreadVanishModeAsync to MessagingProcessor
+- [Add] SendReactionMessageAsync to RealtimeClient
+- [Add] DirectItemChanged to RealtimeClient 
+- [Add] BroadcastChanged to RealtimeClient
+- [Add] ParseQueryString(string query, out string type) to HttpUtility
+- [Add] SharePreviewToFeed parameter to TVProcessor.UploadVideoAsync
+- [Add] support for uploading reels with UploadStoryVideoAsync function
+
 v2.6.0
 - [Deprecate] AddToPostLiveAsync, DeletePostLiveAsync [API deprecated by Instagram]
 - [Bugfix] for serialization/deserialization in .NET 5.0 
