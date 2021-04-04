@@ -150,6 +150,12 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         Task<IResult<bool>> GetZrTokenResultAsync();
 
+        /// <summary>
+        ///     Launcher sync [ after registration is done ]
+        /// </summary>
+        Task<IResult<bool>> LauncherSyncAsync();
+
+
         #endregion Public Async Functions
     }
 }
