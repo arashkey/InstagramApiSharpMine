@@ -20,6 +20,7 @@ using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using InstagramApiSharp.API.Push;
+using InstagramApiSharp.API.Services;
 #if WITH_NOTIFICATION
 using InstagramApiSharp.API.RealTime;
 #endif
@@ -93,10 +94,14 @@ namespace InstagramApiSharp.API
         ///     Current <see cref="IHttpRequestProcessor"/>
         /// </summary>
         public IHttpRequestProcessor HttpRequestProcessor => _httpRequestProcessor;
+        /// <summary>
+        ///     Registration Service
+        /// </summary>
+        public IRegistrationService RegistrationService { get; }
 
-#endregion Variables and properties
+        #endregion Variables and properties
 
-#region SessionHandler
+        #region SessionHandler
         private ISessionHandler _sessionHandler;
         public ISessionHandler SessionHandler { get => _sessionHandler; set => _sessionHandler = value; }
 #endregion
@@ -230,11 +235,12 @@ namespace InstagramApiSharp.API
             PushClient = new FbnsClient(this);
             RealTimeClient = new RealTimeClient(this);
 #endif
+            RegistrationService = new RegistrationService(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
         }
 
-#endregion Constructor
+        #endregion Constructor
 
-#region Register new account with Phone number and email
+        #region Register new account with Phone number and email
 
         /// <summary>
         ///     Check email availability

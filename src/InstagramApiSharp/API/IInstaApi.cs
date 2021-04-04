@@ -24,6 +24,7 @@ using System.Net.Http;
 using System.Collections.Generic;
 using System;
 using InstagramApiSharp.API.Versions;
+using InstagramApiSharp.API.Services;
 using InstagramApiSharp.Helpers;
 
 using InstagramApiSharp.API.Push;
@@ -163,7 +164,10 @@ namespace InstagramApiSharp.API
         ///     Session handler
         /// </summary>
         ISessionHandler SessionHandler { get; set; }
-
+        /// <summary>
+        ///     Registration Service
+        /// </summary>
+        IRegistrationService RegistrationService { get; }
 #endregion
 
 #region State data
