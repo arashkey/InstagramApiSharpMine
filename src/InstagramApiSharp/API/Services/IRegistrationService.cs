@@ -81,7 +81,12 @@ namespace InstagramApiSharp.API.Services
         /// <param name="isMainAccount">Is this main account ? always set to to false</param>
         /// <param name="loggedInUserId">Logged in user id (pk) if available</param>
         Task<IResult<InstaSignupConsentConfig>> GetSignupConsentConfigAsync(bool isMainAccount = false, long? loggedInUserId = null);
-
+        
+        /// <summary>
+        ///     Send registration verify email
+        /// </summary>
+        /// <param name="email">Email</param>
+        Task<IResult<bool>> SendRegistrationVerifyEmailAsync(string email); 
 
         #endregion Public Async Functions
     }

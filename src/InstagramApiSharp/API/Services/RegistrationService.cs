@@ -335,6 +335,45 @@ namespace InstagramApiSharp.API.Services
             }
         }
 
+        /// <summary>
+        ///     Send registration verify email
+        /// </summary>
+        /// <param name="email">Email</param>
+        public async Task<IResult<bool>> SendRegistrationVerifyEmailAsync(string email)
+        {
+            try
+            {
+                var data = new Dictionary<string, string>
+                {
+                    {"phone_id",            _deviceInfo.PhoneGuid.ToString()},
+                    {"_csrftoken",          _user.CsrfToken},
+                    {"guid",                _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id",           _deviceInfo.DeviceId},
+                    {"email",               email},
+                    {"waterfall_id",        RegistrationWaterfallId},
+                    {"auto_confirm_only",   "false"},
+                };
+                var instaUri = UriCreator.GetSendRegistrationVerifyEmailUri();
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
         #endregion Public Async Functions
     }
 }
