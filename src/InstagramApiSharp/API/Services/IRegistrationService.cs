@@ -60,6 +60,12 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         Task<IResult<bool>> FirstQeSyncAsync();
 
+        /// <summary>
+        ///     Check username availablity
+        /// </summary>
+        /// <param name="username">Username</param>
+        Task<IResult<InstaAccountCheck>> CheckUsernameAsync(string username);
+
         #endregion Public Async Functions
     }
 }

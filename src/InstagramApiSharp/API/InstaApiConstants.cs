@@ -78,6 +78,8 @@ namespace InstagramApiSharp.API
 
 
         #region Main
+        public const string RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY = "ig-set-password-encryption-pub-key";
+        public const string RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID = "ig-set-password-encryption-key-id";
         public const string HEADER_IG_U_DIRECT_REGION_HINT = "ig-u-ig-direct-region-hint";
         public const string HEADER_IG_U_SHBID = "ig-u-shbid";
         public const string HEADER_IG_U_SHBTS = "ig-u-shbts";

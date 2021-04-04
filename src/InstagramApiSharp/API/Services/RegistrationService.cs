@@ -195,6 +195,47 @@ namespace InstagramApiSharp.API.Services
                 return Result.Fail<bool>(exception);
             }
         }
+
+        /// <summary>
+        ///     Check username availablity
+        /// </summary>
+        /// <param name="username">Username</param>
+        public async Task<IResult<InstaAccountCheck>> CheckUsernameAsync(string username)
+        {
+            try
+            {
+                var instaUri = UriCreator.GetCheckUsernameUri();
+                var data = new JObject
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"username", username}
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<InstaAccountCheck>(json);
+                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                if (!obj.IsSucceed || response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaAccountCheck>(response, json);
+                else
+                {
+                    _instaApi._user.PublicKey = _user.PublicKey = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY));
+                    _instaApi._user.PublicKeyId = _user.PublicKeyId = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID));
+                    return Result.Success(obj);
+                }
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaAccountCheck), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaAccountCheck>(exception);
+            }
+        }
+
         #endregion Public Async Functions
     }
 }

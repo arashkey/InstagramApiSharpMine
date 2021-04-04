@@ -50,7 +50,7 @@ namespace InstagramApiSharp.API
         public HttpHelper HttpHelper => _httpHelper;
         public InstaApiVersionType InstaApiVersionType => ApiVersionType;
 
-        private UserSessionData _user
+        internal UserSessionData _user
         {
             get { return _userSession; }
             set { _userSession = value; _userAuthValidate.User = value; }
