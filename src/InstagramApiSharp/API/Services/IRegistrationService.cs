@@ -187,6 +187,12 @@ namespace InstagramApiSharp.API.Services
         /// <param name="phoneNumber">Phone number</param>
         Task<IResult<bool>> CheckPhoneNumberAsync(string phoneNumber);
 
+        /// <summary>
+        ///     Send singup sms code
+        /// </summary>
+        /// <param name="phoneNumber">Phone number</param>
+        Task<IResult<bool>> SendSignUpSmsCodeAsync(string phoneNumber);
+
         #endregion Phone registration
 
         #endregion Public Async Functions

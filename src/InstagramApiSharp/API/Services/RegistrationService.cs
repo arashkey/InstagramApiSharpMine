@@ -803,6 +803,25 @@ namespace InstagramApiSharp.API.Services
             return await GetResultAsync(UriCreator.GetCheckPhoneNumberUri(), data, true);
         }
 
+        /// <summary>
+        ///     Send singup sms code
+        /// </summary>
+        /// <param name="phoneNumber">Phone number</param>
+        public async Task<IResult<bool>> SendSignUpSmsCodeAsync(string phoneNumber)
+        {
+            var data = new Dictionary<string, string>
+            {
+                {"phone_id",            _deviceInfo.PhoneGuid.ToString()},
+                {"phone_number",        phoneNumber},
+                {"_csrftoken",          _user.CsrfToken},
+                {"guid",                _deviceInfo.DeviceGuid.ToString()},
+                {"device_id",           _deviceInfo.DeviceId},
+                {"android_build_type",  "release"},
+                {"waterfall_id",        RegistrationWaterfallId},
+            };
+            return await GetResultAsync(UriCreator.GetSignUpSMSCodeUri(), data, true);
+        }
+
         #endregion Phone registration
 
         #endregion Public Async Functions
