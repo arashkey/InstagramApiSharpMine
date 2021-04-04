@@ -123,6 +123,10 @@ namespace InstagramApiSharp.API.Services
         /// <param name="registrationMethod">Registration method</param>
         Task<IResult<bool>> GetOnboardingStepsAsync(InstaOnboardingProgressState progressState, InstaRegistrationMethod registrationMethod = InstaRegistrationMethod.Email);
 
+        /// <summary>
+        ///     New user flow begins consent
+        /// </summary>
+        Task<IResult<bool>> NewUserFlowBeginsConsentAsync();
 
         #endregion Public Async Functions
     }
