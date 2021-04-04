@@ -140,6 +140,11 @@ namespace InstagramApiSharp.API.Services
         Task<IResult<InstaAccountCreation>> CreateNewAccountWithEmailAsync(string email, string username,
             string password, string firstName = "", string signUpCode = null, DateTime? birthday = null);
 
+        /// <summary>
+        ///     Get multiple accounts family
+        /// </summary>
+        Task<IResult<bool>> GetMultipleAccountsFamilyAsync();
+
         #endregion Public Async Functions
     }
 }
