@@ -2489,9 +2489,9 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for notification badge");
             return instaUri;
         }
-        public static Uri GetContactPointPrefillUri()
+        public static Uri GetContactPointPrefillUri(bool isBUrl = false)
         {
-            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.ACCOUNTS_CONTACT_POINT_PREFILL, out var instaUri))
+            if (!Uri.TryCreate(isBUrl ? BaseInstagramBUri : BaseInstagramUri, InstaApiConstants.ACCOUNTS_CONTACT_POINT_PREFILL, out var instaUri))
                 throw new Exception("Cant create URI for contact point prefill");
             return instaUri;
         }
