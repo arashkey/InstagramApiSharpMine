@@ -82,7 +82,12 @@ namespace InstagramApiSharp.API
         public const string CONSENT_CHECK_AGE_ELIGIBILITY = API_SUFFIX + "/consent/check_age_eligibility/";
 
         #endregion New
+        
+        #region B Url endpoints
 
+        public const string MULTIPLE_ACCOUNTS_GET_ACCOUNT_FAMILY = API_SUFFIX + "/multiple_accounts/get_account_family/";
+
+        #endregion B Url endpoints
 
         #region Main
         public const string RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY = "ig-set-password-encryption-pub-key";

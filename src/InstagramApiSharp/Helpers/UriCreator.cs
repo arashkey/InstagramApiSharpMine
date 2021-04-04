@@ -2975,5 +2975,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for check age eligibility");
             return instaUri;
         }
+        public static Uri GetMultipleAccountsFamilyUri(bool isBUrl = false)
+        {
+            if (!Uri.TryCreate(isBUrl ? BaseInstagramBUri : BaseInstagramUri, InstaApiConstants.MULTIPLE_ACCOUNTS_GET_ACCOUNT_FAMILY, out var instaUri))
+                throw new Exception("Cant create URI for get multiple accounts family");
+            return instaUri;
+        }
     }
 }
