@@ -109,6 +109,12 @@ namespace InstagramApiSharp.API.Services
         ///         Optional for phone registration!
         /// </param>
         Task<IResult<InstaRegistrationSuggestionResponse>> GetUsernameSuggestionsAsync(string name, string email = null);
+        
+        /// <summary>
+        ///     Check age eligibility
+        /// </summary>
+        /// <param name="birthday">Birthday => Passing null, will generate randomly and save it to <see cref="IRegistrationService.Birthday"/></param>
+        Task<IResult<InstaCheckAgeEligibility>> CheckAgeEligibilityAsync(DateTime? birthday = null);
 
         #endregion Public Async Functions
     }

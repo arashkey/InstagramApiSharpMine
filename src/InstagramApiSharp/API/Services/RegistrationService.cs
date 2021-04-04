@@ -488,6 +488,42 @@ namespace InstagramApiSharp.API.Services
             }
         }
 
+        /// <summary>
+        ///     Check age eligibility
+        /// </summary>
+        /// <param name="birthday">Birthday => Passing null, will generate randomly and save it to <see cref="IRegistrationService.Birthday"/></param>
+        public async Task<IResult<InstaCheckAgeEligibility>> CheckAgeEligibilityAsync(DateTime? birthday = null)
+        {
+            try
+            {
+                Birthday = birthday ?? GenerateRandomBirthday();
+                var data = new Dictionary<string, string>
+                {
+                    {"_csrftoken",      _user.CsrfToken},
+                    {"day",             Birthday.Day.ToString()},
+                    {"year",            Birthday.Year.ToString()},
+                    {"month",           Birthday.Month.ToString()},
+                };
+                var instaUri = UriCreator.GetCheckAgeEligibilityUri();
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                var obj = JsonConvert.DeserializeObject<InstaCheckAgeEligibility>(json);
+                return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<InstaCheckAgeEligibility>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaCheckAgeEligibility), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaCheckAgeEligibility>(exception);
+            }
+        }
+
         #endregion Public Async Functions
     }
 }
