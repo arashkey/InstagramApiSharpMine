@@ -1141,9 +1141,9 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetOnboardingStepsUri()
+        public static Uri GetOnboardingStepsUri(bool isBUrl = false)
         {
-            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DYNAMIC_ONBOARDING_GET_STEPS, out var instaUri))
+            if (!Uri.TryCreate(isBUrl ? BaseInstagramBUri : BaseInstagramUri, InstaApiConstants.DYNAMIC_ONBOARDING_GET_STEPS, out var instaUri))
                 throw new Exception("Cant create URI for dynamic onboarding get steps");
             return instaUri;
         }
