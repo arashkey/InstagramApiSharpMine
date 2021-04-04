@@ -69,6 +69,13 @@ namespace InstagramApiSharp.API.Services
         }
         #endregion Properties and constructor
 
+        #region Private functions
+
+        void ValidateUser(InstaUserShortResponse user) =>
+            _user.LoggedInUser = ConvertersFabric.Instance.GetUserShortConverter(user)?.Convert();
+
+        #endregion Private functions
+
         #region Public functions
 
         /// <summary>
