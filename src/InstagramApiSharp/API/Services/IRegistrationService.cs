@@ -128,6 +128,18 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         Task<IResult<bool>> NewUserFlowBeginsConsentAsync();
 
+        /// <summary>
+        ///     Create new account via email
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <param name="username">Username</param>
+        /// <param name="password">Password</param>
+        /// <param name="firstName">First name => Optional</param>
+        /// <param name="signUpCode">ForceSignUpCode from <see cref="IRegistrationService.CheckRegistrationConfirmationCodeAsync"/> => Optional</param>
+        /// <param name="birthday">Birthday => Optional</param>
+        Task<IResult<InstaAccountCreation>> CreateNewAccountWithEmailAsync(string email, string username,
+            string password, string firstName = "", string signUpCode = null, DateTime? birthday = null);
+
         #endregion Public Async Functions
     }
 }

@@ -654,6 +654,90 @@ namespace InstagramApiSharp.API.Services
             }
         }
 
+        /// <summary>
+        ///     Create new account via email
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <param name="username">Username</param>
+        /// <param name="password">Password</param>
+        /// <param name="firstName">First name => Optional</param>
+        /// <param name="signUpCode">ForceSignUpCode from <see cref="IRegistrationService.CheckRegistrationConfirmationCodeAsync"/> => Optional</param>
+        /// <param name="birthday">Birthday => Optional</param>
+        public async Task<IResult<InstaAccountCreation>> CreateNewAccountWithEmailAsync(string email, string username,
+            string password, string firstName = "", string signUpCode = null, DateTime? birthday = null)
+        {
+            try
+            {
+                Birthday = birthday ?? GenerateRandomBirthday();
+
+                var encryptedPassword = _instaApi.GetEncryptedPassword(password);
+                var data = new Dictionary<string, string>
+                {
+                    {"is_secondary_account_creation",           "true"},
+                    {"jazoest",                                 ExtensionHelper.GenerateJazoest(_deviceInfo.PhoneGuid.ToString())},
+                    {"suggestedUsername",                       ""},
+                    {"do_not_auto_login_if_credentials_match",  "true"},
+                    {"phone_id",                                _deviceInfo.PhoneGuid.ToString()},
+                    {"enc_password",                            encryptedPassword},
+                    {"_csrftoken",                              _user.CsrfToken},
+                    {"username",                                username},
+                    {"first_name",                              firstName.Replace(" ", "+")},
+                    {"adid",                                    _deviceInfo.AdId.ToString()},
+                    {"guid",                                    _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id",                               _deviceInfo.DeviceId},
+                    {"_uuid",                                   _deviceInfo.DeviceGuid.ToString()},
+                    {"email",                                   email},
+                    {"force_sign_up_code",                      signUpCode ?? ForceSignupCode},
+                    {"waterfall_id",                            RegistrationWaterfallId},
+                    {"sn_result",                               "GOOGLE_PLAY_UNAVAILABLE:SERVICE_INVALID"},
+                    {"day",                                     Birthday.Day.ToString()},
+                    {"year",                                    Birthday.Year.ToString()},
+                    {"month",                                   Birthday.Month.ToString()},
+                    {"sn_nonce",                                ExtensionHelper.GenerateSnNonce(email)},
+                    {"qs_stamp",                                ""},
+                    {"one_tap_opt_in",                          "true"}
+                };
+                if (InstaCheckEmailRegistration?.TosVersion == "row")
+                    data.Add("tos_version", "row");
+
+                var instaUri = UriCreator.GetCreateAccountUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor, true);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    var loginFailReason = JsonConvert.DeserializeObject<InstaLoginBaseResponse>(json);
+
+                    if (loginFailReason.ErrorType == "checkpoint_challenge_required"
+                        || loginFailReason.Message == "challenge_required")
+                    {
+                        _instaApi.ChallengeLoginInfo = loginFailReason.Challenge;
+
+                        return Result.Fail("Challenge is required", ResponseType.ChallengeRequired, default(InstaAccountCreation));
+                    }
+                    return Result.UnExpectedResponse<InstaAccountCreation>(response, json);
+                }
+                var obj = JsonConvert.DeserializeObject<InstaAccountCreation>(json);
+
+                if (obj.AccountCreated && obj.CreatedUser != null)
+                {
+                    _instaApi.ValidateUserAsync(obj.CreatedUser, _user.CsrfToken, true, password);
+                    ValidateUser(obj.CreatedUser);
+                }
+                return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<InstaAccountCreation>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaAccountCreation), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaAccountCreation>(exception);
+            }
+        }
 
         #endregion Public Async Functions
     }
