@@ -145,6 +145,11 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         Task<IResult<bool>> GetMultipleAccountsFamilyAsync();
 
+        /// <summary>
+        ///     Get zr token result
+        /// </summary>
+        Task<IResult<bool>> GetZrTokenResultAsync();
+
         #endregion Public Async Functions
     }
 }
