@@ -34,6 +34,7 @@ namespace InstagramApiSharp.API.Services
         #endregion Properties
 
         #region Public functions
+
         /// <summary>
         ///  Generate random birthday
         /// </summary>

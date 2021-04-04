@@ -70,6 +70,10 @@ namespace InstagramApiSharp.API.Services
         #endregion Properties and constructor
 
         #region Public functions
+
+        /// <summary>
+        ///  Generate random birthday
+        /// </summary>
         public DateTime GenerateRandomBirthday()
         {
             var rnd = new Random();
@@ -78,6 +82,7 @@ namespace InstagramApiSharp.API.Services
             int year = rnd.Next(1979, 2000);
             return new DateTime(year, month, day);
         }
+
         #endregion
     }
 }
