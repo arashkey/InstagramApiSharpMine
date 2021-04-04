@@ -14,6 +14,7 @@ namespace InstagramApiSharp.Helpers
     internal class UriCreator
     {
         private static readonly Uri BaseInstagramUri = new Uri(InstaApiConstants.INSTAGRAM_URL);
+        private static readonly Uri BaseInstagramBUri = new Uri(InstaApiConstants.INSTAGRAM_B_URL);
 
         public static Uri GetAcceptFriendshipUri(long userId)
         {
