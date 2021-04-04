@@ -41,16 +41,18 @@ namespace InstagramApiSharp.API.Services
         ///     Birthday for age consent
         /// </summary>
         public DateTime Birthday { get; set; }
-
         /// <summary>
         ///     Check Email Registration response
         /// </summary>
         public InstaCheckEmailRegistration InstaCheckEmailRegistration { get; set; }
-
         /// <summary>
         ///     Sms verification code
         /// </summary>
         public string SmsVerificationCode { get; set; }
+        /// <summary>
+        ///     Registration phone number respons
+        /// </summary>
+        public InstaAccountRegistrationPhoneNumberNew AccountRegistrationPhoneNumber { get; set; }
 
         #endregion Properties
 
