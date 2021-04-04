@@ -47,6 +47,11 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         public InstaCheckEmailRegistration InstaCheckEmailRegistration { get; set; }
 
+        /// <summary>
+        ///     Sms verification code
+        /// </summary>
+        public string SmsVerificationCode { get; set; }
+
         #endregion Properties
 
         #region Fields and constructor
