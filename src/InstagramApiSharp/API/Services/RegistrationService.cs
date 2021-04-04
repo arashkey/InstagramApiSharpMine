@@ -523,6 +523,103 @@ namespace InstagramApiSharp.API.Services
                 return Result.Fail<InstaCheckAgeEligibility>(exception);
             }
         }
+        /// <summary>
+        ///     Onboarding steps of registration
+        /// </summary>
+        /// <param name="progressState">Progress state</param>
+        /// <param name="registrationMethod">Registration method</param>
+        public async Task<IResult<bool>> GetOnboardingStepsAsync(InstaOnboardingProgressState progressState, InstaRegistrationMethod registrationMethod = InstaRegistrationMethod.Email)
+        {
+            try
+            {
+                RegistrationWaterfallId = Guid.NewGuid().ToString();
+
+                var data = new Dictionary<string, string>
+                {
+                    {"is_secondary_account_creation",       progressState == InstaOnboardingProgressState.Prefetch ? "false" : "true"},
+                    {"fb_connected",                        "false"},
+                    {"progress_state",                      progressState.ToString().ToLower()},
+                    {"phone_id",                            _deviceInfo.PhoneGuid.ToString()},
+                    {"fb_installed",                        "false"},
+                    {"locale",                              InstaApiConstants.ACCEPT_LANGUAGE.Replace("-","_")},
+                    {"timezone_offset",                     InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"_csrftoken",                          _user.CsrfToken},
+                    {"network_type",                        "WIFI-UNKNOWN"},
+                    {"guid",                                _deviceInfo.DeviceGuid.ToString()},
+                    {"is_ci",                               "false"},
+                    {"android_id",                          _deviceInfo.DeviceId},
+                    {"waterfall_id",                        RegistrationWaterfallId},
+                    {"tos_accepted",                        progressState == InstaOnboardingProgressState.Prefetch ? "false" : "true"}
+                };
+
+                if (registrationMethod == InstaRegistrationMethod.Email)
+                {
+                    switch (progressState)
+                    {
+                        case InstaOnboardingProgressState.Start:
+                            data.Add("_uid", _user.LoggedInUser.Pk.ToString());
+                            data.Add("reg_flow_taken", "email");
+                            break;
+
+                        case InstaOnboardingProgressState.Finish:
+                            data.Add("seen_steps", "[{\"step_name\":\"CHECK_FOR_PHONE\",\"value\":1},{\"step_name\":\"FB_CONNECT\",\"value\":0},{\"step_name\":\"FB_FOLLOW\",\"value\":-1},{\"step_name\":\"UNKNOWN\",\"value\":-1},{\"step_name\":\"CONTACT_INVITE\",\"value\":-1},{\"step_name\":\"ACCOUNT_PRIVACY\",\"value\":-1},{\"step_name\":\"TAKE_PROFILE_PHOTO\",\"value\":0},{\"step_name\":\"ADD_PHONE\",\"value\":-1},{\"step_name\":\"TURN_ON_ONETAP\",\"value\":-1}]");
+                            break;
+                    }
+                }
+                else
+                {
+                    data.Add("reg_flow_taken", "phone");
+                    switch (progressState)
+                    {
+                        case InstaOnboardingProgressState.Start:
+                            data.Add("_uid", _user.LoggedInUser.Pk.ToString());
+                            break;
+
+                        case InstaOnboardingProgressState.Finish:
+                            data.Add("seen_steps", "[{\"step_name\":\"CHECK_FOR_PHONE\",\"value\":1},{\"step_name\":\"CREATE_PASSWORD\",\"value\":-1},{\"step_name\":\"FB_CONNECT\",\"value\":0},{\"step_name\":\"FB_FOLLOW\",\"value\":-1},{\"step_name\":\"UNKNOWN\",\"value\":-1},{\"step_name\":\"CONTACT_INVITE\",\"value\":-1},{\"step_name\":\"ACCOUNT_PRIVACY\",\"value\":-1},{\"step_name\":\"TAKE_PROFILE_PHOTO\",\"value\":0},{\"step_name\":\"ADD_PHONE\",\"value\":-1},{\"step_name\":\"TURN_ON_ONETAP\",\"value\":-1},{\"step_name\":\"DISCOVER_PEOPLE\",\"value\":1},{\"step_name\":\"INTEREST_ACCOUNT_SUGGESTIONS\",\"value\":-1}]");
+                            break;
+                    }
+                }
+                if (progressState != InstaOnboardingProgressState.Finish)
+                    data.Add("seen_steps", "[]");
+
+                var instaUri = UriCreator.GetOnboardingStepsUri(progressState == InstaOnboardingProgressState.Start);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (progressState == InstaOnboardingProgressState.Prefetch)
+                    _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                IResult<bool> FailResponse()
+                {
+                    var oa = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                    return Result.Fail<bool>(oa.Message);
+                }
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    try
+                    {
+                        var o = JsonConvert.DeserializeObject<InstaAccountRegistrationPhoneNumber>(json);
+
+                        return Result.Fail<bool>(o.Message?.Errors?[0]);
+                    }
+                    catch { return FailResponse(); }
+                }
+
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
 
         #endregion Public Async Functions
     }

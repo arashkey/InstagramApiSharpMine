@@ -116,6 +116,14 @@ namespace InstagramApiSharp.API.Services
         /// <param name="birthday">Birthday => Passing null, will generate randomly and save it to <see cref="IRegistrationService.Birthday"/></param>
         Task<IResult<InstaCheckAgeEligibility>> CheckAgeEligibilityAsync(DateTime? birthday = null);
 
+        /// <summary>
+        ///     Onboarding steps of registration
+        /// </summary>
+        /// <param name="progressState">Progress state</param>
+        /// <param name="registrationMethod">Registration method</param>
+        Task<IResult<bool>> GetOnboardingStepsAsync(InstaOnboardingProgressState progressState, InstaRegistrationMethod registrationMethod = InstaRegistrationMethod.Email);
+
+
         #endregion Public Async Functions
     }
 }
