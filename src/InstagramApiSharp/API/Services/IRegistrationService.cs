@@ -55,7 +55,10 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         Task<IResult<bool>> FirstLauncherSyncAsync();
 
-
+        /// <summary>
+        ///     First Qe sync [ sends before new registration account ]
+        /// </summary>
+        Task<IResult<bool>> FirstQeSyncAsync();
 
         #endregion Public Async Functions
     }
