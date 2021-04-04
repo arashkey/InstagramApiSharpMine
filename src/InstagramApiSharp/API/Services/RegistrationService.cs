@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Services
@@ -50,7 +49,7 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         public string SmsVerificationCode { get; set; }
         /// <summary>
-        ///     Registration phone number respons
+        ///     Registration phone number response
         /// </summary>
         public InstaAccountRegistrationPhoneNumberNew AccountRegistrationPhoneNumber { get; set; }
 
@@ -61,7 +60,9 @@ namespace InstagramApiSharp.API.Services
         private readonly IHttpRequestProcessor _httpRequestProcessor;
         private readonly IInstaLogger _logger;
         private readonly UserSessionData _user;
+#pragma warning disable IDE0052 // Remove unread private members
         private readonly UserAuthValidate _userAuthValidate;
+#pragma warning restore IDE0052 // Remove unread private members
         private readonly InstaApi _instaApi;
         private readonly HttpHelper _httpHelper;
 
@@ -147,14 +148,12 @@ namespace InstagramApiSharp.API.Services
         #region Public functions
 
         /// <summary>
-        ///  Generate random birthday
+        ///     Generate random birthday
         /// </summary>
         public DateTime GenerateRandomBirthday() =>
             ExtensionHelper.GenerateRandomBirthday();
 
         #endregion
-
-
 
         #region Public Async Functions
 

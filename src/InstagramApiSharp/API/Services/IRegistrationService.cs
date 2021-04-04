@@ -39,7 +39,7 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         string SmsVerificationCode { get; set; }
         /// <summary>
-        ///     Registration phone number respons
+        ///     Registration phone number response
         /// </summary>
         InstaAccountRegistrationPhoneNumberNew AccountRegistrationPhoneNumber { get; set; }
 
@@ -48,12 +48,11 @@ namespace InstagramApiSharp.API.Services
         #region Public functions
 
         /// <summary>
-        ///  Generate random birthday
+        ///     Generate random birthday
         /// </summary>
         DateTime GenerateRandomBirthday();
 
         #endregion
-
 
         #region Public Async Functions
 
