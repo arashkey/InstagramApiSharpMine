@@ -714,6 +714,30 @@ namespace InstagramApiSharp.API.Services
             return await GetResultAsync(UriCreator.GetLauncherSyncUri(true), data, false).ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     Qe sync [ after registration is done ]
+        /// </summary>
+        public async Task<IResult<bool>> QeSyncAsync()
+        {
+            var data = new JObject
+            {
+                {"_csrftoken",                      _user.CsrfToken},
+            };
+            if (_instaApi.IsUserAuthenticated && _user?.LoggedInUser != null)
+            {
+                data.Add("id",                      _user.LoggedInUser.Pk.ToString());
+                data.Add("_uid",                    _user.LoggedInUser.Pk.ToString());
+            }
+            else
+                data.Add("id",                      _deviceInfo.DeviceGuid.ToString());
+
+            data.Add("_uuid",                       _deviceInfo.DeviceGuid.ToString());
+            data.Add("server_config_retrieval",     "1");
+            data.Add("experiments",                 InstaApiConstants.SIGNUP_EXPERIMENTS_CONFIGS);
+
+            return await GetResultAsync(UriCreator.GetQeSyncUri(true), data, false).ConfigureAwait(false);
+        }
+
         #endregion Public Async Functions
     }
 }

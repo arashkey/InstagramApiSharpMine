@@ -155,6 +155,10 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         Task<IResult<bool>> LauncherSyncAsync();
 
+        /// <summary>
+        ///     Qe sync [ after registration is done ]
+        /// </summary>
+        Task<IResult<bool>> QeSyncAsync();
 
         #endregion Public Async Functions
     }
