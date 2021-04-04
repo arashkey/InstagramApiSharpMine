@@ -80,6 +80,18 @@ namespace InstagramApiSharp.Helpers
             }
         }
 
+        public static double ToUnixTimeAsDouble(this DateTime date)
+        {
+            try
+            {
+                return (date - UnixEpoch).TotalSeconds;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
         public static long ToUnixTimeMiliSeconds(this DateTime date)
         {
             try
