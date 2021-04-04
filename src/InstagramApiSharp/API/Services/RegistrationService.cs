@@ -106,6 +106,28 @@ namespace InstagramApiSharp.API.Services
                 return Result.Fail<bool>(exception);
             }
         }
+        private async Task<IResult<bool>> GetResultAsync(Uri instaUri, JObject data)
+        {
+            try
+            {
+                HttpRequestMessage request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
         #endregion Private functions
 
         #region Public functions
@@ -147,32 +169,13 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         public async Task<IResult<bool>> FirstLauncherSyncAsync()
         {
-            try
+            var data = new JObject
             {
-                var data = new JObject
-                {
-                    {"_csrftoken",                  _user.CsrfToken},
-                    {"id",                          _deviceInfo.DeviceGuid.ToString()},
-                    {"server_config_retrieval",     "1"}
-                };
-                var instaUri = UriCreator.GetLauncherSyncUri();
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
-                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
-                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<bool>(exception);
-            }
+                {"_csrftoken",                  _user.CsrfToken},
+                {"id",                          _deviceInfo.DeviceGuid.ToString()},
+                {"server_config_retrieval",     "1"}
+            };
+            return await GetResultAsync(UriCreator.GetLauncherSyncUri(), data);
         }
 
         /// <summary>
