@@ -20,6 +20,6 @@ namespace InstagramApiSharp.Classes.Models
         [JsonProperty("existing_user_password")]
         public bool? ExistingUserPassword { get; set; }
         [JsonProperty("error_type")]
-        internal string ErrorType { get; set; }
+        public string ErrorType { get; set; }
     }
 }
