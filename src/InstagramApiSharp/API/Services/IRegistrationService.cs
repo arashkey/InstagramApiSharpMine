@@ -30,7 +30,10 @@ namespace InstagramApiSharp.API.Services
         ///     Birthday for age consent
         /// </summary>
         DateTime Birthday { get; set; }
-
+        /// <summary>
+        ///     Check Email Registration response
+        /// </summary>
+        InstaCheckEmailRegistration InstaCheckEmailRegistration { get; set; }
         #endregion Properties
 
         #region Public functions

@@ -42,6 +42,11 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         public DateTime Birthday { get; set; }
 
+        /// <summary>
+        ///     Check Email Registration response
+        /// </summary>
+        public InstaCheckEmailRegistration InstaCheckEmailRegistration { get; set; }
+
         #endregion Properties
 
         #region Fields and constructor
