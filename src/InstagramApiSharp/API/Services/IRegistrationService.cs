@@ -200,6 +200,18 @@ namespace InstagramApiSharp.API.Services
         /// <param name="verificationCode">Verification code</param>
         Task<IResult<InstaPhoneNumberRegistration>> VerifySignUpSmsCodeAsync(string phoneNumber, string verificationCode);
 
+        /// <summary>
+        ///     Create new account via phone number
+        /// </summary>
+        /// <param name="phoneNumber">Phone number</param>
+        /// <param name="username">Username</param>
+        /// <param name="password">Password</param>
+        /// <param name="firstName">First name</param>
+        /// <param name="verificationCode">Verification code from sms</param>
+        /// <param name="birthday">Birthday => Optional</param>
+        Task<IResult<InstaAccountCreation>> CreateNewAccountWithPhoneNumberAsync(string phoneNumber, 
+            string username, string password, string firstName, string verificationCode, DateTime? birthday = null);
+
         #endregion Phone registration
 
         #endregion Public Async Functions

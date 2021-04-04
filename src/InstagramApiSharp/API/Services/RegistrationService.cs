@@ -892,6 +892,104 @@ namespace InstagramApiSharp.API.Services
         }
 
 
+        /// <summary>
+        ///     Create new account via phone number
+        /// </summary>
+        /// <param name="phoneNumber">Phone number</param>
+        /// <param name="username">Username</param>
+        /// <param name="password">Password</param>
+        /// <param name="firstName">First name</param>
+        /// <param name="verificationCode">Verification code from sms</param>
+        /// <param name="birthday">Birthday => Optional</param>
+        public async Task<IResult<InstaAccountCreation>> CreateNewAccountWithPhoneNumberAsync(string phoneNumber,
+            string username, string password, string firstName, string verificationCode, DateTime? birthday = null)
+        {
+            try
+            {
+                Birthday = birthday ?? GenerateRandomBirthday();
+                var encryptedPassword = _instaApi.GetEncryptedPassword(password);
+                var postData = new Dictionary<string, string>
+                {
+                    {"is_secondary_account_creation",           "false"},
+                    {"jazoest",                                 ExtensionHelper.GenerateJazoest(_deviceInfo.PhoneGuid.ToString())},
+                    {"tos_version",                             "row"},
+                    {"suggestedUsername",                       ""},
+                    {"verification_code",                       verificationCode ?? SmsVerificationCode},
+                    {"do_not_auto_login_if_credentials_match",  "true"},
+                    {"phone_id",                                _deviceInfo.PhoneGuid.ToString()},
+                    {"enc_password",                            encryptedPassword},
+                    {"phone_number",                            phoneNumber},
+                    {"_csrftoken",                              _user.CsrfToken},
+                    {"username",                                username},
+                    {"first_name",                              firstName},
+                    {"adid",                                    _deviceInfo.AdId.ToString()},
+                    {"guid",                                    _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id",                               _deviceInfo.DeviceId},
+                    {"_uuid",                                   _deviceInfo.DeviceGuid.ToString()},
+                    {"force_sign_up_code",                      ""},
+                    {"waterfall_id",                            RegistrationWaterfallId},
+                    {"has_sms_consent",                         "true"},
+                    {"sn_result",                               "GOOGLE_PLAY_UNAVAILABLE:SERVICE_INVALID"},
+                    {"day",                                     Birthday.Day.ToString()},
+                    {"year",                                    Birthday.Year.ToString()},
+                    {"month",                                   Birthday.Month.ToString()},
+                    {"sn_nonce",                                ExtensionHelper.GenerateSnNonce(phoneNumber)},
+                    {"qs_stamp",                                ""},
+                    {"one_tap_opt_in",                          "true"}
+                };
+                var instaUri = UriCreator.GetCreateValidatedUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, postData);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                IResult<InstaAccountCreation> FailResponse()
+                {
+                    var oa = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                    return Result.Fail<InstaAccountCreation>(oa.Message);
+                }
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    try
+                    {
+                        var o = JsonConvert.DeserializeObject<InstaAccountCreationResponse>(json);
+
+                        return Result.Fail(o.Errors?.Username?[0], (InstaAccountCreation)null);
+                    }
+                    catch
+                    {
+                        return FailResponse();
+                    }
+                }
+                try
+                {
+                    var r = JsonConvert.DeserializeObject<InstaAccountCreationResponse>(json);
+                    if (r.ErrorType == "username_is_taken")
+                        return Result.Fail(r.Errors?.Username?[0], (InstaAccountCreation)null);
+                }
+                catch
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                        return FailResponse();
+                }
+                var obj = JsonConvert.DeserializeObject<InstaAccountCreation>(json);
+                if (obj.AccountCreated && obj.CreatedUser != null)
+                {
+                    _instaApi.ValidateUserAsync(obj.CreatedUser, _user.CsrfToken, true, password);
+                    ValidateUser(obj.CreatedUser);
+                }
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaAccountCreation), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaAccountCreation>(exception);
+            }
+        }
+
         #endregion Phone registration
 
         #endregion Public Async Functions
