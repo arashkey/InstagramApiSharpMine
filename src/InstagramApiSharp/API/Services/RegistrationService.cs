@@ -106,6 +106,7 @@ namespace InstagramApiSharp.API.Services
                 return Result.Fail<bool>(exception);
             }
         }
+        
         private async Task<IResult<bool>> GetResultAsync(Uri instaUri, JObject data)
         {
             try
@@ -128,6 +129,7 @@ namespace InstagramApiSharp.API.Services
                 return Result.Fail<bool>(exception);
             }
         }
+
         #endregion Private functions
 
         #region Public functions
@@ -183,34 +185,15 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         public async Task<IResult<bool>> FirstQeSyncAsync()
         {
-            try
+            var data = new JObject
             {
-                var data = new JObject
-                {
-                    {"_csrftoken",                  _user.CsrfToken},
-                    {"id",                          _deviceInfo.DeviceGuid.ToString()},
-                    {"server_config_retrieval",     "1"},
-                    {"experiments",                 "ig_android_reg_nux_headers_cleanup_universe,ig_android_device_detection_info_upload,ig_android_gmail_oauth_in_reg,ig_android_device_info_foreground_reporting,ig_android_device_verification_fb_signup,ig_android_passwordless_account_password_creation_universe,ig_android_direct_add_direct_to_android_native_photo_share_sheet,ig_growth_android_profile_pic_prefill_with_fb_pic_2,ig_account_identity_logged_out_signals_global_holdout_universe,ig_android_quickcapture_keep_screen_on,ig_android_device_based_country_verification,ig_android_login_identifier_fuzzy_match,ig_android_reg_modularization_universe,ig_android_security_intent_switchoff,ig_android_device_verification_separate_endpoint,ig_android_suma_landing_page,ig_android_sim_info_upload,ig_android_fb_account_linking_sampling_freq_universe,ig_android_retry_create_account_universe,ig_android_caption_typeahead_fix_on_o_universe"},
-                };
+                {"_csrftoken",                  _user.CsrfToken},
+                {"id",                          _deviceInfo.DeviceGuid.ToString()},
+                {"server_config_retrieval",     "1"},
+                {"experiments",                 "ig_android_reg_nux_headers_cleanup_universe,ig_android_device_detection_info_upload,ig_android_gmail_oauth_in_reg,ig_android_device_info_foreground_reporting,ig_android_device_verification_fb_signup,ig_android_passwordless_account_password_creation_universe,ig_android_direct_add_direct_to_android_native_photo_share_sheet,ig_growth_android_profile_pic_prefill_with_fb_pic_2,ig_account_identity_logged_out_signals_global_holdout_universe,ig_android_quickcapture_keep_screen_on,ig_android_device_based_country_verification,ig_android_login_identifier_fuzzy_match,ig_android_reg_modularization_universe,ig_android_security_intent_switchoff,ig_android_device_verification_separate_endpoint,ig_android_suma_landing_page,ig_android_sim_info_upload,ig_android_fb_account_linking_sampling_freq_universe,ig_android_retry_create_account_universe,ig_android_caption_typeahead_fix_on_o_universe"},
+            };
 
-                var instaUri = UriCreator.GetQeSyncUri();
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
-                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
-                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<bool>(exception);
-            }
+            return await GetResultAsync(UriCreator.GetQeSyncUri(), data);
         }
 
         /// <summary>
