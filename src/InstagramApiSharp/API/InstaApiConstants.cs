@@ -87,6 +87,7 @@ namespace InstagramApiSharp.API
 
         public const string MULTIPLE_ACCOUNTS_GET_ACCOUNT_FAMILY = API_SUFFIX + "/multiple_accounts/get_account_family/";
         public const string ZR_TOKEN_RESULT = API_SUFFIX + "/zr/token/result/";
+        public const string NUX_NEW_ACCOUNT_NUX_SEEN = API_SUFFIX + "/nux/new_account_nux_seen/";
 
         #endregion B Url endpoints
 

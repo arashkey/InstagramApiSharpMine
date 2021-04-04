@@ -2991,5 +2991,11 @@ namespace InstagramApiSharp.Helpers
                 .AddQueryParameter("custom_device_id", deviceGuid)
                 .AddQueryParameter("fetch_reason", "token_expired");
         }
+        public static Uri GetNuxNewAccountSeenUri(bool isBUrl = false)
+        {
+            if (!Uri.TryCreate(isBUrl ? BaseInstagramBUri : BaseInstagramUri, InstaApiConstants.NUX_NEW_ACCOUNT_NUX_SEEN, out var instaUri))
+                throw new Exception("Cant create URI for nux new account seen");
+            return instaUri;
+        }
     }
 }
