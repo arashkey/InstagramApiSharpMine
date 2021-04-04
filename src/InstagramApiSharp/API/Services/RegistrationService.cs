@@ -65,7 +65,19 @@ namespace InstagramApiSharp.API.Services
             _instaApi = instaApi;
             _httpHelper = httpHelper;
             RegistrationWaterfallId = Guid.NewGuid().ToString();
+            Birthday = GenerateRandomBirthday();
         }
         #endregion Properties and constructor
+
+        #region Public functions
+        public DateTime GenerateRandomBirthday()
+        {
+            var rnd = new Random();
+            int day = rnd.Next(1, 29);
+            int month = rnd.Next(1, 12);
+            int year = rnd.Next(1979, 2000);
+            return new DateTime(year, month, day);
+        }
+        #endregion
     }
 }

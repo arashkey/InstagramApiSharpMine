@@ -32,5 +32,13 @@ namespace InstagramApiSharp.API.Services
         DateTime Birthday { get; set; }
 
         #endregion Properties
+
+        #region Public functions
+        /// <summary>
+        ///  Generate random birthday
+        /// </summary>
+        DateTime GenerateRandomBirthday();
+
+        #endregion
     }
 }
