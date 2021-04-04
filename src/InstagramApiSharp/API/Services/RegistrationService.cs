@@ -133,31 +133,13 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         public async Task<IResult<bool>> GetFirstContactPointPrefillAsync()
         {
-            try
+            var data = new Dictionary<string, string>
             {
-                var data = new JObject
-                {
-                    {"phone_id",            _deviceInfo.PhoneGuid.ToString()},
-                    {"_csrftoken",          _user.CsrfToken},
-                    {"usage",               "prefill"},
-                };
-                var instaUri = UriCreator.GetContactPointPrefillUri(true);
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
-                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<bool>(exception);
-            }
+                {"phone_id",            _deviceInfo.PhoneGuid.ToString()},
+                {"_csrftoken",          _user.CsrfToken},
+                {"usage",               "prefill"},
+            };
+            return await GetResultAsync(UriCreator.GetContactPointPrefillUri(true), data, true);
         }
 
         /// <summary>
