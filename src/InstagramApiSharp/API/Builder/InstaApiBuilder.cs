@@ -63,7 +63,7 @@ namespace InstagramApiSharp.API.Builder
                     Guid = _device.DeviceGuid,
                     Password = _user?.Password,
                     Username = _user?.UserName,
-                    DeviceId = ApiRequestMessage.GenerateDeviceId(),
+                    DeviceId = _device.DeviceId ?? ApiRequestMessage.GenerateDeviceIdFromGuid(_device.DeviceGuid),
                     AdId = _device.AdId.ToString()
                 };
             }
