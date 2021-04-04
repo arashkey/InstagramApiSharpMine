@@ -94,6 +94,12 @@ namespace InstagramApiSharp.API.Services
         /// <param name="email">Email</param>
         /// <param name="verificationCode">Verification code from email</param>
         Task<IResult<InstaRegistrationConfirmationCode>> CheckRegistrationConfirmationCodeAsync(string email, string verificationCode);
+
+        /// <summary>
+        ///     Get si-fetch headers
+        /// </summary>
+        Task<IResult<bool>> GetSiFetchHeadersAsync();
+
         #endregion Public Async Functions
     }
 }
