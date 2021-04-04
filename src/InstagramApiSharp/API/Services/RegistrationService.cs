@@ -439,6 +439,54 @@ namespace InstagramApiSharp.API.Services
                 return Result.Fail<bool>(exception);
             }
         }
+        /// <summary>
+        ///     Get username suggestions
+        /// </summary>
+        /// <param name="name">Name => will respond with containing provided name</param>
+        /// <param name="email">Email => 
+        ///         <para>Required for email registration!</para>
+        ///         Optional for phone registration!
+        /// </param>
+        public async Task<IResult<InstaRegistrationSuggestionResponse>> GetUsernameSuggestionsAsync(string name, string email = null)
+        {
+            try
+            {
+                var data = new Dictionary<string, string>
+                {
+                    {"phone_id",        _deviceInfo.PhoneGuid.ToString()},
+                    {"_csrftoken",      _user.CsrfToken},
+                    {"guid",            _deviceInfo.DeviceGuid.ToString()},
+                    {"name",            name},
+                    {"device_id",       _deviceInfo.DeviceId},
+                    {"email",           email ?? ""},
+                    {"waterfall_id",    RegistrationWaterfallId},
+                };
+                var instaUri = UriCreator.GetUsernameSuggestionsUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    var o = JsonConvert.DeserializeObject<InstaAccountRegistrationPhoneNumber>(json);
+
+                    return Result.Fail(o.Message?.Errors?[0], (InstaRegistrationSuggestionResponse)null);
+                }
+
+                var obj = JsonConvert.DeserializeObject<InstaRegistrationSuggestionResponse>(json);
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaRegistrationSuggestionResponse), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaRegistrationSuggestionResponse>(exception);
+            }
+        }
 
         #endregion Public Async Functions
     }

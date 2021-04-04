@@ -100,6 +100,16 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         Task<IResult<bool>> GetSiFetchHeadersAsync();
 
+        /// <summary>
+        ///     Get username suggestions
+        /// </summary>
+        /// <param name="name">Name => will respond with containing provided name</param>
+        /// <param name="email">Email => 
+        ///         <para>Required for email registration!</para>
+        ///         Optional for phone registration!
+        /// </param>
+        Task<IResult<InstaRegistrationSuggestionResponse>> GetUsernameSuggestionsAsync(string name, string email = null);
+
         #endregion Public Async Functions
     }
 }
