@@ -2981,5 +2981,15 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for get multiple accounts family");
             return instaUri;
         }
+        public static Uri GetZrTokenResultUri(string deviceGuid, string deviceId, bool isBUrl = false)
+        {
+            if (!Uri.TryCreate(isBUrl ? BaseInstagramBUri : BaseInstagramUri, InstaApiConstants.ZR_TOKEN_RESULT, out var instaUri))
+                throw new Exception("Cant create URI for zr token result");
+            return instaUri
+                .AddQueryParameter("device_id", deviceId)
+                .AddQueryParameter("token_hash", "", true)
+                .AddQueryParameter("custom_device_id", deviceGuid)
+                .AddQueryParameter("fetch_reason", "token_expired");
+        }
     }
 }
