@@ -7,10 +7,11 @@
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.Classes.Models;
 using Newtonsoft.Json;
 namespace InstagramApiSharp.Classes
 {
-    public class InstaCheckEmailRegistration
+    public class InstaCheckEmailRegistration : InstaDefaultResponse
     {
         [JsonProperty("valid")]
         public bool Valid { get; set; }
@@ -18,8 +19,6 @@ namespace InstagramApiSharp.Classes
         public bool Available { get; set; }
         [JsonProperty("confirmed")]
         public bool Confirmed { get; set; }
-        [JsonProperty("status")]
-        public string Status { get; set; }
         [JsonProperty("error_type")]
         public string ErrorType { get; set; }
         [JsonProperty("tos_version")]
@@ -34,10 +33,8 @@ namespace InstagramApiSharp.Classes
 
     }
 
-    public class InstaRegistrationSuggestionResponse
+    public class InstaRegistrationSuggestionResponse : InstaDefaultResponse
     {
-        [JsonProperty("status")]
-        public string Status { get; set; }
         [JsonProperty("suggestions_with_metadata")]
         public InstaRegistrationSuggestionsList SuggestionsWithMetadata { get; set; }
 
