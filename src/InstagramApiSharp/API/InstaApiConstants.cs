@@ -76,6 +76,7 @@ namespace InstagramApiSharp.API
         public const string WARNING_CHECK_OFFENSIVE_TEXT = API_SUFFIX + "/warning/check_offensive_text/";
 
         public const string CONSENT_GET_SIGNUP_CONFIG = API_SUFFIX + "/consent/get_signup_config/";
+        public const string ACCOUNTS_SEND_VERIFY_EMAIL = API_SUFFIX + "/accounts/send_verify_email/";
 
         #endregion New
 

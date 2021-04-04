@@ -2949,5 +2949,11 @@ namespace InstagramApiSharp.Helpers
                 .AddQueryParameter("guid", guid)
                 .AddQueryParameter("main_account_selected", isMainAccount.ToString().ToLower());
         }
+        public static Uri GetSendRegistrationVerifyEmailUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.ACCOUNTS_SEND_VERIFY_EMAIL, out var instaUri))
+                throw new Exception("Cant create URI for account registration send verify email");
+            return instaUri;
+        }
     }
 }
