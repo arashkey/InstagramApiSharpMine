@@ -10,7 +10,7 @@
 using Newtonsoft.Json;
 namespace InstagramApiSharp.Classes
 {
-    internal class InstaAccountRegistrationPhoneNumber
+    public class InstaAccountRegistrationPhoneNumber
     {
         [JsonProperty("message")]
         internal InstaAccountRegistrationPhoneNumberMessage Message { get; set; }
@@ -25,7 +25,7 @@ namespace InstagramApiSharp.Classes
         [JsonProperty("gdpr_required")]
         public bool GdprRequired { get; set; }
         [JsonIgnore]
-        public bool Succeed => Status.ToLower() == "ok" ? true : false;
+        public bool Succeed => Status.ToLower() == "ok";
     }
 
     internal class InstaAccountRegistrationPhoneNumberMessage
