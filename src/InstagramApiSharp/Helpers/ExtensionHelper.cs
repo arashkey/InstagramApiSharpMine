@@ -91,6 +91,15 @@ namespace InstagramApiSharp
               deviceInfo.AndroidVer.VersionNumber,deviceInfo.DeviceModelIdentifier,
               $"{deviceInfo.AndroidBoardName}{deviceInfo.DeviceModel}");
         }
+
+        public static string GenerateSnNonce(string emailOrPhoneNumber)
+        {
+            byte[] b = new byte[24];
+            Rnd.NextBytes(b);
+            var str = $"{emailOrPhoneNumber}|{DateTimeHelper.ToUnixTime(DateTime.UtcNow)}|{Encoding.UTF8.GetString(b)}";
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(str));
+        }
+
         public static bool IsEmpty(this string content)
         {
             return string.IsNullOrEmpty(content);
