@@ -303,6 +303,38 @@ namespace InstagramApiSharp.API.Services
                 return Result.Fail<InstaCheckEmailRegistration>(exception);
             }
         }
+
+
+        /// <summary>
+        ///     Get signup consent config
+        /// </summary>
+        /// <param name="isMainAccount">Is this main account ? always set to to false</param>
+        /// <param name="loggedInUserId">Logged in user id (pk) if available</param>
+        public async Task<IResult<InstaSignupConsentConfig>> GetSignupConsentConfigAsync(bool isMainAccount = false, long? loggedInUserId = null)
+        {
+            try
+            {
+                var instaUri = UriCreator.GetSignupConsentConfigUri(_deviceInfo.DeviceGuid.ToString(), isMainAccount, loggedInUserId);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                var obj = JsonConvert.DeserializeObject<InstaSignupConsentConfig>(json);
+
+                return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<InstaSignupConsentConfig>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaSignupConsentConfig), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaSignupConsentConfig>(exception);
+            }
+        }
+
         #endregion Public Async Functions
     }
 }

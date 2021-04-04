@@ -75,6 +75,14 @@ namespace InstagramApiSharp.API.Services
         /// <param name="email">Email</param>
         Task<IResult<InstaCheckEmailRegistration>> CheckEmailAsync(string email);
 
+        /// <summary>
+        ///     Get signup consent config
+        /// </summary>
+        /// <param name="isMainAccount">Is this main account ? always set to to false</param>
+        /// <param name="loggedInUserId">Logged in user id (pk) if available</param>
+        Task<IResult<InstaSignupConsentConfig>> GetSignupConsentConfigAsync(bool isMainAccount = false, long? loggedInUserId = null);
+
+
         #endregion Public Async Functions
     }
 }
