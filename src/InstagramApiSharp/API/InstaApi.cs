@@ -3218,7 +3218,7 @@ namespace InstagramApiSharp.API
 
         }
 
-        private void ValidateUserAsync(InstaUserShortResponse user, string csrfToken, bool validateExtra = true, string password = null)
+        internal void ValidateUserAsync(InstaUserShortResponse user, string csrfToken, bool validateExtra = true, string password = null)
         {
             try
             {
