@@ -165,6 +165,10 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         Task<IResult<bool>> NuxNewAccountSeenAsync();
 
+        /// <summary>
+        ///     Get contact point prefill [ after registration is done ]
+        /// </summary>
+        Task<IResult<bool>> GetContactPointPrefillAsync();
 
         #endregion Public Async Functions
     }

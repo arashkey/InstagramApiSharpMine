@@ -757,6 +757,22 @@ namespace InstagramApiSharp.API.Services
             return await GetResultAsync(UriCreator.GetNuxNewAccountSeenUri(true), data, false).ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     Get contact point prefill [ after registration is done ]
+        /// </summary>
+        public async Task<IResult<bool>> GetContactPointPrefillAsync()
+        {
+            var data = new JObject
+            {
+                {"_csrftoken",          _user.CsrfToken},
+                {"_uid",                _user.LoggedInUser.Pk.ToString()},
+                {"device_id",           _deviceInfo.DeviceId},
+                {"_uuid",               _deviceInfo.DeviceGuid.ToString()},
+                {"usage",               "auto_confirmation"},
+            };
+            return await GetResultAsync(UriCreator.GetContactPointPrefillUri(true), data, false).ConfigureAwait(false);
+        }
+
 
         #endregion Public Async Functions
     }
