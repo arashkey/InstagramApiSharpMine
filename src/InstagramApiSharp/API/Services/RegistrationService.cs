@@ -79,7 +79,7 @@ namespace InstagramApiSharp.API.Services
         void ValidateUser(InstaUserShortResponse user) =>
             _user.LoggedInUser = ConvertersFabric.Instance.GetUserShortConverter(user)?.Convert();
 
-        private async Task<IResult<bool>> GetResultAsync(Uri instaUri, Dictionary<string, string> data = null, bool signedRequest = false)
+        private async Task<IResult<bool>> GetResultAsync(Uri instaUri, Dictionary<string, string> data = null, bool signedRequest = false, bool setCsrfToken = false)
         {
             try
             {
@@ -91,6 +91,8 @@ namespace InstagramApiSharp.API.Services
                     request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
+                if (setCsrfToken)
+                    _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
                 var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
 
                 return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
@@ -107,13 +109,16 @@ namespace InstagramApiSharp.API.Services
             }
         }
         
-        private async Task<IResult<bool>> GetResultAsync(Uri instaUri, JObject data)
+        private async Task<IResult<bool>> GetResultAsync(Uri instaUri, JObject data, bool setCsrfToken)
         {
             try
             {
                 HttpRequestMessage request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
+                if (setCsrfToken)
+                    _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+
                 var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
 
                 return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
@@ -163,7 +168,7 @@ namespace InstagramApiSharp.API.Services
                 {"_csrftoken",          _user.CsrfToken},
                 {"usage",               "prefill"},
             };
-            return await GetResultAsync(UriCreator.GetContactPointPrefillUri(true), data, true);
+            return await GetResultAsync(UriCreator.GetContactPointPrefillUri(true), data, true, true);
         }
 
         /// <summary>
@@ -177,7 +182,7 @@ namespace InstagramApiSharp.API.Services
                 {"id",                          _deviceInfo.DeviceGuid.ToString()},
                 {"server_config_retrieval",     "1"}
             };
-            return await GetResultAsync(UriCreator.GetLauncherSyncUri(), data);
+            return await GetResultAsync(UriCreator.GetLauncherSyncUri(), data, true);
         }
 
         /// <summary>
@@ -193,7 +198,7 @@ namespace InstagramApiSharp.API.Services
                 {"experiments",                 "ig_android_reg_nux_headers_cleanup_universe,ig_android_device_detection_info_upload,ig_android_gmail_oauth_in_reg,ig_android_device_info_foreground_reporting,ig_android_device_verification_fb_signup,ig_android_passwordless_account_password_creation_universe,ig_android_direct_add_direct_to_android_native_photo_share_sheet,ig_growth_android_profile_pic_prefill_with_fb_pic_2,ig_account_identity_logged_out_signals_global_holdout_universe,ig_android_quickcapture_keep_screen_on,ig_android_device_based_country_verification,ig_android_login_identifier_fuzzy_match,ig_android_reg_modularization_universe,ig_android_security_intent_switchoff,ig_android_device_verification_separate_endpoint,ig_android_suma_landing_page,ig_android_sim_info_upload,ig_android_fb_account_linking_sampling_freq_universe,ig_android_retry_create_account_universe,ig_android_caption_typeahead_fix_on_o_universe"},
             };
 
-            return await GetResultAsync(UriCreator.GetQeSyncUri(), data);
+            return await GetResultAsync(UriCreator.GetQeSyncUri(), data, true);
         }
 
         /// <summary>
@@ -336,37 +341,17 @@ namespace InstagramApiSharp.API.Services
         /// <param name="email">Email</param>
         public async Task<IResult<bool>> SendRegistrationVerifyEmailAsync(string email)
         {
-            try
+            var data = new Dictionary<string, string>
             {
-                var data = new Dictionary<string, string>
-                {
-                    {"phone_id",            _deviceInfo.PhoneGuid.ToString()},
-                    {"_csrftoken",          _user.CsrfToken},
-                    {"guid",                _deviceInfo.DeviceGuid.ToString()},
-                    {"device_id",           _deviceInfo.DeviceId},
-                    {"email",               email},
-                    {"waterfall_id",        RegistrationWaterfallId},
-                    {"auto_confirm_only",   "false"},
-                };
-                var instaUri = UriCreator.GetSendRegistrationVerifyEmailUri();
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
-                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
-
-                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<bool>(exception);
-            }
+                {"phone_id",            _deviceInfo.PhoneGuid.ToString()},
+                {"_csrftoken",          _user.CsrfToken},
+                {"guid",                _deviceInfo.DeviceGuid.ToString()},
+                {"device_id",           _deviceInfo.DeviceId},
+                {"email",               email},
+                {"waterfall_id",        RegistrationWaterfallId},
+                {"auto_confirm_only",   "false"},
+            };
+            return await GetResultAsync(UriCreator.GetSendRegistrationVerifyEmailUri(), data, true, true);
         }
 
         /// <summary>
