@@ -20,6 +20,8 @@ using InstagramApiSharp.API.Versions;
 using InstagramApiSharp.Helpers;
 using System.Text;
 using System.Security.Cryptography;
+using InstagramApiSharp.Classes;
+using System.Net.Http;
 #if NETSTANDARD
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto.Modes;
@@ -30,6 +32,22 @@ namespace InstagramApiSharp
 {
     internal static class ExtensionHelper
     {
+        public static void SetCsrfTokenIfAvailable(this UserSessionData data, HttpResponseMessage response,
+            IHttpRequestProcessor _httpRequestProcessor, bool dontCheck = false)
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var cookies =
+                    _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
+                    .BaseAddress);
+
+                var csrfToken = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
+                if (dontCheck && !string.IsNullOrEmpty(csrfToken))
+                    data.CsrfToken = csrfToken;
+                else if (!string.IsNullOrEmpty(csrfToken) && string.IsNullOrEmpty(data.CsrfToken))
+                    data.CsrfToken = csrfToken;
+            }
+        }
         public static string GenerateUserAgent(this AndroidDevice deviceInfo, InstaApiVersion apiVersion)
         {
             if (deviceInfo == null)
