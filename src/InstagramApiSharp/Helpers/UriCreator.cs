@@ -2969,5 +2969,11 @@ namespace InstagramApiSharp.Helpers
                 .AddQueryParameter("guid", deviceGuid)
                 .AddQueryParameter("challenge_type", challengeType);
         }
+        public static Uri GetCheckAgeEligibilityUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.CONSENT_CHECK_AGE_ELIGIBILITY, out var instaUri))
+                throw new Exception("Cant create URI for check age eligibility");
+            return instaUri;
+        }
     }
 }
