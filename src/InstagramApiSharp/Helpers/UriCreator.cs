@@ -2939,5 +2939,15 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for direct thread ssh [vanish] mode");
             return instaUri;
         }
+        public static Uri GetSignupConsentConfigUri(string guid, bool isMainAccount, long? loggedInUserId = null)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.CONSENT_GET_SIGNUP_CONFIG,
+                    out var instaUri)) throw new Exception("Can't create URI for consent get signup config");
+
+            return instaUri
+                .AddQueryParameter("logged_in_user_id", loggedInUserId.ToString())
+                .AddQueryParameter("guid", guid)
+                .AddQueryParameter("main_account_selected", isMainAccount.ToString().ToLower());
+        }
     }
 }
