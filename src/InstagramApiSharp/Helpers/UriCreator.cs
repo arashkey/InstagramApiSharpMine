@@ -2961,5 +2961,13 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for check account registration confirmation code");
             return instaUri;
         }
+        public static Uri GetSiFetchHeadersUri(string deviceGuid, string challengeType = "signup")
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.SI_FETCH_HEADERS, out var instaUri))
+                throw new Exception("Cant create URI for si fetch headers");
+            return instaUri
+                .AddQueryParameter("guid", deviceGuid)
+                .AddQueryParameter("challenge_type", challengeType);
+        }
     }
 }
