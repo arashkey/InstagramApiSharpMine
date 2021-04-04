@@ -822,6 +822,76 @@ namespace InstagramApiSharp.API.Services
             return await GetResultAsync(UriCreator.GetSignUpSMSCodeUri(), data, true);
         }
 
+        /// <summary>
+        ///     Verify signup sms code
+        /// </summary>
+        /// <param name="phoneNumber">Phone number</param>
+        /// <param name="verificationCode">Verification code</param>
+        public async Task<IResult<InstaPhoneNumberRegistration>> VerifySignUpSmsCodeAsync(string phoneNumber, string verificationCode)
+        {
+            try
+            {
+                SmsVerificationCode = verificationCode ?? SmsVerificationCode;
+                var data = new Dictionary<string, string>
+                {
+                    {"verification_code",         verificationCode},
+                    {"phone_number",              phoneNumber},
+                    {"_csrftoken",                _user.CsrfToken},
+                    {"guid",                      _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id",                 _deviceInfo.DeviceId},
+                    {"waterfall_id",              RegistrationWaterfallId},
+                };
+                var instaUri = UriCreator.GetValidateSignUpSMSCodeUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                IResult<InstaPhoneNumberRegistration> FailResponse()
+                {
+                    var oa = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                    return Result.Fail<InstaPhoneNumberRegistration>(oa.Message);
+                }
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    try
+                    {
+                        var o = JsonConvert.DeserializeObject<InstaAccountRegistrationPhoneNumberVerifySms>(json);
+
+                        return Result.Fail(o.Errors?.Nonce?[0], (InstaPhoneNumberRegistration)null);
+                    }
+                    catch
+                    {
+                        return FailResponse();
+                    }
+                }
+                try
+                {
+                    var r = JsonConvert.DeserializeObject<InstaAccountRegistrationPhoneNumberVerifySms>(json);
+                    if (r.ErrorType == "invalid_nonce")
+                        return Result.Fail(r.Errors?.Nonce?[0], (InstaPhoneNumberRegistration)null);
+                }
+                catch
+                {
+                    if (response.StatusCode != HttpStatusCode.OK)
+                        return FailResponse();
+                }
+                //await GetRegistrationStepsAsync(); onboarding
+                var obj = JsonConvert.DeserializeObject<InstaPhoneNumberRegistration>(json);
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaPhoneNumberRegistration), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaPhoneNumberRegistration>(exception);
+            }
+        }
+
+
         #endregion Phone registration
 
         #endregion Public Async Functions
