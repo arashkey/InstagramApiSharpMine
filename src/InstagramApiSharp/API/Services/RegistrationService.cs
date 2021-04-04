@@ -593,7 +593,6 @@ namespace InstagramApiSharp.API.Services
                 {"_csrftoken",      _user.CsrfToken}
             };
             return await GetResultAsync(UriCreator.GetConsentNewUserFlowBeginsUri(), data, true);
-
         }
 
         /// <summary>
@@ -605,7 +604,7 @@ namespace InstagramApiSharp.API.Services
         /// <param name="firstName">First name => Optional</param>
         /// <param name="signUpCode">ForceSignUpCode from <see cref="IRegistrationService.CheckRegistrationConfirmationCodeAsync"/> => Optional</param>
         /// <param name="birthday">Birthday => Optional</param>
-            public async Task<IResult<InstaAccountCreation>> CreateNewAccountWithEmailAsync(string email, string username,
+        public async Task<IResult<InstaAccountCreation>> CreateNewAccountWithEmailAsync(string email, string username,
             string password, string firstName = "", string signUpCode = null, DateTime? birthday = null)
         {
             try
@@ -684,29 +683,8 @@ namespace InstagramApiSharp.API.Services
         /// <summary>
         ///     Get multiple accounts family
         /// </summary>
-        public async Task<IResult<bool>> GetMultipleAccountsFamilyAsync()
-        {
-            try
-            {
-                var instaUri = UriCreator.GetMultipleAccountsFamilyUri(true);
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
-
-                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<bool>(exception);
-            }
-        }
+        public async Task<IResult<bool>> GetMultipleAccountsFamilyAsync() =>
+            await GetResultAsync(UriCreator.GetMultipleAccountsFamilyUri(true), null, false, false);
 
         /// <summary>
         ///     Get zr token result
