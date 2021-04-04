@@ -27,6 +27,22 @@ namespace InstagramApiSharp.API.Services
 {
     internal class RegistrationService : IRegistrationService
     {
+        #region Properties
+
+        /// <summary>
+        ///     Waterfall id for registration
+        /// </summary>
+        public string RegistrationWaterfallId { get; set; }
+        /// <summary>
+        ///     Signup code from Registration via Email
+        /// </summary>
+        public string ForceSignupCode { get; set; }
+        /// <summary>
+        ///     Birthday for age consent
+        /// </summary>
+        public DateTime Birthday { get; set; }
+
+        #endregion Properties
 
         #region Fields and constructor
         private readonly AndroidDevice _deviceInfo;
@@ -48,6 +64,7 @@ namespace InstagramApiSharp.API.Services
             _userAuthValidate = userAuthValidate;
             _instaApi = instaApi;
             _httpHelper = httpHelper;
+            RegistrationWaterfallId = Guid.NewGuid().ToString();
         }
         #endregion Properties and constructor
     }

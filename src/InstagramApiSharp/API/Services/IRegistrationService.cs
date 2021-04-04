@@ -16,5 +16,21 @@ namespace InstagramApiSharp.API.Services
 {
     public interface IRegistrationService
     {
+        #region Properties
+
+        /// <summary>
+        ///     Waterfall id for registration
+        /// </summary>
+        string RegistrationWaterfallId { get; set; }
+        /// <summary>
+        ///     Signup code from Registration via Email
+        /// </summary>
+        string ForceSignupCode { get; set; }
+        /// <summary>
+        ///     Birthday for age consent
+        /// </summary>
+        DateTime Birthday { get; set; }
+
+        #endregion Properties
     }
 }
