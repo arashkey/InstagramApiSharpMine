@@ -149,14 +149,8 @@ namespace InstagramApiSharp.API.Services
         /// <summary>
         ///  Generate random birthday
         /// </summary>
-        public DateTime GenerateRandomBirthday()
-        {
-            var rnd = new Random();
-            int day = rnd.Next(1, 29);
-            int month = rnd.Next(1, 12);
-            int year = rnd.Next(1979, 2000);
-            return new DateTime(year, month, day);
-        }
+        public DateTime GenerateRandomBirthday() =>
+            ExtensionHelper.GenerateRandomBirthday();
 
         #endregion
 
@@ -875,7 +869,6 @@ namespace InstagramApiSharp.API.Services
                     if (response.StatusCode != HttpStatusCode.OK)
                         return FailResponse();
                 }
-                //await GetRegistrationStepsAsync(); onboarding
                 var obj = JsonConvert.DeserializeObject<InstaPhoneNumberRegistration>(json);
                 return Result.Success(obj);
             }

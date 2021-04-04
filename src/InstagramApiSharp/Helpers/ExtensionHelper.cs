@@ -100,6 +100,13 @@ namespace InstagramApiSharp
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(str));
         }
 
+        public static DateTime GenerateRandomBirthday()
+        {
+            int day = Rnd.Next(1, 29);
+            int month = Rnd.Next(1, 12);
+            int year = Rnd.Next(1979, 2000);
+            return new DateTime(year, month, day);
+        }
         public static bool IsEmpty(this string content)
         {
             return string.IsNullOrEmpty(content);
