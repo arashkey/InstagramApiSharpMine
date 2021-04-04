@@ -738,6 +738,26 @@ namespace InstagramApiSharp.API.Services
             return await GetResultAsync(UriCreator.GetQeSyncUri(true), data, false).ConfigureAwait(false);
         }
 
+        /// <summary>
+        ///     Nux new account seen
+        /// </summary>
+        public async Task<IResult<bool>> NuxNewAccountSeenAsync()
+        {
+            var data = new JObject
+            {
+                {"is_fb4a_installed",   "false"},
+                {"phone_id",            _deviceInfo.PhoneGuid.ToString()},
+                {"_csrftoken",          _user.CsrfToken},
+                {"_uid",                _user.LoggedInUser.Pk.ToString()},
+                {"guid",                _deviceInfo.DeviceGuid.ToString()},
+                {"device_id",           _deviceInfo.DeviceId},
+                {"_uuid",               _deviceInfo.DeviceGuid.ToString()},
+                {"waterfall_id",        Guid.NewGuid().ToString()},
+            };
+            return await GetResultAsync(UriCreator.GetNuxNewAccountSeenUri(true), data, false).ConfigureAwait(false);
+        }
+
+
         #endregion Public Async Functions
     }
 }

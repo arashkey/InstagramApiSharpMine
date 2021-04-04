@@ -160,6 +160,12 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         Task<IResult<bool>> QeSyncAsync();
 
+        /// <summary>
+        ///     Nux new account seen
+        /// </summary>
+        Task<IResult<bool>> NuxNewAccountSeenAsync();
+
+
         #endregion Public Async Functions
     }
 }
