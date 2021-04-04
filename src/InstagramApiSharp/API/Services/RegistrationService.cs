@@ -241,6 +241,68 @@ namespace InstagramApiSharp.API.Services
             }
         }
 
+        /// <summary>
+        ///     Check email availablity
+        /// </summary>
+        /// <param name="email">Email</param>
+        public async Task<IResult<InstaCheckEmailRegistration>> CheckEmailAsync(string email)
+        {
+            try
+            {
+                if (RegistrationWaterfallId == null)
+                    RegistrationWaterfallId = Guid.NewGuid().ToString();
+
+                var data = new Dictionary<string, string>
+                {
+                    {"android_device_id",   _deviceInfo.DeviceId},
+                    {"login_nonce_map",     "{}"},
+                    {"_csrftoken",          _user.CsrfToken},
+                    {"login_nonces",        "[]"},
+                    {"email",               email},
+                    {"qe_id",               Guid.NewGuid().ToString()},
+                    {"waterfall_id",        RegistrationWaterfallId},
+                };
+                var instaUri = UriCreator.GetCheckEmailUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    var obj = JsonConvert.DeserializeObject<InstaCheckEmailRegistration>(json);
+                    if (obj.ErrorType == "fail")
+                        return Result.UnExpectedResponse<InstaCheckEmailRegistration>(response, json);
+                    if (obj.ErrorType == "email_is_taken")
+                        return Result.Fail("Email is taken.", (InstaCheckEmailRegistration)null);
+                    if (obj.ErrorType == "invalid_email")
+                        return Result.Fail("Please enter a valid email address.", (InstaCheckEmailRegistration)null);
+
+                    return Result.UnExpectedResponse<InstaCheckEmailRegistration>(response, json);
+                }
+                else
+                {
+                    var obj = JsonConvert.DeserializeObject<InstaCheckEmailRegistration>(json);
+                    if (obj.ErrorType == "fail")
+                        return Result.UnExpectedResponse<InstaCheckEmailRegistration>(response, json);
+                    if (obj.ErrorType == "email_is_taken")
+                        return Result.Fail("Email is taken.", (InstaCheckEmailRegistration)null);
+                    if (obj.ErrorType == "invalid_email")
+                        return Result.Fail("Please enter a valid email address.", (InstaCheckEmailRegistration)null);
+                    InstaCheckEmailRegistration = obj;
+                    return Result.Success(obj);
+                }
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaCheckEmailRegistration), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaCheckEmailRegistration>(exception);
+            }
+        }
         #endregion Public Async Functions
     }
 }

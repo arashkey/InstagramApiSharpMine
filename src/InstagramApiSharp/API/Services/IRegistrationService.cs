@@ -69,6 +69,12 @@ namespace InstagramApiSharp.API.Services
         /// <param name="username">Username</param>
         Task<IResult<InstaAccountCheck>> CheckUsernameAsync(string username);
 
+        /// <summary>
+        ///     Check email availablity
+        /// </summary>
+        /// <param name="email">Email</param>
+        Task<IResult<InstaCheckEmailRegistration>> CheckEmailAsync(string email);
+
         #endregion Public Async Functions
     }
 }
