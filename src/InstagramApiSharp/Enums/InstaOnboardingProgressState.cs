@@ -8,9 +8,10 @@
 
 namespace InstagramApiSharp.Enums
 {
-    public enum InstaRegistrationMethod
+    public enum InstaOnboardingProgressState
     {
-        Email,
-        Phone
+        Prefetch,
+        Start,
+        Finish
     }
 }
