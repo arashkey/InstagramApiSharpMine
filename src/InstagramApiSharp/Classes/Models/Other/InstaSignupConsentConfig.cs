@@ -3,7 +3,7 @@
  * 
  * Github source: https://github.com/ramtinak/InstagramApiSharpMine
  * 
- * IRANIAN DEVELOPERS 2021, April
+ * IRANIAN DEVELOPERS (c) 2021, April
  */
 
 using InstagramApiSharp.Classes.Models;
