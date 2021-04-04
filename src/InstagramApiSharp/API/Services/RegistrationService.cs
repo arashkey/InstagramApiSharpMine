@@ -374,6 +374,44 @@ namespace InstagramApiSharp.API.Services
             }
         }
 
+        /// <summary>
+        ///     Check registration confirmation code from email
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <param name="verificationCode">Verification code from email</param>
+        public async Task<IResult<InstaRegistrationConfirmationCode>> CheckRegistrationConfirmationCodeAsync(string email, string verificationCode)
+        {
+            try
+            {
+                var data = new Dictionary<string, string>
+                {
+                    {"_csrftoken",          _user.CsrfToken},
+                    {"code",                verificationCode},
+                    {"device_id",           _deviceInfo.DeviceId},
+                    {"email",               email},
+                    {"waterfall_id",        RegistrationWaterfallId},
+                };
+                var instaUri = UriCreator.GetCheckRegistrationConfirmationCodeUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                var obj = JsonConvert.DeserializeObject<InstaRegistrationConfirmationCode>(json);
+                ForceSignupCode = obj.SignupCode;
+                return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<InstaRegistrationConfirmationCode>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaRegistrationConfirmationCode), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaRegistrationConfirmationCode>(exception);
+            }
+        }
+
         #endregion Public Async Functions
     }
 }

@@ -86,8 +86,14 @@ namespace InstagramApiSharp.API.Services
         ///     Send registration verify email
         /// </summary>
         /// <param name="email">Email</param>
-        Task<IResult<bool>> SendRegistrationVerifyEmailAsync(string email); 
+        Task<IResult<bool>> SendRegistrationVerifyEmailAsync(string email);
 
+        /// <summary>
+        ///     Check registration confirmation code from email
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <param name="verificationCode">Verification code from email</param>
+        Task<IResult<InstaRegistrationConfirmationCode>> CheckRegistrationConfirmationCodeAsync(string email, string verificationCode);
         #endregion Public Async Functions
     }
 }
