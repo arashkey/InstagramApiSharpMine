@@ -587,31 +587,13 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         public async Task<IResult<bool>> NewUserFlowBeginsConsentAsync()
         {
-            try
+            var data = new JObject
             {
-                var data = new JObject
-                {
-                    {"phone_id",        _deviceInfo.PhoneGuid.ToString()},
-                    {"_csrftoken",      _user.CsrfToken}
-                };
-                var instaUri = UriCreator.GetConsentNewUserFlowBeginsUri();
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Get, instaUri, _deviceInfo, data);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
-                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
-                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<bool>(exception);
-            }
+                {"phone_id",        _deviceInfo.PhoneGuid.ToString()},
+                {"_csrftoken",      _user.CsrfToken}
+            };
+            return await GetResultAsync(UriCreator.GetConsentNewUserFlowBeginsUri(), data, true);
+
         }
 
         /// <summary>
@@ -623,7 +605,7 @@ namespace InstagramApiSharp.API.Services
         /// <param name="firstName">First name => Optional</param>
         /// <param name="signUpCode">ForceSignUpCode from <see cref="IRegistrationService.CheckRegistrationConfirmationCodeAsync"/> => Optional</param>
         /// <param name="birthday">Birthday => Optional</param>
-        public async Task<IResult<InstaAccountCreation>> CreateNewAccountWithEmailAsync(string email, string username,
+            public async Task<IResult<InstaAccountCreation>> CreateNewAccountWithEmailAsync(string email, string username,
             string password, string firstName = "", string signUpCode = null, DateTime? birthday = null)
         {
             try
