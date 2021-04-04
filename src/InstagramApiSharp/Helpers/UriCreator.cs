@@ -2507,9 +2507,9 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for get prefill candidates");
             return instaUri;
         }
-        public static Uri GetQeSyncUri()
+        public static Uri GetQeSyncUri(bool isBUrl = false)
         {
-            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.QE_SYNC, out var instaUri))
+            if (!Uri.TryCreate(isBUrl ? BaseInstagramBUri : BaseInstagramUri, InstaApiConstants.QE_SYNC, out var instaUri))
                 throw new Exception("Cant create URI for qe sync");
             return instaUri;
         }
