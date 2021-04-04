@@ -179,6 +179,16 @@ namespace InstagramApiSharp.API.Services
         /// </summary>
         Task<IResult<bool>> GetContactPointPrefillAsync();
 
+        #region Phone registration
+
+        /// <summary>
+        ///     Check phone number
+        /// </summary>
+        /// <param name="phoneNumber">Phone number</param>
+        Task<IResult<bool>> CheckPhoneNumberAsync(string phoneNumber);
+
+        #endregion Phone registration
+
         #endregion Public Async Functions
     }
 }

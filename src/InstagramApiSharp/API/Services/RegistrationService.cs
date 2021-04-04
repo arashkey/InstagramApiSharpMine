@@ -781,6 +781,30 @@ namespace InstagramApiSharp.API.Services
         }
 
 
+
+        #region Phone registration
+
+        /// <summary>
+        ///     Check phone number
+        /// </summary>
+        /// <param name="phoneNumber">Phone number</param>
+        public async Task<IResult<bool>> CheckPhoneNumberAsync(string phoneNumber)
+        {
+            var data = new Dictionary<string, string>
+            {
+                {"phone_id",            _deviceInfo.PhoneGuid.ToString()},
+                {"login_nonce_map",     "{}"},
+                {"phone_number",        phoneNumber},
+                {"_csrftoken",          _user.CsrfToken},
+                {"guid",                _deviceInfo.DeviceGuid.ToString()},
+                {"device_id",           _deviceInfo.DeviceId},
+                {"prefill_shown",       "False"},
+            };
+            return await GetResultAsync(UriCreator.GetCheckPhoneNumberUri(), data, true);
+        }
+
+        #endregion Phone registration
+
         #endregion Public Async Functions
     }
 }
