@@ -91,5 +91,46 @@ namespace InstagramApiSharp.API.Services
         }
 
         #endregion
+
+
+
+        #region Public Async Functions
+
+        /// <summary>
+        ///     Get first contactpoint prefill [ sends before registration new account ]
+        /// </summary>
+        public async Task<IResult<bool>> GetFirstContactPointPrefillAsync()
+        {
+            try
+            {
+                var data = new JObject
+                {
+                    {"phone_id",            _deviceInfo.PhoneGuid.ToString()},
+                    {"_csrftoken",          _user.CsrfToken},
+                    {"usage",               "prefill"},
+                };
+                var instaUri = UriCreator.GetContactPointPrefillUri(true);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
+
+
+
+        #endregion Public Async Functions
     }
 }

@@ -41,5 +41,17 @@ namespace InstagramApiSharp.API.Services
         DateTime GenerateRandomBirthday();
 
         #endregion
+
+
+        #region Public Async Functions
+
+        /// <summary>
+        ///     Get first contactpoint prefill [ sends before registration new account ]
+        /// </summary>
+        Task<IResult<bool>> GetFirstContactPointPrefillAsync();
+
+
+
+        #endregion Public Async Functions
     }
 }
