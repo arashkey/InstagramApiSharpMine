@@ -161,6 +161,7 @@ namespace InstagramApiSharp.API
         public const string IG_CONNECTION_TYPE = "WIFI";
         public const string IG_SIGNATURE_KEY_VERSION = "4";
         public const string INSTAGRAM_URL = "https://i.instagram.com";
+        public const string INSTAGRAM_B_URL = "https://b.i.instagram.com";
         public const string P_SUFFIX = "p/";
         public const string SUPPORTED_CAPABALITIES_HEADER = "supported_capabilities_new";
 
