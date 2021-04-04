@@ -689,29 +689,9 @@ namespace InstagramApiSharp.API.Services
         /// <summary>
         ///     Get zr token result
         /// </summary>
-        public async Task<IResult<bool>> GetZrTokenResultAsync()
-        {
-            try
-            {
-                var instaUri = UriCreator.GetZrTokenResultUri(_deviceInfo.DeviceGuid.ToString(), _deviceInfo.DeviceId, true);
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+        public async Task<IResult<bool>> GetZrTokenResultAsync() =>
+            await GetResultAsync(UriCreator.GetZrTokenResultUri(_deviceInfo.DeviceGuid.ToString(), _deviceInfo.DeviceId, true), null, false, false);
 
-                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<bool>(exception);
-            }
-        }
         #endregion Public Async Functions
     }
 }
