@@ -46,9 +46,14 @@ namespace InstagramApiSharp.API.Services
         #region Public Async Functions
 
         /// <summary>
-        ///     Get first contactpoint prefill [ sends before registration new account ]
+        ///     Get first contactpoint prefill [ sends before new registration account ]
         /// </summary>
         Task<IResult<bool>> GetFirstContactPointPrefillAsync();
+
+        /// <summary>
+        ///     First launcher sync [ sends before new registration account ]
+        /// </summary>
+        Task<IResult<bool>> FirstLauncherSyncAsync();
 
 
 

@@ -97,7 +97,7 @@ namespace InstagramApiSharp.API.Services
         #region Public Async Functions
 
         /// <summary>
-        ///     Get first contactpoint prefill [ sends before registration new account ]
+        ///     Get first contactpoint prefill [ sends before new registration account ]
         /// </summary>
         public async Task<IResult<bool>> GetFirstContactPointPrefillAsync()
         {
@@ -128,7 +128,38 @@ namespace InstagramApiSharp.API.Services
             }
         }
 
-
+        /// <summary>
+        ///     First launcher sync [ sends before new registration account ]
+        /// </summary>
+        public async Task<IResult<bool>> FirstLauncherSyncAsync()
+        {
+            try
+            {
+                var data = new JObject
+                {
+                    {"_csrftoken",                  _user.CsrfToken},
+                    {"id",                          _deviceInfo.DeviceGuid.ToString()},
+                    {"server_config_retrieval",     "1"}
+                };
+                var instaUri = UriCreator.GetLauncherSyncUri();
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
 
 
         #endregion Public Async Functions
