@@ -395,30 +395,10 @@ namespace InstagramApiSharp.API.Services
         /// <summary>
         ///     Get si-fetch headers
         /// </summary>
-        public async Task<IResult<bool>> GetSiFetchHeadersAsync()
-        {
-            try
-            {
-                var instaUri = UriCreator.GetSiFetchHeadersUri(_deviceInfo.DeviceGuid.ToString().Replace("-", ""));
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
-                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+        public async Task<IResult<bool>> GetSiFetchHeadersAsync() =>
+            await GetResultAsync(UriCreator.GetSiFetchHeadersUri(_deviceInfo.DeviceGuid.ToString().Replace("-", "")),
+                  null, false, true);
 
-                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<bool>(exception);
-            }
-        }
         /// <summary>
         ///     Get username suggestions
         /// </summary>
