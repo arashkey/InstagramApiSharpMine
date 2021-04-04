@@ -2955,5 +2955,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for account registration send verify email");
             return instaUri;
         }
+        public static Uri GetCheckRegistrationConfirmationCodeUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.ACCOUNTS_CHECK_CONFIRMATION_CODE, out var instaUri))
+                throw new Exception("Cant create URI for check account registration confirmation code");
+            return instaUri;
+        }
     }
 }

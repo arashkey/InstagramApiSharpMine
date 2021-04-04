@@ -77,6 +77,7 @@ namespace InstagramApiSharp.API
 
         public const string CONSENT_GET_SIGNUP_CONFIG = API_SUFFIX + "/consent/get_signup_config/";
         public const string ACCOUNTS_SEND_VERIFY_EMAIL = API_SUFFIX + "/accounts/send_verify_email/";
+        public const string ACCOUNTS_CHECK_CONFIRMATION_CODE = API_SUFFIX + "/accounts/check_confirmation_code/";
 
         #endregion New
 
