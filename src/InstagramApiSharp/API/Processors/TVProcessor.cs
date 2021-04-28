@@ -87,7 +87,6 @@ namespace InstagramApiSharp.API.Processors
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"title", title ?? string.Empty },
                     {"caption", description ?? string.Empty},
-                    {"igtv_share_preview_to_feed", Convert.ToInt16(sharePreviewToFeed).ToString()},
                     {"upload_id", uploadId.Value},
                     {"igtv_composer_session_id", Guid.NewGuid().ToString()},
                     {
@@ -108,6 +107,10 @@ namespace InstagramApiSharp.API.Processors
                 };
                 if (!string.IsNullOrEmpty(igtvSeriesId))
                     data.Add("igtv_series_id", igtvSeriesId);
+
+                if (sharePreviewToFeed)
+                    data.Add("igtv_share_preview_to_feed", "1");
+
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
