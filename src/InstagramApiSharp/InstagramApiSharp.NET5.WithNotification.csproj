@@ -10,9 +10,9 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.7.0.0</Version>
-    <AssemblyVersion>2.7.0.0</AssemblyVersion>
-    <FileVersion>2.7.0.0</FileVersion>
+    <Version>2.8.0.0</Version>
+    <AssemblyVersion>2.8.0.0</AssemblyVersion>
+    <FileVersion>2.8.0.0</FileVersion>
     <Description>A complete Private Instagram API for .NET. With Notifications and Realtime client support.
 
 
@@ -37,7 +37,40 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
-    <PackageReleaseNotes>v2.7.0
+    <PackageReleaseNotes>v2.8.0
+- [Bugfix] for SharePreviewToFeed
+- [Tiny fix] for IInstaApiBuilder
+- [Add] IRegistrationService and RegistrationService
+- [Add] CreateNewAccountWithPhoneNumberAsync to IRegistrationService
+- [Add] CreateNewAccountWithEmailAsync to IRegistrationService
+- [Add] GenerateRandomBirthday to IRegistrationService
+- [Add] GetFirstContactPointPrefillAsync to RegistrationService
+- [Add] FirstLauncherSyncAsync to IRegistrationService
+- [Add] FirstQeSyncAsync to IRegistrationService
+- [Add] CheckUsernameAsync to IRegistrationService
+- [Add] InstaCheckEmailRegistration to IRegistrationService
+- [Add] CheckEmailAsync to IRegistrationService
+- [Add] GetSignupConsentConfigAsync to IRegistrationService
+- [Add] SendRegistrationVerifyEmailAsync to IRegistrationService
+- [Add] CheckRegistrationConfirmationCodeAsync to IRegistrationService
+- [Add] GetSiFetchHeadersAsync to IRegistrationService
+- [Add] GetUsernameSuggestionsAsync to IRegistrationService
+- [Add] CheckAgeEligibilityAsync to IRegistrationService
+- [Add] GetOnboardingStepsAsync to IRegistrationService
+- [Add] NewUserFlowBeginsConsentAsync to IRegistrationService
+- [Add] GetMultipleAccountsFamilyAsync to IRegistrationService
+- [Add] GetZrTokenResultAsync to IRegistrationService
+- [Add] LauncherSyncAsync to IRegistrationService
+- [Add] QeSyncAsync to IRegistrationService
+- [Add] NuxNewAccountSeenAsync to IRegistrationService
+- [Add] GetContactPointPrefillAsync to IRegistrationService
+- [Add] SmsVerificationCode property to IRegistrationService
+- [Add] AccountRegistrationPhoneNumber to IRegistrationService
+- [Add] CheckPhoneNumberAsync to IRegistrationService
+- [Add] SendSignUpSmsCodeAsync to IRegistrationService
+- [Add] VerifySignUpSmsCodeAsync to IRegistrationService
+
+v2.7.0
 - [Update] Api version and headers to v180.0.0.31.119 [it's default now]
   also added v169.3.0.30.135
 - [Deprecate] UploadStoryPhotoAsync(InstaImage, string, InstaStoryUploadOptions) (caption is deprecated, use new function)
