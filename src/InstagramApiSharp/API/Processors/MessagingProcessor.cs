@@ -312,6 +312,11 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaDirectRespondPayload>(exception);
             }
         }
+        /// <summary>
+        ///     Get specific thread by it's participants
+        /// </summary>
+        /// <param name="seqId">Seq id from direct inbox</param>
+        /// <param name="userIds">User ids (pk)</param>
         public async Task<IResult<InstaDirectInboxThread>> GetThreadByParticipantsAsync(int seqId, params long[] userIds)
         {
             UserAuthValidator.Validate(_userAuthValidate);

@@ -97,6 +97,11 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="productId">Product id</param>
         /// <param name="threadIds">Thread ids</param>
         Task<IResult<InstaDirectRespondPayload>> SendDirectProductAsync(string merchantId, string productId, params string[] threadIds);
+        /// <summary>
+        ///     Get specific thread by it's participants
+        /// </summary>
+        /// <param name="seqId">Seq id from direct inbox</param>
+        /// <param name="userIds">User ids (pk)</param>
         Task<IResult<InstaDirectInboxThread>> GetThreadByParticipantsAsync(int seqId, params long[] userIds);
         /// <summary>
         ///     Create group thread
