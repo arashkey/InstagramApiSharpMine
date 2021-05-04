@@ -7,20 +7,13 @@ using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Logger;
 using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using InstagramApiSharp.Helpers;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
-using InstagramApiSharp.Converters;
-using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Classes.Models;
 using System.Net;
-using InstagramApiSharp.Converters.Json;
-using InstagramApiSharp.Enums;
-using InstagramApiSharp.Classes.ResponseWrappers.Business;
 using System.Linq;
 
 namespace InstagramApiSharp.API.Processors
@@ -97,6 +90,7 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var instaUri = UriCreator.GetWriteSupportedCapabilitiesUri();
+
                 var data = new JObject
                 {
                     {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString()},
