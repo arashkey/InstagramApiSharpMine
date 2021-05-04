@@ -25,7 +25,6 @@ using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-#pragma warning disable IDE0052
 namespace InstagramApiSharp.API.Processors
 {
     internal class ReelProcessor : IReelProcessor
@@ -447,7 +446,7 @@ namespace InstagramApiSharp.API.Processors
                 }
                 else
                 {
-                    instaUri = UriCreator.GetReelsFeedsUri();
+                    instaUri = UriCreator.GetReelsClipsUri();
 
                     var sessionInfo = new JObject
                     {
@@ -490,5 +489,3 @@ namespace InstagramApiSharp.API.Processors
         }
     }
 }
-
-#pragma warning restore IDE0052
