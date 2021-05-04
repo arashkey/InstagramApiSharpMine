@@ -33,7 +33,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Explore reel feeds
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
-        Task<IResult<InstaReelsMediaList>> GetReelsFeedsAsync(PaginationParameters paginationParameters);
+        Task<IResult<InstaReelsMediaList>> GetReelsClipsAsync(PaginationParameters paginationParameters);
 
         /// <summary>
         ///     Upload reel video
