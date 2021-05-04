@@ -396,10 +396,11 @@ namespace InstagramApiSharp.API
 
         #endregion Main
 
-        #region Reels endpoints constants
+        #region Reels constants
 
+        public const string DISCOVER_VIDEOS_FEED = API_SUFFIX + "/discover/videos_feed/";
 
-        #endregion Reels endpoints constants
+        #endregion Reels constants
 
         #region Account endpoints constants
 

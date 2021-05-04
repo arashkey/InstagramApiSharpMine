@@ -3003,5 +3003,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for reels media configure");
             return instaUri;
         }
+        public static Uri GetReelsFeedsUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DISCOVER_VIDEOS_FEED, out var instaUri))
+                throw new Exception("Cant create URI for reels feeds");
+            return instaUri;
+        }
     }
 }
