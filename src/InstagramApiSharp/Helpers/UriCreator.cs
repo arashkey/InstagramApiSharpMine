@@ -3027,5 +3027,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for creative clips assets");
             return instaUri;
         }
+        public static Uri GetDirectBroadcastReelsClipsShareUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DIRECT_BROADCAST_CLIPS_SHARE, out var instaUri))
+                throw new Exception("Cant create URI for direct broadcast reel clips share");
+            return instaUri;
+        }
     }
 }

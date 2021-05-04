@@ -401,7 +401,7 @@ namespace InstagramApiSharp.API
         public const string DISCOVER_VIDEOS_FEED = API_SUFFIX + "/discover/videos_feed/";
         public const string CLIPS_WRITE_SEEN_STATE = API_SUFFIX + "/clips/write_seen_state/";
         public const string CLIPS_USER = API_SUFFIX + "/clips/user/";
-
+        public const string DIRECT_BROADCAST_CLIPS_SHARE = API_SUFFIX + "/direct_v2/threads/broadcast/clip_share/";
 
         #endregion  Clips (reels) constants
 

@@ -53,7 +53,24 @@ namespace InstagramApiSharp.API.Processors
             _httpHelper = httpHelper;
         }
 
+        /// <summary>
+        ///     Send reel clips to direct thread
+        /// </summary>
+        /// <param name="text">Text to send</param>
+        /// <param name="mediaPk">Media pk ( from <see cref="InstaMedia.Pk"/> )</param>
+        /// <param name="threadIds">Thread ids</param>
+        /// <param name="module">Module => Default is ClipsViewerClipsTab</param>
+        public async Task<IResult<InstaDirectRespondPayload>> SendDirectReelClipsAsync(string text,
+            string mediaPk, 
+            string[] threadIds,
+            InstaMediaContainerModuleType module = InstaMediaContainerModuleType.ClipsViewerClipsTab) =>
+            await SendDirectReelClips(text, mediaPk, threadIds, null, module).ConfigureAwait(false);
 
+
+
+            //        async Task<IResult<InstaDirectRespondPayload>> SendDirectReelClipsShare(string text,
+            //string mediaPk, string[] threadIds,
+            //string[] recipients, InstaMediaContainerModuleType module = InstaMediaContainerModuleType.ClipsViewerClipsTab)
         /// <summary>
         ///     Disable vanish mode [ ssh mode ] for a specific thread
         /// </summary>
@@ -2600,5 +2617,59 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<bool>(exception);
             }
         }
+
+        async Task<IResult<InstaDirectRespondPayload>> SendDirectReelClips(string text,
+            string mediaPk, string[] threadIds,
+            string[] recipients, InstaMediaContainerModuleType module = InstaMediaContainerModuleType.ClipsViewerClipsTab)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetDirectBroadcastReelsClipsShareUri();
+                var cc = ExtensionHelper.GetThreadToken();
+                var data = new Dictionary<string, string>
+                {
+                    {"action", "send_item"},
+                    {"is_shh_mode", "0"},
+                    {"send_attribution", module.GetContainerType()},
+                    {"client_context", cc},
+                    {"media_id", mediaPk},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"device_id", _deviceInfo.DeviceId},
+                    {"mutation_token", cc},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"offline_threading_id", cc}
+                };
+                if (!string.IsNullOrEmpty(text))
+                    data.Add("text", text);
+
+                if (threadIds?.Length > 0)
+                    data.Add("thread_ids", $"[{threadIds.EncodeList(false)}]");
+                if (recipients?.Length > 0)
+                    data.Add("recipient_users", "[[" + recipients.EncodeList(false) + "]]");
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaDirectRespondPayload>(response, json);
+                var result = JsonConvert.DeserializeObject<InstaDirectRespondResponse>(json);
+
+                return result.IsSucceed ? Result.Success(ConvertersFabric.Instance
+                    .GetDirectRespondConverter(result).Convert().Payload) : Result.Fail(result.Payload?.Message, ConvertersFabric.Instance
+                    .GetDirectRespondConverter(result).Convert().Payload);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaDirectRespondPayload), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaDirectRespondPayload>(exception);
+            }
+        }
+
     }
 }
