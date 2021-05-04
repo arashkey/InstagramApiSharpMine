@@ -3009,5 +3009,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for reels feeds");
             return instaUri;
         }
+        public static Uri GetMarkReelAsSeenUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.CLIPS_WRITE_SEEN_STATE, out var instaUri))
+                throw new Exception("Cant create URI for reels seen");
+            return instaUri;
+        }
     }
 }

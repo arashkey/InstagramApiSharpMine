@@ -18,6 +18,12 @@ namespace InstagramApiSharp.API.Processors
     {
 
         /// <summary>
+        ///     Mark reel feed as seen
+        /// </summary>
+        /// <param name="mediaPkImpression">Media pk (from <see cref="InstaMedia.Pk"/> )</param>
+        Task<IResult<bool>> MarkReelAsSeenAsync(string mediaPkImpression);
+
+        /// <summary>
         ///     Explore reel feeds
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>

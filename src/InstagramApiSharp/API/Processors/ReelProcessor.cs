@@ -54,6 +54,50 @@ namespace InstagramApiSharp.API.Processors
         }
         #endregion Properties and constructor
 
+        /// <summary>
+        ///     Mark reel feed as seen
+        /// </summary>
+        /// <param name="mediaPkImpression">Media pk (from <see cref="InstaMedia.Pk"/> )</param>
+        public async Task<IResult<bool>> MarkReelAsSeenAsync(string mediaPkImpression)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetMarkReelAsSeenUri();
+                var impression = new JObject();
+
+                if (!string.IsNullOrEmpty(mediaPkImpression))
+                    impression.Add(mediaPkImpression);
+
+                var data = new JObject
+                {
+                    {"impressions", impression.ToString(Formatting.None)},
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.Fail<bool>(obj.Message);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
 
         /// <summary>
         ///     Explore reel feeds
