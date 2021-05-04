@@ -3015,5 +3015,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for reels seen");
             return instaUri;
         }
+        public static Uri GetUserReelsClipsUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.CLIPS_USER, out var instaUri))
+                throw new Exception("Cant create URI for user reels clips");
+            return instaUri;
+        }
     }
 }

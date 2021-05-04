@@ -16,6 +16,12 @@ namespace InstagramApiSharp.API.Processors
 {
     public interface IReelProcessor
     {
+        /// <summary>
+        ///     Get user's reels clips (medias)
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        Task<IResult<InstaReelsMediaList>> GetUserReelsClipsAsync(long userId, PaginationParameters paginationParameters);
 
         /// <summary>
         ///     Mark reel feed as seen

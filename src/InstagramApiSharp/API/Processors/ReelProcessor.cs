@@ -54,6 +54,16 @@ namespace InstagramApiSharp.API.Processors
         }
         #endregion Properties and constructor
 
+
+        /// <summary>
+        ///     Get user's reels clips (medias)
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        public async Task<IResult<InstaReelsMediaList>> GetUserReelsClipsAsync(long userId, 
+            PaginationParameters paginationParameters) =>
+            await GetReelsClips(paginationParameters, userId).ConfigureAwait(false);
+
         /// <summary>
         ///     Mark reel feed as seen
         /// </summary>
@@ -103,57 +113,8 @@ namespace InstagramApiSharp.API.Processors
         ///     Explore reel feeds
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
-        public async Task<IResult<InstaReelsMediaList>> GetReelsFeedsAsync(PaginationParameters paginationParameters)
-        {
-            UserAuthValidator.Validate(_userAuthValidate);
-            var reelFeeds = new InstaReelsMediaList();
-            try
-            {
-                if (paginationParameters == null)
-                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
-
-                InstaReelsMediaList Convert(InstaReelsMediaListResponse instaReelFeedResponse)
-                {
-                    return ConvertersFabric.Instance.GetReelsMediaListConverter(instaReelFeedResponse).Convert();
-                }
-                var timelineFeeds = await GetReelsFeeds(paginationParameters);
-                if (!timelineFeeds.Succeeded)
-                    return Result.Fail(timelineFeeds.Info, reelFeeds);
-
-                var reelFeedResponse = timelineFeeds.Value;
-
-                reelFeeds = Convert(reelFeedResponse);
-                paginationParameters.NextMaxId = reelFeeds.NextMaxId;
-                paginationParameters.PagesLoaded++;
-
-                while (reelFeeds.MoreAvailable
-                       && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
-                       && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
-                {
-                    var nextFeed = await GetReelsFeeds(paginationParameters);
-                    if (!nextFeed.Succeeded)
-                        return Result.Fail(nextFeed.Info, reelFeeds);
-
-                    var convertedFeed = Convert(nextFeed.Value);
-                    reelFeeds.Medias.AddRange(convertedFeed.Medias);
-                    reelFeeds.MoreAvailable = nextFeed.Value.PagingInfo?.MoreAvailable ?? false;
-                    reelFeeds.NextMaxId = paginationParameters.NextMaxId = nextFeed.Value.PagingInfo?.MaxId;
-                    paginationParameters.PagesLoaded++;
-                }
-
-                return Result.Success(reelFeeds);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, reelFeeds, ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail(exception, reelFeeds);
-            }
-        }
+        public async Task<IResult<InstaReelsMediaList>> GetReelsFeedsAsync(PaginationParameters paginationParameters) =>
+            await GetReelsClips(paginationParameters).ConfigureAwait(false);
 
         /// <summary>
         ///     Upload reel video
@@ -415,30 +376,99 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        private async Task<IResult<InstaReelsMediaListResponse>> GetReelsFeeds(PaginationParameters paginationParameters)
+        private async Task<IResult<InstaReelsMediaList>> GetReelsClips(PaginationParameters paginationParameters, long? userId = null)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            var reelFeeds = new InstaReelsMediaList();
+            try
+            {
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+
+                InstaReelsMediaList Convert(InstaReelsMediaListResponse instaReelFeedResponse)
+                {
+                    return ConvertersFabric.Instance.GetReelsMediaListConverter(instaReelFeedResponse).Convert();
+                }
+                var timelineFeeds = await GetReels(paginationParameters, userId);
+                if (!timelineFeeds.Succeeded)
+                    return Result.Fail(timelineFeeds.Info, reelFeeds);
+
+                var reelFeedResponse = timelineFeeds.Value;
+
+                reelFeeds = Convert(reelFeedResponse);
+                paginationParameters.NextMaxId = reelFeeds.NextMaxId;
+                paginationParameters.PagesLoaded++;
+
+                while (reelFeeds.MoreAvailable
+                       && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
+                       && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
+                {
+                    var nextFeed = await GetReels(paginationParameters, userId);
+                    if (!nextFeed.Succeeded)
+                        return Result.Fail(nextFeed.Info, reelFeeds);
+
+                    var convertedFeed = Convert(nextFeed.Value);
+                    reelFeeds.Medias.AddRange(convertedFeed.Medias);
+                    reelFeeds.MoreAvailable = nextFeed.Value.PagingInfo?.MoreAvailable ?? false;
+                    reelFeeds.NextMaxId = paginationParameters.NextMaxId = nextFeed.Value.PagingInfo?.MaxId;
+                    paginationParameters.PagesLoaded++;
+                }
+
+                return Result.Success(reelFeeds);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, reelFeeds, ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, reelFeeds);
+            }
+        }
+
+        private async Task<IResult<InstaReelsMediaListResponse>> GetReels(PaginationParameters paginationParameters,
+            long? userId = null)
         {
             try
             {
-                var userFeedUri = UriCreator.GetReelsFeedsUri();
-                var sessionInfo = new JObject
+                Uri instaUri;
+                Dictionary<string, string> data;
+                if (userId.HasValue)
                 {
-                    {"session_id", Guid.NewGuid().ToString()},
-                    {"media_info", new JObject()},
-                };
-                var data = new Dictionary<string, string>
+                    instaUri = UriCreator.GetUserReelsClipsUri();
+                    data = new Dictionary<string, string>
+                    {
+                        {"_csrftoken", _user.CsrfToken},
+                        {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                        {"target_user_id", userId.ToString()},
+                    };
+                }
+                else
                 {
-                    {"seen_reels", "0"},
-                    {"pct_reels", "0"},
-                    {"tab_type", "clips_tab"},
-                    {"_csrftoken", _user.CsrfToken},
-                    {"session_info" ,sessionInfo.ToString(Formatting.None)},
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                };
+                    instaUri = UriCreator.GetReelsFeedsUri();
+
+                    var sessionInfo = new JObject
+                    {
+                        {"session_id", Guid.NewGuid().ToString()},
+                        {"media_info", new JObject()},
+                    };
+                    data = new Dictionary<string, string>
+                    {
+                        {"seen_reels", "0"},
+                        {"pct_reels", "0"},
+                        {"tab_type", "clips_tab"},
+                        {"_csrftoken", _user.CsrfToken},
+                        {"session_info" ,sessionInfo.ToString(Formatting.None)},
+                        {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    };
+                }
 
                 if (!string.IsNullOrEmpty(paginationParameters.NextMaxId))
                     data.Add("max_id", paginationParameters.NextMaxId);
 
-                var request = await _httpHelper.GetDefaultGZipRequestAsync(HttpMethod.Post, userFeedUri, _deviceInfo, data);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
