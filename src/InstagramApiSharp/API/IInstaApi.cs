@@ -160,6 +160,11 @@ namespace InstagramApiSharp.API
         ///     Creative api functions
         /// </summary>
         ICreativeProcessor CreativeProcessor { get; }
+
+        /// <summary>
+        ///     Reels api functions
+        /// </summary>
+        IReelProcessor ReelProcessor { get; }
         /// <summary>
         ///     Session handler
         /// </summary>

@@ -213,6 +213,11 @@ namespace InstagramApiSharp.API
         /// </summary>
         public ICreativeProcessor CreativeProcessor { get; private set; }
 
+        /// <summary>
+        ///     Reels api functions
+        /// </summary>
+        public IReelProcessor ReelProcessor { get; private set; }
+
         public InstaApiVersionType ApiVersionType { get; set; }
 
 #endregion Processors
@@ -3221,6 +3226,7 @@ namespace InstagramApiSharp.API
             _videoCallProcessor = new VideoCallProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
             _pushProcessor = new PushProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
             CreativeProcessor = new CreativeProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
+            ReelProcessor = new ReelProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
 
         }
 
