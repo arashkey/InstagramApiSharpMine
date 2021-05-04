@@ -396,6 +396,11 @@ namespace InstagramApiSharp.API
 
         #endregion Main
 
+        #region Reels endpoints constants
+
+
+        #endregion Reels endpoints constants
+
         #region Account endpoints constants
 
         public const string ACCOUNTS_2FA_LOGIN = API_SUFFIX + "/accounts/two_factor_login/";
@@ -822,6 +827,8 @@ namespace InstagramApiSharp.API
         public const string MEDIA_TAG = API_SUFFIX + "/media/{0}/tags/";
         public const string MEDIA_STORY_CHAT_REQUEST = API_SUFFIX + "/media/story_chat_request/";
         public const string MEDIA_STORY_CHAT_CANCEL_REQUEST = API_SUFFIX + "/media/story_chat_cancel_request/";
+
+        public const string MEDIA_CONFIGURE_TO_CLIPS = "/media/configure_to_clips/?video=";
 
         #endregion Media endpoints constants
 

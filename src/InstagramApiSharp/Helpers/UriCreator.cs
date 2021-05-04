@@ -2997,5 +2997,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for nux new account seen");
             return instaUri;
         }
+        public static Uri GetReelsMediaConfigureUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.MEDIA_CONFIGURE_TO_CLIPS, out var instaUri))
+                throw new Exception("Cant create URI for reels media configure");
+            return instaUri;
+        }
     }
 }
