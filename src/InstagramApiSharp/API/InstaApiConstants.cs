@@ -496,6 +496,8 @@ namespace InstagramApiSharp.API
 
         public const string CREATIVE_ASSETS = API_SUFFIX + "/creatives/assets/";
         public const string CREATIVE_WRITE_SUPPORTED_CAPABILITIES = API_SUFFIX + "/creatives/write_supported_capabilities/";
+        public const string CREATIVE_CLIPS_ASSETS = API_SUFFIX + "/creatives/clips_assets/";
+
         #endregion Creatives endpoints constants
 
         #region Direct endpoints constants
