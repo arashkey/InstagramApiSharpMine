@@ -398,6 +398,8 @@ namespace InstagramApiSharp
                     return "video_view_other";
                 case InstaMediaContainerModuleType.IgtvProfile:
                     return "igtv_profile";
+                case InstaMediaContainerModuleType.ClipsViewerClipsTab:
+                    return "clips_viewer_clips_tab";
                 default:
                 case InstaMediaContainerModuleType.None:
                     return string.Empty;
@@ -425,6 +427,8 @@ namespace InstagramApiSharp
                     return "self_comments_v2_igtv_profile";
                 case InstaCommentContainerModuleType.SelfFeedContextualProfile:
                     return "self_comments_v2_feed_contextual_self_profile";
+                case InstaCommentContainerModuleType.SelfCommentsV2ClipsViewerClipsTab:
+                    return "self_comments_v2_clips_viewer_clips_tab";
             }
         }
 

@@ -24,7 +24,8 @@ namespace InstagramApiSharp.Enums
         IgtvExplorePinnedNav,
         VideoViewOther,
         PhotoViewOther,
-        IgtvProfile
+        IgtvProfile,
+        ClipsViewerClipsTab
     }
     public enum InstaMediaSurfaceType
     {
