@@ -567,7 +567,7 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"seen_state", root.ToString(Formatting.None)},
                     {"_csrftoken", _user.CsrfToken},
-                    {"_uid", _user.LoggedInUser.Pk},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };
 
