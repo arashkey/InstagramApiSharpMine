@@ -23,6 +23,17 @@ namespace InstagramApiSharp.API.Processors
             InstaMediaContainerModuleType module = InstaMediaContainerModuleType.ClipsViewerClipsTab);
 
         /// <summary>
+        ///     Send reel clips to recipients
+        /// </summary>
+        /// <param name="text">Text to send</param>
+        /// <param name="mediaPk">Media pk ( from <see cref="InstaMedia.Pk"/> )</param>
+        /// <param name="recipients">Recipients (user ids pk)</param>
+        /// <param name="module">Module => Default is ClipsViewerClipsTab</param>
+        Task<IResult<InstaDirectRespondPayload>> SendDirectReelClipsToRecipientsAsync(string text,
+            string mediaPk, string[] recipients,
+            InstaMediaContainerModuleType module = InstaMediaContainerModuleType.ClipsViewerClipsTab);
+
+        /// <summary>
         ///     Disable vanish mode [ ssh mode ] for a specific thread
         /// </summary>
         /// <param name="threadId">Thread id</param>
