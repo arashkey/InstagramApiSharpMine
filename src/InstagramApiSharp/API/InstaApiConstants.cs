@@ -834,7 +834,7 @@ namespace InstagramApiSharp.API
         public const string MEDIA_STORY_CHAT_REQUEST = API_SUFFIX + "/media/story_chat_request/";
         public const string MEDIA_STORY_CHAT_CANCEL_REQUEST = API_SUFFIX + "/media/story_chat_cancel_request/";
 
-        public const string MEDIA_CONFIGURE_TO_CLIPS = "/media/configure_to_clips/?video=1";
+        public const string MEDIA_CONFIGURE_TO_CLIPS = API_SUFFIX + "/media/configure_to_clips/?video=1";
 
         #endregion Media endpoints constants
 

@@ -321,25 +321,20 @@ namespace InstagramApiSharp.API.Processors
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {
-                        "clips_audio_metadata", new JObject
+                        new JProperty("clips_audio_metadata", new JObject
                         {
-                            "original", new JObject
+                            new JProperty("original", new JObject
                             {
-                                new JObject {"volume_level", 1.0},
-                            }
-                        }
+                                {"volume_level", 1.0},
+                            })
+                        })
                     },
                     {"clips_segments_metadata", clipsSegmentsMetadata}
                 };
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, UriCreator.GetMediaUploadFinishUri(), _deviceInfo, data);
 
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-
-                request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-
-                response = await _httpRequestProcessor.SendAsync(request);
-                json = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
                 {
                     upProgress.UploadState = InstaUploadState.Error;
