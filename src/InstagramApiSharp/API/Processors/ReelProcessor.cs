@@ -120,8 +120,9 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="video">Video to upload.<para>Note: Thumbnail is required.</para></param>
         /// <param name="caption">Caption => Optional</param>
-        public async Task<IResult<InstaMedia>> UploadReelVideoAsync(InstaVideoUpload video, string caption) =>
-            await UploadReelVideoAsync(null, video, caption);
+        /// <param name="sharePreviewToFeed">Share preview to feed</param>
+        public async Task<IResult<InstaMedia>> UploadReelVideoAsync(InstaVideoUpload video, string caption, bool sharePreviewToFeed = false) =>
+            await UploadReelVideoAsync(null, video, caption, sharePreviewToFeed).ConfigureAwait(false);
 
         /// <summary>
         ///     Upload reel video with progress
@@ -129,8 +130,9 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="progress">Progress action</param>
         /// <param name="video">Video to upload.<para>Note: Thumbnail is required.</para></param>
         /// <param name="caption">Caption => Optional</param>
+        /// <param name="sharePreviewToFeed">Share preview to feed</param>
         public async Task<IResult<InstaMedia>> UploadReelVideoAsync(Action<InstaUploaderProgress> progress,
-            InstaVideoUpload video, string caption)
+            InstaVideoUpload video, string caption, bool sharePreviewToFeed = false)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var upProgress = new InstaUploaderProgress
@@ -216,7 +218,8 @@ namespace InstagramApiSharp.API.Processors
                 upProgress.UploadState = InstaUploadState.ThumbnailUploaded;
                 progress?.Invoke(upProgress);
                 await Task.Delay(15000);
-                return await ConfigureVideoAsync(progress, upProgress, video, uploadId, caption);
+                return await ConfigureVideoAsync(progress, upProgress,
+                    video, uploadId, caption, sharePreviewToFeed);
             }
             catch (HttpRequestException httpException)
             {
@@ -233,7 +236,8 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaMedia>> ConfigureVideoAsync(Action<InstaUploaderProgress> progress,
-            InstaUploaderProgress upProgress, InstaVideoUpload video, string uploadId, string caption)
+            InstaUploaderProgress upProgress, InstaVideoUpload video, 
+            string uploadId, string caption, bool sharePreviewToFeed = false)
         {
             try
             {
@@ -270,7 +274,6 @@ namespace InstagramApiSharp.API.Processors
                 };
                 var data = new JObject
                 {
-                    {"clips_share_preview_to_feed", "1"},
                     {"is_clips_edited", "0"},
                     {"caption", caption ?? string.Empty},
                     {"upload_id", uploadId},
@@ -331,7 +334,8 @@ namespace InstagramApiSharp.API.Processors
                     },
                     {"clips_segments_metadata", clipsSegmentsMetadata}
                 };
-
+                if (sharePreviewToFeed)
+                    data.Add("clips_share_preview_to_feed", "1");
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
