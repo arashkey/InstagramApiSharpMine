@@ -29,7 +29,8 @@ namespace InstagramApiSharp.Converters
 
             if (SourceObject.Medias?.Count > 0)
                 reelsMediaList.Medias.AddRange(
-                    SourceObject.Medias.Select(ConvertersFabric.Instance.GetSingleMediaConverter)
+                    SourceObject.Medias.Select(x=> x.Media)
+                    .Select(ConvertersFabric.Instance.GetSingleMediaConverter)
                         .Select(converter => converter.Convert()));
             return reelsMediaList;
         }

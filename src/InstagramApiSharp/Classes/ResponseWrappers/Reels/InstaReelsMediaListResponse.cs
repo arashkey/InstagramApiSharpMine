@@ -15,7 +15,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
     public class InstaReelsMediaListResponse : InstaDefaultResponse
     {
         [JsonProperty("items")]
-        public List<InstaMediaItemResponse> Medias { get; set; } = new List<InstaMediaItemResponse>();
+        public List<InstaMediaAlbumResponse> Medias { get; set; } = new List<InstaMediaAlbumResponse>();
         [JsonProperty("paging_info")]
         public InstaPagingInfoResponse PagingInfo { get; set; } 
     }
