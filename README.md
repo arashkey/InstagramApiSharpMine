@@ -4,8 +4,8 @@ Private version of [InstagramApiSharp](https://github.com/ramtinak/InstagramApiS
 
 | Target | Branch | Version | Download |
 | ------ | ------ | ------ | ------ |
-| Github | master | v2.7.0 | [v2.7.0](https://github.com/rmt4006/InstagramApiSharpMine/archive/master.zip) |
-| Release | master | v2.7.0 | [v2.7.0](https://github.com/rmt4006/InstagramApiSharpMine/releases/) |
+| Github | master | v2.8.5 | [v2.8.5](https://github.com/rmt4006/InstagramApiSharpMine/archive/master.zip) |
+| Release | master | v2.8.5 | [v2.8.5](https://github.com/rmt4006/InstagramApiSharpMine/releases/) |
 
 #### How to build the project?
 Check this youtube video: https://www.youtube.com/watch?v=AFjKryHz9nM
@@ -82,6 +82,52 @@ For [InstagramApiSharp.NET5.WithNotification.sln] with Push Notifications/realti
 
 
 #### Version changes
+v2.8.5
+- [Tiny fix] for TVProcessor.MarkAsSeenAsync
+- [Update] InstaCommentContainerModuleType, InstaMediaContainerModuleType
+- [Add] new Reels APIs support!
+- [Add] ReelProcessor property to IInstaApi
+- [Add] UploadReelVideoAsync to ReelProcessor
+- [Add] GetReelsClipsAsync to ReelProcessor
+- [Add] GetUserReelsClipsAsync to ReelProcessor
+- [Add] MarkReelAsSeenAsync to ReelProcessor
+- [Add] SendDirectReelClipsAsync to MessagingProcessor
+- [Add] SendDirectReelClipsToRecipientsAsync to MessagingProcessor
+- [Add] GetClipsAssetsAsync to CreativeProcessor
+
+v2.8.0
+- [Bugfix] for SharePreviewToFeed
+- [Tiny fix] for IInstaApiBuilder
+- [Add] IRegistrationService and RegistrationService
+- [Add] CreateNewAccountWithPhoneNumberAsync to IRegistrationService
+- [Add] CreateNewAccountWithEmailAsync to IRegistrationService
+- [Add] GenerateRandomBirthday to IRegistrationService
+- [Add] GetFirstContactPointPrefillAsync to RegistrationService
+- [Add] FirstLauncherSyncAsync to IRegistrationService
+- [Add] FirstQeSyncAsync to IRegistrationService
+- [Add] CheckUsernameAsync to IRegistrationService
+- [Add] InstaCheckEmailRegistration to IRegistrationService
+- [Add] CheckEmailAsync to IRegistrationService
+- [Add] GetSignupConsentConfigAsync to IRegistrationService
+- [Add] SendRegistrationVerifyEmailAsync to IRegistrationService
+- [Add] CheckRegistrationConfirmationCodeAsync to IRegistrationService
+- [Add] GetSiFetchHeadersAsync to IRegistrationService
+- [Add] GetUsernameSuggestionsAsync to IRegistrationService
+- [Add] CheckAgeEligibilityAsync to IRegistrationService
+- [Add] GetOnboardingStepsAsync to IRegistrationService
+- [Add] NewUserFlowBeginsConsentAsync to IRegistrationService
+- [Add] GetMultipleAccountsFamilyAsync to IRegistrationService
+- [Add] GetZrTokenResultAsync to IRegistrationService
+- [Add] LauncherSyncAsync to IRegistrationService
+- [Add] QeSyncAsync to IRegistrationService
+- [Add] NuxNewAccountSeenAsync to IRegistrationService
+- [Add] GetContactPointPrefillAsync to IRegistrationService
+- [Add] SmsVerificationCode property to IRegistrationService
+- [Add] AccountRegistrationPhoneNumber to IRegistrationService
+- [Add] CheckPhoneNumberAsync to IRegistrationService
+- [Add] SendSignUpSmsCodeAsync to IRegistrationService
+- [Add] VerifySignUpSmsCodeAsync to IRegistrationService
+
 v2.7.0
 - [Update] Api version and headers to v180.0.0.31.119 [it's default now]
   also added v169.3.0.30.135

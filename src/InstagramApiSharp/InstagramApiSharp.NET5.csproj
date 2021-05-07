@@ -10,9 +10,9 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.8.0.0</Version>
-    <AssemblyVersion>2.8.0.0</AssemblyVersion>
-    <FileVersion>2.8.0.0</FileVersion>
+    <Version>2.8.5.0</Version>
+    <AssemblyVersion>2.8.5.0</AssemblyVersion>
+    <FileVersion>2.8.5.0</FileVersion>
     <Description>A complete Private Instagram API for .NET.
 
 
@@ -37,7 +37,20 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
-    <PackageReleaseNotes>v2.8.0
+    <PackageReleaseNotes>v2.8.5
+- [Tiny fix] for TVProcessor.MarkAsSeenAsync
+- [Update] InstaCommentContainerModuleType, InstaMediaContainerModuleType
+- [Add] new Reels APIs support!
+- [Add] ReelProcessor property to IInstaApi
+- [Add] UploadReelVideoAsync to ReelProcessor
+- [Add] GetReelsClipsAsync to ReelProcessor
+- [Add] GetUserReelsClipsAsync to ReelProcessor
+- [Add] MarkReelAsSeenAsync to ReelProcessor
+- [Add] SendDirectReelClipsAsync to MessagingProcessor
+- [Add] SendDirectReelClipsToRecipientsAsync to MessagingProcessor
+- [Add] GetClipsAssetsAsync to CreativeProcessor
+
+v2.8.0
 - [Bugfix] for SharePreviewToFeed
 - [Tiny fix] for IInstaApiBuilder
 - [Add] IRegistrationService and RegistrationService
