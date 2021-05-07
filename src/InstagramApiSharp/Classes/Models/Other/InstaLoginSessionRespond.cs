@@ -29,7 +29,7 @@ namespace InstagramApiSharp.Classes.Models
         [JsonProperty("longitude")]
         public float Longitude { get; set; }
         [JsonProperty("device")]
-        public string Ddevice { get; set; }
+        public string Device { get; set; }
         [JsonProperty("timestamp")]
         public long Timestamp { get; set; }
     }
