@@ -21,7 +21,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         public string DeviceBrand { get; set; }
         public string DeviceId { get; set; }
         public string DeviceModel { get; set; }
-        public string DeviceModelBoot { get; set; }
+        public string DeviceModelBoot { get; set; } = "qcom";
         public string DeviceModelIdentifier { get; set; }
         public string FirmwareBrand { get; set; }
         public string FirmwareFingerprint { get; set; }
