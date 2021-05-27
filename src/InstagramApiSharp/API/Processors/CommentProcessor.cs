@@ -15,6 +15,7 @@ using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using InstagramApiSharp.Enums;
+using System.Threading;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -367,9 +368,23 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="targetCommentId">Target comment id</param>
         public async Task<IResult<InstaCommentList>> GetMediaCommentsAsync(string mediaId,
-            PaginationParameters paginationParameters, string targetCommentId = "")
+            PaginationParameters paginationParameters, string targetCommentId = "") =>
+            await GetMediaCommentsAsync(mediaId, paginationParameters, 
+                CancellationToken.None, targetCommentId).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get media comments
+        /// </summary>
+        /// <param name="mediaId">Media id</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="targetCommentId">Target comment id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaCommentList>> GetMediaCommentsAsync(string mediaId,
+            PaginationParameters paginationParameters,
+            CancellationToken cancellationToken, string targetCommentId = "")
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaCommentListResponse commentListResponse = null;
             try
             {
                 if (paginationParameters == null)
@@ -384,12 +399,8 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaCommentList>(response, json);
-                var commentListResponse = JsonConvert.DeserializeObject<InstaCommentListResponse>(json);
+                commentListResponse = JsonConvert.DeserializeObject<InstaCommentListResponse>(json);
                 var pagesLoaded = 1;
-                InstaCommentList Convert(InstaCommentListResponse commentsResponse)
-                {
-                    return ConvertersFabric.Instance.GetCommentListConverter(commentsResponse).Convert();
-                }
 
                 while (commentListResponse.MoreCommentsAvailable
                        && !string.IsNullOrEmpty(commentListResponse.NextMaxId)
@@ -399,14 +410,16 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(commentListResponse.NextMinId)
                        && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     IResult<InstaCommentListResponse> nextComments;
                     if(!string.IsNullOrEmpty(commentListResponse.NextMaxId))
-                        nextComments = await GetCommentListWithMaxIdAsync(mediaId, commentListResponse.NextMaxId,null, targetCommentId);
+                        nextComments = await GetCommentListWithMaxIdAsync(mediaId, commentListResponse.NextMaxId, null, targetCommentId);
                     else 
-                        nextComments = await GetCommentListWithMaxIdAsync(mediaId,null, commentListResponse.NextMinId, targetCommentId);
+                        nextComments = await GetCommentListWithMaxIdAsync(mediaId, null, commentListResponse.NextMinId, targetCommentId);
 
                     if (!nextComments.Succeeded)
-                        return Result.Fail(nextComments.Info, Convert(commentListResponse));
+                        return Result.Fail(nextComments.Info, GetOrDefault());
                     commentListResponse.NextMaxId = nextComments.Value.NextMaxId;
                     commentListResponse.NextMinId = nextComments.Value.NextMinId;
                     commentListResponse.MoreCommentsAvailable = nextComments.Value.MoreCommentsAvailable;
@@ -418,18 +431,25 @@ namespace InstagramApiSharp.API.Processors
                 }
                 paginationParameters.NextMaxId = commentListResponse.NextMaxId;
                 paginationParameters.NextMinId = commentListResponse.NextMinId;
-                var converter = ConvertersFabric.Instance.GetCommentListConverter(commentListResponse);
-                return Result.Success(converter.Convert());
+
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaCommentList), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaCommentList>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaCommentList GetOrDefault() => commentListResponse != null ? Convert(commentListResponse) : default(InstaCommentList);
+
+            InstaCommentList Convert(InstaCommentListResponse commentsResponse)
+            {
+                return ConvertersFabric.Instance.GetCommentListConverter(commentsResponse).Convert();
             }
         }
         /// <summary>
@@ -438,11 +458,23 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaId">Media id</param>
         /// <param name="targetCommentId">Target comment id</param>
         /// <param name="paginationParameters">Maximum amount of pages to load and start id</param>
-        /// <returns></returns>
         public async Task<IResult<InstaInlineCommentList>> GetMediaRepliesCommentsAsync(string mediaId, string targetCommentId,
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters) =>
+            await GetMediaRepliesCommentsAsync(mediaId, targetCommentId, 
+                paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get media inline comments
+        /// </summary>
+        /// <param name="mediaId">Media id</param>
+        /// <param name="targetCommentId">Target comment id</param>
+        /// <param name="paginationParameters">Maximum amount of pages to load and start id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaInlineCommentList>> GetMediaRepliesCommentsAsync(string mediaId, string targetCommentId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaInlineCommentListResponse commentListResponse = null;
             try
             {
                 if (paginationParameters == null)
@@ -457,14 +489,11 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaInlineCommentList>(response, json);
-                var commentListResponse = JsonConvert.DeserializeObject<InstaInlineCommentListResponse>(json);
+                
+                commentListResponse = JsonConvert.DeserializeObject<InstaInlineCommentListResponse>(json);
 
                 var pagesLoaded = 1;
 
-                InstaInlineCommentList Convert(InstaInlineCommentListResponse commentsResponse)
-                {
-                    return ConvertersFabric.Instance.GetInlineCommentsConverter(commentsResponse).Convert();
-                }
                 while (commentListResponse.HasMoreTailChildComments
                        && !string.IsNullOrEmpty(commentListResponse.NextMaxId)
                        && pagesLoaded < paginationParameters.MaximumPagesToLoad ||
@@ -472,13 +501,17 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(commentListResponse.NextMinId)
                        && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     IResult<InstaInlineCommentListResponse> nextComments;
                     if (!string.IsNullOrEmpty(commentListResponse.NextMaxId))
                         nextComments = await GetInlineCommentListWithMaxIdAsync(mediaId, targetCommentId, commentListResponse.NextMaxId, null);
                     else
                         nextComments = await GetInlineCommentListWithMaxIdAsync(mediaId, targetCommentId, null, commentListResponse.NextMinId);
+                    
                     if (!nextComments.Succeeded)
-                        return Result.Fail(nextComments.Info, Convert(commentListResponse));
+                        return Result.Fail(nextComments.Info, GetOrDefault());
+
                     commentListResponse.NextMaxId = nextComments.Value.NextMaxId;
                     commentListResponse.NextMinId = nextComments.Value.NextMinId;
                     commentListResponse.HasMoreHeadChildComments = nextComments.Value.HasMoreHeadChildComments;
@@ -490,18 +523,24 @@ namespace InstagramApiSharp.API.Processors
                 }
                 paginationParameters.NextMaxId = commentListResponse.NextMaxId;
                 paginationParameters.NextMinId = commentListResponse.NextMinId;
-                var comments = ConvertersFabric.Instance.GetInlineCommentsConverter(commentListResponse).Convert();
-                return Result.Success(comments);
+
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaInlineCommentList), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaInlineCommentList>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+            InstaInlineCommentList GetOrDefault() => commentListResponse != null ? Convert(commentListResponse) : default(InstaInlineCommentList);
+
+            InstaInlineCommentList Convert(InstaInlineCommentListResponse commentsResponse)
+            {
+                return ConvertersFabric.Instance.GetInlineCommentsConverter(commentsResponse).Convert();
             }
         }
         /// <summary>

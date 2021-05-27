@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
@@ -78,6 +79,18 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="targetCommentId">Target comment id</param>
         Task<IResult<InstaCommentList>>
             GetMediaCommentsAsync(string mediaId, PaginationParameters paginationParameters, string targetCommentId = "");
+
+        /// <summary>
+        ///     Get media comments
+        /// </summary>
+        /// <param name="mediaId">Media id</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="targetCommentId">Target comment id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaCommentList>>
+            GetMediaCommentsAsync(string mediaId, PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken, string targetCommentId = "");
+
         /// <summary>
         ///     Get media inline comments
         /// </summary>
@@ -86,6 +99,18 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Maximum amount of pages to load and start id</param>
         Task<IResult<InstaInlineCommentList>>
            GetMediaRepliesCommentsAsync(string mediaId, string targetCommentId, PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Get media inline comments
+        /// </summary>
+        /// <param name="mediaId">Media id</param>
+        /// <param name="targetCommentId">Target comment id</param>
+        /// <param name="paginationParameters">Maximum amount of pages to load and start id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaInlineCommentList>>
+           GetMediaRepliesCommentsAsync(string mediaId, string targetCommentId, PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken);
+
         /// <summary>
         ///     Like media comment
         /// </summary>
