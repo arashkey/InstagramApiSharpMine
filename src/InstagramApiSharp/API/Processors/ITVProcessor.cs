@@ -10,6 +10,7 @@ using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
@@ -82,6 +83,14 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         Task<IResult<InstaTVBrowseFeed>> BrowseFeedAsync(PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Browse Feed
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaTVBrowseFeed>> BrowseFeedAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
 
         /// <summary>
         ///     Get channel by user id (pk) => channel owner

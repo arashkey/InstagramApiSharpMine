@@ -22,6 +22,7 @@ using Newtonsoft.Json;
 using InstagramApiSharp.Enums;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -350,7 +351,17 @@ namespace InstagramApiSharp.API.Processors
         ///     Browse Feed
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
-        public async Task<IResult<InstaTVBrowseFeed>> BrowseFeedAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaTVBrowseFeed>> BrowseFeedAsync(PaginationParameters paginationParameters) =>
+            await BrowseFeedAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Browse Feed
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaTVBrowseFeed>> BrowseFeedAsync(PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var tvFeed = new InstaTVBrowseFeed();
@@ -377,6 +388,8 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextFeed = await BrowseFeed(paginationParameters.NextMaxId);
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, tvFeed);
@@ -592,7 +605,8 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<bool>(exception);
             }
         }
-        private async Task<IResult<InstaTVChannel>> GetChannel(InstaTVChannelType? channelType, long? userId, PaginationParameters paginationParameters)
+        private async Task<IResult<InstaTVChannel>> GetChannel(InstaTVChannelType? channelType, long? userId,
+            PaginationParameters paginationParameters)
         {
             try
             {
