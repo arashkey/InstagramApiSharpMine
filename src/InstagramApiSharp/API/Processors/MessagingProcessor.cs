@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
@@ -721,7 +722,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         public async Task<IResult<bool>> DeclineAllDirectPendingRequestsAsync()
         {
-            return await DeclineDirectPendingRequests(true);
+            return await DeclineDirectPendingRequests(true).ConfigureAwait(false);
         }
         /// <summary>
         ///     Decline direct pending requests
@@ -729,7 +730,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadIds">Thread ids</param>
         public async Task<IResult<bool>> DeclineDirectPendingRequestsAsync(params string[] threadIds)
         {
-            return await DeclineDirectPendingRequests(false, threadIds);
+            return await DeclineDirectPendingRequests(false, threadIds).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -814,9 +815,22 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaDirectInboxContainer" />
         /// </returns>
-        public async Task<IResult<InstaDirectInboxContainer>> GetDirectInboxAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaDirectInboxContainer>> GetDirectInboxAsync(PaginationParameters paginationParameters) =>
+            await GetDirectInboxAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get direct inbox threads for current user asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaDirectInboxContainer" />
+        /// </returns>
+        public async Task<IResult<InstaDirectInboxContainer>> GetDirectInboxAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaDirectInboxContainerResponse inboxResponse = null;
             try
             {
                 if (paginationParameters == null)
@@ -825,15 +839,10 @@ namespace InstagramApiSharp.API.Processors
                 if (paginationParameters.NextPage == null)
                     paginationParameters.NextPage = 0;
 
-                InstaDirectInboxContainer Convert(InstaDirectInboxContainerResponse inboxContainerResponse)
-                {
-                    return ConvertersFabric.Instance.GetDirectInboxConverter(inboxContainerResponse).Convert();
-                }
-
-                var inbox = await GetDirectInbox(paginationParameters.NextMaxId, paginationParameters.NextPage.Value);
+                var inbox = await GetDirectInbox(paginationParameters.NextMaxId, paginationParameters.NextPage.Value).ConfigureAwait(false);
                 if (!inbox.Succeeded)
                     return Result.Fail(inbox.Info, default(InstaDirectInboxContainer));
-                var inboxResponse = inbox.Value;
+                inboxResponse = inbox.Value;
                 paginationParameters.NextMaxId = inboxResponse.Inbox.OldestCursor;
                 paginationParameters.NextPage = inboxResponse.SeqId;
                 var pagesLoaded = 1;
@@ -841,10 +850,12 @@ namespace InstagramApiSharp.API.Processors
                       && !string.IsNullOrEmpty(inboxResponse.Inbox.OldestCursor)
                       && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
-                    var nextInbox = await GetDirectInbox(inboxResponse.Inbox.OldestCursor, paginationParameters.NextPage.Value);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var nextInbox = await GetDirectInbox(inboxResponse.Inbox.OldestCursor, paginationParameters.NextPage.Value).ConfigureAwait(false);
 
                     if (!nextInbox.Succeeded)
-                        return Result.Fail(nextInbox.Info, Convert(nextInbox.Value));
+                        return Result.Fail(nextInbox.Info, GetOrDefault());
 
                     inboxResponse.Inbox.OldestCursor = paginationParameters.NextMaxId = nextInbox.Value.Inbox.OldestCursor;
                     paginationParameters.NextPage = nextInbox.Value.SeqId;
@@ -856,17 +867,24 @@ namespace InstagramApiSharp.API.Processors
                     pagesLoaded++;
                 }
 
-                return Result.Success(ConvertersFabric.Instance.GetDirectInboxConverter(inboxResponse).Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaDirectInboxContainer), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
                 return Result.Fail<InstaDirectInboxContainer>(exception);
+            }
+
+            InstaDirectInboxContainer GetOrDefault() => inboxResponse != null ? Convert(inboxResponse) : default(InstaDirectInboxContainer);
+
+            InstaDirectInboxContainer Convert(InstaDirectInboxContainerResponse inboxContainerResponse)
+            {
+                return ConvertersFabric.Instance.GetDirectInboxConverter(inboxContainerResponse).Convert();
             }
         }
         /// <summary>
@@ -877,23 +895,33 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaDirectInboxThread" />
         /// </returns>
-        public async Task<IResult<InstaDirectInboxThread>> GetDirectInboxThreadAsync(string threadId, PaginationParameters paginationParameters)
+        public async Task<IResult<InstaDirectInboxThread>> GetDirectInboxThreadAsync(string threadId, PaginationParameters paginationParameters) =>
+            await GetDirectInboxThreadAsync(threadId, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get direct inbox thread by its id asynchronously
+        /// </summary>
+        /// <param name="threadId">Thread id</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaDirectInboxThread" />
+        /// </returns>
+        public async Task<IResult<InstaDirectInboxThread>> GetDirectInboxThreadAsync(string threadId, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaDirectInboxThreadResponse threadResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                var thread = await GetDirectInboxThread(threadId, paginationParameters.NextMaxId);
+                var thread = await GetDirectInboxThread(threadId, paginationParameters.NextMaxId).ConfigureAwait(false);
                 if (!thread.Succeeded)
                     return Result.Fail(thread.Info, default(InstaDirectInboxThread));
-                InstaDirectInboxThread Convert(InstaDirectInboxThreadResponse inboxThreadResponse)
-                {
-                    return ConvertersFabric.Instance.GetDirectThreadConverter(inboxThreadResponse).Convert();
-                }
 
-                var threadResponse = thread.Value;
+                threadResponse = thread.Value;
                 paginationParameters.NextMaxId = threadResponse.OldestCursor;
                 var pagesLoaded = 1;
 
@@ -901,10 +929,12 @@ namespace InstagramApiSharp.API.Processors
                       && !string.IsNullOrEmpty(threadResponse.OldestCursor)
                       && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
-                    var nextThread = await GetDirectInboxThread(threadId, threadResponse.OldestCursor);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var nextThread = await GetDirectInboxThread(threadId, threadResponse.OldestCursor).ConfigureAwait(false);
 
                     if (!nextThread.Succeeded)
-                        return Result.Fail(nextThread.Info, Convert(nextThread.Value));
+                        return Result.Fail(nextThread.Info, GetOrDefault());
 
                     threadResponse.OldestCursor = paginationParameters.NextMaxId = nextThread.Value.OldestCursor;
                     threadResponse.HasOlder = nextThread.Value.HasOlder;
@@ -932,22 +962,30 @@ namespace InstagramApiSharp.API.Processors
                     pagesLoaded++;
                 }
 
-                //Reverse for Chat Order
-                threadResponse.Items.Reverse();
-                var converter = ConvertersFabric.Instance.GetDirectThreadConverter(threadResponse);
-
-
-                return Result.Success(converter.Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaDirectInboxThread), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaDirectInboxThread>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaDirectInboxThread GetOrDefault()
+            {
+                //Reverse for Chat Order
+                threadResponse?.Items?.Reverse();
+
+                return threadResponse != null ? Convert(threadResponse) : default(InstaDirectInboxThread);
+            }
+
+            InstaDirectInboxThread Convert(InstaDirectInboxThreadResponse inboxThreadResponse)
+            {
+                return ConvertersFabric.Instance.GetDirectThreadConverter(inboxThreadResponse).Convert();
             }
         }
 
@@ -958,33 +996,44 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaDirectInboxContainer" />
         /// </returns>
-        public async Task<IResult<InstaDirectInboxContainer>> GetPendingDirectAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaDirectInboxContainer>> GetPendingDirectAsync(PaginationParameters paginationParameters) =>
+            await GetPendingDirectAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get direct pending inbox threads for current user asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaDirectInboxContainer" />
+        /// </returns>
+        public async Task<IResult<InstaDirectInboxContainer>> GetPendingDirectAsync(PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaDirectInboxContainerResponse inboxResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaDirectInboxContainer Convert(InstaDirectInboxContainerResponse inboxContainerResponse)
-                {
-                    return ConvertersFabric.Instance.GetDirectInboxConverter(inboxContainerResponse).Convert();
-                }
-
-                var inbox = await GetPendingDirect(paginationParameters.NextMaxId);
+                var inbox = await GetPendingDirect(paginationParameters.NextMaxId).ConfigureAwait(false);
                 if (!inbox.Succeeded)
                     return Result.Fail(inbox.Info, default(InstaDirectInboxContainer));
-                var inboxResponse = inbox.Value;
+                inboxResponse = inbox.Value;
                 paginationParameters.NextMaxId = inboxResponse.Inbox.OldestCursor;
                 var pagesLoaded = 1;
                 while (inboxResponse.Inbox.HasOlder
                       && !string.IsNullOrEmpty(inboxResponse.Inbox.OldestCursor)
                       && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
-                    var nextInbox = await GetPendingDirect(inboxResponse.Inbox.OldestCursor);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var nextInbox = await GetPendingDirect(inboxResponse.Inbox.OldestCursor).ConfigureAwait(false);
 
                     if (!nextInbox.Succeeded)
-                        return Result.Fail(nextInbox.Info, Convert(nextInbox.Value));
+                        return Result.Fail(nextInbox.Info, GetOrDefault());
 
                     inboxResponse.Inbox.OldestCursor = paginationParameters.NextMaxId = nextInbox.Value.Inbox.OldestCursor;
                     inboxResponse.Inbox.HasOlder = nextInbox.Value.Inbox.HasOlder;
@@ -994,17 +1043,24 @@ namespace InstagramApiSharp.API.Processors
                     inboxResponse.Inbox.UnseenCountTs = nextInbox.Value.Inbox.UnseenCountTs;
                     pagesLoaded++;
                 }
-                return Result.Success(ConvertersFabric.Instance.GetDirectInboxConverter(inboxResponse).Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaDirectInboxContainer), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaDirectInboxContainer>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaDirectInboxContainer GetOrDefault() => inboxResponse != null ? Convert(inboxResponse) : default(InstaDirectInboxContainer);
+
+            InstaDirectInboxContainer Convert(InstaDirectInboxContainerResponse inboxContainerResponse)
+            {
+                return ConvertersFabric.Instance.GetDirectInboxConverter(inboxContainerResponse).Convert();
             }
         }
 
