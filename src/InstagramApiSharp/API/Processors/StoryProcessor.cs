@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
@@ -747,18 +748,26 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="forceRefresh">Force to use pull refresh</param>
-        public async Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(PaginationParameters paginationParameters, bool forceRefresh = false)
+        public async Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(PaginationParameters paginationParameters,
+            bool forceRefresh = false) =>
+            await GetStoryFeedWithPostMethodAsync(paginationParameters, CancellationToken.None, forceRefresh).ConfigureAwait(forceRefresh);
+
+        /// <summary>
+        ///     Get user story feed with POST method requests and Pagination support (new API)
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="forceRefresh">Force to use pull refresh</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken, bool forceRefresh = false)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaStoryFeedResponse storyFeedResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaStoryFeed Convert(InstaStoryFeedResponse instaStoryFeedResponse)
-                {
-                    return ConvertersFabric.Instance.GetStoryFeedConverter(instaStoryFeedResponse).Convert();
-                }
                 bool HasMore(PaginationParameters pagination) => !string.IsNullOrEmpty(pagination.SessionId) &&
                     pagination.NextIdsToFetch?.Count > 0 && int.TryParse(pagination.NextMaxId, out int count) && count <= pagination.NextIdsToFetch?.Count;
 
@@ -772,19 +781,29 @@ namespace InstagramApiSharp.API.Processors
                 }
                 if (feedResponse.Value == null)
                     Result.Fail(feedResponse.Info, default(InstaStoryFeed));
+                
+                storyFeedResponse = feedResponse.Value;
+
                 while (HasMore(paginationParameters)
                     && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var moreMedias = await GetStoryFeedWithPostMethod(paginationParameters, false);
                     if (!moreMedias.Succeeded)
                     {
-                        if (feedResponse.Value.Tray?.Count > 0)
-                            return Result.Success(Convert(feedResponse.Value));
+                        if (storyFeedResponse.Tray?.Count > 0)
+                            return Result.Success(Convert(storyFeedResponse));
                         else
-                            return Result.Fail(moreMedias.Info, Convert(feedResponse.Value));
+                            return Result.Fail(moreMedias.Info, Convert(storyFeedResponse));
                     }
-                    if (feedResponse.Value.Tray?.Count > 0)
-                        feedResponse.Value.Tray.AddRange(feedResponse.Value.Tray);
+                    if (moreMedias.Value.Tray?.Count > 0)
+                    {
+                        if (storyFeedResponse.Tray == null)
+                            storyFeedResponse.Tray = new List<JToken>();
+
+                        storyFeedResponse.Tray.AddRange(moreMedias.Value.Tray);
+                    }
                     //feedResponse.Value.MoreAvailable = moreMedias.Value.MoreAvailable;
                     //feedResponse.Value.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
                     //feedResponse.Value.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
@@ -794,17 +813,24 @@ namespace InstagramApiSharp.API.Processors
                     paginationParameters.PagesLoaded++;
                 }
 
-                return Result.Success(Convert(feedResponse.Value));
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaStoryFeed), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaStoryFeed>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaStoryFeed GetOrDefault() => storyFeedResponse != null ? Convert(storyFeedResponse) : default(InstaStoryFeed);
+
+            InstaStoryFeed Convert(InstaStoryFeedResponse instaStoryFeedResponse)
+            {
+                return ConvertersFabric.Instance.GetStoryFeedConverter(instaStoryFeedResponse).Convert();
             }
         }
 

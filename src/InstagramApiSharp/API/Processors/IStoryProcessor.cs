@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
@@ -148,6 +149,16 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="forceRefresh">Force to use pull refresh</param>
         Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(PaginationParameters paginationParameters, bool forceRefresh = false);
+
+        /// <summary>
+        ///     Get user story feed (stories from users followed by current user) with pagination.
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="forceRefresh">Force to use pull refresh</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken, bool forceRefresh = false);
+
         /// <summary>
         ///     Get story media viewers
         /// </summary>
