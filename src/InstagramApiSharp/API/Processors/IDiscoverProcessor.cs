@@ -10,6 +10,7 @@ using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Enums;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
@@ -35,6 +36,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="targetIdHashtagIdOrStoryId">Target id, hashtag id or story id</param>
         /// <param name="type">Type of suggestions</param>
         Task<IResult<bool>> DismissSuggestionAsync(string targetIdHashtagIdOrStoryId, string type = "tag");
+
         /// <summary>
         ///     Report an media in Explore page
         /// </summary>
@@ -42,19 +44,23 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaId">Media Identifier</param>
         /// <param name="exploreSourceToken">Explore source token (From <see cref="InstaMedia.ExploreSourceToken"/>)</param>
         Task<IResult<bool>> ExploreReportAsync(string userId, string mediaId, string exploreSourceToken);
+
         /// <summary>
         ///     Hide a search entity
         /// </summary>
         /// <param name="userId">User id/pk to hide</param>
         Task<IResult<bool>> HideSearchEntityAsync(long userId);
+
         /// <summary>
         ///     Get dynamic searches [supports hashtags and users]
         /// </summary>
         Task<IResult<InstaDynamicSearch>> GetDynamicSearchesAsync();
+
         /// <summary>
         ///     Get discover user chaining list 
         /// </summary>
         Task<IResult<InstaUserChainingList>> GetChainingUsersAsync();
+
         /// <summary>
         ///     Get discover user chaining list for specific user
         /// </summary>
@@ -81,13 +87,26 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="searchType">Search type(only blended and users works)</param>
         Task<IResult<InstaDiscoverSuggestedSearches>> GetSuggestedSearchesAsync(InstaDiscoverSearchType searchType =
             InstaDiscoverSearchType.Users);
+
         /// <summary>
         ///     Search user people
         /// </summary>
         /// <param name="query">Query to search</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="count">Count</param>
-        Task<IResult<InstaDiscoverSearchResult>> SearchPeopleAsync(string query, PaginationParameters paginationParameters, int count = 30);
+        Task<IResult<InstaDiscoverSearchResult>> SearchPeopleAsync(string query, 
+            PaginationParameters paginationParameters, int count = 30);
+
+        /// <summary>
+        ///     Search user people
+        /// </summary>
+        /// <param name="query">Text to search</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="count">Count</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaDiscoverSearchResult>> SearchPeopleAsync(string query,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken, int count = 30);
+
         #region Other functions
 
         /// <summary>
@@ -96,6 +115,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="instaContacts">Contact list</param>
         Task<IResult<InstaContactUserList>> SyncContactsAsync(params InstaContact[] instaContacts);
+
         /// <summary>
         ///     Sync your phone contact list to instagram
         ///     <para>Note:You can find your friends in instagram with this function</para>
