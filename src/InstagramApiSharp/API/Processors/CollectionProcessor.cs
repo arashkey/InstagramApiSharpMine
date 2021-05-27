@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
@@ -235,24 +236,33 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaCollectionItem" />
         /// </returns>
         public async Task<IResult<InstaCollectionItem>> GetSingleCollectionAsync(long collectionId,
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters) =>
+            await GetSingleCollectionAsync(collectionId, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get your collection for given collection id
+        /// </summary>
+        /// <param name="collectionId">Collection ID</param>
+        /// <param name="paginationParameters">Pagination parameters: next max id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaCollectionItem" />
+        /// </returns>
+        public async Task<IResult<InstaCollectionItem>> GetSingleCollectionAsync(long collectionId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaCollectionItemResponse collectionsListResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaCollectionItem Convert(InstaCollectionItemResponse instaCollectionItemResponse)
-                {
-                    return ConvertersFabric.Instance.GetCollectionConverter(instaCollectionItemResponse).Convert();
-                }
-
                 var collectionList = await GetSingleCollection(collectionId, paginationParameters);
                 if (!collectionList.Succeeded)
                     return Result.Fail(collectionList.Info, default(InstaCollectionItem));
                 
-                var collectionsListResponse = collectionList.Value;
+                collectionsListResponse = collectionList.Value;
                 paginationParameters.NextMaxId = collectionsListResponse.NextMaxId;
                 var pagesLoaded = 1;
 
@@ -260,6 +270,7 @@ namespace InstagramApiSharp.API.Processors
                     && !string.IsNullOrEmpty(collectionsListResponse.NextMaxId)
                     && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     var nextCollectionList = await GetSingleCollection(collectionId, paginationParameters);
 
                     if (!nextCollectionList.Succeeded)
@@ -273,21 +284,27 @@ namespace InstagramApiSharp.API.Processors
                     pagesLoaded++;
                 }
 
-
-                var converter = ConvertersFabric.Instance.GetCollectionConverter(collectionsListResponse);
-                return Result.Success(converter.Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaCollectionItem), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaCollectionItem>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaCollectionItem GetOrDefault() => collectionsListResponse != null ? Convert(collectionsListResponse) : default(InstaCollectionItem);
+
+            InstaCollectionItem Convert(InstaCollectionItemResponse instaCollectionItemResponse)
+            {
+                return ConvertersFabric.Instance.GetCollectionConverter(instaCollectionItemResponse).Convert();
             }
         }
+
         /// <summary>
         ///     Get your collections
         /// </summary>
@@ -295,25 +312,33 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaCollections" />
         /// </returns>
-        public async Task<IResult<InstaCollections>> GetCollectionsAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaCollections>> GetCollectionsAsync(PaginationParameters paginationParameters) =>
+            await GetCollectionsAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get your collections
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next max id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaCollections" />
+        /// </returns>
+        public async Task<IResult<InstaCollections>> GetCollectionsAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaCollectionsResponse collectionsResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
-
-                InstaCollections Convert(InstaCollectionsResponse instaCollectionsResponse)
-                {
-                    return ConvertersFabric.Instance.GetCollectionsConverter(instaCollectionsResponse).Convert();
-                }
 
                 var collections = await GetCollections(paginationParameters);
 
                 if (!collections.Succeeded)
                     return Result.Fail(collections.Info, default(InstaCollections));
 
-                var collectionsResponse = collections.Value;
+                collectionsResponse = collections.Value;
                 paginationParameters.NextMaxId = collectionsResponse.NextMaxId;
                 var pagesLoaded = 1;
 
@@ -321,6 +346,8 @@ namespace InstagramApiSharp.API.Processors
                     && !string.IsNullOrEmpty(collectionsResponse.NextMaxId)
                     && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextCollection = await GetCollections(paginationParameters);
 
                     if (!nextCollection.Succeeded)
@@ -341,12 +368,19 @@ namespace InstagramApiSharp.API.Processors
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaCollections), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaCollections>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaCollections GetOrDefault() => collectionsResponse != null ? Convert(collectionsResponse) : default(InstaCollections);
+
+            InstaCollections Convert(InstaCollectionsResponse instaCollectionsResponse)
+            {
+                return ConvertersFabric.Instance.GetCollectionsConverter(instaCollectionsResponse).Convert();
             }
         }
 

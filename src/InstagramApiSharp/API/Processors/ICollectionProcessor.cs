@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 
@@ -53,6 +54,18 @@ namespace InstagramApiSharp.API.Processors
         /// </returns>
         Task<IResult<InstaCollectionItem>> GetSingleCollectionAsync(long collectionId,
             PaginationParameters paginationParameters);
+        
+        /// <summary>
+        ///     Get your collection for given collection id
+        /// </summary>
+        /// <param name="collectionId">Collection ID</param>
+        /// <param name="paginationParameters">Pagination parameters: next max id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaCollectionItem" />
+        /// </returns>
+        Task<IResult<InstaCollectionItem>> GetSingleCollectionAsync(long collectionId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Get your collections
@@ -62,5 +75,16 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaCollections" />
         /// </returns>
         Task<IResult<InstaCollections>> GetCollectionsAsync(PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Get your collections
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next max id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaCollections" />
+        /// </returns>
+        Task<IResult<InstaCollections>> GetCollectionsAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
     }
 }
