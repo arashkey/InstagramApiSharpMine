@@ -23,6 +23,7 @@ using InstagramApiSharp.Classes.Models;
 using System.Net;
 using InstagramApiSharp.Converters.Json;
 using InstagramApiSharp.Enums;
+using System.Threading;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -73,6 +74,25 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
+        ///     Get all user shoppable media by username
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetUserShoppableMediaAsync(string username,
+             PaginationParameters paginationParameters, CancellationToken cancellationToken)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            var user = await _instaApi.UserProcessor.GetUserAsync(username);
+            if (!user.Succeeded)
+                return Result.Fail<InstaMediaList>("Unable to get user to load shoppable media");
+            return await GetUserShoppableMedia(user.Value.Pk, paginationParameters, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
         ///     Get all user shoppable media by user id (pk)
         /// </summary>
         /// <param name="userId">User id (pk)</param>
@@ -83,7 +103,22 @@ namespace InstagramApiSharp.API.Processors
         public async Task<IResult<InstaMediaList>> GetUserShoppableMediaByIdAsync(long userId,
             PaginationParameters paginationParameters)
         {
-            return await GetUserShoppableMedia(userId, paginationParameters);
+            return await GetUserShoppableMedia(userId, paginationParameters).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        ///     Get all user shoppable media by user id (pk)
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetUserShoppableMediaByIdAsync(long userId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
+        {
+            return await GetUserShoppableMedia(userId, paginationParameters, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -170,7 +205,8 @@ namespace InstagramApiSharp.API.Processors
 
 
         private async Task<IResult<InstaMediaList>> GetUserShoppableMedia(long userId,
-                                            PaginationParameters paginationParameters)
+                                            PaginationParameters paginationParameters, 
+                                            CancellationToken cancellationToken = default(CancellationToken))
         {
             var mediaList = new InstaMediaList();
             try
@@ -200,6 +236,8 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextMedia = await GetShoppableMedia(userId, paginationParameters);
                     if (!nextMedia.Succeeded)
                         return Result.Fail(nextMedia.Info, mediaList);
@@ -217,7 +255,7 @@ namespace InstagramApiSharp.API.Processors
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaMediaList), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, mediaList, ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
