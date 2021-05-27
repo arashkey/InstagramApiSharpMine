@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
@@ -30,12 +31,35 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaMediaList>> GetHashtagChannelVideosAsync(string channelId, string firstMediaId, PaginationParameters paginationParameters);
 
         /// <summary>
+        ///     Get medias for hashtag channel
+        /// </summary>
+        /// <param name="channelId">Channel id</param>
+        /// <param name="firstMediaId">First media id</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetHashtagChannelVideosAsync(string channelId, string firstMediaId, 
+            PaginationParameters paginationParameters, CancellationToken cancellationToken);
+
+        /// <summary>
         ///     Get hashtag sections
         /// </summary>
         /// <param name="tagname">Tag name</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="hashtagSectionType">Section type</param>
         Task<IResult<InstaSectionMedia>> GetHashtagsSectionsAsync(string tagname, PaginationParameters paginationParameters, InstaHashtagSectionType hashtagSectionType = InstaHashtagSectionType.All);
+
+        /// <summary>
+        ///     Get hashtag sections
+        /// </summary>
+        /// <param name="tagname">Tag name</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="hashtagSectionType">Section type</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaSectionMedia>> GetHashtagsSectionsAsync(string tagname, PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken, InstaHashtagSectionType hashtagSectionType = InstaHashtagSectionType.All);
 
         /// <summary>
         ///     Get Hashtags posts
@@ -79,6 +103,15 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaSectionMedia>> GetRecentHashtagMediaListAsync(string tagname, PaginationParameters paginationParameters);
 
         /// <summary>
+        ///     Get recent hashtag media list
+        /// </summary>
+        /// <param name="tagname">Tag name</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaSectionMedia>> GetRecentHashtagMediaListAsync(string tagname, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
+
+        /// <summary>
         ///     Get suggested hashtags
         /// </summary>
         /// <returns>
@@ -93,6 +126,14 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         Task<IResult<InstaSectionMedia>> GetTopHashtagMediaListAsync(string tagname, PaginationParameters paginationParameters);
 
+        /// <summary>
+        ///     Get top (ranked) hashtag media list
+        /// </summary>
+        /// <param name="tagname">Tag name</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaSectionMedia>> GetTopHashtagMediaListAsync(string tagname, PaginationParameters paginationParameters, CancellationToken cancellationToken);
+        
         /// <summary>
         ///     Searches for specific hashtag by search query.
         /// </summary>

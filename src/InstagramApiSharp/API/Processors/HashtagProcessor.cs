@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
@@ -104,9 +105,23 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaMediaList" />
         /// </returns>
         public async Task<IResult<InstaMediaList>> GetHashtagChannelVideosAsync(string channelId, string firstMediaId,
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters) =>
+            await GetHashtagChannelVideosAsync(channelId, firstMediaId, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get medias for hashtag channel
+        /// </summary>
+        /// <param name="channelId">Channel id</param>
+        /// <param name="firstMediaId">First media id</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetHashtagChannelVideosAsync(string channelId, string firstMediaId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
-            return await _instaApi.HelperProcessor.GetChannelVideosAsync(UriCreator.GetHashtagChannelVideosUri(channelId), firstMediaId, paginationParameters);
+            return await _instaApi.HelperProcessor.GetChannelVideosAsync(UriCreator.GetHashtagChannelVideosUri(channelId), firstMediaId, paginationParameters, cancellationToken);
         }
         /// <summary>
         ///     Get hashtag sections
@@ -114,65 +129,85 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="tagname">Tag name</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="hashtagSectionType">Section type</param>
-        public async Task<IResult<InstaSectionMedia>> GetHashtagsSectionsAsync(string tagname, PaginationParameters paginationParameters, InstaHashtagSectionType hashtagSectionType = InstaHashtagSectionType.All)
+        public async Task<IResult<InstaSectionMedia>> GetHashtagsSectionsAsync(string tagname,
+            PaginationParameters paginationParameters, InstaHashtagSectionType hashtagSectionType = InstaHashtagSectionType.All) =>
+            await GetHashtagsSectionsAsync(tagname, paginationParameters, CancellationToken.None, hashtagSectionType).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get hashtag sections
+        /// </summary>
+        /// <param name="tagname">Tag name</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <param name="hashtagSectionType">Section type</param>
+        public async Task<IResult<InstaSectionMedia>> GetHashtagsSectionsAsync(string tagname, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken, InstaHashtagSectionType hashtagSectionType = InstaHashtagSectionType.All)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaSectionMediaListResponse mediaResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaSectionMedia Convert(InstaSectionMediaListResponse hashtagMediaListResponse)
-                {
-                    return ConvertersFabric.Instance.GetHashtagMediaListConverter(hashtagMediaListResponse).Convert();
-                }
-                var mediaResponse = await GetHashtagSection(tagname,
+                var mediaResult = await GetHashtagSection(tagname,
                    hashtagSectionType,
-                    paginationParameters.NextMaxId, paginationParameters.NextPage);
-                if (!mediaResponse.Succeeded)
+                    paginationParameters.NextMaxId, paginationParameters.NextPage).ConfigureAwait(false);
+                mediaResponse = mediaResult.Value;
+                if (!mediaResult.Succeeded)
                 {
-                    if (mediaResponse.Value != null)
-                        Result.Fail(mediaResponse.Info, Convert(mediaResponse.Value));
+                    if (mediaResult.Value != null)
+                        Result.Fail(mediaResult.Info, GetOrDefault());
                     else
-                        Result.Fail(mediaResponse.Info, default(InstaSectionMedia));
+                        Result.Fail(mediaResult.Info, default(InstaSectionMedia));
                 }
-                paginationParameters.NextMediaIds = mediaResponse.Value.NextMediaIds;
-                paginationParameters.NextPage = mediaResponse.Value.NextPage;
-                paginationParameters.NextMaxId = mediaResponse.Value.NextMaxId;
-                while (mediaResponse.Value.MoreAvailable
+                paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
+                paginationParameters.NextPage = mediaResponse.NextPage;
+                paginationParameters.NextMaxId = mediaResponse.NextMaxId;
+                while (mediaResponse.MoreAvailable
                     && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                     && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var moreMedias = await GetHashtagSection(tagname, hashtagSectionType,
-                        paginationParameters.NextMaxId, mediaResponse.Value.NextPage);
+                        paginationParameters.NextMaxId, mediaResponse.NextPage).ConfigureAwait(false);
                     if (!moreMedias.Succeeded)
                     {
-                        if (mediaResponse.Value.Sections != null && mediaResponse.Value.Sections.Any())
-                            return Result.Success(Convert(mediaResponse.Value));
+                        if (mediaResponse.Sections != null && mediaResponse.Sections.Any())
+                            return Result.Success(GetOrDefault());
                         else
-                            return Result.Fail(moreMedias.Info, Convert(mediaResponse.Value));
+                            return Result.Fail(moreMedias.Info, GetOrDefault());
                     }
 
-                    mediaResponse.Value.MoreAvailable = moreMedias.Value.MoreAvailable;
-                    mediaResponse.Value.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
-                    mediaResponse.Value.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
-                    mediaResponse.Value.NextMediaIds = paginationParameters.NextMediaIds = moreMedias.Value.NextMediaIds;
-                    mediaResponse.Value.NextPage = paginationParameters.NextPage = moreMedias.Value.NextPage;
-                    mediaResponse.Value.Sections.AddRange(moreMedias.Value.Sections);
+                    mediaResponse.MoreAvailable = moreMedias.Value.MoreAvailable;
+                    mediaResponse.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
+                    mediaResponse.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
+                    mediaResponse.NextMediaIds = paginationParameters.NextMediaIds = moreMedias.Value.NextMediaIds;
+                    mediaResponse.NextPage = paginationParameters.NextPage = moreMedias.Value.NextPage;
+                    mediaResponse.Sections.AddRange(moreMedias.Value.Sections);
                     paginationParameters.PagesLoaded++;
                 }
 
-                return Result.Success(ConvertersFabric.Instance.GetHashtagMediaListConverter(mediaResponse.Value).Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaSectionMedia), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaSectionMedia>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaSectionMedia GetOrDefault() => mediaResponse != null ? Convert(mediaResponse) : default(InstaSectionMedia);
+
+            InstaSectionMedia Convert(InstaSectionMediaListResponse hashtagMediaListResponse)
+            {
+                return ConvertersFabric.Instance.GetHashtagMediaListConverter(hashtagMediaListResponse).Convert();
             }
         }
 
@@ -363,65 +398,83 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="tagname">Tag name</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         public async Task<IResult<InstaSectionMedia>> GetRecentHashtagMediaListAsync(string tagname,
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters) =>
+            await GetRecentHashtagMediaListAsync(tagname, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get recent hashtag media list
+        /// </summary>
+        /// <param name="tagname">Tag name</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaSectionMedia>> GetRecentHashtagMediaListAsync(string tagname,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaSectionMediaListResponse mediaResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaSectionMedia Convert(InstaSectionMediaListResponse hashtagMediaListResponse)
-                {
-                    return ConvertersFabric.Instance.GetHashtagMediaListConverter(hashtagMediaListResponse).Convert();
-                }
-                var mediaResponse = await GetHashtagRecentMedia(tagname,
+                var mediaResult = await GetHashtagRecentMedia(tagname,
                     _deviceInfo.DeviceGuid.ToString(),
                     paginationParameters.NextMaxId, paginationParameters.NextPage, paginationParameters.NextMediaIds);
-                if (!mediaResponse.Succeeded)
+                mediaResponse = mediaResult.Value;
+                if (!mediaResult.Succeeded)
                 {
-                    if (mediaResponse.Value != null)
-                        Result.Fail(mediaResponse.Info, Convert(mediaResponse.Value));
+                    if (mediaResult.Value != null)
+                        Result.Fail(mediaResult.Info, GetOrDefault());
                     else
-                        Result.Fail(mediaResponse.Info, default(InstaSectionMedia));
+                        Result.Fail(mediaResult.Info, default(InstaSectionMedia));
                 }
-                paginationParameters.NextMediaIds = mediaResponse.Value.NextMediaIds;
-                paginationParameters.NextPage = mediaResponse.Value.NextPage;
-                paginationParameters.NextMaxId = mediaResponse.Value.NextMaxId;
-                while (mediaResponse.Value.MoreAvailable
+                paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
+                paginationParameters.NextPage = mediaResponse.NextPage;
+                paginationParameters.NextMaxId = mediaResponse.NextMaxId;
+                while (mediaResponse.MoreAvailable
                     && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                     && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var moreMedias = await GetHashtagRecentMedia(tagname, _deviceInfo.DeviceGuid.ToString(),
-                        paginationParameters.NextMaxId, mediaResponse.Value.NextPage, mediaResponse.Value.NextMediaIds);
+                        paginationParameters.NextMaxId, mediaResponse.NextPage, mediaResponse.NextMediaIds);
                     if (!moreMedias.Succeeded)
                     {
-                        if (mediaResponse.Value.Sections != null && mediaResponse.Value.Sections.Any())
-                            return Result.Success(Convert(mediaResponse.Value));
+                        if (mediaResponse.Sections != null && mediaResponse.Sections.Any())
+                            return Result.Success(GetOrDefault());
                         else
-                            return Result.Fail(moreMedias.Info, Convert(mediaResponse.Value));
+                            return Result.Fail(moreMedias.Info, GetOrDefault());
                     }
 
-                    mediaResponse.Value.MoreAvailable = moreMedias.Value.MoreAvailable;
-                    mediaResponse.Value.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
-                    mediaResponse.Value.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
-                    mediaResponse.Value.NextMediaIds = paginationParameters.NextMediaIds = moreMedias.Value.NextMediaIds;
-                    mediaResponse.Value.NextPage = paginationParameters.NextPage = moreMedias.Value.NextPage;
-                    mediaResponse.Value.Sections.AddRange(moreMedias.Value.Sections);
+                    mediaResponse.MoreAvailable = moreMedias.Value.MoreAvailable;
+                    mediaResponse.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
+                    mediaResponse.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
+                    mediaResponse.NextMediaIds = paginationParameters.NextMediaIds = moreMedias.Value.NextMediaIds;
+                    mediaResponse.NextPage = paginationParameters.NextPage = moreMedias.Value.NextPage;
+                    mediaResponse.Sections.AddRange(moreMedias.Value.Sections);
                     paginationParameters.PagesLoaded++;
                 }
 
-                return Result.Success(ConvertersFabric.Instance.GetHashtagMediaListConverter(mediaResponse.Value).Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaSectionMedia), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaSectionMedia>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaSectionMedia GetOrDefault() => mediaResponse != null ? Convert(mediaResponse) : default(InstaSectionMedia);
+
+            InstaSectionMedia Convert(InstaSectionMediaListResponse hashtagMediaListResponse)
+            {
+                return ConvertersFabric.Instance.GetHashtagMediaListConverter(hashtagMediaListResponse).Convert();
             }
         }
 
@@ -469,66 +522,82 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="tagname">Tag name</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         public async Task<IResult<InstaSectionMedia>> GetTopHashtagMediaListAsync(string tagname,
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters) =>
+            await GetTopHashtagMediaListAsync(tagname, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get top (ranked) hashtag media list
+        /// </summary>
+        /// <param name="tagname">Tag name</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaSectionMedia>> GetTopHashtagMediaListAsync(string tagname,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaSectionMediaListResponse mediaResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaSectionMedia Convert(InstaSectionMediaListResponse hashtagMediaListResponse)
-                {
-                    return ConvertersFabric.Instance.GetHashtagMediaListConverter(hashtagMediaListResponse).Convert();
-                }
-                var mediaResponse = await GetHashtagTopMedia(tagname,
+                var mediaResult = await GetHashtagTopMedia(tagname,
                     _deviceInfo.DeviceGuid.ToString(),
-                    paginationParameters.NextMaxId, paginationParameters.NextPage, paginationParameters.NextMediaIds);
-
-                if (!mediaResponse.Succeeded)
+                    paginationParameters.NextMaxId, paginationParameters.NextPage, paginationParameters.NextMediaIds).ConfigureAwait(false);
+                mediaResponse = mediaResult.Value;
+                if (!mediaResult.Succeeded)
                 {
-                    if (mediaResponse.Value != null)
-                        Result.Fail(mediaResponse.Info, Convert(mediaResponse.Value));
+                    if (mediaResult.Value != null)
+                        Result.Fail(mediaResult.Info, GetOrDefault());
                     else
-                        Result.Fail(mediaResponse.Info, default(InstaSectionMedia));
+                        Result.Fail(mediaResult.Info, default(InstaSectionMedia));
                 }
-                paginationParameters.NextMediaIds = mediaResponse.Value.NextMediaIds;
-                paginationParameters.NextPage = mediaResponse.Value.NextPage;
-                paginationParameters.NextMaxId = mediaResponse.Value.NextMaxId;
-                while (mediaResponse.Value.MoreAvailable
+                paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
+                paginationParameters.NextPage = mediaResponse.NextPage;
+                paginationParameters.NextMaxId = mediaResponse.NextMaxId;
+                while (mediaResponse.MoreAvailable
                     && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                     && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var moreMedias = await GetHashtagTopMedia(tagname, _deviceInfo.DeviceGuid.ToString(),
-                        paginationParameters.NextMaxId, mediaResponse.Value.NextPage, mediaResponse.Value.NextMediaIds);
+                        paginationParameters.NextMaxId, mediaResponse.NextPage, mediaResponse.NextMediaIds).ConfigureAwait(false);
                     if (!moreMedias.Succeeded)
                     {
-                        if (mediaResponse.Value.Sections != null && mediaResponse.Value.Sections.Any())
-                            return Result.Success(Convert(mediaResponse.Value));
+                        if (mediaResponse.Sections != null && mediaResponse.Sections.Any())
+                            return Result.Success(GetOrDefault());
                         else
-                            return Result.Fail(moreMedias.Info, Convert(mediaResponse.Value));
+                            return Result.Fail(moreMedias.Info, GetOrDefault());
                     }
 
-                    mediaResponse.Value.MoreAvailable = moreMedias.Value.MoreAvailable;
-                    mediaResponse.Value.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
-                    mediaResponse.Value.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
-                    mediaResponse.Value.NextMediaIds = paginationParameters.NextMediaIds = moreMedias.Value.NextMediaIds;
-                    mediaResponse.Value.NextPage = paginationParameters.NextPage = moreMedias.Value.NextPage;
-                    mediaResponse.Value.Sections.AddRange(moreMedias.Value.Sections);
+                    mediaResponse.MoreAvailable = moreMedias.Value.MoreAvailable;
+                    mediaResponse.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
+                    mediaResponse.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
+                    mediaResponse.NextMediaIds = paginationParameters.NextMediaIds = moreMedias.Value.NextMediaIds;
+                    mediaResponse.NextPage = paginationParameters.NextPage = moreMedias.Value.NextPage;
+                    mediaResponse.Sections.AddRange(moreMedias.Value.Sections);
                     paginationParameters.PagesLoaded++;
                 }
 
-                return Result.Success(ConvertersFabric.Instance.GetHashtagMediaListConverter(mediaResponse.Value).Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaSectionMedia), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaSectionMedia>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaSectionMedia GetOrDefault() => mediaResponse != null ? Convert(mediaResponse) : default(InstaSectionMedia);
+
+            InstaSectionMedia Convert(InstaSectionMediaListResponse hashtagMediaListResponse)
+            {
+                return ConvertersFabric.Instance.GetHashtagMediaListConverter(hashtagMediaListResponse).Convert();
             }
         }
 

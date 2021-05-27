@@ -24,6 +24,7 @@ using InstagramApiSharp.Converters.Json;
 using InstagramApiSharp.Enums;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -2589,7 +2590,7 @@ namespace InstagramApiSharp.API.Processors
 
 
         public async Task<IResult<InstaMediaList>> GetChannelVideosAsync(Uri instaUri, string firstMediaId,
-                                        PaginationParameters paginationParameters)
+                                        PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             var mediaList = new InstaMediaList();
             try
@@ -2602,7 +2603,7 @@ namespace InstagramApiSharp.API.Processors
                     return ConvertersFabric.Instance.GetMediaListConverter(mediaListResponse).Convert();
                 }
 
-                var mediaResult = await GetHashtagChannelVideos(instaUri, paginationParameters, firstMediaId);
+                var mediaResult = await GetHashtagChannelVideos(instaUri, paginationParameters, firstMediaId).ConfigureAwait(false);
                 if (!mediaResult.Succeeded)
                 {
                     if (mediaResult.Value != null)
@@ -2622,8 +2623,9 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                    var nextMedia = await GetHashtagChannelVideos(instaUri, paginationParameters, firstMediaId);
+                    var nextMedia = await GetHashtagChannelVideos(instaUri, paginationParameters, firstMediaId).ConfigureAwait(false);
                     if (!nextMedia.Succeeded)
                         return Result.Fail(nextMedia.Info, mediaList);
                     if (nextMedia.Value.Medias?.Count > 0)
@@ -2642,7 +2644,7 @@ namespace InstagramApiSharp.API.Processors
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaMediaList), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, mediaList, ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
