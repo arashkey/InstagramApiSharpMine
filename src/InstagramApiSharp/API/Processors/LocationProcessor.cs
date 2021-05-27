@@ -14,6 +14,7 @@ using InstagramApiSharp.Logger;
 using InstagramApiSharp.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -122,10 +123,19 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="locationId">Location identifier (location pk, external id, facebook id)</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
-        public async Task<IResult<InstaSectionMedia>> GetRecentLocationFeedsAsync(long locationId, PaginationParameters paginationParameters)
-        {
-            return await GetSectionAsync(locationId, paginationParameters, InstaSectionType.Recent);
-        }
+        public async Task<IResult<InstaSectionMedia>> GetRecentLocationFeedsAsync(long locationId, PaginationParameters paginationParameters) =>
+            await GetRecentLocationFeedsAsync(locationId, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get recent location media feeds.
+        ///     <para>Important note: Be careful of using this function, because it's an POST request</para>
+        /// </summary>
+        /// <param name="locationId">Location identifier (location pk, external id, facebook id)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaSectionMedia>> GetRecentLocationFeedsAsync(long locationId, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken) =>
+            await GetSectionAsync(locationId, paginationParameters, InstaSectionType.Recent, cancellationToken).ConfigureAwait(false);
 
         /// <summary>
         ///     Get top (ranked) location media feeds.
@@ -133,10 +143,19 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="locationId">Location identifier (location pk, external id, facebook id)</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
-        public async Task<IResult<InstaSectionMedia>> GetTopLocationFeedsAsync(long locationId, PaginationParameters paginationParameters)
-        {
-            return await GetSectionAsync(locationId, paginationParameters, InstaSectionType.Ranked);
-        }
+        public async Task<IResult<InstaSectionMedia>> GetTopLocationFeedsAsync(long locationId, PaginationParameters paginationParameters) =>
+            await GetTopLocationFeedsAsync(locationId, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get top (ranked) location media feeds.
+        ///     <para>Important note: Be careful of using this function, because it's an POST request</para>
+        /// </summary>
+        /// <param name="locationId">Location identifier (location pk, external id, facebook id)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaSectionMedia>> GetTopLocationFeedsAsync(long locationId, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken) =>
+            await GetSectionAsync(locationId, paginationParameters, InstaSectionType.Ranked, cancellationToken).ConfigureAwait(false);
 
         /// <summary>
         ///     Searches for specific location by provided geo-data or search query.
@@ -249,10 +268,24 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaPlaceList" />
         /// </returns>
-        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, PaginationParameters paginationParameters)
-        {
-            return await SearchPlacesAsync(latitude, longitude, null, paginationParameters);
-        }
+        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, PaginationParameters paginationParameters) =>
+            await SearchPlacesAsync(latitude, longitude, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Search places in facebook
+        ///     <para>Note: This works for non-facebook accounts too!</para>
+        /// </summary>
+        /// <param name="latitude">Latitude</param>
+        /// <param name="longitude">Longitude</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaPlaceList" />
+        /// </returns>
+        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, 
+            PaginationParameters paginationParameters,
+            CancellationToken cancellationToken) =>
+            await SearchPlacesAsync(latitude, longitude, null, paginationParameters, cancellationToken).ConfigureAwait(false);
 
         /// <summary>
         ///     Search places in facebook
@@ -265,23 +298,36 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaPlaceList" />
         /// </returns>
-        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, string query, PaginationParameters paginationParameters)
+        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, string query, PaginationParameters paginationParameters) =>
+            await SearchPlacesAsync(latitude, longitude, query, paginationParameters).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Search places in facebook
+        ///     <para>Note: This works for non-facebook accounts too!</para>
+        /// </summary>
+        /// <param name="latitude">Latitude</param>
+        /// <param name="longitude">Longitude</param>
+        /// <param name="query">Query to search (city, country or ...)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaPlaceList" />
+        /// </returns>
+        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, string query,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaPlaceListResponse placesResponse = null;
             try
             {
-                if(paginationParameters == null)
-                paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaPlaceList Convert(InstaPlaceListResponse placelistResponse)
-                {
-                    return ConvertersFabric.Instance.GetPlaceListConverter(placelistResponse).Convert();
-                }
-                var places = await SearchPlaces(latitude, longitude, query, paginationParameters);
+                var places = await SearchPlaces(latitude, longitude, query, paginationParameters).ConfigureAwait(false);
                 if (!places.Succeeded)
-                    return Result.Fail(places.Info, default(InstaPlaceList));
+                    return Result.Fail(places.Info, GetOrDefault());
 
-                var placesResponse = places.Value;
+                placesResponse = places.Value;
                 paginationParameters.NextMaxId = placesResponse.RankToken;
                 paginationParameters.ExcludeList = placesResponse.ExcludeList;
                 var pagesLoaded = 1;
@@ -290,10 +336,12 @@ namespace InstagramApiSharp.API.Processors
                       && !string.IsNullOrEmpty(placesResponse.RankToken)
                       && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
-                    var nextPlaces = await SearchPlaces(latitude, longitude, query, paginationParameters);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var nextPlaces = await SearchPlaces(latitude, longitude, query, paginationParameters).ConfigureAwait(false);
 
                     if (!nextPlaces.Succeeded)
-                        return Result.Fail(nextPlaces.Info, Convert(nextPlaces.Value));
+                        return Result.Fail(nextPlaces.Info, GetOrDefault());
 
                     placesResponse.RankToken = paginationParameters.NextMaxId = nextPlaces.Value.RankToken;
                     placesResponse.HasMore = nextPlaces.Value.HasMore;
@@ -303,17 +351,24 @@ namespace InstagramApiSharp.API.Processors
                     pagesLoaded++;
                 }
 
-                return Result.Success(ConvertersFabric.Instance.GetPlaceListConverter(placesResponse).Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaPlaceList), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaPlaceList>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaPlaceList GetOrDefault() => placesResponse != null ? Convert(placesResponse) : default(InstaPlaceList);
+
+            InstaPlaceList Convert(InstaPlaceListResponse placelistResponse)
+            {
+                return ConvertersFabric.Instance.GetPlaceListConverter(placelistResponse).Convert();
             }
         }
         /// <summary>
@@ -325,23 +380,34 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaPlaceList" />
         /// </returns>
-        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(string query, PaginationParameters paginationParameters)
+        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(string query, PaginationParameters paginationParameters) =>
+            await SearchPlacesAsync(query, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Search places in facebook
+        ///     <para>Note: This works for non-facebook accounts too!</para>
+        /// </summary>
+        /// <param name="query">Query to search (city, country or ...)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaPlaceList" />
+        /// </returns>
+        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(string query, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaPlaceListResponse placesResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaPlaceList Convert(InstaPlaceListResponse placelistResponse)
-                {
-                    return ConvertersFabric.Instance.GetPlaceListConverter(placelistResponse).Convert();
-                }
-                var places = await SearchPlaces(query, paginationParameters);
+                var places = await SearchPlaces(query, paginationParameters).ConfigureAwait(false);
                 if (!places.Succeeded)
-                    return Result.Fail(places.Info, default(InstaPlaceList));
+                    return Result.Fail(places.Info, GetOrDefault());
 
-                var placesResponse = places.Value;
+                placesResponse = places.Value;
                 paginationParameters.NextMaxId = placesResponse.RankToken;
                 paginationParameters.ExcludeList = placesResponse.ExcludeList;
                 var pagesLoaded = 1;
@@ -350,10 +416,12 @@ namespace InstagramApiSharp.API.Processors
                       && !string.IsNullOrEmpty(placesResponse.RankToken)
                       && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
-                    var nextPlaces = await SearchPlaces(query, paginationParameters);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var nextPlaces = await SearchPlaces(query, paginationParameters).ConfigureAwait(false);
 
                     if (!nextPlaces.Succeeded)
-                        return Result.Fail(nextPlaces.Info, Convert(nextPlaces.Value));
+                        return Result.Fail(nextPlaces.Info, GetOrDefault());
 
                     placesResponse.RankToken = paginationParameters.NextMaxId = nextPlaces.Value.RankToken;
                     placesResponse.HasMore = nextPlaces.Value.HasMore;
@@ -363,17 +431,24 @@ namespace InstagramApiSharp.API.Processors
                     pagesLoaded++;
                 }
 
-                return Result.Success(ConvertersFabric.Instance.GetPlaceListConverter(placesResponse).Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaPlaceList), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaPlaceList>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaPlaceList GetOrDefault() => placesResponse != null ? Convert(placesResponse) : default(InstaPlaceList);
+
+            InstaPlaceList Convert(InstaPlaceListResponse placelistResponse)
+            {
+                return ConvertersFabric.Instance.GetPlaceListConverter(placelistResponse).Convert();
             }
         }
 
@@ -422,71 +497,75 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaSectionMedia>> GetSectionAsync(long locationId,
-            PaginationParameters paginationParameters, InstaSectionType sectionType)
+            PaginationParameters paginationParameters, InstaSectionType sectionType, CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaSectionMediaListResponse mediaResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaSectionMedia Convert(InstaSectionMediaListResponse sectionMediaListResponse)
-                {
-                    return ConvertersFabric.Instance.GetHashtagMediaListConverter(sectionMediaListResponse).Convert();
-                }
-                var mediaResponse = await GetSectionMedia(sectionType, 
+                var mediaResult = await GetSectionMedia(sectionType, 
                     locationId,
                     paginationParameters.NextMaxId,
                     paginationParameters.NextPage, 
-                    paginationParameters.NextMediaIds);
+                    paginationParameters.NextMediaIds).ConfigureAwait(false);
 
-                if (!mediaResponse.Succeeded)
-                {
-                    if (mediaResponse.Value != null)
-                        Result.Fail(mediaResponse.Info, Convert(mediaResponse.Value));
-                    else
-                        Result.Fail(mediaResponse.Info, default(InstaSectionMedia));
-                }
-                paginationParameters.NextMediaIds = mediaResponse.Value.NextMediaIds;
-                paginationParameters.NextPage = mediaResponse.Value.NextPage;
-                paginationParameters.NextMaxId = mediaResponse.Value.NextMaxId;
-                while (mediaResponse.Value.MoreAvailable
+                mediaResponse = mediaResult.Value;
+
+                if (!mediaResult.Succeeded)
+                    Result.Fail(mediaResult.Info, GetOrDefault());
+
+                paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
+                paginationParameters.NextPage = mediaResponse.NextPage;
+                paginationParameters.NextMaxId = mediaResponse.NextMaxId;
+                while (mediaResponse.MoreAvailable
                     && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                     && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var moreMedias = await GetSectionMedia(sectionType,
                         locationId,
                         paginationParameters.NextMaxId, 
-                        mediaResponse.Value.NextPage, 
-                        mediaResponse.Value.NextMediaIds);
+                        mediaResponse.NextPage, 
+                        mediaResponse.NextMediaIds).ConfigureAwait(false);
                     if (!moreMedias.Succeeded)
                     {
-                        if (mediaResponse.Value.Sections?.Count > 0)
-                            return Result.Success(Convert(mediaResponse.Value));
+                        if (mediaResponse.Sections?.Count > 0)
+                            return Result.Success(GetOrDefault());
                         else
-                            return Result.Fail(moreMedias.Info, Convert(mediaResponse.Value));
+                            return Result.Fail(moreMedias.Info, GetOrDefault());
                     }
 
-                    mediaResponse.Value.MoreAvailable = moreMedias.Value.MoreAvailable;
-                    mediaResponse.Value.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
-                    mediaResponse.Value.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
-                    mediaResponse.Value.NextMediaIds = paginationParameters.NextMediaIds = moreMedias.Value.NextMediaIds;
-                    mediaResponse.Value.NextPage = paginationParameters.NextPage = moreMedias.Value.NextPage;
-                    mediaResponse.Value.Sections.AddRange(moreMedias.Value.Sections);
+                    mediaResponse.MoreAvailable = moreMedias.Value.MoreAvailable;
+                    mediaResponse.NextMaxId = paginationParameters.NextMaxId = moreMedias.Value.NextMaxId;
+                    mediaResponse.AutoLoadMoreEnabled = moreMedias.Value.AutoLoadMoreEnabled;
+                    mediaResponse.NextMediaIds = paginationParameters.NextMediaIds = moreMedias.Value.NextMediaIds;
+                    mediaResponse.NextPage = paginationParameters.NextPage = moreMedias.Value.NextPage;
+                    mediaResponse.Sections.AddRange(moreMedias.Value.Sections);
                     paginationParameters.PagesLoaded++;
                 }
 
-                return Result.Success(ConvertersFabric.Instance.GetHashtagMediaListConverter(mediaResponse.Value).Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaSectionMedia), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaSectionMedia>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaSectionMedia GetOrDefault() => mediaResponse != null ? Convert(mediaResponse) : default(InstaSectionMedia);
+
+            InstaSectionMedia Convert(InstaSectionMediaListResponse hashtagMediaListResponse)
+            {
+                return ConvertersFabric.Instance.GetHashtagMediaListConverter(hashtagMediaListResponse).Convert();
             }
         }
 

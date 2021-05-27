@@ -156,12 +156,8 @@ namespace InstagramApiSharp.API.Processors
                     paginationParameters.NextMaxId, paginationParameters.NextPage).ConfigureAwait(false);
                 mediaResponse = mediaResult.Value;
                 if (!mediaResult.Succeeded)
-                {
-                    if (mediaResult.Value != null)
-                        Result.Fail(mediaResult.Info, GetOrDefault());
-                    else
-                        Result.Fail(mediaResult.Info, default(InstaSectionMedia));
-                }
+                    Result.Fail(mediaResult.Info, GetOrDefault());
+
                 paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
                 paginationParameters.NextPage = mediaResponse.NextPage;
                 paginationParameters.NextMaxId = mediaResponse.NextMaxId;
@@ -423,12 +419,8 @@ namespace InstagramApiSharp.API.Processors
                     paginationParameters.NextMaxId, paginationParameters.NextPage, paginationParameters.NextMediaIds);
                 mediaResponse = mediaResult.Value;
                 if (!mediaResult.Succeeded)
-                {
-                    if (mediaResult.Value != null)
-                        Result.Fail(mediaResult.Info, GetOrDefault());
-                    else
-                        Result.Fail(mediaResult.Info, default(InstaSectionMedia));
-                }
+                    Result.Fail(mediaResult.Info, GetOrDefault());
+
                 paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
                 paginationParameters.NextPage = mediaResponse.NextPage;
                 paginationParameters.NextMaxId = mediaResponse.NextMaxId;
@@ -546,12 +538,8 @@ namespace InstagramApiSharp.API.Processors
                     paginationParameters.NextMaxId, paginationParameters.NextPage, paginationParameters.NextMediaIds).ConfigureAwait(false);
                 mediaResponse = mediaResult.Value;
                 if (!mediaResult.Succeeded)
-                {
-                    if (mediaResult.Value != null)
-                        Result.Fail(mediaResult.Info, GetOrDefault());
-                    else
-                        Result.Fail(mediaResult.Info, default(InstaSectionMedia));
-                }
+                    Result.Fail(mediaResult.Info, GetOrDefault());
+
                 paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
                 paginationParameters.NextPage = mediaResponse.NextPage;
                 paginationParameters.NextMaxId = mediaResponse.NextMaxId;

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 
@@ -39,6 +40,16 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaSectionMedia>> GetRecentLocationFeedsAsync(long locationId, PaginationParameters paginationParameters);
 
         /// <summary>
+        ///     Get recent location media feeds.
+        ///     <para>Important note: Be careful of using this function, because it's an POST request</para>
+        /// </summary>
+        /// <param name="locationId">Location identifier (location pk, external id, facebook id)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaSectionMedia>> GetRecentLocationFeedsAsync(long locationId, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
+
+        /// <summary>
         ///     Get top (ranked) location media feeds.
         ///     <para>Important note: Be careful of using this function, because it's an POST request</para>
         /// </summary>
@@ -46,6 +57,15 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         Task<IResult<InstaSectionMedia>> GetTopLocationFeedsAsync(long locationId, PaginationParameters paginationParameters);
 
+        /// <summary>
+        ///     Get top (ranked) location media feeds.
+        ///     <para>Important note: Be careful of using this function, because it's an POST request</para>
+        /// </summary>
+        /// <param name="locationId">Location identifier (location pk, external id, facebook id)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaSectionMedia>> GetTopLocationFeedsAsync(long locationId, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
         /// <summary>
         ///     Searches for specific location by provided geo-data or search query.
         /// </summary>
@@ -81,12 +101,42 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="latitude">Latitude</param>
         /// <param name="longitude">Longitude</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaPlaceList" />
+        /// </returns>
+        Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken);
+
+        /// <summary>
+        ///     Search places in facebook
+        ///     <para>Note: This works for non-facebook accounts too!</para>
+        /// </summary>
+        /// <param name="latitude">Latitude</param>
+        /// <param name="longitude">Longitude</param>
         /// <param name="query">Query to search (city, country or ...)</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <returns>
         ///     <see cref="InstaPlaceList" />
         /// </returns>
         Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, string query, PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Search places in facebook
+        ///     <para>Note: This works for non-facebook accounts too!</para>
+        /// </summary>
+        /// <param name="latitude">Latitude</param>
+        /// <param name="longitude">Longitude</param>
+        /// <param name="query">Query to search (city, country or ...)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaPlaceList" />
+        /// </returns>
+        Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, string query, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
+
         /// <summary>
         ///     Search places in facebook
         ///     <para>Note: This works for non-facebook accounts too!</para>
@@ -97,5 +147,18 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaPlaceList" />
         /// </returns>
         Task<IResult<InstaPlaceList>> SearchPlacesAsync(string query, PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Search places in facebook
+        ///     <para>Note: This works for non-facebook accounts too!</para>
+        /// </summary>
+        /// <param name="query">Query to search (city, country or ...)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaPlaceList" />
+        /// </returns>
+        Task<IResult<InstaPlaceList>> SearchPlacesAsync(string query, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
     }
 }
