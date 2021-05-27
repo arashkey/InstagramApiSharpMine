@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
@@ -81,6 +83,17 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaUserShortList>> GetBestFriendsAsync(PaginationParameters paginationParameters);
 
         /// <summary>
+        ///     Get self best friends (besties)
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        Task<IResult<InstaUserShortList>> GetBestFriendsAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
+
+        /// <summary>
         ///     Get best friends (besties) suggestions
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
@@ -88,6 +101,17 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaUserShortList" />
         /// </returns>
         Task<IResult<InstaUserShortList>> GetBestFriendsSuggestionsAsync(PaginationParameters paginationParameters);
+        
+        /// <summary>
+        ///     Get best friends (besties) suggestions
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        Task<IResult<InstaUserShortList>> GetBestFriendsSuggestionsAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
 
         /// <summary>
         ///     Get blocked users
@@ -97,6 +121,17 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaBlockedUsers" />
         /// </returns>
         Task<IResult<InstaBlockedUsers>> GetBlockedUsersAsync(PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Get blocked users
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaBlockedUsers" />
+        /// </returns>
+        Task<IResult<InstaBlockedUsers>> GetBlockedUsersAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
 
         /// <summary>
         ///     Get currently logged in user info asynchronously
@@ -116,9 +151,20 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaUserShortList>> GetCurrentUserFollowersAsync(PaginationParameters paginationParameters);
 
         /// <summary>
+        ///     Get followers list for currently logged in user asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        Task<IResult<InstaUserShortList>> GetCurrentUserFollowersAsync(PaginationParameters paginationParameters, CancellationToken cancellationToken);
+
+        /// <summary>
         ///     Get activity of following asynchronously
         /// </summary>
         /// <param name="paginationParameters"></param>
+        [Obsolete("GetFollowingRecentActivityFeedAsync is deprecated by Instagram.", true)]
         Task<IResult<InstaActivityFeed>> GetFollowingRecentActivityFeedAsync(PaginationParameters paginationParameters);
 
         /// <summary>
@@ -155,6 +201,14 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaActivityFeed>> GetRecentActivityFeedAsync(PaginationParameters paginationParameters);
 
         /// <summary>
+        ///     Get activity of current user asynchronously
+        /// </summary>
+        /// <param name="paginationParameters"></param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaActivityFeed>> GetRecentActivityFeedAsync(PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken);
+
+        /// <summary>
         ///     Get suggestion details
         /// </summary>
         /// <param name="userId">User id (pk)</param>
@@ -166,6 +220,13 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         Task<IResult<InstaSuggestions>> GetSuggestionUsersAsync(PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Get suggestion users
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaSuggestions>> GetSuggestionUsersAsync(PaginationParameters paginationParameters, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Get user info by its user name asynchronously
@@ -197,6 +258,24 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaUserShortList>> GetUserFollowersAsync(string username,
             PaginationParameters paginationParameters, string searchQuery = "", bool mutualsfirst = false, string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default);
 
+
+        /// <summary>
+        ///     Get followers list by username asynchronously
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="searchQuery">Search string to locate specific followers</param>
+        /// <param name="mutualsfirst">Mutual followers</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
+        /// <param name="orderBy">Order by latest, earliest or default</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        Task<IResult<InstaUserShortList>> GetUserFollowersAsync(string username,
+            PaginationParameters paginationParameters, string searchQuery, CancellationToken cancellationToken,
+            bool mutualsfirst = false, string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default);
+
         /// <summary>
         ///     Get followers list by user id(pk) asynchronously
         /// </summary>
@@ -211,6 +290,23 @@ namespace InstagramApiSharp.API.Processors
         /// </returns>
         Task<IResult<InstaUserShortList>> GetUserFollowersByIdAsync(long userId,
             PaginationParameters paginationParameters, string searchQuery = "", bool mutualsfirst = false, string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default);
+
+
+        /// <summary>
+        ///     Get followers list by user id(pk) asynchronously
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="searchQuery">Search string to locate specific followers</param>
+        /// <param name="mutualsfirst">Mutual followers</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
+        /// <param name="orderBy">Order by latest, earliest or default</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        Task<IResult<InstaUserShortList>> GetUserFollowersByIdAsync(long userId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken, string searchQuery = "",
+            bool mutualsfirst = false, string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default);
 
         /// <summary>
         ///     Get following list by username asynchronously
@@ -227,6 +323,22 @@ namespace InstagramApiSharp.API.Processors
             PaginationParameters paginationParameters, string searchQuery = "", InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null);
 
         /// <summary>
+        ///     Get following list by username asynchronously
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="searchQuery">Search string to locate specific followings</param>
+        /// <param name="orderBy">Order by latest, earliest or default</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        Task<IResult<InstaUserShortList>> GetUserFollowingAsync(string username,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken,
+            string searchQuery = "", InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null);
+
+        /// <summary>
         ///     Get following list by user id(pk) asynchronously
         /// </summary>
         /// <param name="userId">User id(pk)</param>
@@ -239,6 +351,21 @@ namespace InstagramApiSharp.API.Processors
         /// </returns>
         Task<IResult<InstaUserShortList>> GetUserFollowingByIdAsync(long userId,
             PaginationParameters paginationParameters, string searchQuery = "", InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null);
+
+        /// <summary>
+        ///     Get following list by user id(pk) asynchronously
+        /// </summary>
+        /// <param name="userId">User id(pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="searchQuery">Search string to locate specific followings</param>
+        /// <param name="orderBy">Order by latest, earliest or default</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        Task<IResult<InstaUserShortList>> GetUserFollowingByIdAsync(long userId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken, string searchQuery = "", InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null);
 
         /// <summary>
         ///     Gets the user extended information (followers count, following count, bio, etc) by user identifier.
@@ -265,6 +392,17 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaMediaList>> GetUserMediaAsync(string username, PaginationParameters paginationParameters);
 
         /// <summary>
+        ///     Get all user media by username asynchronously
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetUserMediaAsync(string username, PaginationParameters paginationParameters, CancellationToken cancellationToken);
+
+        /// <summary>
         ///     Get all user media by user id (pk) asynchronously
         /// </summary>
         /// <param name="userId">User id (pk)</param>
@@ -273,6 +411,17 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaMediaList" />
         /// </returns>
         Task<IResult<InstaMediaList>> GetUserMediaByIdAsync(long userId, PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Get all user media by user id (pk) asynchronously
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetUserMediaByIdAsync(long userId, PaginationParameters paginationParameters, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Get all user shoppable media by username
@@ -285,6 +434,17 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaMediaList>> GetUserShoppableMediaAsync(string username, PaginationParameters paginationParameters);
 
         /// <summary>
+        ///     Get all user shoppable media by username
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetUserShoppableMediaAsync(string username, PaginationParameters paginationParameters, CancellationToken cancellationToken);
+
+        /// <summary>
         ///     Get user tags by username asynchronously
         ///     <remarks>Returns media list containing tags</remarks>
         /// </summary>
@@ -294,6 +454,19 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaMediaList" />
         /// </returns>
         Task<IResult<InstaMediaList>> GetUserTagsAsync(string username, PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Get user tags by username asynchronously
+        ///     <remarks>Returns media list containing tags</remarks>
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetUserTagsAsync(string username, PaginationParameters paginationParameters, CancellationToken cancellationToken);
+
         /// <summary>
         ///     Get user tags by username asynchronously
         ///     <remarks>Returns media list containing tags</remarks>
@@ -304,6 +477,19 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaMediaList" />
         /// </returns>
         Task<IResult<InstaMediaList>> GetUserTagsAsync(long userId, PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Get user tags by username asynchronously
+        ///     <remarks>Returns media list containing tags</remarks>
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetUserTagsAsync(long userId, PaginationParameters paginationParameters, CancellationToken cancellationToken);
+
         /// <summary>
         ///     Ignore user friendship requst.
         /// </summary>

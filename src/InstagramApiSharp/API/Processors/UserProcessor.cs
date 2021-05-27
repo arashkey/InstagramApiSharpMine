@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
@@ -255,7 +256,21 @@ namespace InstagramApiSharp.API.Processors
         /// </returns>
         public async Task<IResult<InstaUserShortList>> GetBestFriendsAsync(PaginationParameters paginationParameters)
         {
-            return await GetBesties(paginationParameters);
+            return await GetBesties(paginationParameters).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        ///     Get self best friends (besties)
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        public async Task<IResult<InstaUserShortList>> GetBestFriendsAsync(PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken)
+        {
+            return await GetBesties(paginationParameters, false, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -267,7 +282,21 @@ namespace InstagramApiSharp.API.Processors
         /// </returns>
         public async Task<IResult<InstaUserShortList>> GetBestFriendsSuggestionsAsync(PaginationParameters paginationParameters)
         {
-            return await GetBesties(paginationParameters, true);
+            return await GetBesties(paginationParameters, true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        ///     Get best friends (besties) suggestions
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        public async Task<IResult<InstaUserShortList>> GetBestFriendsSuggestionsAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
+        {
+            return await GetBesties(paginationParameters, true, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -277,43 +306,56 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaUserShortList" />
         /// </returns>
-        public async Task<IResult<InstaBlockedUsers>> GetBlockedUsersAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaBlockedUsers>> GetBlockedUsersAsync(PaginationParameters paginationParameters) =>
+            await GetBlockedUsersAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get blocked users
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        public async Task<IResult<InstaBlockedUsers>> GetBlockedUsersAsync(PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaBlockedUsersResponse blockedUsersResponse;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaBlockedUsers Convert(InstaBlockedUsersResponse instaBlockedUsers)
+                var blockedUsersResult = await GetBlockedUsers(paginationParameters?.NextMaxId);
+                if (!blockedUsersResult.Succeeded)
                 {
-                    return ConvertersFabric.Instance.GetBlockedUsersConverter(instaBlockedUsers).Convert();
-                }
-                var blockedUsersResponse = await GetBlockedUsers(paginationParameters?.NextMaxId);
-                if (!blockedUsersResponse.Succeeded)
-                {
-                    if (blockedUsersResponse.Value != null)
-                        return Result.Fail(blockedUsersResponse.Info, Convert(blockedUsersResponse.Value));
+                    if (blockedUsersResult.Value != null)
+                        return Result.Fail(blockedUsersResult.Info, Convert(blockedUsersResult.Value));
                     else
-                        return Result.Fail(blockedUsersResponse.Info, default(InstaBlockedUsers));
+                        return Result.Fail(blockedUsersResult.Info, default(InstaBlockedUsers));
                 }
-                paginationParameters.NextMaxId = blockedUsersResponse.Value.MaxId;
+                blockedUsersResponse = blockedUsersResult.Value;
+                paginationParameters.NextMaxId = blockedUsersResponse.MaxId;
 
                 paginationParameters.PagesLoaded++;
                 while (!string.IsNullOrEmpty(paginationParameters.NextMaxId)
                      && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var moreUsers = await GetBlockedUsers(paginationParameters.NextMaxId);
                     if (!moreUsers.Succeeded)
-                        return Result.Fail(moreUsers.Info, Convert(blockedUsersResponse.Value));
+                        return Result.Fail(moreUsers.Info, GetOrDefault());
 
-                    blockedUsersResponse.Value.BlockedList.AddRange(moreUsers.Value.BlockedList);
-                    blockedUsersResponse.Value.PageSize = moreUsers.Value.PageSize;
-                    blockedUsersResponse.Value.BigList = moreUsers.Value.BigList;
-                    blockedUsersResponse.Value.MaxId = paginationParameters.NextMaxId = moreUsers.Value.MaxId;
+                    blockedUsersResponse.BlockedList.AddRange(moreUsers.Value.BlockedList);
+                    blockedUsersResponse.PageSize = moreUsers.Value.PageSize;
+                    blockedUsersResponse.BigList = moreUsers.Value.BigList;
+                    blockedUsersResponse.MaxId = paginationParameters.NextMaxId = moreUsers.Value.MaxId;
                     paginationParameters.PagesLoaded++;
                 }
-                return Result.Success(Convert(blockedUsersResponse.Value));
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
@@ -324,6 +366,13 @@ namespace InstagramApiSharp.API.Processors
             {
                 _logger?.LogException(exception);
                 return Result.Fail<InstaBlockedUsers>(exception);
+            }
+
+            InstaBlockedUsers GetOrDefault() => blockedUsersResponse != null ? Convert(blockedUsersResponse) : default(InstaBlockedUsers);
+
+            InstaBlockedUsers Convert(InstaBlockedUsersResponse instaBlockedUsers)
+            {
+                return ConvertersFabric.Instance.GetBlockedUsersConverter(instaBlockedUsers).Convert();
             }
         }
 
@@ -373,16 +422,26 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaUserShortList" />
         /// </returns>
         public async Task<IResult<InstaUserShortList>> GetCurrentUserFollowersAsync(
-            PaginationParameters paginationParameters)
-        {
-            UserAuthValidator.Validate(_userAuthValidate);
-            return await GetUserFollowersAsync(_user.UserName, paginationParameters, string.Empty);
-        }
+            PaginationParameters paginationParameters) =>
+            await GetCurrentUserFollowersAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
 
+
+        /// <summary>
+        ///     Get followers list for currently logged in user asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        public async Task<IResult<InstaUserShortList>> GetCurrentUserFollowersAsync(
+            PaginationParameters paginationParameters, CancellationToken cancellationToken) =>
+            await GetUserFollowersAsync(_user.UserName, paginationParameters, string.Empty, cancellationToken).ConfigureAwait(false);
+
+        [Obsolete()]
         public async Task<IResult<InstaActivityFeed>> GetFollowingRecentActivityFeedAsync(PaginationParameters paginationParameters)
         {
             var uri = UriCreator.GetFollowingRecentActivityUri(paginationParameters.NextMaxId);
-            return await GetRecentActivityInternalAsync(uri, paginationParameters);
+            return await GetRecentActivityInternalAsync(uri, paginationParameters, CancellationToken.None);
         }
 
         /// <summary>
@@ -534,10 +593,15 @@ namespace InstagramApiSharp.API.Processors
         }
 
         public async Task<IResult<InstaActivityFeed>> GetRecentActivityFeedAsync(
-                    PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters) =>
+            await GetRecentActivityFeedAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        public async Task<IResult<InstaActivityFeed>> GetRecentActivityFeedAsync(
+            PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             var uri = UriCreator.GetRecentActivityUri();
-            return await GetRecentActivityInternalAsync(uri, paginationParameters);
+            return await GetRecentActivityInternalAsync(uri, paginationParameters, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -579,54 +643,71 @@ namespace InstagramApiSharp.API.Processors
         ///     Get suggestion users
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
-        public async Task<IResult<InstaSuggestions>> GetSuggestionUsersAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaSuggestions>> GetSuggestionUsersAsync(PaginationParameters paginationParameters) =>
+            await GetSuggestionUsersAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get suggestion users
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaSuggestions>> GetSuggestionUsersAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaSuggestionUserContainerResponse suggestionsResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaSuggestions Convert(InstaSuggestionUserContainerResponse suggestResponse)
+                var suggestionsResult = await GetSuggestionUsers(paginationParameters);
+                suggestionsResponse = suggestionsResult.Value;
+                if (!suggestionsResult.Succeeded)
                 {
-                    return ConvertersFabric.Instance.GetSuggestionsConverter(suggestResponse).Convert();
-                }
-                var suggestionsResponse = await GetSuggestionUsers(paginationParameters);
-                if (!suggestionsResponse.Succeeded)
-                {
-                    if (suggestionsResponse.Value != null)
-                        return Result.Fail(suggestionsResponse.Info, Convert(suggestionsResponse.Value));
+                    if (suggestionsResult.Value != null)
+                        return Result.Fail(suggestionsResult.Info, GetOrDefault());
                     else
-                        return Result.Fail(suggestionsResponse.Info, default(InstaSuggestions));
+                        return Result.Fail(suggestionsResult.Info, default(InstaSuggestions));
                 }
-                paginationParameters.NextMaxId = suggestionsResponse.Value.MaxId;
 
+                paginationParameters.NextMaxId = suggestionsResponse.MaxId;
                 paginationParameters.PagesLoaded++;
-                while (suggestionsResponse.Value.MoreAvailable
+
+                while (suggestionsResponse.MoreAvailable
                      && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                      && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var moreSuggestions = await GetSuggestionUsers(paginationParameters);
                     if (!moreSuggestions.Succeeded)
-                        return Result.Fail(moreSuggestions.Info, Convert(suggestionsResponse.Value));
+                        return Result.Fail(moreSuggestions.Info, GetOrDefault());
 
-                    suggestionsResponse.Value.NewSuggestedUsers.Suggestions.AddRange(moreSuggestions.Value.NewSuggestedUsers.Suggestions);
-                    suggestionsResponse.Value.SuggestedUsers.Suggestions.AddRange(moreSuggestions.Value.SuggestedUsers.Suggestions);
-                    suggestionsResponse.Value.MoreAvailable = moreSuggestions.Value.MoreAvailable;
-                    suggestionsResponse.Value.MaxId = paginationParameters.NextMaxId = moreSuggestions.Value.MaxId;
+                    suggestionsResponse.NewSuggestedUsers.Suggestions.AddRange(moreSuggestions.Value.NewSuggestedUsers.Suggestions);
+                    suggestionsResponse.SuggestedUsers.Suggestions.AddRange(moreSuggestions.Value.SuggestedUsers.Suggestions);
+                    suggestionsResponse.MoreAvailable = moreSuggestions.Value.MoreAvailable;
+                    suggestionsResponse.MaxId = paginationParameters.NextMaxId = moreSuggestions.Value.MaxId;
                     paginationParameters.PagesLoaded++;
                 }
-                return Result.Success(Convert(suggestionsResponse.Value));
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaSuggestions), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaSuggestions>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaSuggestions GetOrDefault() => suggestionsResponse != null ? Convert(suggestionsResponse) : default(InstaSuggestions);
+
+            InstaSuggestions Convert(InstaSuggestionUserContainerResponse suggestResponse)
+            {
+                return ConvertersFabric.Instance.GetSuggestionsConverter(suggestResponse).Convert();
             }
         }
 
@@ -761,17 +842,40 @@ namespace InstagramApiSharp.API.Processors
         /// </returns>
         public async Task<IResult<InstaUserShortList>> GetUserFollowersAsync(string username,
             PaginationParameters paginationParameters, string searchQuery, bool mutualsfirst = false,
-            string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default)
+            string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default) =>
+            await GetUserFollowersAsync(username, paginationParameters, searchQuery,
+                CancellationToken.None, mutualsfirst, rankToken, orderBy).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get followers list by username asynchronously
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="searchQuery">Search string to locate specific followers</param>
+        /// <param name="mutualsfirst">Mutual followers</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
+        /// <param name="orderBy">Order by latest, earliest or default</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        public async Task<IResult<InstaUserShortList>> GetUserFollowersAsync(string username,
+            PaginationParameters paginationParameters, string searchQuery, CancellationToken cancellationToken,
+            bool mutualsfirst = false, string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default)
         {
             try
             {
-                var user = await GetUserAsync(username);
+                var user = await GetUserAsync(username).ConfigureAwait(false);
                 if (user.Succeeded)
                 {
-                    if (user.Value.FriendshipStatus.IsPrivate && user.Value.UserName != _user.LoggedInUser.UserName && !user.Value.FriendshipStatus.Following)
-                        return Result.Fail("You must be a follower of private accounts to be able to get user's followers", default(InstaUserShortList));
+                    if (user.Value.FriendshipStatus.IsPrivate &&
+                        user.Value.UserName != _user.LoggedInUser.UserName &&
+                        !user.Value.FriendshipStatus.Following)
+                        return Result.Fail("You must be a follower of private accounts to be able to get user's followers",
+                            default(InstaUserShortList));
 
-                    return await GetUserFollowersByIdAsync(user.Value.Pk, paginationParameters, searchQuery, mutualsfirst, rankToken, orderBy);
+                    return await GetUserFollowersByIdAsync(user.Value.Pk, paginationParameters,
+                       cancellationToken, searchQuery, mutualsfirst, rankToken, orderBy);
                 }
                 else
                     return Result.Fail(user.Info, default(InstaUserShortList));
@@ -801,8 +905,27 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaUserShortList" />
         /// </returns>
         public async Task<IResult<InstaUserShortList>> GetUserFollowersByIdAsync(long userId,
-            PaginationParameters paginationParameters, string searchQuery, bool mutualsfirst = false, 
-            string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default)
+            PaginationParameters paginationParameters, string searchQuery, bool mutualsfirst = false,
+            string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default) =>
+            await GetUserFollowersByIdAsync(userId, paginationParameters, CancellationToken.None,
+                searchQuery, mutualsfirst, rankToken, orderBy).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get followers list by user id(pk) asynchronously
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="searchQuery">Search string to locate specific followers</param>
+        /// <param name="mutualsfirst">Mutual followers</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
+        /// <param name="orderBy">Order by latest, earliest or default</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        public async Task<IResult<InstaUserShortList>> GetUserFollowersByIdAsync(long userId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken, string searchQuery,
+            bool mutualsfirst = false, string rankToken = null, InstaFollowOrderType orderBy = InstaFollowOrderType.Default)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var followers = new InstaUserShortList();
@@ -826,6 +949,8 @@ namespace InstagramApiSharp.API.Processors
                 while (!string.IsNullOrEmpty(followersResponse.Value.NextMaxId)
                        && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextFollowersUri =
                         UriCreator.GetUserFollowersUri(userId, _user.RankToken, searchQuery, mutualsfirst,
                             followersResponse.Value.NextMaxId, orderBy);
@@ -866,17 +991,37 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaUserShortList" />
         /// </returns>
         public async Task<IResult<InstaUserShortList>> GetUserFollowingAsync(string username,
-            PaginationParameters paginationParameters, string searchQuery, InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null)
+            PaginationParameters paginationParameters, string searchQuery,
+            InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null) =>
+            await GetUserFollowingAsync(username, paginationParameters, CancellationToken.None, searchQuery,
+                orderBy, rankToken).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get following list by username asynchronously
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="searchQuery">Search string to locate specific followings</param>
+        /// <param name="orderBy">Order by latest, earliest or default</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        public async Task<IResult<InstaUserShortList>> GetUserFollowingAsync(string username,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken,
+            string searchQuery, InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null)
         {
             try
             {
-                var user = await GetUserAsync(username);
+                var user = await GetUserAsync(username).ConfigureAwait(false);
                 if (user.Succeeded)
                 {
                     if (user.Value.FriendshipStatus.IsPrivate && user.Value.UserName != _user.LoggedInUser.UserName && !user.Value.FriendshipStatus.Following)
                         return Result.Fail("You must be a follower of private accounts to be able to get user's followings", default(InstaUserShortList));
 
-                    return await GetUserFollowingByIdAsync(user.Value.Pk, paginationParameters, searchQuery, orderBy, rankToken);
+                    return await GetUserFollowingByIdAsync(user.Value.Pk, paginationParameters, cancellationToken, searchQuery, orderBy, rankToken).ConfigureAwait(false);
                 }
                 else
                     return Result.Fail(user.Info, default(InstaUserShortList));
@@ -904,7 +1049,26 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaUserShortList" />
         /// </returns>
         public async Task<IResult<InstaUserShortList>> GetUserFollowingByIdAsync(long userId,
-            PaginationParameters paginationParameters, string searchQuery, InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null)
+            PaginationParameters paginationParameters,
+            string searchQuery, InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null) =>
+            await GetUserFollowingByIdAsync(userId, paginationParameters, CancellationToken.None, searchQuery, orderBy,
+                rankToken).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get following list by user id(pk) asynchronously
+        /// </summary>
+        /// <param name="userId">User id(pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="searchQuery">Search string to locate specific followings</param>
+        /// <param name="orderBy">Order by latest, earliest or default</param>
+        /// <param name="rankToken">Rank token (random guid)</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaUserShortList" />
+        /// </returns>
+        public async Task<IResult<InstaUserShortList>> GetUserFollowingByIdAsync(long userId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken,
+            string searchQuery, InstaFollowOrderType orderBy = InstaFollowOrderType.Default, string rankToken = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var following = new InstaUserShortList();
@@ -915,7 +1079,7 @@ namespace InstagramApiSharp.API.Processors
 
                 var uri = UriCreator.GetUserFollowingUri(userId, !string.IsNullOrEmpty(rankToken) ? rankToken : _user.RankToken, searchQuery,
                     paginationParameters.NextMaxId, orderBy);
-                var userListResponse = await GetUserListByUriAsync(uri);
+                var userListResponse = await GetUserListByUriAsync(uri).ConfigureAwait(false);
                 if (!userListResponse.Succeeded)
                     return Result.Fail(userListResponse.Info, (InstaUserShortList)null);
                 following.AddRange(
@@ -926,10 +1090,12 @@ namespace InstagramApiSharp.API.Processors
                 while (!string.IsNullOrEmpty(following.NextMaxId)
                        && pages < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextUri =
                         UriCreator.GetUserFollowingUri(userId, _user.RankToken, searchQuery,
                             userListResponse.Value.NextMaxId, orderBy);
-                    userListResponse = await GetUserListByUriAsync(nextUri);
+                    userListResponse = await GetUserListByUriAsync(nextUri).ConfigureAwait(false);
                     if (!userListResponse.Succeeded)
                         return Result.Fail(userListResponse.Info, following);
                     following.AddRange(
@@ -1013,13 +1179,26 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaMediaList" />
         /// </returns>
         public async Task<IResult<InstaMediaList>> GetUserMediaAsync(string username,
-             PaginationParameters paginationParameters)
+             PaginationParameters paginationParameters) =>
+            await GetUserMediaAsync(username, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get all user media by username asynchronously
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetUserMediaAsync(string username,
+             PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
-            var user = await GetUserAsync(username);
+            var user = await GetUserAsync(username).ConfigureAwait(false);
             if (!user.Succeeded)
                 return Result.Fail<InstaMediaList>("Unable to get user to load media");
-            return await GetUserMediaByIdAsync(user.Value.Pk, paginationParameters);
+            return await GetUserMediaByIdAsync(user.Value.Pk, paginationParameters, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1031,7 +1210,20 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaMediaList" />
         /// </returns>
         public async Task<IResult<InstaMediaList>> GetUserMediaByIdAsync(long userId,
-                                                    PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters) =>
+            await GetUserMediaByIdAsync(userId, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get all user media by user id (pk) asynchronously
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetUserMediaByIdAsync(long userId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             var mediaList = new InstaMediaList();
             try
@@ -1062,6 +1254,7 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
 
                     var nextMedia = await GetUserMedia(userId, paginationParameters);
                     if (!nextMedia.Succeeded)
@@ -1080,7 +1273,7 @@ namespace InstagramApiSharp.API.Processors
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaMediaList), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, mediaList, ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
@@ -1100,8 +1293,21 @@ namespace InstagramApiSharp.API.Processors
         public async Task<IResult<InstaMediaList>> GetUserShoppableMediaAsync(string username,
             PaginationParameters paginationParameters)
         {
-            return await _instaApi.ShoppingProcessor.GetUserShoppableMediaAsync(username, paginationParameters);
+            return await _instaApi.ShoppingProcessor.GetUserShoppableMediaAsync(username, paginationParameters).ConfigureAwait(false);
         }
+
+        /// <summary>
+        ///     Get all user shoppable media by username
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetUserShoppableMediaAsync(string username,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken) =>
+            await _instaApi.ShoppingProcessor.GetUserShoppableMediaAsync(username, paginationParameters, cancellationToken).ConfigureAwait(false);
 
         /// <summary>
         ///     Get user tags by username asynchronously
@@ -1113,13 +1319,27 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaMediaList" />
         /// </returns>
         public async Task<IResult<InstaMediaList>> GetUserTagsAsync(string username,
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters) =>
+            await GetUserTagsAsync(username, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get user tags by username asynchronously
+        ///     <remarks>Returns media list containing tags</remarks>
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetUserTagsAsync(string username,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
-            var user = await GetUserAsync(username);
+            var user = await GetUserAsync(username).ConfigureAwait(false);
             if (!user.Succeeded)
                 return Result.Fail($"Unable to get user {username} to get tags", (InstaMediaList)null);
-            return await GetUserTagsAsync(user.Value.Pk, paginationParameters);
+            return await GetUserTagsAsync(user.Value.Pk, paginationParameters, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         ///     Get user tags by username asynchronously
@@ -1131,7 +1351,22 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaMediaList" />
         /// </returns>
         public async Task<IResult<InstaMediaList>> GetUserTagsAsync(long userId,
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters) =>
+            await GetUserTagsAsync(userId, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get user tags by username asynchronously
+        ///     <remarks>Returns media list containing tags</remarks>
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetUserTagsAsync(long userId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var userTags = new InstaMediaList();
@@ -1145,7 +1380,7 @@ namespace InstagramApiSharp.API.Processors
                     return mediaListResponse.Medias.Select(ConvertersFabric.Instance.GetSingleMediaConverter)
                         .Select(converter => converter.Convert());
                 }
-                var mediaTags = await GetUserTags(userId, paginationParameters);
+                var mediaTags = await GetUserTags(userId, paginationParameters).ConfigureAwait(false);
                 if (!mediaTags.Succeeded)
                 {
                     if (mediaTags.Value != null)
@@ -1165,7 +1400,9 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
-                    var nextMedia = await GetUserTags(userId, paginationParameters);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var nextMedia = await GetUserTags(userId, paginationParameters).ConfigureAwait(false);
                     if (!nextMedia.Succeeded)
                         return Result.Fail(nextMedia.Info, userTags);
 
@@ -1642,13 +1879,15 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaActivityFeed>> GetRecentActivityInternalAsync(Uri uri,
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
+            var activityFeed = new InstaActivityFeed();
+
             try
             {
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, uri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request, HttpCompletionOption.ResponseContentRead);
-                var activityFeed = new InstaActivityFeed();
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -1671,6 +1910,8 @@ namespace InstagramApiSharp.API.Processors
                 while (!string.IsNullOrEmpty(nextId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextFollowingFeed = await GetFollowingActivityWithMaxIdAsync(nextId);
                     if (!nextFollowingFeed.Succeeded)
                         return Result.Fail(nextFollowingFeed.Info, activityFeed);
@@ -1693,12 +1934,12 @@ namespace InstagramApiSharp.API.Processors
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaActivityFeed), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, activityFeed, ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaActivityFeed>(exception);
+                return Result.Fail(exception, activityFeed);
             }
         }
 
@@ -1796,7 +2037,8 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        private async Task<IResult<InstaUserShortList>> GetBesties(PaginationParameters paginationParameters, bool suggested = false)
+        private async Task<IResult<InstaUserShortList>> GetBesties(PaginationParameters paginationParameters, bool suggested = false,
+            CancellationToken cancellationToken = default(CancellationToken)) 
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var besties = new InstaUserShortList();
@@ -1821,6 +2063,8 @@ namespace InstagramApiSharp.API.Processors
                 while (!string.IsNullOrEmpty(bestiesResponse.Value.NextMaxId)
                        && pagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextBestiesUri = UriCreator.GetBestFriendsUri(bestiesResponse.Value.NextMaxId);
                     if (suggested)
                         nextBestiesUri = UriCreator.GetBestiesSuggestionUri(bestiesResponse.Value.NextMaxId);
