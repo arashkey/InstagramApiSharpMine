@@ -24,6 +24,7 @@ using InstagramApiSharp.Converters;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -599,7 +600,17 @@ namespace InstagramApiSharp.API.Processors
         ///     Get discover top live.
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
-        public async Task<IResult<InstaDiscoverTopLive>> GetDiscoverTopLiveAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaDiscoverTopLive>> GetDiscoverTopLiveAsync(PaginationParameters paginationParameters) =>
+            await GetDiscoverTopLiveAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get discover top live.
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaDiscoverTopLive>> GetDiscoverTopLiveAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var topLive = new InstaDiscoverTopLive();
@@ -624,6 +635,8 @@ namespace InstagramApiSharp.API.Processors
                       && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     paginationParameters.PagesLoaded++;
                     var nextTop = await GetDiscoverTopLive(paginationParameters.NextMaxId);
                     if (!nextTop.Succeeded)

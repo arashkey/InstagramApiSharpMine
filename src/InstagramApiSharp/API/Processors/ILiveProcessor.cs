@@ -10,6 +10,7 @@ using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using System.Threading.Tasks;
 using System;
+using System.Threading;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -122,6 +123,14 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         Task<IResult<InstaDiscoverTopLive>> GetDiscoverTopLiveAsync(PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Get discover top live.
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaDiscoverTopLive>> GetDiscoverTopLiveAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
 
         /// <summary>
         ///     Get final viewer list.
