@@ -274,7 +274,7 @@ namespace InstagramApiSharp.API.Processors
                     var nextCollectionList = await GetSingleCollection(collectionId, paginationParameters);
 
                     if (!nextCollectionList.Succeeded)
-                        return Result.Fail(nextCollectionList.Info, Convert(nextCollectionList.Value));
+                        return Result.Fail(nextCollectionList.Info, GetOrDefault());
 
                     collectionsListResponse.NextMaxId = paginationParameters.NextMaxId = nextCollectionList.Value.NextMaxId;
                     collectionsListResponse.MoreAvailable = nextCollectionList.Value.MoreAvailable;
@@ -351,7 +351,7 @@ namespace InstagramApiSharp.API.Processors
                     var nextCollection = await GetCollections(paginationParameters);
 
                     if (!nextCollection.Succeeded)
-                        return Result.Fail(nextCollection.Info, Convert(nextCollection.Value));
+                        return Result.Fail(nextCollection.Info, GetOrDefault());
 
                     collectionsResponse.NextMaxId = paginationParameters.NextMaxId = nextCollection.Value.NextMaxId;
                     collectionsResponse.MoreAvailable = nextCollection.Value.MoreAvailable;
@@ -361,9 +361,7 @@ namespace InstagramApiSharp.API.Processors
                     pagesLoaded++;
                 }
 
-                var converter = ConvertersFabric.Instance.GetCollectionsConverter(collectionsResponse);
-
-                return Result.Success(converter.Convert());
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
