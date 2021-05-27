@@ -25,6 +25,7 @@ using InstagramApiSharp.Converters.Json;
 using InstagramApiSharp.Enums;
 using InstagramApiSharp.Classes.ResponseWrappers.Business;
 using System.Linq;
+using System.Threading;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -249,7 +250,18 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>
-        public async Task<IResult<InstaMediaList>> GetPendingUserTagsAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaMediaList>> GetPendingUserTagsAsync(PaginationParameters paginationParameters) =>
+            await GetPendingUserTagsAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get pending user tags asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetPendingUserTagsAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var userTags = new InstaMediaList();
@@ -283,6 +295,8 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextMedia = await GetPendingUserTags(paginationParameters);
                     if (!nextMedia.Succeeded)
                         return Result.Fail(nextMedia.Info, userTags);

@@ -11,6 +11,7 @@ using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Enums;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -60,6 +61,15 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaMediaList" />
         /// </returns>
         Task<IResult<InstaMediaList>> GetPendingUserTagsAsync(PaginationParameters paginationParameters);
+        /// <summary>
+        ///     Get pending user tags asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetPendingUserTagsAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
         /// <summary>
         ///     Approve usertags
         /// </summary>
