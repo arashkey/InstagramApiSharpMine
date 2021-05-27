@@ -16,6 +16,7 @@ using InstaRecentActivityConverter = InstagramApiSharp.Converters.Json.InstaRece
 using System.Diagnostics;
 using System.Collections.Generic;
 using InstagramApiSharp.Enums;
+using System.Threading;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -42,6 +43,7 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+
         /// <summary>
         ///     Get medias for explore channel
         /// </summary>
@@ -52,16 +54,44 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaMediaList" />
         /// </returns>
         public async Task<IResult<InstaMediaList>> GetExploreChannelVideosAsync(string channelId, string firstMediaId,
-            PaginationParameters paginationParameters)
-        {
-            return await _instaApi.HelperProcessor.GetChannelVideosAsync(UriCreator.GetExploreChannelVideosUri(channelId), firstMediaId, paginationParameters);
-        }
+            PaginationParameters paginationParameters) =>
+            await GetExploreChannelVideosAsync(channelId, firstMediaId, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get medias for explore channel
+        /// </summary>
+        /// <param name="channelId">Channel id</param>
+        /// <param name="firstMediaId">First media id</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetExploreChannelVideosAsync(string channelId, string firstMediaId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken) =>
+            await _instaApi.HelperProcessor.GetChannelVideosAsync(UriCreator.GetExploreChannelVideosUri(channelId), 
+                firstMediaId, paginationParameters, cancellationToken).ConfigureAwait(false);
+
         /// <summary>
         ///     Get user explore feed (Explore tab info) asynchronously
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
-        /// <returns><see cref="InstaExploreFeed" /></returns>
-        public async Task<IResult<InstaExploreFeed>> GetExploreFeedAsync(PaginationParameters paginationParameters)
+        /// <returns>
+        ///     <see cref="InstaExploreFeed" />
+        /// </returns>
+        public async Task<IResult<InstaExploreFeed>> GetExploreFeedAsync(PaginationParameters paginationParameters) =>
+            await GetExploreFeedAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get user explore feed (Explore tab info) asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaExploreFeed" />
+        /// </returns>
+        public async Task<IResult<InstaExploreFeed>> GetExploreFeedAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var exploreFeed = new InstaExploreFeed();
@@ -88,6 +118,8 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextFeed = await GetExploreFeed(paginationParameters);
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, Convert(feeds.Value));
@@ -143,12 +175,13 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaActivityFeed" />
         /// </returns>
+        [Obsolete()]
         public async Task<IResult<InstaActivityFeed>> GetFollowingRecentActivityFeedAsync(
             PaginationParameters paginationParameters)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var uri = UriCreator.GetFollowingRecentActivityUri();
-            return await GetRecentActivityInternalAsync(uri, paginationParameters);
+            return await GetRecentActivityInternalAsync(uri, paginationParameters, CancellationToken.None);
         }
 
         /// <summary>
@@ -158,60 +191,80 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>
-        public async Task<IResult<InstaMediaList>> GetLikedFeedAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaMediaList>> GetLikedFeedAsync(PaginationParameters paginationParameters) =>
+            await GetLikedFeedAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get feed of media your liked.
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetLikedFeedAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaMediaListResponse mediaResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaMediaList Convert(InstaMediaListResponse mediaListResponse)
-                {
-                    return ConvertersFabric.Instance.GetMediaListConverter(mediaListResponse).Convert();
-                }
-                var mediaResult = await GetAnyFeeds(UriCreator.GetUserLikeFeedUri(paginationParameters.NextMaxId));
+                var mediaResult = await GetAnyFeeds(UriCreator.GetUserLikeFeedUri(paginationParameters.NextMaxId)).ConfigureAwait(false);
+                mediaResponse = mediaResult.Value;
+
                 if (!mediaResult.Succeeded)
-                {
-                    if (mediaResult.Value != null)
-                        return Result.Fail(mediaResult.Info, Convert(mediaResult.Value));
-                    else
-                        return Result.Fail(mediaResult.Info, default(InstaMediaList));
-                }
-                var mediaResponse = mediaResult.Value;
-                var mediaList = Convert(mediaResponse);
-                mediaList.NextMaxId = paginationParameters.NextMaxId = mediaResponse.NextMaxId;
+                    return Result.Fail(mediaResult.Info, GetOrDefault());
+
+                paginationParameters.NextMaxId = mediaResponse.NextMaxId;
                 paginationParameters.PagesLoaded++;
                 while (mediaResponse.MoreAvailable
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
-                    var result = await GetAnyFeeds(UriCreator.GetUserLikeFeedUri(paginationParameters.NextMaxId));
-                    if (!result.Succeeded)
-                        return Result.Fail(result.Info, mediaList);
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                    var convertedResult = Convert(result.Value);
+                    var result = await GetAnyFeeds(UriCreator.GetUserLikeFeedUri(paginationParameters.NextMaxId)).ConfigureAwait(false);
+                    if (!result.Succeeded)
+                        return Result.Fail(result.Info, GetOrDefault());
+
+                    var convertedResult = result.Value;
                     paginationParameters.PagesLoaded++;
-                    mediaList.NextMaxId = paginationParameters.NextMaxId = result.Value.NextMaxId;
+                    mediaResponse.NextMaxId = paginationParameters.NextMaxId = result.Value.NextMaxId;
                     mediaResponse.MoreAvailable = result.Value.MoreAvailable;
                     mediaResponse.ResultsCount += result.Value.ResultsCount;
                     mediaResponse.TotalCount += result.Value.TotalCount;
-                    mediaList.AddRange(convertedResult);
+                    mediaResponse.Medias.AddRange(convertedResult.Medias);
                 }
-
-                mediaList.PageSize = mediaResponse.ResultsCount;
-                mediaList.Pages = paginationParameters.PagesLoaded;
-                return Result.Success(mediaList);
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaMediaList), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaMediaList>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaMediaList GetOrDefault()
+            {
+                var ret = mediaResponse != null ? Convert(mediaResponse) : default(InstaMediaList);
+                if (ret != default(InstaMediaList))
+                {
+                    ret.PageSize = mediaResponse.ResultsCount;
+                    ret.Pages = paginationParameters.PagesLoaded;
+                }
+                return ret;
+            }
+
+            InstaMediaList Convert(InstaMediaListResponse mediaListResponse)
+            {
+                return ConvertersFabric.Instance.GetMediaListConverter(mediaListResponse).Convert();
             }
         }
 
@@ -223,11 +276,23 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaActivityFeed" />
         /// </returns>
         public async Task<IResult<InstaActivityFeed>> GetRecentActivityFeedAsync(
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters) =>
+            await GetRecentActivityFeedAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get recent activity info asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaActivityFeed" />
+        /// </returns>
+        public async Task<IResult<InstaActivityFeed>> GetRecentActivityFeedAsync(
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var uri = UriCreator.GetRecentActivityUri();
-            return await GetRecentActivityInternalAsync(uri, paginationParameters);
+            return await GetRecentActivityInternalAsync(uri, paginationParameters, cancellationToken).ConfigureAwait(false);
         }
 
 
@@ -238,36 +303,44 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>
-        public async Task<IResult<InstaMediaList>> GetSavedFeedAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaMediaList>> GetSavedFeedAsync(PaginationParameters paginationParameters) =>
+            await GetSavedFeedAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get saved media feeds asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetSavedFeedAsync(PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
+            InstaMediaListResponse mediaResponse = null;
             try
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                InstaMediaList Convert(InstaMediaListResponse mediaListResponse)
-                {
-                    return ConvertersFabric.Instance.GetMediaListConverter(mediaListResponse).Convert();
-                }
-                var mediaFeedsResult = await GetAnyFeeds(UriCreator.GetSavedFeedUri(paginationParameters?.NextMaxId));
+                var mediaFeedsResult = await GetAnyFeeds(UriCreator.GetSavedFeedUri(paginationParameters?.NextMaxId)).ConfigureAwait(false);
                 if (!mediaFeedsResult.Succeeded)
-                {
-                    if (mediaFeedsResult.Value != null)
-                        return Result.Fail(mediaFeedsResult.Info, Convert(mediaFeedsResult.Value));
-                    else
-                        return Result.Fail(mediaFeedsResult.Info, default(InstaMediaList));
-                }
-                var mediaResponse = mediaFeedsResult.Value;
+                    return Result.Fail(mediaFeedsResult.Info, GetOrDefault());
+
+                mediaResponse = mediaFeedsResult.Value;
                 paginationParameters.NextMaxId = mediaResponse.NextMaxId;
                 paginationParameters.PagesLoaded++;
                 while (mediaResponse.MoreAvailable
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
-                    var result = await GetAnyFeeds(UriCreator.GetSavedFeedUri(paginationParameters?.NextMaxId));
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var result = await GetAnyFeeds(UriCreator.GetSavedFeedUri(paginationParameters?.NextMaxId)).ConfigureAwait(false);
                     if (!result.Succeeded)
-                        return Result.Fail(result.Info, Convert(mediaResponse));
+                        return Result.Fail(result.Info, GetOrDefault());
 
                     mediaResponse.NextMaxId = paginationParameters.NextMaxId = result.Value.NextMaxId;
                     mediaResponse.MoreAvailable = result.Value.MoreAvailable;
@@ -277,20 +350,32 @@ namespace InstagramApiSharp.API.Processors
                     mediaResponse.Medias.AddRange(result.Value.Medias);
                     paginationParameters.PagesLoaded++;
                 }
-                var mediaList = Convert(mediaResponse);
-                mediaList.PageSize = mediaResponse.ResultsCount;
-                mediaList.Pages = paginationParameters.PagesLoaded;
-                return Result.Success(mediaList);
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaMediaList), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, GetOrDefault(), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaMediaList>(exception);
+                return Result.Fail(exception, GetOrDefault());
+            }
+
+            InstaMediaList GetOrDefault()
+            {
+                var ret = mediaResponse != null ? Convert(mediaResponse) : default(InstaMediaList);
+                if (ret != default(InstaMediaList))
+                {
+                    ret.PageSize = mediaResponse.ResultsCount;
+                    ret.Pages = paginationParameters.PagesLoaded;
+                }
+                return ret;
+            }
+            InstaMediaList Convert(InstaMediaListResponse mediaListResponse)
+            {
+                return ConvertersFabric.Instance.GetMediaListConverter(mediaListResponse).Convert();
             }
         }
 
@@ -302,7 +387,21 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaTagFeed" />
         /// </returns>
-        public async Task<IResult<InstaTagFeed>> GetTagFeedAsync(string tag, PaginationParameters paginationParameters)
+        public async Task<IResult<InstaTagFeed>> GetTagFeedAsync(string tag, PaginationParameters paginationParameters) =>
+            await GetTagFeedAsync(tag, paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get tag feed by tag value asynchronously
+        /// </summary>
+        /// <param name="tag">Tag value</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaTagFeed" />
+        /// </returns>
+        public async Task<IResult<InstaTagFeed>> GetTagFeedAsync(string tag, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var tagFeed = new InstaTagFeed();
@@ -316,7 +415,7 @@ namespace InstagramApiSharp.API.Processors
                     return ConvertersFabric.Instance.GetTagFeedConverter(instaTagFeedResponse).Convert();
                 }
 
-                var tags = await GetTagFeed(tag, paginationParameters);
+                var tags = await GetTagFeed(tag, paginationParameters).ConfigureAwait(false);
                 if (!tags.Succeeded)
                 {
                     if (tags.Value != null)
@@ -335,7 +434,9 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
-                    var nextFeed = await GetTagFeed(tag, paginationParameters);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var nextFeed = await GetTagFeed(tag, paginationParameters).ConfigureAwait(false);
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, tagFeed);
 
@@ -369,8 +470,26 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaFeed" />
         /// </returns>
-        public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters, 
+        public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
             string[] seenMediaIds = null, bool refreshRequest = false,
+            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None) =>
+            await GetUserTimelineFeedAsync(paginationParameters, CancellationToken.None, seenMediaIds,
+               refreshRequest, paginationSource).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get user timeline feed (feed of recent posts from users you follow) asynchronously.
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="seenMediaIds">Id of the posts seen till now</param>
+        /// <param name="refreshRequest">Request refresh feeds</param>
+        /// <param name="paginationSource">Pagination source</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>
+        ///     <see cref="InstaFeed" />
+        /// </returns>
+        public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken, string[] seenMediaIds = null, bool refreshRequest = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -399,6 +518,8 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextFeed = await GetUserTimelineFeed(paginationParameters, null, false, paginationSource);
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, feed);
@@ -431,7 +552,20 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="clusterId">Cluster id</param>
         /// <returns><see cref="InstaTopicalExploreFeed" /></returns>
-        public async Task<IResult<InstaTopicalExploreFeed>> GetTopicalExploreFeedAsync(PaginationParameters paginationParameters, string clusterId = null)
+        public async Task<IResult<InstaTopicalExploreFeed>> GetTopicalExploreFeedAsync(PaginationParameters paginationParameters,
+            string clusterId = null) =>
+            await GetTopicalExploreFeedAsync(paginationParameters, CancellationToken.None, clusterId).ConfigureAwait(false);
+
+
+        /// <summary>
+        ///     Get user topical explore feeds asynchronously
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="clusterId">Cluster id</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns><see cref="InstaTopicalExploreFeed" /></returns>
+        public async Task<IResult<InstaTopicalExploreFeed>> GetTopicalExploreFeedAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken,string clusterId = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var topicalExploreFeed = new InstaTopicalExploreFeed();
@@ -461,6 +595,8 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextFeed = await GetTopicalExploreFeed(paginationParameters, clusterId);
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, Convert(feeds.Value));
@@ -526,13 +662,14 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaActivityFeed>> GetRecentActivityInternalAsync(Uri uri,
-            PaginationParameters paginationParameters)
+            PaginationParameters paginationParameters, CancellationToken cancellationToken)
         {
+            var activityFeed = new InstaActivityFeed();
+
             try
             {
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, uri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request, HttpCompletionOption.ResponseContentRead);
-                var activityFeed = new InstaActivityFeed();
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -549,6 +686,8 @@ namespace InstagramApiSharp.API.Processors
                 while (!string.IsNullOrEmpty(nextId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextFollowingFeed = await GetFollowingActivityWithMaxIdAsync(nextId);
                     if (!nextFollowingFeed.Succeeded)
                         return Result.Fail(nextFollowingFeed.Info, activityFeed);
@@ -565,12 +704,12 @@ namespace InstagramApiSharp.API.Processors
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaActivityFeed), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, activityFeed, ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaActivityFeed>(exception);
+                return Result.Fail(exception, activityFeed);
             }
         }
 
