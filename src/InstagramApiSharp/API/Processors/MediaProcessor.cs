@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
@@ -226,7 +227,11 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        public async Task<IResult<InstaMediaList>> GetArchivedMediaAsync(PaginationParameters paginationParameters)
+        public async Task<IResult<InstaMediaList>> GetArchivedMediaAsync(PaginationParameters paginationParameters) =>
+            await GetArchivedMediaAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+
+        public async Task<IResult<InstaMediaList>> GetArchivedMediaAsync(PaginationParameters paginationParameters, 
+            CancellationToken cancellationToken)
         {
             var mediaList = new InstaMediaList();
             try
@@ -252,6 +257,8 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     paginationParameters.PagesLoaded++;
                     var nextMedia = await GetArchivedMedia(paginationParameters.NextMaxId);
                     if (!nextMedia.Succeeded)

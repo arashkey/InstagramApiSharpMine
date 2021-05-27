@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
@@ -39,10 +40,20 @@ namespace InstagramApiSharp.API.Processors
         ///     Get archived medias
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>
         Task<IResult<InstaMediaList>> GetArchivedMediaAsync(PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Get archived medias
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetArchivedMediaAsync(PaginationParameters paginationParameters, CancellationToken cancellationToken);
 
         /// <summary>
         ///     Get blocked medias
