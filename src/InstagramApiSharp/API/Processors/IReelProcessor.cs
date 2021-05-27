@@ -10,6 +10,7 @@ using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
@@ -24,6 +25,15 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaReelsMediaList>> GetUserReelsClipsAsync(long userId, PaginationParameters paginationParameters);
 
         /// <summary>
+        ///     Get user's reels clips (medias)
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaReelsMediaList>> GetUserReelsClipsAsync(long userId, PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
+
+        /// <summary>
         ///     Mark reel feed as seen
         /// </summary>
         /// <param name="mediaPkImpression">Media pk (from <see cref="InstaMedia.Pk"/> )</param>
@@ -34,6 +44,14 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         Task<IResult<InstaReelsMediaList>> GetReelsClipsAsync(PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Explore reel feeds
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaReelsMediaList>> GetReelsClipsAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
 
         /// <summary>
         ///     Upload reel video

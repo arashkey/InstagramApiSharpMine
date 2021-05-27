@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
@@ -64,6 +65,16 @@ namespace InstagramApiSharp.API.Processors
             await GetReelsClips(paginationParameters, userId).ConfigureAwait(false);
 
         /// <summary>
+        ///     Get user's reels clips (medias)
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaReelsMediaList>> GetUserReelsClipsAsync(long userId,
+            PaginationParameters paginationParameters, CancellationToken cancellationToken) =>
+            await GetReelsClips(paginationParameters, userId, cancellationToken).ConfigureAwait(false);
+
+        /// <summary>
         ///     Mark reel feed as seen
         /// </summary>
         /// <param name="mediaPkImpression">Media pk (from <see cref="InstaMedia.Pk"/> )</param>
@@ -114,6 +125,15 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         public async Task<IResult<InstaReelsMediaList>> GetReelsClipsAsync(PaginationParameters paginationParameters) =>
             await GetReelsClips(paginationParameters).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Explore reel feeds
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaReelsMediaList>> GetReelsClipsAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken) =>
+            await GetReelsClips(paginationParameters, null, cancellationToken).ConfigureAwait(false);
 
         /// <summary>
         ///     Upload reel video
@@ -374,7 +394,8 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        private async Task<IResult<InstaReelsMediaList>> GetReelsClips(PaginationParameters paginationParameters, long? userId = null)
+        private async Task<IResult<InstaReelsMediaList>> GetReelsClips(PaginationParameters paginationParameters, 
+            long? userId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var reelFeeds = new InstaReelsMediaList();
@@ -401,6 +422,8 @@ namespace InstagramApiSharp.API.Processors
                        && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
                        && paginationParameters.PagesLoaded <= paginationParameters.MaximumPagesToLoad)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var nextFeed = await GetReels(paginationParameters, userId);
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, reelFeeds);
