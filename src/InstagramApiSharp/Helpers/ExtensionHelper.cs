@@ -303,7 +303,7 @@ namespace InstagramApiSharp
 
             str += Rnd.Next(2222, 6789);
 
-            return $"897{str}";
+            return $"680{str}";
         }
 
         public static string GetLiveTransactionToken()
