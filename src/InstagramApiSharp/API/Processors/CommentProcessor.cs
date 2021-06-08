@@ -43,47 +43,21 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+
+        /// <summary>
+        ///     Check offensive text for caption
+        /// </summary>
+        /// <param name="captionText">Caption text</param>
+        public async Task<IResult<InstaOffensiveText>> CheckOffensiveCaptionAsync(string captionText) =>
+            await CheckOffensiveText(captionText, null).ConfigureAwait(false);
+
         /// <summary>
         ///     Check offensive text for comment
         /// </summary>
         /// <param name="mediaId">Media identifier</param>
         /// <param name="commentText">Comment text</param>
-        public async Task<IResult<InstaOffensiveText>> CheckOffensiveTextAsync(string mediaId, string commentText)
-        {
-            UserAuthValidator.Validate(_userAuthValidate);
-            try
-            {
-                var instaUri = UriCreator.GetCheckOffensiveTextUri();
-                var fields = new Dictionary<string, string>
-                {
-                    {"media_id", mediaId},
-                    {"_csrftoken", _user.CsrfToken},
-                    {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"comment_text", commentText ?? string.Empty},
-                };
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode == HttpStatusCode.OK)
-                    return Result.UnExpectedResponse<InstaOffensiveText>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaOffensiveText>(json);
-                if (obj.IsSucceed)
-                    return Result.Success(obj);
-                else
-                    return Result.UnExpectedResponse<InstaOffensiveText>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaOffensiveText), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail(exception, default(InstaOffensiveText));
-            }
-        }
+        public async Task<IResult<InstaOffensiveText>> CheckOffensiveTextAsync(string mediaId, string commentText) =>
+            await CheckOffensiveText(commentText, mediaId).ConfigureAwait(false);
 
         /// <summary>
         ///     Block an user from commenting to medias
@@ -885,6 +859,51 @@ namespace InstagramApiSharp.API.Processors
             {
                 _logger?.LogException(exception);
                 return Result.Fail(exception, false);
+            }
+        }
+
+        async Task<IResult<InstaOffensiveText>> CheckOffensiveText(string text, string mediaId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetCheckOffensiveTextUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+                if (!string.IsNullOrEmpty(mediaId))
+                {
+                    data.Add("media_id", mediaId);
+                    data.Add("comment_text", text ?? string.Empty);
+                }
+                else
+                {
+                    data.Add("text", text ?? string.Empty);
+                    data.Add("request_type", "caption");
+                }
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaOffensiveText>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaOffensiveText>(json);
+                if (obj.IsSucceed)
+                    return Result.Success(obj);
+                else
+                    return Result.UnExpectedResponse<InstaOffensiveText>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaOffensiveText), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(InstaOffensiveText));
             }
         }
     }

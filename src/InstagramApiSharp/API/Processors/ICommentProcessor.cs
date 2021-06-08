@@ -11,6 +11,11 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface ICommentProcessor
     {
+        /// <summary>
+        ///     Check offensive text for caption
+        /// </summary>
+        /// <param name="captionText">Caption text</param>
+        Task<IResult<InstaOffensiveText>> CheckOffensiveCaptionAsync(string captionText);
 
         /// <summary>
         ///     Check offensive text for comment
