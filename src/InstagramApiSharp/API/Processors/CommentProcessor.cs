@@ -867,6 +867,7 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
+                text = text?.Replace('\r', '\n');
                 var instaUri = UriCreator.GetCheckOffensiveTextUri();
                 var data = new Dictionary<string, string>
                 {
