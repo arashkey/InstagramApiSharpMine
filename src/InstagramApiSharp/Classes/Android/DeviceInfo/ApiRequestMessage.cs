@@ -102,7 +102,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
             s += s;
             s -= Rnd.Next(10000, 999999);
             s += Rnd.Next(1000, 9999);
-            return s.ToString();
+            return s + Rnd.Next(123, 987).ToString();
         }
         public static ApiRequestMessage FromDevice(AndroidDevice device)
         {

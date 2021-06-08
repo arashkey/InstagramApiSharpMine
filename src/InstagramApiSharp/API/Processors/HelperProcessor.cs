@@ -1715,7 +1715,7 @@ namespace InstagramApiSharp.API.Processors
 
                 var uploadId = ApiRequestMessage.GenerateUnknownUploadId();
                 var videoHashCode = Path.GetFileName(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").GetHashCode();
-                var waterfallId = ApiRequestMessage.GenerateUnknownUploadId();//Guid.NewGuid().ToString();
+                var waterfallId = ApiRequestMessage.GenerateRandomUploadId();//Guid.NewGuid().ToString();
                 var videoEntityName = $"{uploadId}_0_{videoHashCode}";
                 var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode.ToString());
                 var retryContext = GetRetryContext();
@@ -1947,7 +1947,7 @@ namespace InstagramApiSharp.API.Processors
 
                 var randomId = Guid.NewGuid().ToString();
 
-                var waterfallId = ApiRequestMessage.GenerateUnknownUploadId();//Guid.NewGuid().ToString();
+                var waterfallId = ApiRequestMessage.GenerateRandomUploadId();//Guid.NewGuid().ToString();
                 var retryContext = GetRetryContext();
                 HttpRequestMessage request = null;
                 HttpResponseMessage response = null;
@@ -2204,7 +2204,7 @@ namespace InstagramApiSharp.API.Processors
 
                 var randomId = Guid.NewGuid().ToString();
 
-                var waterfallId = ApiRequestMessage.GenerateUnknownUploadId();//Guid.NewGuid().ToString();
+                var waterfallId = ApiRequestMessage.GenerateRandomUploadId();//Guid.NewGuid().ToString();
                 var retryContext = GetRetryContext();
                 HttpRequestMessage request = null;
                 HttpResponseMessage response = null;
