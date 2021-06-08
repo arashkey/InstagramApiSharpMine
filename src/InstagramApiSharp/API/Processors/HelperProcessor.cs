@@ -135,7 +135,7 @@ namespace InstagramApiSharp.API.Processors
 
         public async Task<IResult<string>> UploadSingleVideo(Action<InstaUploaderProgress> progress, InstaVideoUpload video, InstaUploaderProgress upProgress, bool album = true)
         {
-            var uploadId = ApiRequestMessage.GenerateRandomUploadId();
+            var uploadId = ApiRequestMessage.GenerateUnknownUploadId();
             var videoHashCode = Path.GetFileName(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").GetHashCode();
             var waterfallId = Guid.NewGuid().ToString();
             var videoEntityName = $"{uploadId}_0_{videoHashCode}";
@@ -358,7 +358,7 @@ namespace InstagramApiSharp.API.Processors
             };
             try
             {
-                var uploadId = ApiRequestMessage.GenerateRandomUploadId();
+                var uploadId = ApiRequestMessage.GenerateUnknownUploadId();
                 var videoHashCode = Path.GetFileName(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").GetHashCode();
                 var waterfallId = Guid.NewGuid().ToString();
                 var videoEntityName = $"{uploadId}_0_{videoHashCode}";
@@ -848,7 +848,7 @@ namespace InstagramApiSharp.API.Processors
             };
             try
             {
-                var uploadId = ApiRequestMessage.GenerateRandomUploadId();
+                var uploadId = ApiRequestMessage.GenerateUnknownUploadId();
                 var photoHashCode = Path.GetFileName(image.Uri ?? $"C:\\{13.GenerateRandomString()}.jpg").GetHashCode();
                 var photoEntityName = $"{uploadId}_0_{photoHashCode}";
                 var photoUri = UriCreator.GetStoryUploadPhotoUri(uploadId, photoHashCode);
@@ -1437,7 +1437,7 @@ namespace InstagramApiSharp.API.Processors
             };
             try
             {
-                var uploadId = ApiRequestMessage.GenerateRandomUploadId();
+                var uploadId = ApiRequestMessage.GenerateUnknownUploadId();
                 var videoHashCode = Path.GetFileName(audio.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").GetHashCode();
                 var waterfallId = Guid.NewGuid().ToString();
                 var videoEntityName = $"{uploadId}_0_{videoHashCode}";
@@ -1713,9 +1713,9 @@ namespace InstagramApiSharp.API.Processors
             try
             {
 
-                var uploadId = ApiRequestMessage.GenerateRandomUploadId();
+                var uploadId = ApiRequestMessage.GenerateUnknownUploadId();
                 var videoHashCode = Path.GetFileName(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").GetHashCode();
-                var waterfallId = ApiRequestMessage.GenerateRandomUploadId();//Guid.NewGuid().ToString();
+                var waterfallId = ApiRequestMessage.GenerateUnknownUploadId();//Guid.NewGuid().ToString();
                 var videoEntityName = $"{uploadId}_0_{videoHashCode}";
                 var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode.ToString());
                 var retryContext = GetRetryContext();
@@ -1943,11 +1943,11 @@ namespace InstagramApiSharp.API.Processors
         {
             try
             {
-                var uploadId = ApiRequestMessage.GenerateRandomUploadId() + new Random().Next(1000,9999);
+                var uploadId = ApiRequestMessage.GenerateUnknownUploadId() + new Random().Next(1000,9999);
 
                 var randomId = Guid.NewGuid().ToString();
 
-                var waterfallId = ApiRequestMessage.GenerateRandomUploadId();//Guid.NewGuid().ToString();
+                var waterfallId = ApiRequestMessage.GenerateUnknownUploadId();//Guid.NewGuid().ToString();
                 var retryContext = GetRetryContext();
                 HttpRequestMessage request = null;
                 HttpResponseMessage response = null;
@@ -2200,11 +2200,11 @@ namespace InstagramApiSharp.API.Processors
         {
             try
             {
-                var uploadId = ApiRequestMessage.GenerateRandomUploadId() + new Random().Next(1000, 9999);
+                var uploadId = ApiRequestMessage.GenerateUnknownUploadId() + new Random().Next(1000, 9999);
 
                 var randomId = Guid.NewGuid().ToString();
 
-                var waterfallId = ApiRequestMessage.GenerateRandomUploadId();//Guid.NewGuid().ToString();
+                var waterfallId = ApiRequestMessage.GenerateUnknownUploadId();//Guid.NewGuid().ToString();
                 var retryContext = GetRetryContext();
                 HttpRequestMessage request = null;
                 HttpResponseMessage response = null;

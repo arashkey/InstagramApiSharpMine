@@ -966,7 +966,7 @@ namespace InstagramApiSharp.API.Processors
                 }
                 catch { }
                 var instaUri = UriCreator.GetMediaAlbumConfigureUri();
-                var clientSidecarId = ApiRequestMessage.GenerateUploadId();
+                var clientSidecarId = ApiRequestMessage.GenerateUnknownUploadId();
                 var childrenArray = new JArray();
 
                 foreach (var al in album)
@@ -1201,7 +1201,7 @@ namespace InstagramApiSharp.API.Processors
                 }
                 catch { }
                 var instaUri = UriCreator.GetMediaAlbumConfigureUri();
-                var clientSidecarId = ApiRequestMessage.GenerateUploadId();
+                var clientSidecarId = ApiRequestMessage.GenerateUnknownUploadId();
                 var childrenArray = new JArray();
                 if (imagesUploadIds != null && imagesUploadIds.Any())
                 {
