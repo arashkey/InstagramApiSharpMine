@@ -182,9 +182,9 @@ namespace InstagramApiSharp.API.Processors
             upProgress.UploadState = InstaUploadState.Uploading;
             progress?.Invoke(upProgress);
             var vidExt = Path.GetExtension(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").Replace(".", "").ToLower();
-            if (vidExt == "mov")
-                request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
-            else
+            //if (vidExt == "mov")
+            //    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
+            //else
                 request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
 
             request.Headers.AddHeader("Offset", "0", _instaApi);
@@ -485,9 +485,9 @@ namespace InstagramApiSharp.API.Processors
                 upProgress.UploadState = InstaUploadState.Uploading;
                 progress?.Invoke(upProgress);
                 var vidExt = Path.GetExtension(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").Replace(".", "").ToLower();
-                if (vidExt == "mov")
-                    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
-                else
+                //if (vidExt == "mov")
+                //    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
+                //else
                     request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
 
                 request.Headers.AddHeader("Offset", "0", _instaApi);
@@ -1767,9 +1767,9 @@ namespace InstagramApiSharp.API.Processors
                 upProgress.UploadState = InstaUploadState.Uploading;
                 progress?.Invoke(upProgress);
                 var vidExt = Path.GetExtension(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").Replace(".", "").ToLower();
-                if (vidExt == "mov")
-                    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
-                else
+                //if (vidExt == "mov")
+                //    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
+                //else
                     request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
 
                 request.Headers.AddHeader("Offset", "0", _instaApi);
