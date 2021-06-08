@@ -94,11 +94,11 @@ namespace InstagramApiSharp.API
         #region Main
         public const string RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY = "ig-set-password-encryption-pub-key";
         public const string RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID = "ig-set-password-encryption-key-id";
-        public const string HEADER_IG_U_DIRECT_REGION_HINT = "ig-u-ig-direct-region-hint";
-        public const string HEADER_IG_U_SHBID = "ig-u-shbid";
-        public const string HEADER_IG_U_SHBTS = "ig-u-shbts";
-        public const string HEADER_IG_U_DS_USER_ID = "ig-u-ds-user-id";
-        public const string HEADER_IG_U_RUR = "ig-u-rur";
+        public const string HEADER_IG_U_DIRECT_REGION_HINT = "IG-U-IG-DIRECT-REGION-HINT";
+        public const string HEADER_IG_U_SHBID = "IG-U-SHBID";
+        public const string HEADER_IG_U_SHBTS = "IG-U-SHBTS";
+        public const string HEADER_IG_U_DS_USER_ID = "IG-U-DS-USER-ID";
+        public const string HEADER_IG_U_RUR = "IG-U-RUR";
         public const string COOKIES_IG_DIRECT_REGION_HINT = "ig_direct_region_hint";
         public const string COOKIES_SHBTS = "shbts";
         public const string COOKIES_SHBID = "shbid";
