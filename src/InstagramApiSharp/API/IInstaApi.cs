@@ -39,6 +39,45 @@ namespace InstagramApiSharp.API
     public interface IInstaApi
     {
         #region Properties
+
+        #region Locale
+
+        /// <summary>
+        ///     X-IG-App-Startup-Country header
+        ///     <para>Default is US</para>
+        /// </summary>
+        string StartupCountry { get; set; }
+        /// <summary>
+        ///     X-IG-Timezone-Offset header
+        ///     <para>Default is choosen from your system information</para>
+        /// </summary>
+        uint StartupCountryCode { get; set; }
+        /// <summary>
+        ///     X-IG-Device-Locale header
+        ///     <para>Default is en_US</para>
+        /// </summary>
+        string DeviceLocale { get; set; }
+        /// <summary>
+        ///     X-IG-App-Locale header
+        ///     <para>Default is en_US</para>
+        /// </summary>
+        string AppLocale { get; set; }
+        /// <summary>
+        ///     X-IG-Mapped-Locale
+        ///     <para>Default is en_US</para>
+        /// </summary>
+        string MappedLocale { get; set; }
+        /// <summary>
+        ///     Accept-Language
+        ///     <para>Default is en-US</para>
+        ///     <para>for UK should be: en-GB, en-US</para>
+        /// </summary>
+        string AcceptLanguage { get; set; }
+
+
+        #endregion
+
+
 #if WITH_NOTIFICATION
         /// <summary>
         ///     Realtime client for direct message only [for now]

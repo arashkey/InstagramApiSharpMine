@@ -36,7 +36,16 @@ namespace InstagramApiSharp.API
     /// </summary>
     internal class InstaApi : IInstaApi
     {
-#region Variables and properties
+        #region Variables and properties
+
+        private string _startupCountry = "US";
+        private string _deviceLocale = "en_US";
+        private string _appLocale = "en_US";
+        private string _mappedLocale = "en_US";
+        private string _acceptLanguage = "en-US";
+
+        private uint _startupCountryCode = 1;
+        private int _timeZoneOffset;
 
         private IConfigureMediaDelay _configureMediaDelay = ConfigureMediaDelay.Empty();
         private IRequestDelay _delay = RequestDelay.Empty();
@@ -98,6 +107,76 @@ namespace InstagramApiSharp.API
         ///     Registration Service
         /// </summary>
         public IRegistrationService RegistrationService { get; }
+
+
+        #region Locale
+        public string StartupCountry
+        {
+            get => _startupCountry;
+            set => _startupCountry = value;
+        }
+
+        public uint StartupCountryCode
+        {
+            get => _startupCountryCode;
+            set => _startupCountryCode = _httpRequestProcessor.RequestMessage.StartupCountryCode = value == 0 ? 1 : value;
+        }
+
+        public int TimeZoneOffset
+        {
+            get => _timeZoneOffset;
+            set => _timeZoneOffset = value;
+        }
+
+        public string DeviceLocale
+        {
+            get => _deviceLocale;
+            set
+            {
+                if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+                    _deviceLocale = "en_US";
+                else
+                    _deviceLocale = value;
+            }
+        }
+
+        public string AppLocale
+        {
+            get => _appLocale;
+            set
+            {
+                if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+                    _appLocale = "en_US";
+                else
+                    _appLocale = value;
+            }
+        }
+
+        public string MappedLocale
+        {
+            get => _mappedLocale;
+            set
+            {
+                if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+                    _mappedLocale = "en_US";
+                else
+                    _mappedLocale = value;
+            }
+        }
+
+        public string AcceptLanguage
+        {
+            get => _acceptLanguage;
+            set
+            {
+                if (string.IsNullOrEmpty(value) || string.IsNullOrWhiteSpace(value))
+                    _acceptLanguage = "en-US";
+                else
+                    _acceptLanguage = value;
+            }
+        }
+
+        #endregion Locale
 
         #endregion Variables and properties
 

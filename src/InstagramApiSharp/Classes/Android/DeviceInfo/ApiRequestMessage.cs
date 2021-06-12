@@ -17,7 +17,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         [JsonProperty("jazoest")]
         public string Jazoest { get; set; }
         [JsonProperty("country_codes")]
-        public string CountryCodes { get; set; } = "[{\"country_code\":\"1\",\"source\":[\"default\"]}]";
+        public string CountryCodes { get; set; } = "[{\"country_code\":\"$COUNTRYCODE$\",\"source\":[\"default\"]}]"; // "[{\"country_code\":\"$COUNTRYCODE$\",\"source\":[\"default\"]},{\"country_code\":\"$COUNTRYCODE$\",\"source\":[\"uig_via_phone_id\"]}]";
         [JsonProperty("phone_id")]
         public string PhoneId { get { return _phoneId; } set { _phoneId = value; Jazoest = ExtensionHelper.GenerateJazoest(value); } }
         [JsonProperty("enc_password")]
@@ -41,6 +41,8 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         public string Password { get; set; }
         [JsonProperty("login_attempt_count")]
         public string LoginAttemptCount { get; set; } = "0";
+        [JsonIgnore()]
+        public uint StartupCountryCode { get; set; }
         public static ApiRequestMessage CurrentDevice { get; private set; }
         internal string GetMessageString(bool isNewerApi)
         {
@@ -54,7 +56,8 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
                                 NullValueHandling = NullValueHandling.Ignore
                             });
             Password = pass;
-            return json;
+            return json
+                .Replace("$COUNTRYCODE$", StartupCountryCode.ToString());
         }
         internal string GenerateSignature(InstaApiVersion apiVersion, string signatureKey, bool isNewerApi, out string deviceid)
         {
