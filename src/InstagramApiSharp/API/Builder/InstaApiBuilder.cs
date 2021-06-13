@@ -307,6 +307,7 @@ namespace InstagramApiSharp.API.Builder
                         HardwareModel = parts[6],
                         DeviceGuid = toDeviceGuid,
                         PhoneGuid = toPhoneGuid,
+                        FamilyDeviceGuid = toPhoneGuid,
                         DeviceId = ApiRequestMessage.GenerateDeviceIdFromGuid(toDeviceGuid),
                         AndroidVer = androidVer
                     };
