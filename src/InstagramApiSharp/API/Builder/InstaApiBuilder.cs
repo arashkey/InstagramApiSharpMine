@@ -28,6 +28,7 @@ namespace InstagramApiSharp.API.Builder
         private InstaApiVersionType? _apiVersionType;
         private ISessionHandler _sessionHandler;
         private bool _loadProxyFromSession = false;
+        private string _language = "en-US";
         private InstaApiBuilder()
         {
         }
@@ -82,7 +83,12 @@ namespace InstagramApiSharp.API.Builder
             {
                 LoadProxyFromSessionFile = _loadProxyFromSession
             };
-
+            if (!string.IsNullOrEmpty(_language))
+            {
+                // no need to add StartupCountry
+                instaApi.AppLocale = instaApi.DeviceLocale = instaApi.MappedLocale = _language.Replace("-", "_");
+                instaApi.AcceptLanguage = _language;
+            }
             try
             {
                 instaApi.TimezoneOffset = InstaApiConstants.TIMEZONE_OFFSET = int.Parse(DateTimeOffset.Now.Offset.TotalSeconds.ToString());
@@ -305,7 +311,7 @@ namespace InstagramApiSharp.API.Builder
                         AndroidVer = androidVer
                     };
 
-                    InstaApiConstants.ACCEPT_LANGUAGE = lang;
+                    _language = InstaApiConstants.ACCEPT_LANGUAGE = lang;
 
                     return SetDevice(device);
                 }
