@@ -3014,7 +3014,14 @@ namespace InstagramApiSharp.API
 #endif
                 InstaApiVersion = ApiVersionType,
                 ChallengeLoginInfo = ChallengeLoginInfo,
-                TwoFactorLoginInfo = TwoFactorLoginInfo
+                TwoFactorLoginInfo = TwoFactorLoginInfo,
+                StartupCountry = StartupCountry,
+                StartupCountryCode = StartupCountryCode,
+                AcceptLanguage = AcceptLanguage,
+                AppLocale = AppLocale,
+                DeviceLocale = DeviceLocale,
+                MappedLocale = MappedLocale,
+                TimezoneOffset = TimezoneOffset
             };
             return SerializationHelper.SerializeToStream(state);
         }
@@ -3046,7 +3053,14 @@ namespace InstagramApiSharp.API
 #endif
                 InstaApiVersion = ApiVersionType,
                 ChallengeLoginInfo = ChallengeLoginInfo,
-                TwoFactorLoginInfo = TwoFactorLoginInfo
+                TwoFactorLoginInfo = TwoFactorLoginInfo,
+                StartupCountry = StartupCountry,
+                StartupCountryCode = StartupCountryCode,
+                AcceptLanguage = AcceptLanguage,
+                AppLocale = AppLocale,
+                DeviceLocale = DeviceLocale,
+                MappedLocale = MappedLocale,
+                TimezoneOffset = TimezoneOffset
             };
             return SerializationHelper.SerializeToString(state);
         }
@@ -3078,7 +3092,14 @@ namespace InstagramApiSharp.API
 #endif
                 InstaApiVersion = ApiVersionType,
                 ChallengeLoginInfo = ChallengeLoginInfo,
-                TwoFactorLoginInfo = TwoFactorLoginInfo
+                TwoFactorLoginInfo = TwoFactorLoginInfo,
+                StartupCountry = StartupCountry,
+                StartupCountryCode = StartupCountryCode,
+                AcceptLanguage = AcceptLanguage,
+                AppLocale = AppLocale,
+                DeviceLocale = DeviceLocale,
+                MappedLocale = MappedLocale,
+                TimezoneOffset = TimezoneOffset
             };
             return state;
         }
@@ -3120,6 +3141,14 @@ namespace InstagramApiSharp.API
         public void LoadStateDataFromStream(Stream stream)
         {
             var data = SerializationHelper.DeserializeFromStream<StateData>(stream);
+            StartupCountry = data.StartupCountry;
+            StartupCountryCode = data.StartupCountryCode;
+            AppLocale = data.AppLocale;
+            MappedLocale = data.MappedLocale;
+            DeviceLocale = data.DeviceLocale;
+            AcceptLanguage = data.AcceptLanguage;
+            TimezoneOffset = data.TimezoneOffset;
+
             if (!IsCustomDeviceSet)
                 _deviceInfo = data.DeviceInfo;
             _user = data.UserSession;
@@ -3167,6 +3196,13 @@ namespace InstagramApiSharp.API
             if (!IsCustomDeviceSet)
                 _deviceInfo = data.DeviceInfo;
             _user = data.UserSession;
+            StartupCountry = data.StartupCountry;
+            StartupCountryCode = data.StartupCountryCode;
+            AppLocale = data.AppLocale;
+            MappedLocale = data.MappedLocale;
+            DeviceLocale = data.DeviceLocale;
+            AcceptLanguage = data.AcceptLanguage;
+            TimezoneOffset = data.TimezoneOffset;
 
             if (string.IsNullOrEmpty(_deviceInfo.IGBandwidthSpeedKbps))
             {
@@ -3210,12 +3246,19 @@ namespace InstagramApiSharp.API
         /// <summary>
         ///     Set state data from StateData object
         /// </summary>
-        /// <param name="stateData"></param>
-        public void LoadStateDataFromObject(StateData stateData)
+        /// <param name="data"></param>
+        public void LoadStateDataFromObject(StateData data)
         {
             if (!IsCustomDeviceSet)
-                _deviceInfo = stateData.DeviceInfo;
-            _user = stateData.UserSession;
+                _deviceInfo = data.DeviceInfo;
+            _user = data.UserSession;
+            StartupCountry = data.StartupCountry;
+            StartupCountryCode = data.StartupCountryCode;
+            AppLocale = data.AppLocale;
+            MappedLocale = data.MappedLocale;
+            DeviceLocale = data.DeviceLocale;
+            AcceptLanguage = data.AcceptLanguage;
+            TimezoneOffset = data.TimezoneOffset;
 
             if (string.IsNullOrEmpty(_deviceInfo.IGBandwidthSpeedKbps))
             {
@@ -3225,33 +3268,33 @@ namespace InstagramApiSharp.API
             }
 
             //Load Stream Edit 
-            _httpRequestProcessor.RequestMessage.Username = stateData.UserSession.UserName;
-            _httpRequestProcessor.RequestMessage.Password = stateData.UserSession.Password;
+            _httpRequestProcessor.RequestMessage.Username = data.UserSession.UserName;
+            _httpRequestProcessor.RequestMessage.Password = data.UserSession.Password;
 
-            _httpRequestProcessor.RequestMessage.DeviceId = stateData.DeviceInfo.DeviceId;
-            _httpRequestProcessor.RequestMessage.PhoneId = stateData.DeviceInfo.PhoneGuid.ToString();
-            _httpRequestProcessor.RequestMessage.Guid = stateData.DeviceInfo.DeviceGuid;
-            _httpRequestProcessor.RequestMessage.AdId = stateData.DeviceInfo.AdId.ToString();
+            _httpRequestProcessor.RequestMessage.DeviceId = data.DeviceInfo.DeviceId;
+            _httpRequestProcessor.RequestMessage.PhoneId = data.DeviceInfo.PhoneGuid.ToString();
+            _httpRequestProcessor.RequestMessage.Guid = data.DeviceInfo.DeviceGuid;
+            _httpRequestProcessor.RequestMessage.AdId = data.DeviceInfo.AdId.ToString();
 
-            foreach (var cookie in stateData.RawCookies)
+            foreach (var cookie in data.RawCookies)
             {
                 _httpRequestProcessor.HttpHandler.CookieContainer.Add(new Uri(InstaApiConstants.INSTAGRAM_URL), cookie);
             }
 
-            if (stateData.InstaApiVersion == null)
-                stateData.InstaApiVersion = InstaApiVersionType.Version180;
+            if (data.InstaApiVersion == null)
+                data.InstaApiVersion = InstaApiVersionType.Version180;
             if (!LoadApiVersionFromSessionFile)
-                stateData.InstaApiVersion = InstaApiVersionType.Version180;
-            ApiVersionType = stateData.InstaApiVersion.Value;
+                data.InstaApiVersion = InstaApiVersionType.Version180;
+            ApiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(ApiVersionType);
             _httpHelper = new HttpHelper(_apiVersion, _httpRequestProcessor, this);
 #if WITH_NOTIFICATION
             Task.Run(async () => { await PushClient?.Shutdown(); });
             PushClient = new FbnsClient(this, stateData.FbnsConnectionData);
 #endif
-            IsUserAuthenticated = stateData.IsAuthenticated;
-            TwoFactorLoginInfo = stateData.TwoFactorLoginInfo; 
-            ChallengeLoginInfo = stateData.ChallengeLoginInfo;
+            IsUserAuthenticated = data.IsAuthenticated;
+            TwoFactorLoginInfo = data.TwoFactorLoginInfo; 
+            ChallengeLoginInfo = data.ChallengeLoginInfo;
             InvalidateProcessors();
         }
 
