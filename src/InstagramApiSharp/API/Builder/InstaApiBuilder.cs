@@ -27,7 +27,7 @@ namespace InstagramApiSharp.API.Builder
         private UserSessionData _user;
         private InstaApiVersionType? _apiVersionType;
         private ISessionHandler _sessionHandler;
-
+        private bool _loadProxyFromSession = false;
         private InstaApiBuilder()
         {
         }
@@ -78,7 +78,10 @@ namespace InstagramApiSharp.API.Builder
             if (_apiVersionType == null)
                 _apiVersionType = InstaApiVersionType.Version180;
 
-            var instaApi = new InstaApi(_user, _logger, _device, _httpRequestProcessor, _apiVersionType.Value, _configureMediaDelay);
+            var instaApi = new InstaApi(_user, _logger, _device, _httpRequestProcessor, _apiVersionType.Value, _configureMediaDelay)
+            {
+                LoadProxyFromSessionFile = _loadProxyFromSession
+            };
 
             try
             {
@@ -246,6 +249,11 @@ namespace InstagramApiSharp.API.Builder
                 httpRequestProcessor.HttpHandler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
             _httpRequestProcessor = httpRequestProcessor;
+            return this;
+        }
+        public IInstaApiBuilder LoadProxyFromSessionFile()
+        {
+            _loadProxyFromSession = true;
             return this;
         }
 

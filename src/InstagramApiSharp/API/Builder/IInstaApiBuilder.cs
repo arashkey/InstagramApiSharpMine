@@ -96,6 +96,11 @@ namespace InstagramApiSharp.API.Builder
         IInstaApiBuilder SetSessionHandler(ISessionHandler sessionHandler);
 
         /// <summary>
+        ///     Load proxy from session file
+        /// </summary>
+        IInstaApiBuilder LoadProxyFromSessionFile();
+
+        /// <summary>
         ///     Try to parse user agent and set it if possible
         /// </summary>
         /// <param name="userAgent">User agent</param>

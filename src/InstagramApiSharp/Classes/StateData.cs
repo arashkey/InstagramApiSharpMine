@@ -30,5 +30,15 @@ namespace InstagramApiSharp.Classes
         public string AcceptLanguage { get; set; }
 
         #endregion
+
+        #region Proxy
+
+        public Uri ProxyAddress { get; set; }
+        public bool ProxyUseDefaultCredentials { get; set; }
+        public bool ProxyBypassProxyOnLocal { get; set; }
+        public string ProxyCredentialUsername { get; set; }
+        public string ProxyCredentialPassword { get; set; }
+        public string ProxyCredentialDomain { get; set; }
+        #endregion
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using InstagramApiSharp.API;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
@@ -28,8 +30,10 @@ namespace InstagramApiSharp.Classes
         public HttpClient Client { get; set; }
         public void SetHttpClientHandler(HttpClientHandler handler)
         {
+            handler.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
             HttpHandler = handler;
-            Client = new HttpClient(handler);
+            Client = new HttpClient(handler) { BaseAddress = new Uri(InstaApiConstants.INSTAGRAM_URL) };
         }
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, bool keepAlive = false)

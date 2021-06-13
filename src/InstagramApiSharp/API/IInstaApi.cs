@@ -130,6 +130,15 @@ namespace InstagramApiSharp.API
         /// </summary>
         bool LoadApiVersionFromSessionFile { get; set; }
         /// <summary>
+        ///     Load proxy from session file.
+        ///     <para>
+        ///           When first time you set proxy using InstaApiBuilder class, and you try to save the session, proxy will save automatically. 
+        ///           Enabling this options means that the proxy set automatically by the library.
+        ///     </para>
+        ///     <para>Default is false</para>
+        /// </summary>
+        bool LoadProxyFromSessionFile { get; set; }
+        /// <summary>
         ///     Live api functions.
         /// </summary>
         ILiveProcessor LiveProcessor { get; }

@@ -108,7 +108,7 @@ namespace InstagramApiSharp.API
         /// </summary>
         public IRegistrationService RegistrationService { get; }
 
-
+        public bool LoadProxyFromSessionFile { get; set; } = false;
         #region Locale
         public string StartupCountry
         {
@@ -2991,79 +2991,17 @@ namespace InstagramApiSharp.API
         /// <returns>
         ///     State data
         /// </returns>
-        public Stream GetStateDataAsStream()
-        {
+        public Stream GetStateDataAsStream() =>
+            SerializationHelper.SerializeToStream(GetStateDataAsObject());
 
-            var Cookies = _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(new Uri(InstaApiConstants.INSTAGRAM_URL));
-            var RawCookiesList = new List<Cookie>();
-            foreach (Cookie cookie in Cookies)
-            {
-                RawCookiesList.Add(cookie);
-            }
-
-
-            var state = new StateData
-            {
-                DeviceInfo = _deviceInfo,
-                IsAuthenticated = IsUserAuthenticated,
-                UserSession = _user,
-                Cookies = _httpRequestProcessor.HttpHandler.CookieContainer,
-                RawCookies = RawCookiesList,
-#if WITH_NOTIFICATION
-                FbnsConnectionData = PushClient?.ConnectionData,
-#endif
-                InstaApiVersion = ApiVersionType,
-                ChallengeLoginInfo = ChallengeLoginInfo,
-                TwoFactorLoginInfo = TwoFactorLoginInfo,
-                StartupCountry = StartupCountry,
-                StartupCountryCode = StartupCountryCode,
-                AcceptLanguage = AcceptLanguage,
-                AppLocale = AppLocale,
-                DeviceLocale = DeviceLocale,
-                MappedLocale = MappedLocale,
-                TimezoneOffset = TimezoneOffset
-            };
-            return SerializationHelper.SerializeToStream(state);
-        }
         /// <summary>
         ///     Get current state info as Json string
         /// </summary>
         /// <returns>
         ///     State data
         /// </returns>
-        public string GetStateDataAsString()
-        {
-
-            var Cookies = _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(new Uri(InstaApiConstants.INSTAGRAM_URL));
-            var RawCookiesList = new List<Cookie>();
-            foreach (Cookie cookie in Cookies)
-            {
-                RawCookiesList.Add(cookie);
-            }
-
-            var state = new StateData
-            {
-                DeviceInfo = _deviceInfo,
-                IsAuthenticated = IsUserAuthenticated,
-                UserSession = _user,
-                Cookies = _httpRequestProcessor.HttpHandler.CookieContainer,
-                RawCookies = RawCookiesList,
-#if WITH_NOTIFICATION
-                FbnsConnectionData = PushClient?.ConnectionData,
-#endif
-                InstaApiVersion = ApiVersionType,
-                ChallengeLoginInfo = ChallengeLoginInfo,
-                TwoFactorLoginInfo = TwoFactorLoginInfo,
-                StartupCountry = StartupCountry,
-                StartupCountryCode = StartupCountryCode,
-                AcceptLanguage = AcceptLanguage,
-                AppLocale = AppLocale,
-                DeviceLocale = DeviceLocale,
-                MappedLocale = MappedLocale,
-                TimezoneOffset = TimezoneOffset
-            };
-            return SerializationHelper.SerializeToString(state);
-        }
+        public string GetStateDataAsString() =>
+            SerializationHelper.SerializeToString(GetStateDataAsObject());
 
         /// <summary>
         ///     Get current state as StateData object
@@ -3101,6 +3039,18 @@ namespace InstagramApiSharp.API
                 MappedLocale = MappedLocale,
                 TimezoneOffset = TimezoneOffset
             };
+
+            if (_httpRequestProcessor.HttpHandler?.Proxy is WebProxy proxy)
+            {
+                state.ProxyAddress = proxy.Address;
+                state.ProxyUseDefaultCredentials = proxy.UseDefaultCredentials;
+                state.ProxyBypassProxyOnLocal = proxy.BypassProxyOnLocal;
+                if (proxy.Credentials is NetworkCredential credential)
+                {
+                    state.ProxyCredentialUsername = credential.UserName;
+                    state.ProxyCredentialPassword = credential.Password;
+                }
+            }
             return state;
         }
 
@@ -3138,110 +3088,14 @@ namespace InstagramApiSharp.API
         ///     Loads the state data from stream.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        public void LoadStateDataFromStream(Stream stream)
-        {
-            var data = SerializationHelper.DeserializeFromStream<StateData>(stream);
-            StartupCountry = data.StartupCountry;
-            StartupCountryCode = data.StartupCountryCode;
-            AppLocale = data.AppLocale;
-            MappedLocale = data.MappedLocale;
-            DeviceLocale = data.DeviceLocale;
-            AcceptLanguage = data.AcceptLanguage;
-            TimezoneOffset = data.TimezoneOffset;
+        public void LoadStateDataFromStream(Stream stream) =>
+            LoadStateDataFromObject(SerializationHelper.DeserializeFromStream<StateData>(stream));
 
-            if (!IsCustomDeviceSet)
-                _deviceInfo = data.DeviceInfo;
-            _user = data.UserSession;
-            if (string.IsNullOrEmpty(_deviceInfo.IGBandwidthSpeedKbps))
-            {
-                _deviceInfo.IGBandwidthSpeedKbps = string.Format("{0}.{1}", Rnd.Next(1233, 1567), Rnd.Next(100, 999));
-                _deviceInfo.IGBandwidthTotalTimeMS = Rnd.Next(781, 999).ToString();
-                _deviceInfo.IGBandwidthTotalBytesB = ((int)((double.Parse(_deviceInfo.IGBandwidthSpeedKbps) * double.Parse(_deviceInfo.IGBandwidthTotalTimeMS)) + Rnd.Next(100, 999))).ToString();
-            }
-            _httpRequestProcessor.RequestMessage.Username = data.UserSession.UserName;
-            _httpRequestProcessor.RequestMessage.Password = data.UserSession.Password;
-
-            _httpRequestProcessor.RequestMessage.DeviceId = data.DeviceInfo.DeviceId;
-            _httpRequestProcessor.RequestMessage.PhoneId = data.DeviceInfo.PhoneGuid.ToString();
-            _httpRequestProcessor.RequestMessage.Guid = data.DeviceInfo.DeviceGuid;
-            _httpRequestProcessor.RequestMessage.AdId = data.DeviceInfo.AdId.ToString();
-
-            foreach (var cookie in data.RawCookies)
-            {
-                _httpRequestProcessor.HttpHandler.CookieContainer.Add(new Uri(InstaApiConstants.INSTAGRAM_URL), cookie);
-            }
-
-            if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version180;
-            if(!LoadApiVersionFromSessionFile)
-                data.InstaApiVersion = InstaApiVersionType.Version180;
-            ApiVersionType = data.InstaApiVersion.Value;
-            _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(ApiVersionType);
-            _httpHelper = new HttpHelper(_apiVersion, _httpRequestProcessor, this);
-#if WITH_NOTIFICATION
-            Task.Run(async () => { await PushClient?.Shutdown(); });
-            PushClient = new FbnsClient(this, data.FbnsConnectionData);
-#endif
-            IsUserAuthenticated = data.IsAuthenticated;
-            TwoFactorLoginInfo = data.TwoFactorLoginInfo;
-            ChallengeLoginInfo = data.ChallengeLoginInfo;
-            InvalidateProcessors();
-        }
         /// <summary>
         ///     Set state data from provided json string
         /// </summary>
-        public void LoadStateDataFromString(string json)
-        {
-            var data = SerializationHelper.DeserializeFromString<StateData>(json);
-            if (!IsCustomDeviceSet)
-                _deviceInfo = data.DeviceInfo;
-            _user = data.UserSession;
-            StartupCountry = data.StartupCountry;
-            StartupCountryCode = data.StartupCountryCode;
-            AppLocale = data.AppLocale;
-            MappedLocale = data.MappedLocale;
-            DeviceLocale = data.DeviceLocale;
-            AcceptLanguage = data.AcceptLanguage;
-            TimezoneOffset = data.TimezoneOffset;
-
-            if (string.IsNullOrEmpty(_deviceInfo.IGBandwidthSpeedKbps))
-            {
-                _deviceInfo.IGBandwidthSpeedKbps = string.Format("{0}.{1}", Rnd.Next(1233, 1567), Rnd.Next(100, 999));
-                _deviceInfo.IGBandwidthTotalTimeMS = Rnd.Next(781, 999).ToString();
-                _deviceInfo.IGBandwidthTotalBytesB = ((int)((double.Parse(_deviceInfo.IGBandwidthSpeedKbps) * double.Parse(_deviceInfo.IGBandwidthTotalTimeMS)) + Rnd.Next(100, 999))).ToString();
-            }
-
-            //Load Stream Edit 
-            _httpRequestProcessor.RequestMessage.Username = data.UserSession.UserName;
-            _httpRequestProcessor.RequestMessage.Password = data.UserSession.Password;
-
-            _httpRequestProcessor.RequestMessage.DeviceId = data.DeviceInfo.DeviceId;
-            _httpRequestProcessor.RequestMessage.PhoneId = data.DeviceInfo.PhoneGuid.ToString();
-            _httpRequestProcessor.RequestMessage.Guid = data.DeviceInfo.DeviceGuid;
-            _httpRequestProcessor.RequestMessage.AdId = data.DeviceInfo.AdId.ToString();
-
-            foreach (var cookie in data.RawCookies)
-            {
-                _httpRequestProcessor.HttpHandler.CookieContainer.Add(new Uri(InstaApiConstants.INSTAGRAM_URL), cookie);
-            }
-
-            if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version180;
-            if (!LoadApiVersionFromSessionFile)
-                data.InstaApiVersion = InstaApiVersionType.Version180;
-            ApiVersionType = data.InstaApiVersion.Value;
-            _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(ApiVersionType);
-            _httpHelper = new HttpHelper(_apiVersion, _httpRequestProcessor, this);
-#if WITH_NOTIFICATION
-            Task.Run(async () => { await PushClient?.Shutdown(); });
-            PushClient = new FbnsClient(this, data.FbnsConnectionData);
-#endif
-            IsUserAuthenticated = data.IsAuthenticated;
-            TwoFactorLoginInfo = data.TwoFactorLoginInfo;
-            ChallengeLoginInfo = data.ChallengeLoginInfo;
-            InvalidateProcessors();
-        }
-
+        public void LoadStateDataFromString(string json) =>
+            LoadStateDataFromObject(SerializationHelper.DeserializeFromString<StateData>(json));
 
         /// <summary>
         ///     Set state data from StateData object
@@ -3249,6 +3103,8 @@ namespace InstagramApiSharp.API
         /// <param name="data"></param>
         public void LoadStateDataFromObject(StateData data)
         {
+            if (data == null) throw new ArgumentNullException("data can't be null");
+
             if (!IsCustomDeviceSet)
                 _deviceInfo = data.DeviceInfo;
             _user = data.UserSession;
@@ -3293,8 +3149,43 @@ namespace InstagramApiSharp.API
             PushClient = new FbnsClient(this, stateData.FbnsConnectionData);
 #endif
             IsUserAuthenticated = data.IsAuthenticated;
-            TwoFactorLoginInfo = data.TwoFactorLoginInfo; 
+            TwoFactorLoginInfo = data.TwoFactorLoginInfo;
             ChallengeLoginInfo = data.ChallengeLoginInfo;
+            //if (_httpRequestProcessor.HttpHandler?.Proxy is WebProxy proxy)
+            //{
+            //    state.ProxyAddress = proxy.Address;
+            //    state.ProxyUseDefaultCredentials = proxy.UseDefaultCredentials;
+            //    state.ProxyBypassProxyOnLocal = proxy.BypassProxyOnLocal;
+            //    if (proxy.Credentials is NetworkCredential credential)
+            //    {
+            //        state.ProxyCredentialUsername = credential.UserName;
+            //        state.ProxyCredentialPassword = credential.Password;
+            //    }
+            //}
+            if (data.ProxyAddress != null)// proxy is available
+            {
+                try
+                {
+                    var webProxy = new WebProxy
+                    {
+                        Address = data.ProxyAddress,
+                        BypassProxyOnLocal = data.ProxyBypassProxyOnLocal,
+                        UseDefaultCredentials = data.ProxyUseDefaultCredentials
+                    };
+                    if (!string.IsNullOrEmpty(data.ProxyCredentialUsername) && !string.IsNullOrEmpty(data.ProxyCredentialPassword))
+                    {
+                        var credential = new NetworkCredential(data.ProxyCredentialUsername, data.ProxyCredentialPassword);
+                        if (!string.IsNullOrEmpty(data.ProxyCredentialDomain))
+                            credential.Domain = data.ProxyCredentialDomain;
+                        webProxy.Credentials = credential;
+                    }
+                    _httpRequestProcessor.SetHttpClientHandler(new HttpClientHandler { Proxy = webProxy });
+                }
+                catch(Exception ex) 
+                {
+                    _logger?.LogException(ex);
+                }
+            }
             InvalidateProcessors();
         }
 
