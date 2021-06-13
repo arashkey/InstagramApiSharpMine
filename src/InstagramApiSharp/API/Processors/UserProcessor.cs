@@ -731,7 +731,7 @@ namespace InstagramApiSharp.API.Processors
                 request.Options.TryAdd(InstaApiConstants.HEADER_RANK_TOKEN, _user.RankToken);
 #else
                 request.Properties.Add(new KeyValuePair<string, object>(InstaApiConstants.HEADER_TIMEZONE,
-                    InstaApiConstants.TIMEZONE_OFFSET.ToString()));
+                    _instaApi.TimezoneOffset.ToString()));
                 request.Properties.Add(new KeyValuePair<string, object>(InstaApiConstants.HEADER_COUNT, "1"));
                 request.Properties.Add(
                     new KeyValuePair<string, object>(InstaApiConstants.HEADER_RANK_TOKEN, _user.RankToken));

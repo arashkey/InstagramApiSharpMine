@@ -127,7 +127,7 @@ namespace InstagramApiSharp.API.Processors
                     {"client_context", Guid.NewGuid().ToString()},
                     {"camera_session_id", Guid.NewGuid().ToString()},
                     {"reply_type", "story"},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"client_shared_at", (long.Parse(ApiRequestMessage.GenerateUploadId())- rnd.Next(25,55)).ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"configure_mode", "2"},
@@ -2135,7 +2135,7 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None)},
                     {"allow_multi_configures", "1"},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"original_media_type", "photo"},
                     {"has_original_sound", "1"},
@@ -2359,7 +2359,7 @@ namespace InstagramApiSharp.API.Processors
                     {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None)},
                     {"filter_type", "0"},
                     {"original_media_type", "video"},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"client_shared_at", (long.Parse(ApiRequestMessage.GenerateUploadId())- rnd.Next(25,55)).ToString()},
                     //{"story_media_creation_date", (long.Parse(ApiRequestMessage.GenerateUploadId())- rnd.Next(50,70)).ToString()},
@@ -2746,7 +2746,7 @@ namespace InstagramApiSharp.API.Processors
                 if (isFreshPagination || forceRefresh)
                 {
                     nextId = "50";
-                    data.Add(InstaApiConstants.HEADER_TIMEZONE, InstaApiConstants.TIMEZONE_OFFSET.ToString());
+                    data.Add(InstaApiConstants.HEADER_TIMEZONE, _instaApi.TimezoneOffset.ToString());
                     data.Add("page_size", "50");
                 }
                 else

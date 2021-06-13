@@ -280,14 +280,16 @@ namespace InstagramApiSharp.API.Processors
                 var data = new Dictionary<string, string>
                 {
                     {"query_id", "425892567746558"},
-                    {"locale", InstaApiConstants.ACCEPT_LANGUAGE.Replace("-", "_")},
+                    {"locale", _instaApi.AppLocale},
                     {"vc_policy", "ads_viewer_context_policy"},
                     {"signed_body", $"{_httpHelper._apiVersion.SignatureKey}."},
-                    {InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION},
+                    //{InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION},
                     {"strip_nulls", "true"},
                     {"strip_defaults", "true"},
                     {"query_params", queryParams.ToString(Formatting.None)},
                 };
+                if (_httpHelper.IsNewerApis)
+                    data.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
                 var request =
                     _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -319,7 +321,7 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var instaUri = UriCreator.GetGraphStatisticsUri(InstaApiConstants.ACCEPT_LANGUAGE, InstaInsightSurfaceType.Post);
+                var instaUri = UriCreator.GetGraphStatisticsUri(_instaApi.AcceptLanguage, InstaInsightSurfaceType.Post);
 
                 var queryParamsData = new JObject
                 {
@@ -432,7 +434,7 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var instaUri = UriCreator.GetGraphStatisticsUri(InstaApiConstants.ACCEPT_LANGUAGE);
+                var instaUri = UriCreator.GetGraphStatisticsUri(_instaApi.AcceptLanguage);
                 var queryParamsData = new JObject
                 {
                     {"access_token", ""},
@@ -575,14 +577,15 @@ namespace InstagramApiSharp.API.Processors
                 var data = new Dictionary<string, string>
                 {
                     {"query_id", "425892567746558"},
-                    {"locale", InstaApiConstants.ACCEPT_LANGUAGE.Replace("-", "_")},
+                    {"locale", _instaApi.AppLocale},
                     {"vc_policy", "ads_viewer_context_policy"},
                     {"signed_body", $"{_httpHelper._apiVersion.SignatureKey}."},
-                    {InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION},
                     {"strip_nulls", "true"},
                     {"strip_defaults", "true"},
                     {"query_params", queryParams.ToString(Formatting.None)},
                 };
+                if (_httpHelper.IsNewerApis)
+                    data.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
                 var request =
                     _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -627,14 +630,15 @@ namespace InstagramApiSharp.API.Processors
                 var data = new Dictionary<string, string>
                 {
                     {"query_id", "706774002864790"},
-                    {"locale", InstaApiConstants.ACCEPT_LANGUAGE.Replace("-", "_")},
+                    {"locale", _instaApi.AppLocale},
                     {"vc_policy", "ads_viewer_context_policy"},
                     {"signed_body", $"{_httpHelper._apiVersion.SignatureKey}."},
-                    {InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION},
                     {"strip_nulls", "true"},
                     {"strip_defaults", "true"},
                     {"query_params", queryParams.ToString(Formatting.None)},
                 };
+                if (_httpHelper.IsNewerApis)
+                    data.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
                 var request =
                     _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -773,14 +777,15 @@ namespace InstagramApiSharp.API.Processors
                 var data = new Dictionary<string, string>
                 {
                     {"query_id", "1860980127555904"},
-                    {"locale", InstaApiConstants.ACCEPT_LANGUAGE.Replace("-", "_")},
+                    {"locale", _instaApi.AppLocale},
                     {"vc_policy", "ads_viewer_context_policy"},
                     {"signed_body", $"{_httpHelper._apiVersion.SignatureKey}."},
-                    {InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION},
                     {"strip_nulls", "true"},
                     {"strip_defaults", "true"},
                     {"query_params", queryParams.ToString(Formatting.None)},
                 };
+                if (_httpHelper.IsNewerApis)
+                    data.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
                 var request =
                     _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);

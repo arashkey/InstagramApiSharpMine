@@ -227,7 +227,7 @@ namespace InstagramApiSharp.API.Processors
                     count = 30;
                 var fields = new Dictionary<string, string>
                 {
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"lat", latitude.ToString(CultureInfo.InvariantCulture)},
                     {"lng", longitude.ToString(CultureInfo.InvariantCulture)},
                     {"count", count.ToString()},
@@ -467,7 +467,7 @@ namespace InstagramApiSharp.API.Processors
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                var instaUri = UriCreator.GetSearchPlacesUri(query, paginationParameters.NextMaxId, paginationParameters.ExcludeList, latitude, longitude);
+                var instaUri = UriCreator.GetSearchPlacesUri(query, paginationParameters.NextMaxId, paginationParameters.ExcludeList, latitude, longitude, _instaApi.TimezoneOffset);
 
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);

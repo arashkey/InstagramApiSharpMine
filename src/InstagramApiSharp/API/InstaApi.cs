@@ -2322,8 +2322,8 @@ namespace InstagramApiSharp.API
                     {"seen_steps",          "[]"},
                     {"phone_id",            _deviceInfo.PhoneGuid.ToString()},
                     {"fb_installed",        "false"},
-                    {"locale",              InstaApiConstants.ACCEPT_LANGUAGE.Replace("-","_")},
-                    {"timezone_offset",     InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"locale",              AppLocale},
+                    {"timezone_offset",     TimezoneOffset.ToString()},
                     {"_csrftoken",          csrftoken},
                     {"network_type",        "WIFI-UNKNOWN"},
                     {"guid",                _deviceInfo.DeviceGuid.ToString()},
@@ -2457,7 +2457,7 @@ namespace InstagramApiSharp.API
         /// <summary>
         ///     Get user agent of current <see cref="IInstaApi"/>
         /// </summary>
-        public string GetUserAgent() => _deviceInfo.GenerateUserAgent(_apiVersion);
+        public string GetUserAgent() => _deviceInfo.GenerateUserAgent(_apiVersion, this);
         /// <summary>
         ///     Set timeout to <see cref="HttpClient"/>
         ///     <para>Note: Set timeout more than 100 seconds!</para>

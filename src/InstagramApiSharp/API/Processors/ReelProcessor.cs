@@ -301,7 +301,7 @@ namespace InstagramApiSharp.API.Processors
                     {"device_id", _deviceInfo.DeviceId},
                     {"camera_position", "back"},
                     {"camera_session_id", Guid.NewGuid().ToString()},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"capture_type", "clips_v2"},
                     {"date_time_original", DateTime.Now.ToString("yyyy-dd-MMTh:mm:ss-0fffZ")},
                     {

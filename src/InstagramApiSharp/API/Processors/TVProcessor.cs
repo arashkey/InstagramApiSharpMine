@@ -79,7 +79,7 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"igtv_ads_toggled_on", "0"},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},

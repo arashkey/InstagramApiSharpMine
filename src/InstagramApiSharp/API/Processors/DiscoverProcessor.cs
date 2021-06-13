@@ -480,7 +480,7 @@ namespace InstagramApiSharp.API.Processors
         {
             try
             {
-                var instaUri = UriCreator.GetSearchUserUri(query, count, paginationParameters.ExcludeList, paginationParameters.RankToken);
+                var instaUri = UriCreator.GetSearchUserUri(query, count, paginationParameters.ExcludeList, paginationParameters.RankToken, _instaApi.TimezoneOffset);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();

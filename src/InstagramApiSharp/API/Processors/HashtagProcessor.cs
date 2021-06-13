@@ -606,7 +606,7 @@ namespace InstagramApiSharp.API.Processors
 
             try
             {
-                var userUri = UriCreator.GetSearchTagUri(query, count, excludeList, _user.RankToken);
+                var userUri = UriCreator.GetSearchTagUri(query, count, excludeList, _user.RankToken, _instaApi.TimezoneOffset);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, userUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();

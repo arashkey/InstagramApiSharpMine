@@ -161,7 +161,7 @@ namespace InstagramApiSharp.API.Processors
         {
             try
             {
-                var instaUri = new Uri($"https://i.instagram.com/api/v1/wwwgraphql/ig/query/?locale={InstaApiConstants.ACCEPT_LANGUAGE.Replace("-","_")}");
+                var instaUri = new Uri($"https://i.instagram.com/api/v1/wwwgraphql/ig/query/?locale={_instaApi.AppLocale}");
 
                 var sources = new JObject
                 {

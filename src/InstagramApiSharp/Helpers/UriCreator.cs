@@ -684,11 +684,11 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetExploreUri(string maxId = null, string rankToken = null)
+        public static Uri GetExploreUri(string maxId = null, string rankToken = null, int timeZoneOffset = -14400)
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DISCOVER_EXPLORE, out var instaUri))
                 throw new Exception("Cant create URI for explore posts");
-            var query = $"is_prefetch=false&is_from_promote=true&timezone_offset={InstaApiConstants.TIMEZONE_OFFSET}&supported_capabilities_new={JsonConvert.SerializeObject(InstaApiConstants.SupportedCapabalities)}";
+            var query = $"is_prefetch=false&is_from_promote=true&timezone_offset={timeZoneOffset}&supported_capabilities_new={JsonConvert.SerializeObject(InstaApiConstants.SupportedCapabalities)}";
             if (!string.IsNullOrEmpty(maxId)) query += $"&max_id={maxId}&session_id={rankToken}";
             var uriBuilder = new UriBuilder(instaUri) { Query = query };
             return uriBuilder.Uri;
@@ -1302,7 +1302,7 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetSearchTagUri(string tag, int count, IEnumerable<long> excludeList, string rankToken)
+        public static Uri GetSearchTagUri(string tag, int count, IEnumerable<long> excludeList, string rankToken, int timezoneOffset = -14400)
         {
             excludeList = excludeList ?? new List<long>();
             var excludeListStr = string.Empty;
@@ -1317,10 +1317,10 @@ namespace InstagramApiSharp.Helpers
             return instaUri
                 .AddQueryParameter("exclude_list", excludeListStr)
                 .AddQueryParameter("rank_token", rankToken)
-                .AddQueryParameter(InstaApiConstants.HEADER_TIMEZONE, InstaApiConstants.TIMEZONE_OFFSET.ToString());
+                .AddQueryParameter(InstaApiConstants.HEADER_TIMEZONE, timezoneOffset.ToString());
         }
 
-        public static Uri GetSearchUserUri(string text, int count, IEnumerable<long> excludeList, string rankToken)
+        public static Uri GetSearchUserUri(string text, int count, IEnumerable<long> excludeList, string rankToken, int timezoneOffset = -14400)
         {
             excludeList = excludeList ?? new List<long>();
             var excludeListStr = string.Empty;
@@ -1336,7 +1336,7 @@ namespace InstagramApiSharp.Helpers
             }
             //TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow).TotalSeconds
             if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.USERS_SEARCH,
-                InstaApiConstants.TIMEZONE_OFFSET, text, count), out var instaUri))
+                timezoneOffset, text, count), out var instaUri))
                 throw new Exception("Cant create URI for search user");
             return instaUri
                 .AddQueryParameter("exclude_list", excludeListStr)
@@ -1894,13 +1894,13 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetSearchPlacesUri(string query, string rankToken, List<long> excludeList, double? lat = null, double? lng = null)
+        public static Uri GetSearchPlacesUri(string query, string rankToken, List<long> excludeList, double? lat = null, double? lng = null, int timezoneOffset = -14400)
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.FBSEARCH_PLACES, out var instaUri))
                 throw new Exception("Cant create URI for search places");
 
-            var parameters = $"timezone_offset={InstaApiConstants.TIMEZONE_OFFSET}&";
-
+            var parameters = $"timezone_offset={timezoneOffset}&";
+            
             if(lat!= null && lng != null)
                 parameters += $"lat={lat.Value.ToString(CultureInfo.InvariantCulture)}&lng={lng.Value.ToString(CultureInfo.InvariantCulture)}";
 
@@ -2326,7 +2326,7 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetTopicalExploreUri(string sessionId, string maxId = null, string clusterId = null)
+        public static Uri GetTopicalExploreUri(string sessionId, string maxId = null, string clusterId = null, int timezoneOffset = -14400)
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DISCOVER_TOPICAL_EXPLORE, out var instaUri))
                 throw new Exception("Cant create URI for topical explore");
@@ -2339,7 +2339,7 @@ namespace InstagramApiSharp.Helpers
             instaUri = instaUri
                 .AddQueryParameter("module", "explore_popular")
                 .AddQueryParameter("use_sectional_payload", "true")
-                .AddQueryParameter("timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString())
+                .AddQueryParameter("timezone_offset", timezoneOffset.ToString())
                 .AddQueryParameter("session_id", sessionId)
                 .AddQueryParameter("include_fixed_destinations", "true");
             if (clusterId.ToLower() == "explore_all:0" || clusterId.ToLower() == "explore_all%3A0")

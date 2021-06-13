@@ -985,7 +985,7 @@ namespace InstagramApiSharp.API.Processors
                     {"caption", caption},
                     {"client_sidecar_id", clientSidecarId},
                     {"upload_id", clientSidecarId},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"source_type", "4"},
                     {"device_id", _deviceInfo.DeviceId},
                     {"creation_logger_session_id", Guid.NewGuid().ToString()},
@@ -1309,7 +1309,7 @@ namespace InstagramApiSharp.API.Processors
                     {"device_id", _deviceInfo.DeviceId},
                     {"camera_position", "unknown"},
                     {"creation_logger_session_id", Guid.NewGuid().ToString()},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"date_time_original", DateTime.Now.ToString("yyyy-dd-MMTh:mm:ss-0fffZ")},
                     {
                         "extra", new JObject

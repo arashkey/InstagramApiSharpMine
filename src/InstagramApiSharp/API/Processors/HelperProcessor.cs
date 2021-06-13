@@ -208,7 +208,7 @@ namespace InstagramApiSharp.API.Processors
         {
             var imgData = new JObject
             {
-                {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                 {"source_type", "4"},
                 {"upload_id", uploadId},
                 {"caption", ""},
@@ -258,7 +258,7 @@ namespace InstagramApiSharp.API.Processors
         {
             var vidData = new JObject
             {
-                {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                 {"caption", ""},
                 {"upload_id", uploadId},
                 {"date_time_original", DateTime.Now.ToString("yyyy-dd-MMTh:mm:ss-0fffZ")},
@@ -1247,7 +1247,7 @@ namespace InstagramApiSharp.API.Processors
                     //{"date_time_original", DateTime.UtcNow.ToString("yyyy:MM:dd+hh:mm:ss")},
                     //{"is_suggested_venue", "false"},
                     {"scene_capture_type", ""},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"media_folder", spl[rnd.Next(spl.Length)]},
                     {"source_type", "4"},
@@ -1558,7 +1558,7 @@ namespace InstagramApiSharp.API.Processors
                 //}
                 var data = new JObject
                 {
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
@@ -1864,7 +1864,7 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"filter_type", "0"},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
@@ -2121,7 +2121,7 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"filter_type", "0"},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
@@ -2379,7 +2379,7 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"filter_type", "0"},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
@@ -2490,7 +2490,7 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"filter_type", "0"},
-                    {"timezone_offset", InstaApiConstants.TIMEZONE_OFFSET.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                     {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},

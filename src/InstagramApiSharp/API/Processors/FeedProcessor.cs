@@ -717,7 +717,7 @@ namespace InstagramApiSharp.API.Processors
         {
             try
             {
-                var exploreUri = UriCreator.GetExploreUri(paginationParameters.NextMaxId, paginationParameters.RankToken);
+                var exploreUri = UriCreator.GetExploreUri(paginationParameters.NextMaxId, paginationParameters.RankToken, _instaApi.TimezoneOffset);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, exploreUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -889,7 +889,7 @@ namespace InstagramApiSharp.API.Processors
 
                 if (string.IsNullOrEmpty(TopicalSessionId))
                     TopicalSessionId = Guid.NewGuid().ToString();
-                var exploreUri = UriCreator.GetTopicalExploreUri(TopicalSessionId, paginationParameters?.NextMaxId, clusterId);
+                var exploreUri = UriCreator.GetTopicalExploreUri(TopicalSessionId, paginationParameters?.NextMaxId, clusterId, _instaApi.TimezoneOffset);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, exploreUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request, true);
                 var json = await response.Content.ReadAsStringAsync();

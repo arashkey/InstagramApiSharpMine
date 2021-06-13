@@ -71,12 +71,6 @@ namespace InstagramApiSharp.API.Builder
             if (string.IsNullOrEmpty(_requestMessage.Password)) _requestMessage.Password = _user?.Password;
             if (string.IsNullOrEmpty(_requestMessage.Username)) _requestMessage.Username = _user?.UserName;
 
-            try
-            {
-                InstaApiConstants.TIMEZONE_OFFSET = int.Parse(DateTimeOffset.Now.Offset.TotalSeconds.ToString());
-            }
-            catch { }
-
             if (_httpRequestProcessor == null)
                 _httpRequestProcessor =
                     new HttpRequestProcessor(_delay, _httpClient, _httpHandler, _requestMessage, _logger);
@@ -85,6 +79,13 @@ namespace InstagramApiSharp.API.Builder
                 _apiVersionType = InstaApiVersionType.Version180;
 
             var instaApi = new InstaApi(_user, _logger, _device, _httpRequestProcessor, _apiVersionType.Value, _configureMediaDelay);
+
+            try
+            {
+                instaApi.TimezoneOffset = InstaApiConstants.TIMEZONE_OFFSET = int.Parse(DateTimeOffset.Now.Offset.TotalSeconds.ToString());
+            }
+            catch { }
+
             if (_sessionHandler != null)
             {
                 _sessionHandler.InstaApi = instaApi;
