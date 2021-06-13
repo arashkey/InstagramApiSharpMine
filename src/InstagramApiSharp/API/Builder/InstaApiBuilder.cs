@@ -251,6 +251,10 @@ namespace InstagramApiSharp.API.Builder
             _httpRequestProcessor = httpRequestProcessor;
             return this;
         }
+
+        /// <summary>
+        ///     Load proxy from session file
+        /// </summary>
         public IInstaApiBuilder LoadProxyFromSessionFile()
         {
             _loadProxyFromSession = true;
