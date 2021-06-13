@@ -48,15 +48,14 @@ namespace InstagramApiSharp
                     data.CsrfToken = csrfToken;
             }
         }
-        public static string GenerateUserAgent(this AndroidDevice deviceInfo, InstaApiVersion apiVersion)
+        public static string GenerateUserAgent(this AndroidDevice deviceInfo, InstaApiVersion apiVersion, IInstaApi instaApi, string language = null)
         {
             if (deviceInfo == null)
                 return InstaApiConstants.USER_AGENT_DEFAULT;
             if (deviceInfo.AndroidVer == null)
                 deviceInfo.AndroidVer = AndroidVersion.GetRandomAndriodVersion();
 
-            var lang = !string.IsNullOrEmpty(InstaApiConstants.ACCEPT_LANGUAGE) ?
-                InstaApiConstants.ACCEPT_LANGUAGE.Replace("-", "_") : "en_US";
+            var lang = language ?? instaApi.AppLocale ?? "en_US";
 
             var apiLevel = deviceInfo.AndroidVer.APILevel;
 

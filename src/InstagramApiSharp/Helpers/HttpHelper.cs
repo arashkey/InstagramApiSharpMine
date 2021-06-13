@@ -38,7 +38,7 @@ namespace InstagramApiSharp.Helpers
         {
             var currentCulture = GetCurrentCulture();
             System.Globalization.CultureInfo.CurrentCulture = EnglishCulture;
-            var userAgent = deviceInfo.GenerateUserAgent(_apiVersion);
+            var userAgent = deviceInfo.GenerateUserAgent(_apiVersion, _instaApi);
 
             var request = new HttpRequestMessage(method, uri);
             var cookies = _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
@@ -51,11 +51,11 @@ namespace InstagramApiSharp.Helpers
             var rur = cookies[InstaApiConstants.COOKIES_RUR]?.Value ?? string.Empty;
             var igDirectRegionHint = cookies[InstaApiConstants.COOKIES_IG_DIRECT_REGION_HINT]?.Value ?? string.Empty;
 
-            request.Headers.Add(InstaApiConstants.HEADER_X_IG_APP_LOCALE, InstaApiConstants.ACCEPT_LANGUAGE.Replace("-", "_"));
+            request.Headers.Add(InstaApiConstants.HEADER_X_IG_APP_LOCALE, _instaApi.AppLocale);
 
-            request.Headers.Add(InstaApiConstants.HEADER_X_IG_DEVICE_LOCALE, InstaApiConstants.ACCEPT_LANGUAGE.Replace("-", "_"));
+            request.Headers.Add(InstaApiConstants.HEADER_X_IG_DEVICE_LOCALE, _instaApi.DeviceLocale);
 
-            request.Headers.Add(InstaApiConstants.HEADER_X_IG_MAPPED_LOCALE, InstaApiConstants.ACCEPT_LANGUAGE.Replace("-", "_"));
+            request.Headers.Add(InstaApiConstants.HEADER_X_IG_MAPPED_LOCALE, _instaApi.MappedLocale);
 
             request.Headers.Add(InstaApiConstants.HEADER_PIGEON_SESSION_ID, deviceInfo.PigeonSessionId.ToString());
 
@@ -106,7 +106,7 @@ namespace InstagramApiSharp.Helpers
 
             request.Headers.Add(InstaApiConstants.HEADER_USER_AGENT, userAgent);
 
-            request.Headers.Add(InstaApiConstants.HEADER_ACCEPT_LANGUAGE, InstaApiConstants.ACCEPT_LANGUAGE);
+            request.Headers.Add(InstaApiConstants.HEADER_ACCEPT_LANGUAGE, _instaApi.AcceptLanguage);
 
 
             if (!string.IsNullOrEmpty(mid))
@@ -140,7 +140,7 @@ namespace InstagramApiSharp.Helpers
 
             request.Headers.Add(InstaApiConstants.HEADER_PRIORITY, InstaApiConstants.HEADER_PRIORITY_VALUE);
 
-            request.Headers.Add(InstaApiConstants.HEADER_IG_TIMEZONE_OFFSET, InstaApiConstants.TIMEZONE_OFFSET.ToString());
+            request.Headers.Add(InstaApiConstants.HEADER_IG_TIMEZONE_OFFSET, _instaApi.TimezoneOffset.ToString());
 
             request.Headers.Add(InstaApiConstants.HEADER_IG_INTENDED_USER_ID, (_instaApi.GetLoggedUser().LoggedInUser?.Pk ?? 0).ToString());
 
