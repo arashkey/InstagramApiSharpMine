@@ -19,7 +19,6 @@ namespace InstagramApiSharp.Classes
         public InstaTwoFactorLoginInfo TwoFactorLoginInfo { get; set; }
         public InstaChallengeLoginInfo ChallengeLoginInfo { get; set; }
 
-
         #region Locale
 
         public int TimezoneOffset { get; set; }
