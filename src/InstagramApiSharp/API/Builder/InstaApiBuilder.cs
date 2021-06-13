@@ -312,7 +312,7 @@ namespace InstagramApiSharp.API.Builder
                         AndroidVer = androidVer
                     };
 
-                    _language = InstaApiConstants.ACCEPT_LANGUAGE = lang;
+                    _language = lang;
 
                     return SetDevice(device);
                 }
