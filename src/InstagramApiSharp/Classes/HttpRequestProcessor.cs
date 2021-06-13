@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
-#pragma warning disable IDE0068
+
 namespace InstagramApiSharp.Classes
 {
     internal class HttpRequestProcessor : IHttpRequestProcessor
@@ -34,21 +34,7 @@ namespace InstagramApiSharp.Classes
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, bool keepAlive = false)
         {
-            var currentCulture = HttpHelper.GetCurrentCulture();
-            System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
-
-            if (!keepAlive)
-            {
-                Client.DefaultRequestHeaders.ConnectionClose = true;
-                requestMessage.Headers.Add("Connection", "close");
-            }
-            else
-            {
-                Client.DefaultRequestHeaders.ConnectionClose = false;
-                requestMessage.Headers.Add("Connection", "Keep-Alive");
-            }
-
-            System.Globalization.CultureInfo.CurrentCulture = currentCulture;
+            await AppendOtherHeaders(requestMessage, keepAlive);
             LogHttpRequest(requestMessage);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);
@@ -59,10 +45,7 @@ namespace InstagramApiSharp.Classes
 
         public async Task<HttpResponseMessage> GetAsync(Uri requestUri, bool keepAlive = false)
         {
-            if (!keepAlive)
-                Client.DefaultRequestHeaders.ConnectionClose = true;
-            else
-                Client.DefaultRequestHeaders.ConnectionClose = false;
+            await AppendOtherHeaders(null, keepAlive);
             _logger?.LogRequest(requestUri);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);
@@ -74,22 +57,7 @@ namespace InstagramApiSharp.Classes
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage,
             HttpCompletionOption completionOption, bool keepAlive = false)
         {
-            var currentCulture = HttpHelper.GetCurrentCulture();
-            System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
-
-            if (!keepAlive)
-            {
-                Client.DefaultRequestHeaders.ConnectionClose = true;
-                requestMessage.Headers.Add("Connection", "close");
-            }
-            else
-            {
-                Client.DefaultRequestHeaders.ConnectionClose = false;
-                requestMessage.Headers.Add("Connection", "Keep-Alive");
-            }
-
-
-            System.Globalization.CultureInfo.CurrentCulture = currentCulture;
+            await AppendOtherHeaders(requestMessage, keepAlive);
             LogHttpRequest(requestMessage);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);
@@ -101,20 +69,7 @@ namespace InstagramApiSharp.Classes
         public async Task<string> SendAndGetJsonAsync(HttpRequestMessage requestMessage,
             HttpCompletionOption completionOption, bool keepAlive = false)
         {
-            var currentCulture = HttpHelper.GetCurrentCulture();
-            System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
-
-            if (!keepAlive)
-            {
-                Client.DefaultRequestHeaders.ConnectionClose = true;
-                requestMessage.Headers.Add("Connection", "close");
-            }
-            else
-            {
-                Client.DefaultRequestHeaders.ConnectionClose = false;
-                requestMessage.Headers.Add("Connection", "Keep-Alive");
-            }
-            System.Globalization.CultureInfo.CurrentCulture = currentCulture;
+            await AppendOtherHeaders(requestMessage, keepAlive);
             LogHttpRequest(requestMessage);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);
@@ -125,10 +80,7 @@ namespace InstagramApiSharp.Classes
 
         public async Task<string> GeJsonAsync(Uri requestUri, bool keepAlive = false)
         {
-            if (!keepAlive)
-                Client.DefaultRequestHeaders.ConnectionClose = true;
-            else
-                Client.DefaultRequestHeaders.ConnectionClose = false;
+            await AppendOtherHeaders(null, keepAlive);
             _logger?.LogRequest(requestUri);
             if (_delay.Exist)
                 await Task.Delay(_delay.Value);
@@ -146,22 +98,45 @@ namespace InstagramApiSharp.Classes
         {
             _logger?.LogResponse(request);
         }
-        async Task<HttpResponseMessage> CopyResponseAsync(HttpResponseMessage response)
-        {
-            await Task.Delay(350);
-            var http = new HttpResponseMessage
-            {
-                Content = response.Content,
-                ReasonPhrase = response.ReasonPhrase,
-                StatusCode = response.StatusCode,
-                RequestMessage = response.RequestMessage,
-                Version = response.Version,
 
-            };
-            foreach (var item in response.Headers)
-                http.Headers.Add(item.Key, item.Value);
-            return http;
+        async Task AppendOtherHeaders(HttpRequestMessage request, bool keepAlive = false)
+        {
+            var currentCulture = HttpHelper.GetCurrentCulture();
+            System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
+            Client.DefaultRequestHeaders.ConnectionClose = keepAlive;
+            if (request != null)
+            {
+                request.Headers.ConnectionClose = keepAlive;
+                if (request.Content != null)
+                {
+                    request.Content.Headers.ContentType.CharSet = "UTF-8";
+                    var requestUri = request.RequestUri.ToString();
+
+                    // since a file can be 600MB, reading it takes time, so we ignore it and don't add Content-Length header
+                    if (WasntIndexOf(requestUri, "/upload/") && WasntIndexOf(requestUri, "/rupload_"))
+                        request.Content.Headers.ContentLength = request.Content.ReadAsStringAsync().GetAwaiter().GetResult()?.Length;
+                }
+            }
+            System.Globalization.CultureInfo.CurrentCulture = currentCulture;
+            await Task.Delay(1).ConfigureAwait(false); // lets force compiler to wait for AppendOtherHeaders
         }
+
+        static bool WasntIndexOf(string str1, string str2) => str1.IndexOf(str2, StringComparison.OrdinalIgnoreCase) == -1;
+
+        //async Task<HttpResponseMessage> CopyResponseAsync(HttpResponseMessage response)
+        //{
+        //    await Task.Delay(350);
+        //    var http = new HttpResponseMessage
+        //    {
+        //        Content = response.Content,
+        //        ReasonPhrase = response.ReasonPhrase,
+        //        StatusCode = response.StatusCode,
+        //        RequestMessage = response.RequestMessage,
+        //        Version = response.Version,
+        //    };
+        //    foreach (var item in response.Headers)
+        //        http.Headers.Add(item.Key, item.Value);
+        //    return http;
+        //}
     }
 }
-#pragma warning restore IDE0068
