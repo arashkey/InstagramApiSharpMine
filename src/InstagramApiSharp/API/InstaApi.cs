@@ -45,7 +45,7 @@ namespace InstagramApiSharp.API
         private string _acceptLanguage = "en-US";
 
         private uint _startupCountryCode = 1;
-        private int _timeZoneOffset;
+        private int _timeZoneOffset = -14400; // USA, New york
 
         private IConfigureMediaDelay _configureMediaDelay = ConfigureMediaDelay.Empty();
         private IRequestDelay _delay = RequestDelay.Empty();
@@ -122,7 +122,7 @@ namespace InstagramApiSharp.API
             set => _startupCountryCode = _httpRequestProcessor.RequestMessage.StartupCountryCode = value == 0 ? 1 : value;
         }
 
-        public int TimeZoneOffset
+        public int TimezoneOffset
         {
             get => _timeZoneOffset;
             set => _timeZoneOffset = value;

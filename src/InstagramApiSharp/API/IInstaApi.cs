@@ -41,15 +41,22 @@ namespace InstagramApiSharp.API
         #region Properties
 
         #region Locale
-
+        
+        /// <summary>
+        ///     Timezone offset
+        ///     <para>This property is using in a lot of different places.</para>
+        ///     <para>X-IG-Timezone-Offset header</para>
+        ///     <para>Default is choosen from your system information</para>
+        /// </summary>
+        int TimezoneOffset { get; set; }
         /// <summary>
         ///     X-IG-App-Startup-Country header
         ///     <para>Default is US</para>
         /// </summary>
         string StartupCountry { get; set; }
         /// <summary>
-        ///     X-IG-Timezone-Offset header
-        ///     <para>Default is choosen from your system information</para>
+        ///     Startup country code
+        ///     <para>Default value is 1 which is USA country code</para>
         /// </summary>
         uint StartupCountryCode { get; set; }
         /// <summary>
@@ -73,7 +80,6 @@ namespace InstagramApiSharp.API
         ///     <para>for UK should be: en-GB, en-US</para>
         /// </summary>
         string AcceptLanguage { get; set; }
-
 
         #endregion
 
