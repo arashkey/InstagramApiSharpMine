@@ -497,32 +497,38 @@ namespace InstagramApiSharp.API
         ///     Check email availability
         /// </summary>
         /// <param name="email">Email to check</param>
+        [Obsolete("CheckEmailAsync is deprecated. Use the one from RegistrationService property.\r\nThis function will be deleted.")]
         Task<IResult<InstaCheckEmailRegistration>> CheckEmailAsync(string email);
         /// <summary>
         ///     Check phone number availability
         /// </summary>
         /// <param name="phoneNumber">Phone number to check</param>
+        [Obsolete("CheckPhoneNumberAsync is deprecated. Use the one from RegistrationService property.\r\nThis function will be deleted.")]
         Task<IResult<bool>> CheckPhoneNumberAsync(string phoneNumber);
         /// <summary>
         ///     Check username availablity. 
         /// </summary>
         /// <param name="username">Username</param>
+        [Obsolete("CheckPhoneNumberAsync is deprecated. Use the one from RegistrationService property.\r\nThis function will be deleted.")]
         Task<IResult<InstaAccountCheck>> CheckUsernameAsync(string username);
         /// <summary>
         ///     Send sign up sms code
         /// </summary>
         /// <param name="phoneNumber">Phone number</param>
+        [Obsolete("SendSignUpSmsCodeAsync is deprecated. Use the one from RegistrationService property.\r\nThis function will be deleted.")]
         Task<IResult<bool>> SendSignUpSmsCodeAsync(string phoneNumber);
         /// <summary>
         ///     Verify sign up sms code
         /// </summary>
         /// <param name="phoneNumber">Phone number</param>
         /// <param name="verificationCode">Verification code</param>
+        [Obsolete("SendSignUpSmsCodeAsync is deprecated. Use the one from RegistrationService property.\r\nThis function will be deleted.")]
         Task<IResult<InstaPhoneNumberRegistration>> VerifySignUpSmsCodeAsync(string phoneNumber, string verificationCode);
         /// <summary>
         ///     Get username suggestions
         /// </summary>
         /// <param name="name">Name</param>
+        [Obsolete("GetUsernameSuggestionsAsync is deprecated. Use the one from RegistrationService property.\r\nThis function will be deleted.")]
         Task<IResult<InstaRegistrationSuggestionResponse>> GetUsernameSuggestionsAsync(string name);
         /// <summary>
         ///     Validate new account creation with phone number
@@ -532,6 +538,7 @@ namespace InstagramApiSharp.API
         /// <param name="username">Username to set</param>
         /// <param name="password">Password to set</param>
         /// <param name="firstName">First name to set</param>
+        [Obsolete("ValidateNewAccountWithPhoneNumberAsync is deprecated. Use the one from RegistrationService property.\r\nThis function will be deleted.")]
         Task<IResult<InstaAccountCreation>> ValidateNewAccountWithPhoneNumberAsync(string phoneNumber, string verificationCode, string username, string password, string firstName);
         /// <summary>
         ///     Create a new instagram account
@@ -541,6 +548,7 @@ namespace InstagramApiSharp.API
         /// <param name="email">Email</param>
         /// <param name="firstName">First name (optional)</param>
         /// <param name="delay">Delay between requests. null = 2.5 seconds</param>
+        [Obsolete("CreateNewAccountAsync is deprecated. Use the one from RegistrationService property.\r\nThis function will be deleted.")]
         Task<IResult<InstaAccountCreation>> CreateNewAccountAsync(string username, string password, string email, string firstName = ""/*, TimeSpan? delay = null*/);
         /// <summary>
         ///     Accept consent required (only for GDPR countries)
