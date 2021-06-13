@@ -106,7 +106,7 @@ namespace FollowSample
 
                         if (followersResult.Succeeded && followersResult.Value?.Count > 0)
                         {
-                            FollowersList.AddRange(FollowersList);
+                            FollowersList.AddRange(followersResult.Value);
 
                             foreach (var follower in followersResult.Value)
                                 Console.WriteLine($"{follower.UserName.ToLower()}\t\t\t\t\t\t{follower.Pk}\t\t\t\t{follower.IsPrivate}");
