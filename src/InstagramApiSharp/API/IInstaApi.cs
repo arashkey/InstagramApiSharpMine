@@ -346,6 +346,7 @@ namespace InstagramApiSharp.API
         ///     <para>Returns something like this: 16200</para>
         /// </summary>
         /// <returns>Returns something like this: 16200</returns>
+        [Obsolete("GetTimezoneOffset is deprecated. Use TimezoneOffset property instead. This function will no longer effect anything and will be deleted in future releases.")]
         int GetTimezoneOffset();
         /// <summary>
         ///     Set delay between requests. Useful when API supposed to be used for mass-bombing.
@@ -394,6 +395,7 @@ namespace InstagramApiSharp.API
         ///     timezone offset
         ///     <para>I.e: 16200 for Iran/Tehran</para>
         /// </param>
+        [Obsolete("SetTimezoneOffset is deprecated. Use TimezoneOffset property instead. This function will no longer effect anything and will be deleted in future releases.")]
         void SetTimezoneOffset(int timezoneOffset);
         /// <summary>
         ///     Send get request
