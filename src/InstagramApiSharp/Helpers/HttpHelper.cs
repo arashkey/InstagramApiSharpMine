@@ -20,7 +20,7 @@ namespace InstagramApiSharp.Helpers
 {
     public class HttpHelper
     {
-        public /*readonly*/ InstaApiVersion _apiVersion;
+        public InstaApiVersion _apiVersion;
         readonly Random Rnd = new Random();
         public IHttpRequestProcessor _httpRequestProcessor;
         public IInstaApi _instaApi;
@@ -162,28 +162,19 @@ namespace InstagramApiSharp.Helpers
             text = text.TrimEnd('&');
             byte[] jsonBytes = Encoding.UTF8.GetBytes(text);
             MemoryStream ms = new MemoryStream();
-//#if !WINDOWS_UWP
-//            using (GZipStream gzip = new GZipStream(ms, CompressionMode.Compress, true))
-//                await gzip.WriteAsync(jsonBytes, 0, jsonBytes.Length);
-//#else
             using (Ionic.Zlib.GZipStream gzip = new Ionic.Zlib.GZipStream(ms, Ionic.Zlib.CompressionMode.Compress, true))
                 await gzip.WriteAsync(jsonBytes, 0, jsonBytes.Length);
-//#endif
             ms.Position = 0;
             byte[] compressed = new byte[ms.Length];
 
             await ms.ReadAsync(compressed, 0, compressed.Length);
             MemoryStream outStream = new MemoryStream(compressed);
-
-            //StreamContent content = new StreamContent(outStream);
             var bytes = outStream.ToArray();
             var content = new ByteArrayContent(bytes);
             content.Headers.Add("Content-Encoding", "gzip");
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded") { CharSet= "UTF-8" };
             content.Headers.ContentLength = bytes.Length;
             request.Content = content;
-            //request.Content = new FormUrlEncodedContent(data);
-            //request.Content.Headers.Add("Content-Encoding", "gzip");
             return request;
         }
         /// <summary>
@@ -216,98 +207,6 @@ namespace InstagramApiSharp.Helpers
                 fields.Add("d", "0");
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(fields);
-#if NET
-            request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
-
-            if (!IsNewerApis)
-                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
-                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
-            if (appendD)
-                request.Options.TryAdd("d", "0");
-#else
-            request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
-
-            if (!IsNewerApis)
-                request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
-                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
-            if (appendD)
-                request.Properties.Add("d", "0");
-#endif
-            return request;
-        }
-        public HttpRequestMessage GetSignedRequest(HttpMethod method,
-            Uri uri,
-            AndroidDevice deviceInfo,
-            Dictionary<string, int> data)
-        {
-            var hash = CryptoHelper.CalculateHash(_apiVersion.SignatureKey,
-                JsonConvert.SerializeObject(data));
-            var payload = JsonConvert.SerializeObject(data);
-            var signature = $"{(IsNewerApis ? _apiVersion.SignatureKey : hash)}.{payload}";
-
-            var fields = new Dictionary<string, string>
-            {
-                {InstaApiConstants.HEADER_IG_SIGNATURE, signature},
-            };
-            if (!IsNewerApis)
-                fields.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
-            var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
-            request.Content = new FormUrlEncodedContent(fields);
-#if NET
-            request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
-
-            if (!IsNewerApis)
-                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
-                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
-#else
-            request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
-
-            if (!IsNewerApis)
-                request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
-                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
-#endif
-            return request;
-        }
-
-
-
-        public HttpRequestMessage GetSignedRequest(HttpMethod method,
-            Uri uri,
-            AndroidDevice deviceInfo,
-            Dictionary<string, object> data, bool appendD = false)
-        {
-            var hash = CryptoHelper.CalculateHash(_apiVersion.SignatureKey,
-                JsonConvert.SerializeObject(data));
-            var payload = JsonConvert.SerializeObject(data);
-            var signature = $"{(IsNewerApis ? _apiVersion.SignatureKey : hash)}.{payload}";
-
-            var fields = new Dictionary<string, string>
-            {
-                {InstaApiConstants.HEADER_IG_SIGNATURE, signature},
-            };
-            if (!IsNewerApis)
-                fields.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
-            if (appendD)
-                fields.Add("d", "0");
-            var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
-            request.Content = new FormUrlEncodedContent(fields);
-#if NET
-            request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
-
-            if (!IsNewerApis)
-                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
-                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
-            if (appendD)
-                request.Options.TryAdd("d", "0");
-#else
-            request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
-
-            if (!IsNewerApis)
-                request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
-                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
-            if (appendD)
-                request.Properties.Add("d", "0");
-#endif
             return request;
         }
 
@@ -330,42 +229,10 @@ namespace InstagramApiSharp.Helpers
                 fields.Add("d", "0");
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(fields);
-#if NET
-            request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
 
-            if (!IsNewerApis)
-                request.Options.TryAdd(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
-                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
-            if (appendD)
-                request.Options.TryAdd("d", "0");
-#else
-            request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE, signature);
-
-            if (!IsNewerApis)
-                request.Properties.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION,
-                InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
-            if (appendD)
-                request.Properties.Add("d", "0");
-#endif
             return request;
         }
 
-        public async Task<HttpRequestMessage> GetSignedGZipRequestAsync(HttpMethod method, Uri uri, AndroidDevice deviceInfo, Dictionary<string, string> data)
-        {
-            return await GetSignedGZipRequest(method, uri, deviceInfo, data);
-        }
-        public async Task<HttpRequestMessage> GetSignedGZipRequestAsync(HttpMethod method, Uri uri, AndroidDevice deviceInfo, Dictionary<string, int> data)
-        {
-            return await GetSignedGZipRequest(method, uri, deviceInfo, data);
-        }
-        public async Task<HttpRequestMessage> GetSignedGZipRequestAsync(HttpMethod method, Uri uri, AndroidDevice deviceInfo, Dictionary<string, object> data)
-        {
-            return await GetSignedGZipRequest(method, uri, deviceInfo, data);
-        }
-        public async Task<HttpRequestMessage> GetSignedGZipRequestAsync(HttpMethod method, Uri uri, AndroidDevice deviceInfo, JObject data)
-        {
-            return await GetSignedGZipRequest(method, uri, deviceInfo, data);
-        }
         async Task<HttpRequestMessage> GetSignedGZipRequest(HttpMethod method, Uri uri, AndroidDevice deviceInfo, object data)
         {
             var hash = CryptoHelper.CalculateHash(_apiVersion.SignatureKey,
@@ -377,8 +244,6 @@ namespace InstagramApiSharp.Helpers
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(signature);
             MemoryStream ms = new MemoryStream();
-            //using (GZipStream gzip = new GZipStream(ms, CompressionMode.Compress, true))
-            //    await gzip.WriteAsync(jsonBytes, 0, jsonBytes.Length);
             using (Ionic.Zlib.GZipStream gzip = new Ionic.Zlib.GZipStream(ms, Ionic.Zlib.CompressionMode.Compress, true))
                 await gzip.WriteAsync(jsonBytes, 0, jsonBytes.Length);
             ms.Position = 0;
@@ -392,6 +257,7 @@ namespace InstagramApiSharp.Helpers
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded") { CharSet = "UTF-8" };
             content.Headers.ContentLength = bytes.Length;
             request.Content = content;
+
             return request;
         }
 
