@@ -3162,7 +3162,7 @@ namespace InstagramApiSharp.API
             //        state.ProxyCredentialPassword = credential.Password;
             //    }
             //}
-            if (data.ProxyAddress != null)// proxy is available
+            if (data.ProxyAddress != null && LoadProxyFromSessionFile)// proxy is available
             {
                 try
                 {
