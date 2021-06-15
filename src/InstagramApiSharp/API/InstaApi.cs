@@ -3371,6 +3371,10 @@ namespace InstagramApiSharp.API
                 var instaUri = UriCreator.GetContactPointPrefillUri();
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
+
+                var json = await response.Content.ReadAsStringAsync();
+
+                _httpRequestProcessor.RequestMessage.UIgViaPhoneId = json?.IndexOf("uig_via_phone_id", StringComparison.OrdinalIgnoreCase) != -1;
             }
             catch (HttpRequestException httpException)
             {
@@ -3438,35 +3442,44 @@ namespace InstagramApiSharp.API
                 _logger?.LogException(exception);
             }
         }
-        private async Task LauncherSyncPrivate(bool second = false, bool third = false)
+        private async Task LauncherSyncPrivate(bool second = false)
         {
             try
             {
-                var data = new JObject();
+                var data = new JObject
+                {
+                    {"server_config_retrieval", "1"}
+                };
                 var csrftoken = GetCsrfTokenFromCookies();
-                if (!string.IsNullOrEmpty(csrftoken))
-                    data.Add("_csrftoken", csrftoken);
+                //if (!string.IsNullOrEmpty(csrftoken))
+                //    data.Add("_csrftoken", csrftoken);
                 if (IsUserAuthenticated && _user?.LoggedInUser != null)
                 {
                     //data.Add("_csrftoken", _user.CsrfToken);
-                    data.Add("id", _deviceInfo.DeviceGuid.ToString());
-                    //data.Add("_uuid", _deviceInfo.DeviceGuid.ToString());
                     //data.Add("id", _deviceInfo.DeviceGuid.ToString());
+                    data.Add("id", _user.LoggedInUser.Pk.ToString());
+                    data.Add("_uid", _user.LoggedInUser.Pk.ToString());
+                    data.Add("_uuid", _deviceInfo.DeviceGuid.ToString());
                 }
                 else
-                {
                     data.Add("id", _deviceInfo.DeviceGuid.ToString());
-                }
-                data.Add("server_config_retrieval", "1");
+
                 var uri = UriCreator.GetLauncherSyncUri();
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
-
                 var response = await _httpRequestProcessor.SendAsync(request);
-                if (!third)
-                {//ig-set-password-encryption-key-id
-                 //ig-set-password-encryption-pub-key
-                    _user.PublicKey = string.Join("", response.Headers.GetValues("ig-set-password-encryption-pub-key"));
-                    _user.PublicKeyId = string.Join("", response.Headers.GetValues("ig-set-password-encryption-key-id"));
+
+                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor, second);
+                if (!IsUserAuthenticated)
+                {
+                    //ig-set-password-encryption-key-id
+                    //ig-set-password-encryption-pub-key
+                    var pubKey = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY));
+                    var pubKeyId = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID));
+                    if (!string.IsNullOrEmpty(pubKey) && !string.IsNullOrEmpty(pubKeyId))
+                    {
+                        _user.PublicKey = pubKey;
+                        _user.PublicKeyId = pubKeyId;
+                    }
                 }
             }
             catch (HttpRequestException httpException)
