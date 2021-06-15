@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using InstagramApiSharp.Classes.Models;
+using Newtonsoft.Json;
 
 namespace InstagramApiSharp.Classes
 {
-    public class TwoFactorLoginSMS
+    public class TwoFactorLoginSMS : InstaDefaultResponse
     {
         [JsonProperty("two_factor_required")]
         public bool TwoFactorRequired { get; set; }

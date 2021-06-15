@@ -1158,7 +1158,7 @@ namespace InstagramApiSharp.API
                                 : InstaLoginResult.InvalidUser);
                     if (loginFailReason.TwoFactorRequired)
                     {
-                        if (loginFailReason.TwoFactorLoginInfo != null)
+                        if (!string.IsNullOrEmpty(loginFailReason.TwoFactorLoginInfo?.Username))
                             _httpRequestProcessor.RequestMessage.Username = loginFailReason.TwoFactorLoginInfo.Username;
                         _twoFactorInfo = loginFailReason.TwoFactorLoginInfo;
                         //2FA is required!
@@ -1694,26 +1694,36 @@ namespace InstagramApiSharp.API
             try
             {
                 if (_twoFactorInfo == null)
-                    return Result.Fail<TwoFactorLoginSMS>("Run LoginAsync first");
-
-                var postData = new Dictionary<string, string>
+                    return Result.Fail<TwoFactorLoginSMS>("Login first");
+                //{  // v191.1.0.41.124
+                //  "two_factor_identifier": "bluh bluh bluh",
+                //  "username": "bluh bluh",
+                //  "guid": "bluh-bluh-bluh-bluh-bluh",
+                //  "device_id": "android-bluh"
+                //}
+                var data = new Dictionary<string, string>
                 {
-                    {"_csrftoken", _user.CsrfToken},
-                    {"two_factor_identifier", _twoFactorInfo.TwoFactorIdentifier },
-                    {"username", _httpRequestProcessor.RequestMessage.Username},
+                    //{"_csrftoken", _user.CsrfToken},// remove?!
+                    {"two_factor_identifier", _twoFactorInfo.TwoFactorIdentifier},
+                    {"username", _httpRequestProcessor.RequestMessage.Username.ToLower()},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
-                    {"device_id", _httpRequestProcessor.RequestMessage.DeviceId}
+                    {"device_id", _deviceInfo.DeviceId}
                 };
 
                 var instaUri = UriCreator.GetAccount2FALoginAgainUri();
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, postData);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
-                var result = await response.Content.ReadAsStringAsync();
+                var json = await response.Content.ReadAsStringAsync();
 
-                var T = JsonConvert.DeserializeObject<TwoFactorLoginSMS>(result);
-                if (!string.IsNullOrEmpty(T.TwoFactorInfo.TwoFactorIdentifier))
-                    _twoFactorInfo.TwoFactorIdentifier = T.TwoFactorInfo.TwoFactorIdentifier;
-                return Result.Success(T);
+                var obj = JsonConvert.DeserializeObject<TwoFactorLoginSMS>(json);
+                if (obj.IsSucceed)
+                {
+                    if (!string.IsNullOrEmpty(obj.TwoFactorInfo?.TwoFactorIdentifier))
+                        _twoFactorInfo.TwoFactorIdentifier = obj.TwoFactorInfo.TwoFactorIdentifier;
+                    return Result.Success(obj);
+                }
+                else
+                    return Result.UnExpectedResponse<TwoFactorLoginSMS>(response, json);
             }
             catch (HttpRequestException httpException)
             {
