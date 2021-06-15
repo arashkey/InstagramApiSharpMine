@@ -3117,10 +3117,9 @@ namespace InstagramApiSharp.API
                 _httpRequestProcessor.HttpHandler.CookieContainer.Add(new Uri(InstaApiConstants.INSTAGRAM_URL), cookie);
             }
 
-            if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version180;
-            if (!LoadApiVersionFromSessionFile)
-                data.InstaApiVersion = InstaApiVersionType.Version180;
+            if (data.InstaApiVersion == null || !LoadApiVersionFromSessionFile)
+                data.InstaApiVersion = InstaApiVersionType.Version191;
+
             ApiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(ApiVersionType);
             _httpHelper = new HttpHelper(_apiVersion, _httpRequestProcessor, this);
@@ -3131,17 +3130,7 @@ namespace InstagramApiSharp.API
             IsUserAuthenticated = data.IsAuthenticated;
             TwoFactorLoginInfo = data.TwoFactorLoginInfo;
             ChallengeLoginInfo = data.ChallengeLoginInfo;
-            //if (_httpRequestProcessor.HttpHandler?.Proxy is WebProxy proxy)
-            //{
-            //    state.ProxyAddress = proxy.Address;
-            //    state.ProxyUseDefaultCredentials = proxy.UseDefaultCredentials;
-            //    state.ProxyBypassProxyOnLocal = proxy.BypassProxyOnLocal;
-            //    if (proxy.Credentials is NetworkCredential credential)
-            //    {
-            //        state.ProxyCredentialUsername = credential.UserName;
-            //        state.ProxyCredentialPassword = credential.Password;
-            //    }
-            //}
+
             if (data.ProxyAddress != null && LoadProxyFromSessionFile)// proxy is available
             {
                 try
