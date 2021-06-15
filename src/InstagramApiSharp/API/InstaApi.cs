@@ -1351,17 +1351,27 @@ namespace InstagramApiSharp.API
                     var csrftoken = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
                     _user.CsrfToken = csrftoken;
                 }
-
+                //{
+                //    "verification_code": "bluh",
+                //    "phone_id": "bluh-bluh-bluh-bluh-bluh",
+                //    "two_factor_identifier": "=",
+                //    "username": "rmt4006x",
+                //    "trust_this_device": "0",
+                //    "guid": "bluh-bluh-bluh-bluh-bluh",
+                //    "device_id": "android-bluh",
+                //    "waterfall_id": "rnd",
+                //    "verification_method": "1"
+                //}
                 var data = new Dictionary<string, string>
                 {
                     {"verification_code", verificationCode},
-                    {"phone_id", _deviceInfo.DeviceGuid.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
+                    {"phone_id", _deviceInfo.PhoneGuid.ToString()},
+                    //{"_csrftoken", _user.CsrfToken}, // why they keep deleting csrftoken from requests?! v190, v191.0 and v192 doesn't have it either
                     {"two_factor_identifier", _twoFactorInfo.TwoFactorIdentifier},
                     {"username", _httpRequestProcessor.RequestMessage.Username.ToLower()},
                     {"trust_this_device", Convert.ToInt16(trustThisDevice).ToString()},
-                    {"guid", _deviceInfo.PhoneGuid.ToString()},
-                    {"device_id", _httpRequestProcessor.RequestMessage.DeviceId},
+                    {"guid", _deviceInfo.DeviceGuid.ToString()},
+                    {"device_id", _deviceInfo.DeviceId},
                     {"waterfall_id", Guid.NewGuid().ToString()},
                     {"verification_method", ((int)twoFactorVerifyOptions).ToString()},
                 };
@@ -1397,7 +1407,6 @@ namespace InstagramApiSharp.API
                     _challengeinfo = loginFailReason.Challenge;
 
                     return Result.Fail("Challenge is required", InstaLoginTwoFactorResult.ChallengeRequired);
-
                 }
                 return Result.Fail("This code is no longer valid, please, request again for new one",
                     InstaLoginTwoFactorResult.CodeExpired);
