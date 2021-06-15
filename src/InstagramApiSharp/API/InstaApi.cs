@@ -1112,7 +1112,7 @@ namespace InstagramApiSharp.API
                 var instaUri = UriCreator.GetLoginUri();
                 var signature = string.Empty;
                 var devid = string.Empty;
-
+                _httpRequestProcessor.RequestMessage.PhoneId = _deviceInfo.PhoneGuid.ToString(); // fixes some issues
                 if (!string.IsNullOrEmpty(_user.Password))
                 {
                     if (string.IsNullOrEmpty(_user.PublicKey))
