@@ -12,7 +12,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         public Guid AdId { get; set; } = Guid.NewGuid();
         public Guid PigeonSessionId { get; set; } = Guid.NewGuid();
         public Guid PushDeviceGuid { get; set; } = Guid.NewGuid();
-        public Guid FamilyDeviceGuid { get; set; } = Guid.NewGuid();
+        public Guid FamilyDeviceGuid { get; set; } 
 
         public AndroidVersion AndroidVer { get; set; } = AndroidVersion.GetRandomAndriodVersion();
 
@@ -37,9 +37,9 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         // X-IG-Bandwidth-Speed-KBPS
         // X-IG-Bandwidth-TotalBytes-B
         // X-IG-Bandwidth-TotalTime-MS
-        public string IGBandwidthSpeedKbps { get; set; } = "1235.043";
-        public string IGBandwidthTotalBytesB { get; set; } = "1219685";
-        public string IGBandwidthTotalTimeMS { get; set; } = "949";
+        public string IGBandwidthSpeedKbps { get; set; } = "-1.000";
+        public string IGBandwidthTotalBytesB { get; set; } = "0";
+        public string IGBandwidthTotalTimeMS { get; set; } = "0";
 
         public const string CPU_ABI = "armeabi-v7a:armeabi";
 

@@ -113,6 +113,8 @@ namespace InstagramApiSharp.API
         public const string HEADER_X_IG_BANDWIDTH_TOTALTIME_MS = "X-IG-Bandwidth-TotalTime-MS";
         public const string HEADER_X_IG_MAPPED_LOCALE = "X-IG-Mapped-Locale";
         public const string HEADER_X_IG_TIGON_RETRY = "X-Tigon-Is-Retry";
+        public const string HEADER_X_IG_FAMILY_DEVICE_ID = "X-IG-Family-Device-ID";
+
         public const string HEADER_PRIORITY = "Priority";
         public const string HEADER_PRIORITY_VALUE = "u=3";
         public const string HEADER_IG_TIMEZONE_OFFSET = "X-IG-Timezone-Offset";
