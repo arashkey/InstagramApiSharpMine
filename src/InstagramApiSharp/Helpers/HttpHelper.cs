@@ -138,11 +138,11 @@ namespace InstagramApiSharp.Helpers
 
             request.Headers.Add(InstaApiConstants.HEADER_X_FB_SERVER_CLUSTER, "True");
 
-            request.Headers.Add(InstaApiConstants.HEADER_PRIORITY, InstaApiConstants.HEADER_PRIORITY_VALUE);
+            //request.Headers.Add(InstaApiConstants.HEADER_PRIORITY, InstaApiConstants.HEADER_PRIORITY_VALUE);
 
             request.Headers.Add(InstaApiConstants.HEADER_IG_TIMEZONE_OFFSET, _instaApi.TimezoneOffset.ToString());
 
-            request.Headers.Add(InstaApiConstants.HEADER_IG_INTENDED_USER_ID, (_instaApi.GetLoggedUser().LoggedInUser?.Pk ?? 0).ToString());
+            //request.Headers.Add(InstaApiConstants.HEADER_IG_INTENDED_USER_ID, (_instaApi.GetLoggedUser().LoggedInUser?.Pk ?? 0).ToString());
 
             System.Globalization.CultureInfo.CurrentCulture = currentCulture;
             return request;

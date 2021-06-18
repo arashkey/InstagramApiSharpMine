@@ -201,11 +201,31 @@ namespace ChallengeRequireExample
                         else
                             MessageBox.Show(challenge.Info.Message, "ERR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    else if(logInResult.Value == InstaLoginResult.TwoFactorRequired)
+                    else if (logInResult.Value == InstaLoginResult.TwoFactorRequired)
                     {
+                        // lets check for pending trusted notification first
+                        if (InstaApi.TwoFactorLoginInfo?.PendingTrustedNotification ?? false)
+                        {
+                            // if we have one, let us check the required API by calling this function
+                            await InstaApi.Check2FATrustedNotificationAsync();
+                            await Task.Delay(2000);// lets wait 2 seconds and try again [ to act as instagram way! ]
+                            await InstaApi.Check2FATrustedNotificationAsync();
+                            // why 3 times? Insta checking this value repeatedly,
+                            // I tracked it in one login to 19 requests and in another login it was 3 or less and more
+
+                            await Task.Delay(2000);// lets wait 2 seconds more to manipulate instagram
+
+                            // now we are allowed to call this function to send it via SMS
+                            await InstaApi.SendTwoFactorLoginSMSAsync();
+
+                            // we have to send trusted device API one more time, after we call SendTwoFactorLoginSMSAsync
+                            await InstaApi.Check2FATrustedNotificationAsync();
+                        }
                         TwoFactorGroupBox.Visible = true;
                         Size = ChallengeSize;
                     }
+                    else
+                        MessageBox.Show(logInResult.Info.Message, logInResult.Info.ResponseType.ToString());
                 }
             }
             else

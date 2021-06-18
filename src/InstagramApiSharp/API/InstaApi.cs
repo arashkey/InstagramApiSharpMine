@@ -3327,6 +3327,8 @@ namespace InstagramApiSharp.API
             {
                 //await GetNotificationBadge();
                 await GetContactPointPrefill();
+                await RegistrationService.GetZrTokenResultAsync();
+                await RegistrationService.GetZrTokenResultAsync();
                 //await GetReadMsisdnHeader();
                 await LauncherSyncPrivate();
                 await QeSync();
