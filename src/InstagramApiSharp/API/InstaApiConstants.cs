@@ -81,8 +81,11 @@ namespace InstagramApiSharp.API
         public const string SI_FETCH_HEADERS = API_SUFFIX + "/si/fetch_headers/";
         public const string CONSENT_CHECK_AGE_ELIGIBILITY = API_SUFFIX + "/consent/check_age_eligibility/";
 
+        public const string TWO_FACTOR_CHECK_TRUSTED_NOTIFICATION_STATUS = API_SUFFIX + "/two_factor/check_trusted_notification_status/";
+
+
         #endregion New
-        
+
         #region B Url endpoints
 
         public const string MULTIPLE_ACCOUNTS_GET_ACCOUNT_FAMILY = API_SUFFIX + "/multiple_accounts/get_account_family/";

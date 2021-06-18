@@ -28,6 +28,17 @@ namespace InstagramApiSharp.Classes
         [JsonProperty("show_trusted_device_option")]
         public bool? ShowTrustedDeviceOption { get; set; }
 
+        [JsonProperty("whatsapp_two_factor_on")]
+        public bool? WhatsappTwoFactorOn { get; set; }
+
+        [JsonProperty("should_opt_in_trusted_device_option")]
+        public bool? ShouldOptInTrustedDeviceOption { get; set; }
+
+        [JsonProperty("pending_trusted_notification")]
+        public bool? PendingTrustedNotification { get; set; }
+
+        [JsonProperty("sms_not_allowed_reason")]
+        public object SmsNotAllowedReason { get; set; } // always is null, but let us have it
 
         public static InstaTwoFactorLoginInfo Empty => new InstaTwoFactorLoginInfo();
     }
