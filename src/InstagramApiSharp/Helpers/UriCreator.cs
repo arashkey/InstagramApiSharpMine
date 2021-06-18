@@ -3033,5 +3033,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for direct broadcast reel clips share");
             return instaUri;
         }
+        public static Uri Get2FATrustedNotificationCheckUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.TWO_FACTOR_CHECK_TRUSTED_NOTIFICATION_STATUS, out var instaUri))
+                throw new Exception("Cant create URI for check two factor notifications status");
+            return instaUri;
+        }
     }
 }

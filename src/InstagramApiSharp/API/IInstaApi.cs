@@ -662,6 +662,15 @@ namespace InstagramApiSharp.API
         /// </summary>
         Task<IResult<TwoFactorLoginSMS>> SendTwoFactorLoginSMSAsync();
         /// <summary>
+        ///     Check two factor trusted notification status
+        /// </summary>
+        /// <remarks>
+        ///         This will checks for response from another logged in device.
+        ///         <para>Review status can be 0, 1 or 2</para>
+        ///         <para>At the momemnt I don't know, but I'll check it for understand these values</para>
+        /// </remarks>
+        Task<IResult<InstaTwoFactorTrustedNotification>> Check2FATrustedNotificationAsync();
+        /// <summary>
         ///     Logout from instagram asynchronously
         /// </summary>
         /// <returns>True if logged out without errors</returns>

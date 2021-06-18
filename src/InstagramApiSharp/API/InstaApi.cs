@@ -1423,7 +1423,50 @@ namespace InstagramApiSharp.API
                     ? Result.Success(_twoFactorInfo)
                     : Result.Fail<InstaTwoFactorLoginInfo>("No Two Factor info available."));
         }
+        /// <summary>
+        ///     Check two factor trusted notification status
+        /// </summary>
+        /// <remarks>
+        ///         This will checks for response from another logged in device.
+        ///         <para>Review status can be 0, 1 or 2</para>
+        ///         <para>At the momemnt I don't know, but I'll check it for understand these values</para>
+        /// </remarks>
+        public async Task<IResult<InstaTwoFactorTrustedNotification>> Check2FATrustedNotificationAsync()
+        {
+            try
+            {
+                if (_twoFactorInfo == null)
+                    return Result.Fail<InstaTwoFactorTrustedNotification>("Try to Login first");
 
+                var instaUri = UriCreator.Get2FATrustedNotificationCheckUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"two_factor_identifier", _twoFactorInfo.TwoFactorIdentifier},
+                    {"username", _httpRequestProcessor.RequestMessage.Username.ToLower()},
+                    {"device_id", _deviceInfo.DeviceId}
+                };
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK) 
+                    return Result.UnExpectedResponse<InstaTwoFactorTrustedNotification>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaTwoFactorTrustedNotification>(json);
+
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaTwoFactorTrustedNotification), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                LogException(exception);
+                return Result.Fail<InstaTwoFactorTrustedNotification>(exception);
+            }
+        }
         /// <summary>
         ///     Logout from instagram asynchronously
         /// </summary>
@@ -1679,7 +1722,7 @@ namespace InstagramApiSharp.API
             try
             {
                 if (_twoFactorInfo == null)
-                    return Result.Fail<TwoFactorLoginSMS>("Login first");
+                    return Result.Fail<TwoFactorLoginSMS>("Try to Login first");
                 //{  // v191.1.0.41.124
                 //  "two_factor_identifier": "bluh bluh bluh",
                 //  "username": "bluh bluh",
