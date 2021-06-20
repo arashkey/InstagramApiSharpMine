@@ -44,7 +44,8 @@ namespace TwoFactorSample
         public Form1()
         {
             InitializeComponent();
-            CheckForIllegalCrossThreadCalls = false;
+            CheckForIllegalCrossThreadCalls = false;// lets disable this, note that you should invoke the controls, this isn't right
+            // but since it's a example I avoided it 
         }
 
         private async void LoginButton_Click(object sender, EventArgs e)
