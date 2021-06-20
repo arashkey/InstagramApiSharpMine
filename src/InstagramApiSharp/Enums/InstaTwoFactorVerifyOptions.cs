@@ -13,6 +13,7 @@ namespace InstagramApiSharp.Enums
     {
         SmsCode = 1,
         RecoveryCode = 2,
-        AuthenticationApp = 3
+        AuthenticationApp = 3,
+        Notification = 4
     }
 }
