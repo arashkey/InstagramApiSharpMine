@@ -95,7 +95,8 @@ Public Class Form1
     Dim InstaApi As IInstaApi
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        CheckForIllegalCrossThreadCalls = False
+        CheckForIllegalCrossThreadCalls = False ' lets disable this, note that you should invoke the controls, this isn't right
+        ' but since it's a example I avoided it 
         Size = NormalSize
     End Sub
 
