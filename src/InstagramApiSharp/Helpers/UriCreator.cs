@@ -3039,10 +3039,16 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for check two factor notifications status");
             return instaUri;
         }
+        public static Uri GetUpdate2FATrustedNotificationSettingsUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.TWO_FACTOR_UPDATE_TRUSTED_NOTIFICATION_SETTING, out var instaUri))
+                throw new Exception("Cant create URI for update two factor notifications setting");
+            return instaUri;
+        }
         public static Uri Get2FATrustedNotificationUpdateUri()
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.TWO_FACTOR_UPDATE_TRUSTED_NOTIFICATION_STATUS, out var instaUri))
-                throw new Exception("Cant create URI for update two factor notifications status");
+                throw new Exception("Cant create URI for check two factor notifications status");
             return instaUri;
         }
     }

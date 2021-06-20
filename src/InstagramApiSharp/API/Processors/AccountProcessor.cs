@@ -1538,6 +1538,17 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
+        ///     Approve new login reques from push/realtime notification
+        /// </summary>
+        /// <param name="twoFactorIdentifier">TwoFactorIndentifier from push notifications</param>
+        /// <param name="requestorDeviceId">Resquestor device id from push notifications</param>
+        public async Task<IResult<InstaTwoFactorTrustedNotification>> ApproveNewLoginRequestAsync(
+            string twoFactorIdentifier,
+            string requestorDeviceId) =>
+            await Update2FATrustedNotification(Insta2FANotificationReviewStatus.Approved, twoFactorIdentifier, 
+                requestorDeviceId).ConfigureAwait(false);
+
+        /// <summary>
         ///     Disable login request notifications
         /// </summary>
         /// <remarks>
@@ -2080,12 +2091,12 @@ namespace InstagramApiSharp.API.Processors
         #endregion Other functions
 
         #region Private functions
-        public async Task<IResult<bool>> EnableDisableLoginRequestNotification(bool enable)
+        private async Task<IResult<bool>> EnableDisableLoginRequestNotification(bool enable)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var instaUri = UriCreator.Get2FATrustedNotificationUpdateUri();
+                var instaUri = UriCreator.GetUpdate2FATrustedNotificationSettingsUri();
                 var data = new JObject
                 {
                     //{"_csrftoken", _user.CsrfToken},
@@ -2120,6 +2131,47 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
+        async Task<IResult<InstaTwoFactorTrustedNotification>> Update2FATrustedNotification(
+            Insta2FANotificationReviewStatus reviewStatus,
+            string twoFactorIdentifier,
+            string requestorDeviceId)
+        {
+            try
+            {
+                var instaUri = UriCreator.Get2FATrustedNotificationUpdateUri();
+                // two_factor_identifier==&
+                //_uuid=----&
+                //requestor_device_id=android-&
+                //review_status=1
+                var data = new Dictionary<string, string>
+                {
+                    {"two_factor_identifier", twoFactorIdentifier},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"requestor_device_id", requestorDeviceId},
+                    {"review_status", ((int)reviewStatus).ToString()},
+                };
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaTwoFactorTrustedNotification>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaTwoFactorTrustedNotification>(json);
+
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaTwoFactorTrustedNotification), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaTwoFactorTrustedNotification>(exception);
+            }
+        }
         #endregion Private functions
 
         #region NOT COMPLETE FUNCTIONS
