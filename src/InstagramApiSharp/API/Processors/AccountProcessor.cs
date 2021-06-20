@@ -1538,6 +1538,48 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
+        ///     Check new login request notification
+        /// </summary>
+        /// <param name="twoFactorIdentifier">TwoFactorIndentifier from push notifications</param>
+        /// <param name="requestorDeviceId">Resquestor device id from push notifications</param>
+        public async Task<IResult<InstaTwoFactorTrustedNotification>> CheckNewLoginRequestNotificationAsync(string twoFactorIdentifier,
+            string requestorDeviceId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.Get2FATrustedNotificationCheckUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"two_factor_identifier", twoFactorIdentifier},
+                    {"username", _httpRequestProcessor.RequestMessage.Username.ToLower()},
+                    {"device_id", requestorDeviceId},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()}
+                };
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaTwoFactorTrustedNotification>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaTwoFactorTrustedNotification>(json);
+
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaTwoFactorTrustedNotification), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaTwoFactorTrustedNotification>(exception);
+            }
+        }
+
+        /// <summary>
         ///     Deny new login reques from push/realtime notification
         /// </summary>
         /// <param name="twoFactorIdentifier">TwoFactorIndentifier from push notifications</param>
