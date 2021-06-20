@@ -254,6 +254,15 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         Task<IResult<bool>> DisableTwoFactorAuthenticationAsync();
 
+        /// <summary>
+        ///     Enable login request notifications
+        /// </summary>
+        /// <remarks>
+        ///     Instagram description: We'll send a notification to approve new devices that try to login
+        /// </remarks>
+        /// <returns>True, if succeeded</returns>
+        Task<IResult<bool>> EnableLoginRequestNotificationAsync();
+
         // two factor authentication enable/disable
         /// <summary>
         ///     Get Security settings (two factor authentication and backup codes).

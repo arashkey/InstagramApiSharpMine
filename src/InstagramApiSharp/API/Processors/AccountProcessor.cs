@@ -1536,6 +1536,17 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaAccountSecuritySettings>(exception);
             }
         }
+
+        /// <summary>
+        ///     Enable login request notifications
+        /// </summary>
+        /// <remarks>
+        ///     Instagram description: We'll send a notification to approve new devices that try to login
+        /// </remarks>
+        /// <returns>True, if succeeded</returns>
+        public async Task<IResult<bool>> EnableLoginRequestNotificationAsync() =>
+            await EnableDisableLoginRequestNotification(true).ConfigureAwait(false);
+
         /// <summary>
         ///     Disable two factor authentication.
         /// </summary>        
@@ -2056,9 +2067,52 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<bool>(exception);
             }
         }
-#endregion Other functions
+        #endregion Other functions
 
-#region NOT COMPLETE FUNCTIONS
+        #region Private functions
+        public async Task<IResult<bool>> EnableDisableLoginRequestNotification(bool enable)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.Get2FATrustedNotificationUpdateUri();
+                var data = new JObject
+                {
+                    //{"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"enable", enable.ToString().ToLower()}
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<JObject>(json);
+                var status = obj["status"];
+                if (status.Value<string>() == "ok")
+                {
+                    var enabled = obj["enabled"].Value<bool>();
+                    //{"enabled":true,"status":"ok"} // false
+                    return Result.Success(enable == enabled);
+                }
+                else 
+                    return Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
+        #endregion Private functions
+
+        #region NOT COMPLETE FUNCTIONS
 
 
         //NOT COMPLETE

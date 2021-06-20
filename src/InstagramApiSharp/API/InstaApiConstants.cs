@@ -82,7 +82,7 @@ namespace InstagramApiSharp.API
         public const string CONSENT_CHECK_AGE_ELIGIBILITY = API_SUFFIX + "/consent/check_age_eligibility/";
 
         public const string TWO_FACTOR_CHECK_TRUSTED_NOTIFICATION_STATUS = API_SUFFIX + "/two_factor/check_trusted_notification_status/";
-
+        public const string TWO_FACTOR_UPDATE_TRUSTED_NOTIFICATION_STATUS = API_SUFFIX + "/two_factor/update_trusted_notification_setting/";
 
         #endregion New
 
