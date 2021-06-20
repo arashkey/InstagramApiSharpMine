@@ -249,10 +249,15 @@ namespace InstagramApiSharp.API.Processors
         #endregion Story settings
 
         #region two factor authentication enable/disable
+
         /// <summary>
-        ///     Disable two factor authentication.
+        ///     Disable login request notifications
         /// </summary>
-        Task<IResult<bool>> DisableTwoFactorAuthenticationAsync();
+        /// <remarks>
+        ///     Instagram description: We'll send a notification to approve new devices that try to login
+        /// </remarks>
+        /// <returns>False, if succeeded</returns>
+        Task<IResult<bool>> DisableLoginRequestNotificationAsync();
 
         /// <summary>
         ///     Enable login request notifications
@@ -262,6 +267,11 @@ namespace InstagramApiSharp.API.Processors
         /// </remarks>
         /// <returns>True, if succeeded</returns>
         Task<IResult<bool>> EnableLoginRequestNotificationAsync();
+
+        /// <summary>
+        ///     Disable two factor authentication.
+        /// </summary>
+        Task<IResult<bool>> DisableTwoFactorAuthenticationAsync();
 
         // two factor authentication enable/disable
         /// <summary>

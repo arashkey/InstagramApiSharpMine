@@ -1538,6 +1538,16 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
+        ///     Disable login request notifications
+        /// </summary>
+        /// <remarks>
+        ///     Instagram description: We'll send a notification to approve new devices that try to login
+        /// </remarks>
+        /// <returns>False, if succeeded</returns>
+        public async Task<IResult<bool>> DisableLoginRequestNotificationAsync() =>
+            await EnableDisableLoginRequestNotification(false).ConfigureAwait(false);
+
+        /// <summary>
         ///     Enable login request notifications
         /// </summary>
         /// <remarks>
