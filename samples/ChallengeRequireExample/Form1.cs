@@ -92,6 +92,8 @@ namespace ChallengeRequireExample
         public Form1()
         {
             InitializeComponent();
+            CheckForIllegalCrossThreadCalls = false;// lets disable this, note that you should invoke the controls, this isn't right
+            // but since it's a example I avoided it 
             Load += Form1_Load;
         }
 
@@ -236,7 +238,7 @@ namespace ChallengeRequireExample
                                         case Insta2FANotificationReviewStatus.Approved:
                                             {
                                                 // if user approved login notification, we can simply login, without any further hard work
-                                                // >>>>>>>>>>>>>> DON'T CHANGE THESE VALUE <<<<<<<<<<<<<<
+                                                // >>>>>>>>>>>>>> DON'T CHANGE "code" AND "twoFactorOption" VALUES <<<<<<<<<<<<<<
 
                                                 var code = ""; // we have to pass "" as a verification code,
                                                                // since Instagram doesn't need code in approved case
