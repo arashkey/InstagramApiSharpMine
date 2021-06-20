@@ -1327,7 +1327,9 @@ namespace InstagramApiSharp.API
         ///     CodeExpired --> The code is expired, please request a new one.
         ///     Exception --> Something wrong happened
         /// </returns>
-        public async Task<IResult<InstaLoginTwoFactorResult>> TwoFactorLoginAsync(string verificationCode, bool trustThisDevice = false, InstaTwoFactorVerifyOptions twoFactorVerifyOptions = InstaTwoFactorVerifyOptions.SmsCode)
+        public async Task<IResult<InstaLoginTwoFactorResult>> TwoFactorLoginAsync(string verificationCode, 
+            bool trustThisDevice = false,
+            InstaTwoFactorVerifyOptions twoFactorVerifyOptions = InstaTwoFactorVerifyOptions.SmsCode)
         {
             if (_twoFactorInfo == null)
                 return Result.Fail<InstaLoginTwoFactorResult>("Re-login required");
@@ -1347,6 +1349,7 @@ namespace InstagramApiSharp.API
                 //    "waterfall_id": "rnd",
                 //    "verification_method": "1"
                 //}
+
                 var data = new Dictionary<string, string>
                 {
                     {"verification_code", verificationCode},
