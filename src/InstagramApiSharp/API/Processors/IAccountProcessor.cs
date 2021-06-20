@@ -249,7 +249,15 @@ namespace InstagramApiSharp.API.Processors
         #endregion Story settings
 
         #region two factor authentication enable/disable
-        
+
+        /// <summary>
+        ///     Deny new login reques from push/realtime notification
+        /// </summary>
+        /// <param name="twoFactorIdentifier">TwoFactorIndentifier from push notifications</param>
+        /// <param name="requestorDeviceId">Resquestor device id from push notifications</param>
+        Task<IResult<InstaTwoFactorTrustedNotification>> DenyNewLoginRequestAsync(string twoFactorIdentifier,
+            string requestorDeviceId);
+
         /// <summary>
         ///     Approve new login reques from push/realtime notification
         /// </summary>

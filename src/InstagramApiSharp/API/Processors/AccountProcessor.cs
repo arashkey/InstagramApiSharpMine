@@ -1538,6 +1538,17 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
+        ///     Deny new login reques from push/realtime notification
+        /// </summary>
+        /// <param name="twoFactorIdentifier">TwoFactorIndentifier from push notifications</param>
+        /// <param name="requestorDeviceId">Resquestor device id from push notifications</param>
+        public async Task<IResult<InstaTwoFactorTrustedNotification>> DenyNewLoginRequestAsync(
+            string twoFactorIdentifier,
+            string requestorDeviceId) =>
+            await Update2FATrustedNotification(Insta2FANotificationReviewStatus.Denied, twoFactorIdentifier,
+                requestorDeviceId).ConfigureAwait(false);
+
+        /// <summary>
         ///     Approve new login reques from push/realtime notification
         /// </summary>
         /// <param name="twoFactorIdentifier">TwoFactorIndentifier from push notifications</param>
