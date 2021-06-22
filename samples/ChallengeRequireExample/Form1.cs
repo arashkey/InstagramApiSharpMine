@@ -211,10 +211,10 @@ namespace ChallengeRequireExample
                         // lets check for pending trusted notification first
                         if (InstaApi.TwoFactorLoginInfo?.PendingTrustedNotification ?? false)
                         {
+                            var random = new Random();
                             ///////////// IF YOU WANT TO SUPPORT NOTIFICATION LOGIN DO THIS> /////////////
                             if (!freshLoginFromTwoFactor) // false
                             {
-                                var random = new Random();
                                 int tried = 0;
                             RetryLabel:
                                 var trustedNotification = await InstaApi.Check2FATrustedNotificationAsync();
@@ -284,20 +284,34 @@ namespace ChallengeRequireExample
                             }
                             else ///////////// IF YOU WANT TO SEND SMS CODE, USE BELOW CODE /////////////
                             {
-                                // if we have one, let us check the required API by calling this function
-                                await InstaApi.Check2FATrustedNotificationAsync();
-                                await Task.Delay(2000);// lets wait 2 seconds and try again [ to act as instagram way! ]
-                                await InstaApi.Check2FATrustedNotificationAsync();
-                                // why 3 times? Insta checking this value repeatedly,
-                                // I tracked it in one login to 19 requests and in another login it was 3 or less and more
+                                // Let us check the required APIs by calling these functions
 
-                                await Task.Delay(2000);// lets wait 2 seconds more to manipulate instagram
+                                // >>>>>>>>>>>> NEW <<<<<<<<<<<
+                                // I check Instagram again, it seems they wait 9 to 12 seconds before checking /two_factor/check_trusted_notification_status/ API
+                                // So lets wait between this range
+                                await DelayAndCheck(random.Next(9, 12));
+
+                                await DelayAndCheck(4); // lets wait 4 seconds and try again
+
+                                await DelayAndCheck(5); // 5 seconds delay
+
+                                await DelayAndCheck(5); // 5 seconds delay
+
+                                await Task.Delay(4000); // 4 seconds delay before sending SendTwoFactorLoginSMSAsync
 
                                 // now we are allowed to call this function to send it via SMS
                                 await InstaApi.SendTwoFactorLoginSMSAsync();
 
+                                await Task.Delay(1000);// lets wait 1 second for one last time
+
                                 // we have to send trusted device API one more time, after we call SendTwoFactorLoginSMSAsync
                                 await InstaApi.Check2FATrustedNotificationAsync();
+
+                                async Task DelayAndCheck(int delayInSeconds)
+                                {
+                                    await Task.Delay(TimeSpan.FromSeconds(delayInSeconds));
+                                    await InstaApi.Check2FATrustedNotificationAsync().ConfigureAwait(false);
+                                }
                             }
                         }
                         TwoFactorGroupBox.Visible = true;
