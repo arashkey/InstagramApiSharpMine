@@ -1732,9 +1732,9 @@ namespace InstagramApiSharp.API
                 //}
                 var data = new Dictionary<string, string>
                 {
-                    //{"_csrftoken", _user.CsrfToken},// remove?!
+                    {"_csrftoken", _user.CsrfToken},// remove?!
                     {"two_factor_identifier", _twoFactorInfo.TwoFactorIdentifier},
-                    {"username", _httpRequestProcessor.RequestMessage.Username.ToLower()},
+                    {"username", (_httpRequestProcessor.RequestMessage.Username ?? _user.UserName).ToLower()},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId}
                 };
