@@ -1367,7 +1367,7 @@ namespace InstagramApiSharp.API
                     data.Add("fb_access_token", FbAccessToken);
 
                 var instaUri = UriCreator.GetTwoFactorLoginUri();
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
