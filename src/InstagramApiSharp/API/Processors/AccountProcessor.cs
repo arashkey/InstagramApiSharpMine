@@ -764,17 +764,27 @@ namespace InstagramApiSharp.API.Processors
                     await _instaApi.SendRequestsBeforeLoginAsync();
                 var time = DateTime.UtcNow.ToUnixTime();
 
-                async Task<string> GetPassword(string pass)
-                {
-                    if (_instaApi._encryptedPasswordEncryptor != null)
-                       return await _instaApi._encryptedPasswordEncryptor.GetEncryptedPassword(_instaApi, pass, time).ConfigureAwait(false);
-                    else
-                       return _instaApi.GetEncryptedPassword(pass, time);
-                }
+                string GetPassword(string pass) => _instaApi.GetEncryptedPassword(pass, time);
 
-                var enc1 = await GetPassword(oldPassword);
-                var enc2 = await GetPassword(newPassword);
-                var enc3 = await GetPassword(newPassword);
+                string enc1;
+                string enc2; 
+                string enc3;
+                if (_instaApi._encryptedPasswordEncryptor != null)
+                {
+                    var result = await _instaApi
+                        ._encryptedPasswordEncryptor
+                        .GetEncryptedPassword(_instaApi, oldPassword, newPassword, time).ConfigureAwait(false);
+
+                    enc1 = result.Item1;
+                    enc2 = result.Item2;
+                    enc3 = result.Item3;
+                }
+                else
+                {
+                    enc1 = GetPassword(oldPassword);
+                    enc2 = GetPassword(newPassword);
+                    enc3 = GetPassword(newPassword);
+                }
                 if (_httpHelper.IsNewerApis)
                 {
                     data.Add("enc_old_password", enc1);

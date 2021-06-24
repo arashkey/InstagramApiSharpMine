@@ -28,6 +28,7 @@ using InstagramApiSharp.API.Services;
 using InstagramApiSharp.Helpers;
 
 using InstagramApiSharp.API.Push;
+using InstagramApiSharp.Logger;
 #if WITH_NOTIFICATION
 using InstagramApiSharp.API.RealTime;
 #endif
@@ -294,10 +295,15 @@ namespace InstagramApiSharp.API
         Task LoadStateDataFromStringAsync(string json);
 
 
-#endregion State data
+        #endregion State data
 
-#region Other public functions
+        #region Other public functions
 
+        /// <summary>
+        ///     Get logger
+        /// </summary>
+        /// <returns></returns>
+        IInstaLogger GetLogger();
         /// <summary>
         ///     Get current API version info (signature key, api version info, app id)
         /// </summary>

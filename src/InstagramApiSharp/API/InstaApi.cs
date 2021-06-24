@@ -2476,9 +2476,11 @@ namespace InstagramApiSharp.API
                 return Result.Fail(ex, false);
             }
         }
-#endregion ORIGINAL FACEBOOK LOGIN
+        #endregion ORIGINAL FACEBOOK LOGIN
 
-#region Other public functions
+        #region Other public functions
+
+        public IInstaLogger GetLogger() => _logger;
         /// <summary>
         ///     Get current API version info (signature key, api version info, app id)
         /// </summary>
