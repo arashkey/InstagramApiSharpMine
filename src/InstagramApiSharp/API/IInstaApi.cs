@@ -98,6 +98,7 @@ namespace InstagramApiSharp.API
         ///     Get current api version of Instagram that <see cref="InstagramApiSharp"/> is using it
         /// </summary>
         InstaApiVersionType InstaApiVersionType { get; }
+        bool DontGenerateToken { get; set; }
 
         /// <summary>
         ///     Gets or sets two factor login info
@@ -227,6 +228,12 @@ namespace InstagramApiSharp.API
         ///     Registration Service
         /// </summary>
         IRegistrationService RegistrationService { get; }
+
+
+#if WINDOWS_UWP
+        IPushClient PushClient { get; set; }
+#endif
+
 #endregion
 
 #region State data
@@ -368,6 +375,7 @@ namespace InstagramApiSharp.API
         /// </summary>
         /// <param name="configureMediaDelay">Timespan delay for configuring Media</param>
         void SetConfigureMediaDelay(IConfigureMediaDelay configureMediaDelay);
+        IRequestDelay GetRequestDelay();
         /// <summary>
         ///     Set instagram api version (for user agent version)
         /// </summary>
@@ -437,6 +445,8 @@ namespace InstagramApiSharp.API
         /// <param name="uri">Desire uri (must include https://i.instagram.com/api/v...) </param>
         /// <param name="data">Data to post</param>
         Task<IResult<string>> SendPostRequestAsync(System.Uri uri, Dictionary<string, string> data);
+
+        void SetEncryptedPasswordEncryptor(IEncryptedPasswordEncryptor encryptedPasswordEncryptor);
 #endregion Other public functions
 
 #region Authentication, challenge functions
@@ -685,9 +695,9 @@ namespace InstagramApiSharp.API
         Task<IResult<bool>> LauncherSyncAsync();
         Task<IResult<InstaBanyanSuggestions>> GetBanyanSuggestionsAsync();
 
-        #endregion Authentication, challenge functions
+#endregion Authentication, challenge functions
 
-        #region Giphy
+#region Giphy
 
         /// <summary>
         ///     Get trending giphy

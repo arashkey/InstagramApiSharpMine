@@ -20,7 +20,7 @@ namespace InstagramApiSharp.Classes.Models
         public double Height { get; set; } = 0.3454722;
         public double Rotation { get; set; } = 0.0;
         public string Question { get; set; }
-        public List<InstaStoryQuizAnswer> Options { get; set; } = new List<InstaStoryQuizAnswer>();
+        public List<InstaStoryQuizAnswerUpload> Options { get; set; } = new List<InstaStoryQuizAnswerUpload>();
         public int CorrectAnswer { get; set; } = 0;
         public bool ViewerCanAnswer { get; set; } = true;
         public string TextColor { get; set; } = "#ffffff";

@@ -24,6 +24,7 @@ namespace InstagramApiSharp.Converters
                 Pending = SourceObject.Pending ?? false,
                 VieweId = SourceObject.VieweId,
                 LastActivity = DateTimeHelper.UnixTimestampMilisecondsToDateTime(SourceObject.LastActivity),
+                LastActivityUnix = SourceObject.LastActivity,
                 ThreadId = SourceObject.ThreadId,
                 OldestCursor = SourceObject.OldestCursor,
                 IsGroup = SourceObject.IsGroup ?? false,
@@ -104,7 +105,10 @@ namespace InstagramApiSharp.Converters
                                 ItemId = convertedLastSeen.ItemId,
                             };
                             if (convertedLastSeen.TimestampPrivate != null)
+                            {
                                 lastSeen.SeenTime = DateTimeHelper.UnixTimestampMilisecondsToDateTime(convertedLastSeen.TimestampPrivate);
+                                lastSeen.SeenTimeUnix = convertedLastSeen.TimestampPrivate;
+                            }
                             thread.LastSeenAt.Add(lastSeen);
                         }
                 }
@@ -112,7 +116,7 @@ namespace InstagramApiSharp.Converters
             }
             try
             {
-                if (thread.LastActivity != thread.LastSeenAt.LastOrDefault().SeenTime)
+                if (thread.LastActivity != thread.LastSeenAt?.LastOrDefault()?.SeenTime)
                     thread.HasUnreadMessage = true;
             }
             catch 

@@ -895,7 +895,8 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaDirectInboxThread" />
         /// </returns>
-        public async Task<IResult<InstaDirectInboxThread>> GetDirectInboxThreadAsync(string threadId, PaginationParameters paginationParameters) =>
+        public async Task<IResult<InstaDirectInboxThread>> GetDirectInboxThreadAsync(string threadId, PaginationParameters paginationParameters,
+            int seqId = 0, string itemIds = null) =>
             await GetDirectInboxThreadAsync(threadId, paginationParameters, CancellationToken.None).ConfigureAwait(false);
 
 
@@ -908,7 +909,8 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaDirectInboxThread" />
         /// </returns>
         public async Task<IResult<InstaDirectInboxThread>> GetDirectInboxThreadAsync(string threadId, PaginationParameters paginationParameters,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            int seqId = 0, string itemIds = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             InstaDirectInboxThreadResponse threadResponse = null;
@@ -917,7 +919,7 @@ namespace InstagramApiSharp.API.Processors
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                var thread = await GetDirectInboxThread(threadId, paginationParameters.NextMaxId).ConfigureAwait(false);
+                var thread = await GetDirectInboxThread(threadId, paginationParameters.NextMaxId, seqId, itemIds).ConfigureAwait(false);
                 if (!thread.Succeeded)
                     return Result.Fail(thread.Info, default(InstaDirectInboxThread));
 
@@ -931,7 +933,7 @@ namespace InstagramApiSharp.API.Processors
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var nextThread = await GetDirectInboxThread(threadId, threadResponse.OldestCursor).ConfigureAwait(false);
+                    var nextThread = await GetDirectInboxThread(threadId, threadResponse.OldestCursor, seqId).ConfigureAwait(false);
 
                     if (!nextThread.Succeeded)
                         return Result.Fail(nextThread.Info, GetOrDefault());
@@ -1481,7 +1483,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadIds">Thread ids</param>
         /// <param name="recipients">Recipients ids</param>
         /// <returns>Returns True if felix share sent</returns>
-        public async Task<IResult<bool>> SendDirectFelixShareAsync(string mediaId, string[] threadIds, string[] recipients)
+        public async Task<IResult<bool>> SendDirectFelixShareAsync(string mediaId, string text, string[] threadIds, string[] recipients)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
@@ -1489,14 +1491,18 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetBroadcastFelixShareUri();
                 var cc = ExtensionHelper.GetThreadToken();
 
+                if (!string.IsNullOrEmpty(text))
+                    text = text.Replace("\r", "");
                 var data = new Dictionary<string, string>
                 {
                     {"mutation_token", cc},
                     {"media_id", mediaId},
+                    {"device_id", _deviceInfo.DeviceId},
                     {"action", "send_item"},
                     {"client_context", cc},
                     {"_csrftoken", _user.CsrfToken},
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()}
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"text", text ?? string.Empty}
                 };
                 if (threadIds?.Length > 0)
                 {
@@ -1990,14 +1996,14 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaType">Media type</param>
         /// <param name="text">Text to send</param>
         /// <param name="threadIds">Thread ids</param>
-        public async Task<IResult<bool>> ShareMediaToThreadAsync(string mediaId, InstaMediaType mediaType, string text, params string[] threadIds)
+        public async Task<IResult<bool>> ShareMediaToThreadAsync(string mediaId, InstaMediaType mediaType, string text, string carouselChildMediaId = null, params string[] threadIds)
         {
             try
             {
                 if (threadIds == null || threadIds != null && !threadIds.Any())
                     throw new ArgumentException("At least one thread id required");
 
-                return await ShareMedia(mediaId, mediaType, text, threadIds, null);
+                return await ShareMedia(mediaId, mediaType, text, carouselChildMediaId, threadIds, null);
             }
             catch (HttpRequestException httpException)
             {
@@ -2018,14 +2024,14 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaType">Media type</param>
         /// <param name="text">Text to send</param>
         /// <param name="userIds">User ids (pk)</param>
-        public async Task<IResult<bool>> ShareMediaToUserAsync(string mediaId, InstaMediaType mediaType, string text, params long[] userIds)
+        public async Task<IResult<bool>> ShareMediaToUserAsync(string mediaId, InstaMediaType mediaType, string text, string carouselChildMediaId = null, params long[] userIds)
         {
             try
             {
                 if (userIds == null || userIds != null && !userIds.Any())
                     throw new ArgumentException("At least one user id required");
 
-                return await ShareMedia(mediaId, mediaType, text, null, userIds);
+                return await ShareMedia(mediaId, mediaType, text, carouselChildMediaId, null, userIds);
             }
             catch (HttpRequestException httpException)
             {
@@ -2039,13 +2045,15 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        private async Task<IResult<bool>> ShareMedia(string mediaId, InstaMediaType mediaType, string text, string[] threadIds, long[] userIds)
+        private async Task<IResult<bool>> ShareMedia(string mediaId, InstaMediaType mediaType, string text, string carouselChildMediaId, string[] threadIds, long[] userIds)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
                 var instaUri = UriCreator.GetMediaShareUri(mediaType);
                 var clientContext = ExtensionHelper.GetThreadToken();
+                if (!string.IsNullOrEmpty(text))
+                    text = text.Replace("\r", "");
                 var data = new Dictionary<string, string>
                 {
                     {"action", "send_item"},
@@ -2061,6 +2069,9 @@ namespace InstagramApiSharp.API.Processors
                     {"text", text ?? string.Empty},
                     {"offline_threading_id", clientContext},
                 };
+                if (!string.IsNullOrEmpty(carouselChildMediaId))
+                    data.Add("carousel_share_child_media_id", carouselChildMediaId);
+
                 if (threadIds != null)
                     data.Add("thread_ids", $"[{threadIds.EncodeList(false)}]");
                 else
@@ -2480,11 +2491,11 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaDirectInboxContainerResponse>(exception);
             }
         }
-        private async Task<IResult<InstaDirectInboxThreadResponse>> GetDirectInboxThread(string threadId, string maxId = null)
+        private async Task<IResult<InstaDirectInboxThreadResponse>> GetDirectInboxThread(string threadId, string maxId = null, int seqId = 0, string itemIds = null)
         {
             try
             {
-                var directInboxUri = UriCreator.GetDirectInboxThreadUri(threadId, maxId);
+                var directInboxUri = UriCreator.GetDirectInboxThreadUri(threadId, maxId, seqId, itemIds);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, directInboxUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();

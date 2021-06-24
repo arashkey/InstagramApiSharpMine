@@ -56,6 +56,10 @@ namespace InstagramApiSharp.Converters.Json
             {
                 recentActivity.SuggestedItems = token.SelectToken("aymf")?.SelectToken("items")?.ToObject<InstaSuggestionItemListResponse>();
             }
+            if (token.SelectToken("counts") != null)
+            {
+                recentActivity.Counts = token.SelectToken("counts")?.ToObject<InstaActivityCountResponse>();
+            }
             return recentActivity;
         }
 

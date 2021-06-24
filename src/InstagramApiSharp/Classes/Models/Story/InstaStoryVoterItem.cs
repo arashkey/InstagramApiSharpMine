@@ -16,6 +16,8 @@ namespace InstagramApiSharp.Classes.Models
         public InstaUserShortFriendship User { get; set; }
 
         public double Vote { get; set; }
+        public string VoteYesText { get; set; }
+        public string VoteNoText { get; set; }
 
         public DateTime Time { get; set; }
     }

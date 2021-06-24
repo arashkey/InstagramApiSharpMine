@@ -14,6 +14,10 @@ namespace InstagramApiSharp.API.Processors
     public interface IUserProcessor
     {
         /// <summary>
+        ///     Mark activities news inbox
+        /// </summary>
+        Task<IResult<bool>> MarkNewsInboxSeenAsync();
+        /// <summary>
         ///     
         /// </summary>
         Task<IResult<bool>> MarkDiscoverMarkSuSeenAsync();

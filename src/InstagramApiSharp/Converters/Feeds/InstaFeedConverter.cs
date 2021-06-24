@@ -53,7 +53,14 @@ namespace InstagramApiSharp.Converters
                         {
                             case InstaFeedsType.EndOfFeedDemarcator:
                                 if (item.EndOfFeedDemarcator != null)
-                                    post.EndOfFeedDemarcator = item.EndOfFeedDemarcator;
+                                {
+                                    try
+                                    {
+                                        post.EndOfFeedDemarcator = ConvertersFabric.Instance
+                                            .GetFeedAllCatchedUpConverter(item.EndOfFeedDemarcator).Convert();
+                                    }
+                                    catch { }
+                                }
                                 break;
                             case InstaFeedsType.SuggestedUsers:
                                 foreach (var user in item.SuggestedUserItems)

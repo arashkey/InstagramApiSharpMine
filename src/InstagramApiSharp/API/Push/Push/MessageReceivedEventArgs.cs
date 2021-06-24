@@ -5,7 +5,10 @@ using Newtonsoft.Json;
 
 namespace InstagramApiSharp.API.Push 
 {
-    // Reference https://github.com/mgp25/Instagram-API/blob/master/src/Push/Notification.php
+    public class PushReceivedEventArgs : MessageReceivedEventArgs
+    {
+        [JsonIgnore] public IInstaApi InstaApi { get; set; }
+    }
     public class MessageReceivedEventArgs : EventArgs
     {
         private string _notificationContentJson;

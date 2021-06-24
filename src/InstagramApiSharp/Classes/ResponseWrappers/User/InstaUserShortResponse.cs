@@ -20,5 +20,9 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("pk")] public long Pk { get; set; }
 
         [JsonProperty("has_anonymous_profile_picture")] public bool? HasAnonymousProfilePicture { get; set; }
+
+        [JsonProperty("is_bestie")] public bool? IsBestie { get; set; }
+
+        [JsonProperty("latest_reel_media")] public long? LatestReelMedia { get; set; }
     }
 }

@@ -160,7 +160,9 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters, 
-            string[] seenMediaIds = null, bool refreshRequest = false,
+            string[] seenMediaIds = null,
+            bool refreshRequest = false,
+            bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None);
 
         /// <summary>
@@ -175,7 +177,10 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
-            CancellationToken cancellationToken, string[] seenMediaIds = null, bool refreshRequest = false,
+            CancellationToken cancellationToken, 
+            string[] seenMediaIds = null,
+            bool refreshRequest = false,
+            bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None);
 
         /// <summary>

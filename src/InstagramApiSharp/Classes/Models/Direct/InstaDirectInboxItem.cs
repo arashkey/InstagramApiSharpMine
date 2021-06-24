@@ -1,20 +1,36 @@
 ﻿using InstagramApiSharp.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaDirectInboxItem
+    public class InstaDirectInboxItem : INotifyPropertyChanged
     {
+        private InstaDirectInboxItemSendingType _sendingType = InstaDirectInboxItemSendingType.Pending;
+        public InstaDirectInboxItemSendingType SendingType
+        {
+            get => _sendingType;
+            set
+            {
+                _sendingType = value;
+                OnPropertyChanged("SendingType");
+            }
+        }
+
         public string Text { get; set; }
 
         public long UserId { get; set; }
 
         public DateTime TimeStamp { get; set; }
 
+        public string TimeStampUnix { get; set; }
+
         public string ItemId { get; set; }
 
         public InstaDirectThreadItemType ItemType { get; set; } = InstaDirectThreadItemType.Text;
+
+        public string ItemTypeOriginalText { get; set; }
 
         public InstaInboxMedia Media { get; set; }
 
@@ -77,5 +93,13 @@ namespace InstagramApiSharp.Classes.Models
         public bool HideInThread { get; set; }
         public string RealtimePath { get; set; }
         public string RealtimeOp { get; set; } = "add";
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged(string memberName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
     }
 }

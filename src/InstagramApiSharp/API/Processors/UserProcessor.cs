@@ -46,6 +46,13 @@ namespace InstagramApiSharp.API.Processors
         }
 
 
+        /// <summary>
+        ///     Mark activities news inbox
+        /// </summary>
+        public async Task<IResult<bool>> MarkNewsInboxSeenAsync()
+        {
+            return await SendDefaultRequest(UriCreator.GetNewsInboxSeenUri());
+        }
         public async Task<IResult<bool>> MarkDiscoverMarkSuSeenAsync()
         {
             return await SendDefaultRequest(UriCreator.GetDiscoverMarkSuSeenUri());
@@ -1905,6 +1912,14 @@ namespace InstagramApiSharp.API.Processors
                         .AddRange(ConvertersFabric.Instance
                         .GetSuggestionItemListConverter(feedPage.SuggestedItems).Convert());
 
+                activityFeed.Counts.CampaignNotification = feedPage.Counts.CampaignNotification ?? 0;
+                activityFeed.Counts.CommentLikes = feedPage.Counts.CommentLikes ?? 0;
+                activityFeed.Counts.Comments = feedPage.Counts.Comments ?? 0;
+                activityFeed.Counts.Likes = feedPage.Counts.Likes ?? 0;
+                activityFeed.Counts.Relationships = feedPage.Counts.Relationships ?? 0;
+                activityFeed.Counts.Requests = feedPage.Counts.Requests ?? 0;
+                activityFeed.Counts.ShoppingNotification = feedPage.Counts.ShoppingNotification ?? 0;
+                activityFeed.Counts.Usertags = feedPage.Counts.Usertags ?? 0;
                 paginationParameters.PagesLoaded++;
                 activityFeed.NextMaxId = paginationParameters.NextMaxId = feedPage.NextMaxId;
                 while (!string.IsNullOrEmpty(nextId)
@@ -1927,6 +1942,14 @@ namespace InstagramApiSharp.API.Processors
 
                     paginationParameters.PagesLoaded++;
                     activityFeed.NextMaxId = paginationParameters.NextMaxId = nextId;
+                    activityFeed.Counts.CampaignNotification = nextFollowingFeed.Value.Counts.CampaignNotification ?? 0;
+                    activityFeed.Counts.CommentLikes = nextFollowingFeed.Value.Counts.CommentLikes ?? 0;
+                    activityFeed.Counts.Comments = nextFollowingFeed.Value.Counts.Comments ?? 0;
+                    activityFeed.Counts.Likes = nextFollowingFeed.Value.Counts.Likes ?? 0;
+                    activityFeed.Counts.Relationships = nextFollowingFeed.Value.Counts.Relationships ?? 0;
+                    activityFeed.Counts.Requests = nextFollowingFeed.Value.Counts.Requests ?? 0;
+                    activityFeed.Counts.ShoppingNotification = nextFollowingFeed.Value.Counts.ShoppingNotification ?? 0;
+                    activityFeed.Counts.Usertags = nextFollowingFeed.Value.Counts.Usertags ?? 0;
                 }
 
                 return Result.Success(activityFeed);

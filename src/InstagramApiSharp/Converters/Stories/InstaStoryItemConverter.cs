@@ -34,6 +34,7 @@ namespace InstagramApiSharp.Converters
                 PhotoOfYou = SourceObject.PhotoOfYou,
                 Pk = SourceObject.Pk,
                 TakenAt = DateTimeHelper.UnixTimestampToDateTime(SourceObject.TakenAt),
+                TakenAtUnix = SourceObject.TakenAt,
                 ImportedTakenAt = DateTimeHelper.UnixTimestampToDateTime(SourceObject.ImportedTakenAt ?? 0),
                 VideoDuration = SourceObject.VideoDuration ?? 0,
                 AdAction = SourceObject.AdAction,

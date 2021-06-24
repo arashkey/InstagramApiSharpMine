@@ -15,6 +15,7 @@ namespace InstagramApiSharp.Classes.Models
         public string UserName { get; set; }
         public string FullName { get; set; }
         public bool HasAnonymousProfilePicture { get; set; }
+        public long LatestReelMedia { get; set; }
 
         public static InstaUserShort Empty => new InstaUserShort {FullName = string.Empty, UserName = string.Empty};
 
@@ -33,6 +34,12 @@ namespace InstagramApiSharp.Classes.Models
             return Pk.GetHashCode();
         }
 
+        private bool _isBestie = false;
+        public bool IsBestie
+        {
+            get { return _isBestie; }
+            set { _isBestie = value; OnPropertyChanged("IsBestie"); }
+        }
         private bool _selected = false;
         public bool? Selected
         {

@@ -56,6 +56,38 @@ namespace InstagramApiSharp.API.Processors
             _httpHelper = httpHelper;
         }
         #endregion Properties and constructor
+
+
+        /// <summary>
+        ///     Get all user shoppable media by username
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetUserShoppableMediaAsync(string username,
+             PaginationParameters paginationParameters)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            var user = await _instaApi.UserProcessor.GetUserAsync(username);
+            if (!user.Succeeded)
+                return Result.Fail<InstaMediaList>("Unable to get user to load shoppable media");
+            return await GetUserShoppableMedia(user.Value.Pk, paginationParameters);
+        }
+        /// <summary>
+        ///     Get all user shoppable media by user id (pk)
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        public async Task<IResult<InstaMediaList>> GetUserShoppableMediaByIdAsync(long userId,
+            PaginationParameters paginationParameters)
+        {
+            return await GetUserShoppableMedia(userId, paginationParameters);
+        }
         /// <summary>
         ///     Add button to your business account
         /// </summary>
@@ -364,32 +396,58 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Get media insights
         /// </summary>
-        /// <param name="mediaPk">Media PK (<see cref="InstaMedia.Pk"/>)</param>
-        public async Task<IResult<InstaMediaInsights>> GetMediaInsightsAsync(string mediaPk)
+        /// <param name="mediaId">Media Id (<see cref="InstaMedia.InstaIdentifier"/>)</param>
+        public async Task<IResult<InstaMediaInsightsX>> GetMediaInsightsAsync(string mediaId, InstaInsightSurfaceType surfaceType)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var instaUri = UriCreator.GetMediaSingleInsightsUri(mediaPk);
-                var request =
-                    _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var instaUri = UriCreator.GetBusinessGraphQLUri();
+                var queryParamsData = new JObject
+                {
+                    {"access_token", ""},
+                    {"id", mediaId}
+                };
+                var variables = new JObject
+                {
+                    {"query_params", queryParamsData}
+                };
+                var data = new Dictionary<string, string>
+                {
+                    {"surface", surfaceType.ToString().ToLower()},
+                    {"doc_id", surfaceType == InstaInsightSurfaceType.Post ? "3221905377882880": "2619762348089826"/*"1527362987318283"*/},
+                    {"locale", InstaApiConstants.ACCEPT_LANGUAGE.Replace("-", "_")},
+                    {"vc_policy", "insights_policy"},
+                    {"query_params", variables.ToString(Formatting.None)},
+                    {"strip_nulls", "true"},
+                    {"strip_defaults", "true"},
+                };
+                var hash = CryptoHelper.CalculateHash(_instaApi.GetApiVersionInfo().SignatureKey, JsonConvert.SerializeObject(data));
+                data.Add("signed_body", $"{(_httpHelper.IsNewerApis ? _instaApi.GetApiVersionInfo().SignatureKey : hash)}.");
+
+                if (!_httpHelper.IsNewerApis)
+                {
+                    data.Add("ig_sig_key_version", "4");
+                }
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
-                    return Result.UnExpectedResponse<InstaMediaInsights>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaMediaInsightsContainer>(json);
-                return Result.Success(obj.MediaOrganicInsights);
+                    return Result.UnExpectedResponse<InstaMediaInsightsX>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaMediaInsightsContainerResponse>(json);
+                return Result.Success(ConvertersFabric.Instance.GetMediaInsightsConverter(obj.Data.InstagramPostByIgid).Convert());
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaMediaInsights), ResponseType.NetworkProblem);
+                return Result.Fail(httpException, default(InstaMediaInsightsX), ResponseType.NetworkProblem);
             }
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaMediaInsights>(exception);
+                return Result.Fail<InstaMediaInsightsX>(exception);
             }
         }
 
@@ -1029,5 +1087,92 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
+
+        private async Task<IResult<InstaMediaList>> GetUserShoppableMedia(long userId,
+                                            PaginationParameters paginationParameters)
+        {
+            var mediaList = new InstaMediaList();
+            try
+            {
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+
+                InstaMediaList Convert(InstaMediaListResponse mediaListResponse)
+                {
+                    return ConvertersFabric.Instance.GetMediaListConverter(mediaListResponse).Convert();
+                }
+
+                var mediaResult = await GetShoppableMedia(userId, paginationParameters);
+                if (!mediaResult.Succeeded)
+                {
+                    if (mediaResult.Value != null)
+                        return Result.Fail(mediaResult.Info, Convert(mediaResult.Value));
+                    else
+                        return Result.Fail(mediaResult.Info, mediaList);
+                }
+                var mediaResponse = mediaResult.Value;
+                mediaList = ConvertersFabric.Instance.GetMediaListConverter(mediaResponse).Convert();
+                mediaList.NextMaxId = paginationParameters.NextMaxId = mediaResponse.NextMaxId;
+                paginationParameters.PagesLoaded++;
+
+                while (mediaResponse.MoreAvailable
+                       && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
+                       && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                {
+                    var nextMedia = await GetShoppableMedia(userId, paginationParameters);
+                    if (!nextMedia.Succeeded)
+                        return Result.Fail(nextMedia.Info, mediaList);
+                    mediaList.NextMaxId = paginationParameters.NextMaxId = nextMedia.Value.NextMaxId;
+                    mediaList.AddRange(Convert(nextMedia.Value));
+                    mediaResponse.MoreAvailable = nextMedia.Value.MoreAvailable;
+                    mediaResponse.ResultsCount += nextMedia.Value.ResultsCount;
+                    paginationParameters.PagesLoaded++;
+                }
+
+                mediaList.Pages = paginationParameters.PagesLoaded;
+                mediaList.PageSize = mediaResponse.ResultsCount;
+                return Result.Success(mediaList);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaMediaList), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, mediaList);
+            }
+        }
+
+        private async Task<IResult<InstaMediaListResponse>> GetShoppableMedia(long userId,
+                                    PaginationParameters paginationParameters)
+        {
+            try
+            {
+                var instaUri = UriCreator.GetUserShoppableMediaListUri(userId, paginationParameters.NextMaxId);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaMediaListResponse>(response, json);
+
+                var mediaResponse = JsonConvert.DeserializeObject<InstaMediaListResponse>(json,
+                    new InstaMediaListDataConverter());
+
+                return Result.Success(mediaResponse);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaMediaListResponse), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(InstaMediaListResponse));
+            }
+        }
     }
 }

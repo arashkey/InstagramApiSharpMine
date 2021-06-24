@@ -13,6 +13,8 @@
             ProfilePictureId = instaUserShort.ProfilePictureId;
             IsVerified = instaUserShort.IsVerified;
             HasAnonymousProfilePicture = instaUserShort.HasAnonymousProfilePicture;
+            LatestReelMedia = instaUserShort.LatestReelMedia;
+            IsBestie = instaUserShort.IsBestie;
         }
 
         public int FollowersCount { get; set; }
@@ -22,6 +24,5 @@
         public int MutualFollowers { get; set; }
         public int UnseenCount { get; set; }
         public InstaFriendshipShortStatus FriendshipStatus { get; set; }
-        public long LatestReelMedia { get; set; }
     }
 }

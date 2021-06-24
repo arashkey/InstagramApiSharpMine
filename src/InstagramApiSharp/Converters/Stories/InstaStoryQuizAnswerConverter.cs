@@ -23,8 +23,12 @@ namespace InstagramApiSharp.Converters
 
             var quizAnswer = new InstaStoryQuizAnswer
             {
-                Count = SourceObject.Count,
-                Text = SourceObject.Text
+                //Count = SourceObject.Count,
+                //Text = SourceObject.Text
+
+                Answer = SourceObject.Answer,
+                Timestamp = SourceObject.Timestamp,
+                User = ConvertersFabric.Instance.GetUserShortConverter(SourceObject.User).Convert()
             };
             return quizAnswer;
         }

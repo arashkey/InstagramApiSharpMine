@@ -11,6 +11,6 @@ namespace InstagramApiSharp.Classes.Models
 
         public List<InstaDirectInboxThread> Threads { get; set; } = new List<InstaDirectInboxThread>();
 
-        public List<InstaUserShort> Items { get; set; } = new List<InstaUserShort>();
+        public List<InstaDirectInboxThread> Items { get; set; } = new List<InstaDirectInboxThread>();
     }
 }

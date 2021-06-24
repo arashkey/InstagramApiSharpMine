@@ -21,6 +21,28 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IBusinessProcessor
     {
+
+        /// <summary>
+        ///     Get all user shoppable media by username
+        /// </summary>
+        /// <param name="username">Username</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetUserShoppableMediaAsync(string username,
+             PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Get all user shoppable media by user id (pk)
+        /// </summary>
+        /// <param name="userId">User id (pk)</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <returns>
+        ///     <see cref="InstaMediaList" />
+        /// </returns>
+        Task<IResult<InstaMediaList>> GetUserShoppableMediaByIdAsync(long userId, PaginationParameters paginationParameters);
+
         /// <summary>
         ///     Add button to your business account
         /// </summary>
@@ -82,8 +104,8 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Get media insight
         /// </summary>
-        /// <param name="mediaPk">Media PK (<see cref="InstaMedia.Pk"/>)</param>
-        Task<IResult<InstaMediaInsights>> GetMediaInsightsAsync(string mediaPk);
+        /// <param name="mediaId">Media Id (<see cref="InstaMedia.InstaIdentifier"/>)</param>
+        Task<IResult<InstaMediaInsightsX>> GetMediaInsightsAsync(string mediaId, InstaInsightSurfaceType surfaceType);
 
         /// <summary>
         ///     Get promotable media feeds

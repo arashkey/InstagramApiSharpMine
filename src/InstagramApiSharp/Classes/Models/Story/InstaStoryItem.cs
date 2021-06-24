@@ -89,6 +89,8 @@ namespace InstagramApiSharp.Classes.Models
 
         public DateTime TakenAt { get; set; }
 
+        public long TakenAtUnix { get; set; }
+
         public DateTime ImportedTakenAt { get; set; }
 
         public string VideoDashManifest { get; set; }

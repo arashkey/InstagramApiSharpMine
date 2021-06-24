@@ -1116,5 +1116,26 @@ namespace InstagramApiSharp.Converters
             return new InstaReelsMediaListConverter { SourceObject = response };
         }
 
+        public IObjectConverter<InstaMediaInsightsX, InstaMediaInsightsXResponse> GetMediaInsightsConverter(
+                    InstaMediaInsightsXResponse response)
+        {
+            return new InstaMediaInsightsConverter { SourceObject = response };
+        }
+        public IObjectConverter<InstaAllCatchedUp, InstaAllCatchedUpResponse> GetFeedAllCatchedUpConverter(
+                    InstaAllCatchedUpResponse response)
+        {
+            return new InstaAllCatchedUpConverter { SourceObject = response };
+        }
+        public IObjectConverter<InstaFeedGroupSet, InstaFeedGroupSetResponse> GetFeedGroupSetConverter(
+                    InstaFeedGroupSetResponse response)
+        {
+            return new InstaFeedGroupSetConverter { SourceObject = response };
+        }
+        public IObjectConverter<InstaFeedGroup, InstaFeedGroupResponse> GetFeedGroupConverter(
+                    InstaFeedGroupResponse response)
+        {
+            return new InstaFeedGroupConverter { SourceObject = response };
+        }
+
     }
 }

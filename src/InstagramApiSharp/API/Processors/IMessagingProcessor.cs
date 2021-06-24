@@ -206,7 +206,8 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaDirectInboxThread" />
         /// </returns>
-        Task<IResult<InstaDirectInboxThread>> GetDirectInboxThreadAsync(string threadId, PaginationParameters paginationParameters);
+        Task<IResult<InstaDirectInboxThread>> GetDirectInboxThreadAsync(string threadId, PaginationParameters paginationParameters,
+            int seqId = 0, string itemIds = null);
 
         /// <summary>
         ///     Get direct inbox thread by its id asynchronously
@@ -217,7 +218,8 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaDirectInboxThread" />
         /// </returns>
-        Task<IResult<InstaDirectInboxThread>> GetDirectInboxThreadAsync(string threadId, PaginationParameters paginationParameters, CancellationToken cancellationToken);
+        Task<IResult<InstaDirectInboxThread>> GetDirectInboxThreadAsync(string threadId, PaginationParameters paginationParameters, CancellationToken cancellationToken,
+            int seqId = 0, string itemIds = null);
 
         /// <summary>
         ///     Get direct pending inbox threads for current user asynchronously
@@ -370,7 +372,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadIds">Thread ids</param>
         /// <param name="recipients">Recipients ids</param>
         /// <returns>Returns True if felix share sent</returns>
-        Task<IResult<bool>> SendDirectFelixShareAsync(string mediaId, string[] threadIds, string[] recipients);
+        Task<IResult<bool>> SendDirectFelixShareAsync(string mediaId, string text, string[] threadIds, string[] recipients);
 
         /// <summary>
         ///     Send hashtag to direct thread
@@ -581,7 +583,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaType">Media type</param>
         /// <param name="text">Text to send</param>
         /// <param name="threadIds">Thread ids</param>
-        Task<IResult<bool>> ShareMediaToThreadAsync(string mediaId, InstaMediaType mediaType, string text, params string[] threadIds);
+        Task<IResult<bool>> ShareMediaToThreadAsync(string mediaId, InstaMediaType mediaType, string text, string carouselChildMediaId = null, params string[] threadIds);
 
         /// <summary>
         ///     Share media to user id
@@ -590,7 +592,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaType">Media type</param>
         /// <param name="text">Text to send</param>
         /// <param name="userIds">User ids (pk)</param>
-        Task<IResult<bool>> ShareMediaToUserAsync(string mediaId, InstaMediaType mediaType, string text, params long[] userIds);
+        Task<IResult<bool>> ShareMediaToUserAsync(string mediaId, InstaMediaType mediaType, string text, string carouselChildMediaId = null, params long[] userIds);
 
         [Obsolete("ShareUserAsync is deprecated. Use SendDirectProfileAsync instead.")]
         /// <summary>

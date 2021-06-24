@@ -471,10 +471,12 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
-            string[] seenMediaIds = null, bool refreshRequest = false,
+            string[] seenMediaIds = null,
+            bool refreshRequest = false,
+            bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None) =>
             await GetUserTimelineFeedAsync(paginationParameters, CancellationToken.None, seenMediaIds,
-               refreshRequest, paginationSource).ConfigureAwait(false);
+               refreshRequest, removeAds, paginationSource).ConfigureAwait(false);
 
 
         /// <summary>
@@ -489,7 +491,10 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
-            CancellationToken cancellationToken, string[] seenMediaIds = null, bool refreshRequest = false,
+            CancellationToken cancellationToken,
+            string[] seenMediaIds = null, 
+            bool refreshRequest = false,
+            bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -504,7 +509,7 @@ namespace InstagramApiSharp.API.Processors
                     return ConvertersFabric.Instance.GetFeedConverter(instaFeedResponse).Convert();
                 }
                 var timelineFeeds = await GetUserTimelineFeed(paginationParameters,
-                    seenMediaIds, refreshRequest, paginationSource);
+                    seenMediaIds, refreshRequest, removeAds, paginationSource);
                 if (!timelineFeeds.Succeeded)
                     return Result.Fail(timelineFeeds.Info, feed);
 
@@ -520,7 +525,7 @@ namespace InstagramApiSharp.API.Processors
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var nextFeed = await GetUserTimelineFeed(paginationParameters, null, false, paginationSource);
+                    var nextFeed = await GetUserTimelineFeed(paginationParameters, null, false, removeAds, paginationSource);
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, feed);
 
@@ -741,7 +746,9 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaFeedResponse>> GetUserTimelineFeed(PaginationParameters paginationParameters, 
-            string[] seenMediaIds = null, bool refreshRequest = false,
+            string[] seenMediaIds = null, 
+            bool refreshRequest = false, 
+            bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None)
         {
             try
@@ -797,7 +804,7 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("is_pull_to_refresh", "0");
                 }
 
-                var request = await _httpHelper.GetDefaultGZipRequestAsync(HttpMethod.Post, userFeedUri, _deviceInfo, data);
+                var request = /*await*/ _httpHelper.GetDefaultRequest(HttpMethod.Post, userFeedUri, _deviceInfo, data);
                 request.Headers.AddHeader("X-Ads-Opt-Out", "0", _instaApi);
                 request.Headers.AddHeader("X-Google-AD-ID", _deviceInfo.GoogleAdId.ToString(), _instaApi);
                 request.Headers.AddHeader("X-DEVICE-ID", _deviceInfo.DeviceGuid.ToString(), _instaApi);
@@ -810,7 +817,7 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<InstaFeedResponse>(response, json);
 
                 var feedResponse = JsonConvert.DeserializeObject<InstaFeedResponse>(json,
-                    new InstaFeedResponseDataConverter());
+                    new InstaFeedResponseDataConverter(_user.LoggedInUser.Pk, removeAds));
                 return Result.Success(feedResponse);
             }
             catch (HttpRequestException httpException)

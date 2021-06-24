@@ -6,7 +6,7 @@ using InstagramApiSharp.API;
 
 namespace InstagramApiSharp.Helpers
 {
-    internal class CryptoHelper
+    public class CryptoHelper
     {
         public static string ByteToString(byte[] buff)
         {

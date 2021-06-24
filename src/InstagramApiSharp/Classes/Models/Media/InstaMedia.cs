@@ -7,6 +7,7 @@ namespace InstagramApiSharp.Classes.Models
 {
     public class InstaMedia : INotifyPropertyChanged
     {
+        public bool IsMain { get; set; } = false;
         public string Url => $"https://instagram.com/p/{Code}";
         public long TakenAtUnix { get; set; }
         public DateTime TakenAt { get; set; }
@@ -129,6 +130,7 @@ namespace InstagramApiSharp.Classes.Models
         public string InlineComposerDisplayCondition { get; set; }
         public long InlineComposerImpTriggerTime { get; set; }
         public InstaMediaIdList TopLikers { get; set; } = new InstaMediaIdList();
+        public string CarouselShareChildMediaId { get; set; }
 
         private void OnPropertyChanged(string memberName)
         {

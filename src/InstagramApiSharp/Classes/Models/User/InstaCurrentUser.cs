@@ -15,6 +15,8 @@ namespace InstagramApiSharp.Classes.Models
             ProfilePictureId = instaUserShort.ProfilePictureId;
             IsVerified = instaUserShort.IsVerified;
             HasAnonymousProfilePicture = instaUserShort.HasAnonymousProfilePicture;
+            IsBestie = instaUserShort.IsBestie;
+            LatestReelMedia = instaUserShort.LatestReelMedia;
         }
 
         public string Biography { get; set; }
@@ -27,6 +29,7 @@ namespace InstagramApiSharp.Classes.Models
         public int CountryCode { get; set; }
         public long NationalNumber { get; set; }
         public InstaGenderType Gender { get; set; }
+        public string CustomGender { get; set; }
         public string Email { get; set; }
     }
 }

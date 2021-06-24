@@ -19,6 +19,7 @@ namespace InstagramApiSharp.Classes.Models
 
         public double LastSeenBroadcastTs { get; set; }
 
+        public int RankedPosition { get; set; }
         public bool CanReply { get; set; }
     }
 }

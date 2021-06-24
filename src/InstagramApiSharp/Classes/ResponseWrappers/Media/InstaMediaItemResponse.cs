@@ -124,6 +124,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("inline_composer_display_condition")] public string InlineComposerDisplayCondition { get; set; }
         [JsonProperty("inline_composer_imp_trigger_time")] public long? InlineComposerImpTriggerTime { get; set; }
         [JsonProperty("top_likers")] public InstaMediaIdList TopLikers { get; set; }
+        [JsonProperty("carousel_share_child_media_id")] public string CarouselShareChildMediaId { get; set; }
 
     }
 }

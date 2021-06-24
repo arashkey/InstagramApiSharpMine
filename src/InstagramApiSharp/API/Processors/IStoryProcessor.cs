@@ -13,6 +13,13 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IStoryProcessor
     {
+
+        Task<IResult<InstaStorySliderVoterInfoItem>> GetStorySliderVotersAsync(string storyMediaId, string sliderId, PaginationParameters paginationParameters);
+
+        Task<IResult<InstaStoryQuizParticipant>> GetStoryQuizParticipantsAsync(string storyMediaId, string quizId, PaginationParameters paginationParameters);
+
+        Task<IResult<InstaStoryQuestionInfo>> GetStoryQuestionRespondersAsync(string storyMediaId, string questionId, PaginationParameters paginationParameters);
+
         /// <summary>
         ///     Get user story and lives
         /// </summary>
@@ -172,7 +179,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="storyMediaId">Story media id</param>
         /// <param name="pollId">Story poll id</param>
         /// <param name="paginationParameters">Pagination parameters</param>
-        Task<IResult<InstaStoryPollVotersList>> GetStoryPollVotersAsync(string storyMediaId, string pollId, PaginationParameters paginationParameters);
+        Task<IResult<InstaStoryPollVotersList>> GetStoryPollVotersAsync(string storyMediaId, string pollId, PaginationParameters paginationParameters, uint abc);
 
         /// <summary>
         ///     Get the story by userId

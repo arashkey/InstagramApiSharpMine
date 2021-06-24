@@ -45,7 +45,7 @@ namespace InstagramApiSharp.API
 
         private uint _startupCountryCode = 1;
         private int _timeZoneOffset = -14400; // USA, New york
-
+        internal IEncryptedPasswordEncryptor _encryptedPasswordEncryptor;
         private IConfigureMediaDelay _configureMediaDelay = ConfigureMediaDelay.Empty();
         private IRequestDelay _delay = RequestDelay.Empty();
         private readonly IHttpRequestProcessor _httpRequestProcessor;
@@ -78,6 +78,7 @@ namespace InstagramApiSharp.API
         ///     Gets or sets two factor login info
         /// </summary>
         public InstaTwoFactorLoginInfo TwoFactorLoginInfo { get { return _twoFactorInfo; } set { _twoFactorInfo = value; } }
+        public bool DontGenerateToken { get; set; }
 
         private bool _isUserAuthenticated;
         /// <summary>
@@ -106,6 +107,9 @@ namespace InstagramApiSharp.API
         ///     Registration Service
         /// </summary>
         public IRegistrationService RegistrationService { get; }
+#if WINDOWS_UWP
+        public IPushClient PushClient { get; set; }
+#endif
 
         public bool LoadProxyFromSessionFile { get; set; } = false;
         #region Locale
@@ -1117,7 +1121,9 @@ namespace InstagramApiSharp.API
                         _httpRequestProcessor.RequestMessage.CsrfToken = null;
                     else
                         _httpRequestProcessor.RequestMessage.CsrfToken = csrftoken;
-                    var encruptedPassword = this.GetEncryptedPassword(_user.Password);
+                    var encruptedPassword = _encryptedPasswordEncryptor != null ?
+                        await _encryptedPasswordEncryptor.GetEncryptedPassword(this, _user.Password).ConfigureAwait(false) :
+                        this.GetEncryptedPassword(_user.Password);
                     _httpRequestProcessor.RequestMessage.EncPassword = encruptedPassword;
                 }
                 _httpRequestProcessor.RequestMessage.CsrfToken = csrftoken;
@@ -2144,10 +2150,13 @@ namespace InstagramApiSharp.API
                 return Result.Fail(ex, InstaLoginResult.Exception);
             }
         }
-#endregion Challenge part
+        #endregion Challenge part
 
-        internal async Task GetToken() =>
+        internal async Task GetToken()
+        {
+            if (DontGenerateToken) return;
             await LauncherSyncPrivate().ConfigureAwait(false);
+        }
 
         #endregion Authentication and challenge functions
 
@@ -2611,7 +2620,7 @@ namespace InstagramApiSharp.API
             _configureMediaDelay = configureMediaDelay;
             _httpRequestProcessor.ConfigureMediaDelay = _configureMediaDelay;
         }
-        internal IRequestDelay GetRequestDelay() => _delay;
+        public IRequestDelay GetRequestDelay() => _delay;
 
         /// <summary>
         ///     Set instagram api version (for user agent version)
@@ -2918,12 +2927,12 @@ namespace InstagramApiSharp.API
                         if (suggestions.Threads?.Count > 0)
                         {
                             foreach (var thread in suggestions.Threads)
-                                suggestions.Items.Add(thread.Users.FirstOrDefault());
+                                suggestions.Items.Add(thread);
                         }
                         if (suggestions.Users?.Count > 0)
                         {
                             foreach (var user in suggestions.Users)
-                                suggestions.Items.Add(user);
+                                suggestions.Items.Add(user.CreateFakeThread());
                         }
 
                         //if (suggestions.Items?.Count > 0)
@@ -2946,6 +2955,10 @@ namespace InstagramApiSharp.API
                 return Result.Fail(exception, suggestions);
             }
         }
+
+        public void SetEncryptedPasswordEncryptor(IEncryptedPasswordEncryptor
+            encryptedPasswordEncryptor) => _encryptedPasswordEncryptor = encryptedPasswordEncryptor;
+
         #endregion Other public functions
 
         #region Giphy

@@ -63,7 +63,8 @@ namespace InstagramApiSharp.Converters
                 CanSeeInsightsAsBrand = SourceObject.CanSeeInsightsAsBrand ?? false,
                 UnifyTagDisplay = SourceObject.UnifyTagDisplay ?? false,
                 InlineComposerDisplayCondition= SourceObject.InlineComposerDisplayCondition ,
-                InlineComposerImpTriggerTime = SourceObject.InlineComposerImpTriggerTime ?? 0
+                InlineComposerImpTriggerTime = SourceObject.InlineComposerImpTriggerTime ?? 0,
+                CarouselShareChildMediaId = SourceObject.CarouselShareChildMediaId
 
             };
             if (!string.IsNullOrEmpty(SourceObject.TakenAtUnixLike))

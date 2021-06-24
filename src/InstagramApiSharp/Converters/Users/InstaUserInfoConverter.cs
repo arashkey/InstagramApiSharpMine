@@ -98,7 +98,8 @@ namespace InstagramApiSharp.Converters
                 ZipCode = SourceObject.User.Zip,
                 PageId = SourceObject.User.PageId ?? 0,
                 PageName = SourceObject.User.PageName,
-                ProfilePicture = SourceObject.User.ProfilePicUrl
+                ProfilePicture = SourceObject.User.ProfilePicUrl,
+                LatestReelMedia = SourceObject.User.LatestReelMedia ??0
             };
             try
             {
