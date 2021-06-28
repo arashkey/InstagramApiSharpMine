@@ -113,7 +113,8 @@ namespace InstagramApiSharp.Classes
                 request.Headers.ConnectionClose = keepAlive;
                 if (request.Content != null)
                 {
-                    request.Content.Headers.ContentType.CharSet = "UTF-8";
+                    if (request.Content.Headers.ContentType != null)
+                        request.Content.Headers.ContentType.CharSet = "UTF-8";
                     var requestUri = request.RequestUri.ToString();
 
                     // since a file can be 600MB, reading it takes time, so we ignore it and don't add Content-Length header
