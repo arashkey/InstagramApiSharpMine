@@ -560,8 +560,8 @@ namespace InstagramApiSharp.API.Processors
 
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
             }
             catch (HttpRequestException httpException)
             {
@@ -598,8 +598,8 @@ namespace InstagramApiSharp.API.Processors
 
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
             }
             catch (HttpRequestException httpException)
             {

@@ -1486,11 +1486,6 @@ namespace InstagramApiSharp.API
             ValidateLoggedIn();
             try
             {
-                //phone_id=3dc84281-dd5a-45a3-a0a8-bc32a2dd9038&
-                //_csrftoken=DddfrffN2m4DfUEmytTgfY&
-                //guid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
-                //device_id=android-21c311d494a974fe&
-                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876
                 var instaUri = UriCreator.GetLogoutUri();
                 var data = new Dictionary<string, string>
                 {
@@ -1505,7 +1500,7 @@ namespace InstagramApiSharp.API
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK) return Result.UnExpectedResponse<bool>(response, json);
                 var logoutInfo = JsonConvert.DeserializeObject<BaseStatusResponse>(json);
-                if (logoutInfo.Status == "ok")
+                if (logoutInfo.IsOk())
                     IsUserAuthenticated = false;
                 return Result.Success(!IsUserAuthenticated);
             }

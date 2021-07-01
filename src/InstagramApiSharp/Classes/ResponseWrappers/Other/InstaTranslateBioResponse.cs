@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
-    public class InstaTranslateBioResponse : InstaDefault
+    public class InstaTranslateBioResponse : InstaDefaultResponse
     {
         [JsonProperty("translation")] public string Translation { get; set; }
     }

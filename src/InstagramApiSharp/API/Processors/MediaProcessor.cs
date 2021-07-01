@@ -1555,7 +1555,7 @@ namespace InstagramApiSharp.API.Processors
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 var imgResp = JsonConvert.DeserializeObject<ImageThumbnailResponse>(json);
-                if (imgResp.Status.ToLower() == "ok")
+                if (imgResp.IsSucceed)
                 {
                     upProgress.UploadState = InstaUploadState.ThumbnailUploaded;
                     progress?.Invoke(upProgress);

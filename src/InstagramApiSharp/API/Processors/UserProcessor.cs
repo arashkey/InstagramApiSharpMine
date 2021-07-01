@@ -1505,12 +1505,12 @@ namespace InstagramApiSharp.API.Processors
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, obj.Message, null);
 
-                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, obj.Message, null);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, obj.Message, null);
             }
             catch (HttpRequestException httpException)
             {
@@ -1708,7 +1708,7 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<string>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaTranslateBioResponse>(json);
 
-                return obj.Status.ToLower() == "ok" ? Result.Success(obj.Translation) : Result.Fail<string>(obj.Message);
+                return obj.IsSucceed ? Result.Success(obj.Translation) : Result.Fail<string>(obj.Message);
             }
             catch (HttpRequestException httpException)
             {
@@ -2187,12 +2187,12 @@ namespace InstagramApiSharp.API.Processors
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, obj.Message, null);
 
-                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, obj.Message, null);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, obj.Message, null);
             }
             catch (HttpRequestException httpException)
             {

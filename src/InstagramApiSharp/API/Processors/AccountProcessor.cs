@@ -992,9 +992,7 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
-                if (obj.Status.ToLower() == "ok")
-                    return Result.Success(true);
-                return Result.Success(false);
+                return Result.Success(obj.IsSucceed);
             }
             catch (HttpRequestException httpException)
             {
@@ -1023,7 +1021,8 @@ namespace InstagramApiSharp.API.Processors
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     { "_csrftoken", _user.CsrfToken}
                 };
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);                var response = await _httpRequestProcessor.SendAsync(request);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaUserEdit>(response, json);
@@ -1264,10 +1263,8 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                if (obj.Status.ToLower() == "ok")
-                    return Result.Success(true);
-                return Result.Success(false);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return Result.Success(obj.IsSucceed);
             }
             catch (HttpRequestException httpException)
             {
@@ -1301,10 +1298,8 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                if (obj.Status.ToLower() == "ok")
-                    return Result.Success(true);
-                return Result.Success(false);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return Result.Success(obj.IsSucceed);
             }
             catch (HttpRequestException httpException)
             {
@@ -1341,10 +1336,8 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<bool>(response, json);
 
                 var obj = JsonConvert.DeserializeObject<InstaAccountArchiveStory>(json);
-                if (obj.ReelAutoArchive.ToLower() == "on")
-                    return Result.Success(true);
-                return Result.Success(false);
-
+                
+                return Result.Success(obj.ReelAutoArchive.ToLower() == "on");
             }
             catch (HttpRequestException httpException)
             {
@@ -1380,9 +1373,7 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaAccountArchiveStory>(json);
-                if(obj.ReelAutoArchive.ToLower() == "off")
-                    return Result.Success(true);
-                return Result.Success(false);
+                return Result.Success(obj.ReelAutoArchive.ToLower() == "off");
             }
             catch (HttpRequestException httpException)
             {
@@ -1421,9 +1412,8 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaAccountArchiveStory>(json);
-                if (obj.Status.ToLower() == "off")
-                    return Result.Success(true);
-                return Result.Success(false);
+
+                return Result.Success(obj.Status.ToLower() == "off");
             }
             catch (HttpRequestException httpException)
             {
@@ -1659,10 +1649,8 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                if (obj.Status.ToLower() == "ok")
-                    return Result.Success(true);
-                return Result.Success(false);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return Result.Success(obj.IsSucceed);
             }
             catch (HttpRequestException httpException)
             {
@@ -1926,7 +1914,7 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<TwoFactorRegenBackupCodes>(response, json);
 
                 var obj = JsonConvert.DeserializeObject<TwoFactorRegenBackupCodes>(json);
-                return obj.Status.ToLower() == "ok" ? Result.Success(obj) : Result.UnExpectedResponse<TwoFactorRegenBackupCodes>(response, json);
+                return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<TwoFactorRegenBackupCodes>(response, json);
             }
             catch (HttpRequestException httpException)
             {
@@ -2145,8 +2133,8 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
 
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
             }
             catch (HttpRequestException httpException)
             {
