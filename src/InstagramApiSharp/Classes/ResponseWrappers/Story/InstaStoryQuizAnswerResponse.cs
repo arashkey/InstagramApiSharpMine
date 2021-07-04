@@ -13,7 +13,8 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 {
     public class InstaStoryQuizAnswerResponse
     {
-        [JsonProperty("text")] public string Text { get; set; }
-        [JsonProperty("count")] public int Count { get; set; }
+        [JsonProperty("ts")] public string Timestamp { get; set; }
+        [JsonProperty("answer")] public int Answer { get; set; }
+        [JsonProperty("user")] public InstaUserShortResponse User { get; set; }
     }
 }

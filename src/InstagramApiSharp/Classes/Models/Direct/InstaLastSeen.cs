@@ -19,6 +19,7 @@ namespace InstagramApiSharp.Classes.Models
         public long PK { get; set; }
 
         public DateTime SeenTime { get; set; }
+        public string SeenTimeUnix { get; set; }
     }
     public class InstaLastSeenAtResponse
     {

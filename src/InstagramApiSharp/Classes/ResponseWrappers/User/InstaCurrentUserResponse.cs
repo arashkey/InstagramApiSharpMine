@@ -29,5 +29,6 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public ImageResponse HDProfilePicture { get; set; }
 
         [JsonProperty("external_url")] public string ExternalURL { get; set; }
+        [JsonProperty("custom_gender")] public string CustomGender { get; set; }
     }
 }

@@ -20,6 +20,10 @@ namespace InstagramApiSharp.Classes.Models
 
         public string DashManifest { get; set; }
 
+        public string DashAbrPlaybackUrl { get; set; }
+
+        public string DashPlaybackUrl { get; set; }
+
         public DateTime ExpireAt { get; set; }
 
         public string EncodingTag { get; set; }

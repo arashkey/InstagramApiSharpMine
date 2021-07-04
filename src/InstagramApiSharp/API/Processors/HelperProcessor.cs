@@ -603,19 +603,11 @@ namespace InstagramApiSharp.API.Processors
                         progress?.Invoke(upProgress);
                         return Result.UnExpectedResponse<bool>(response, json);
                     }
-                    var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
+                    var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
 
-                    if (obj.Status.ToLower() == "ok")
-                    {
-                        upProgress.UploadState = InstaUploadState.Configured;
-                        progress?.Invoke(upProgress);
-                    }
-                    else
-                    {
-                        upProgress.UploadState = InstaUploadState.Completed;
-                        progress?.Invoke(upProgress);
-                    }
-                    return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+                    upProgress.UploadState = obj.IsSucceed ? InstaUploadState.Configured : InstaUploadState.Completed;
+                    progress?.Invoke(upProgress);
+                    return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
                 }
                 else
                 {
@@ -804,19 +796,12 @@ namespace InstagramApiSharp.API.Processors
 
                     if (response.IsSuccessStatusCode)
                     {
-                        var mediaResponse = JsonConvert.DeserializeObject<InstaDefault>(json);
+                        var mediaResponse = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
 
-                        if (mediaResponse.Status.ToLower() == "ok")
-                        {
-                            upProgress.UploadState = InstaUploadState.Configured;
-                            progress?.Invoke(upProgress);
-                        }
-                        else
-                        {
-                            upProgress.UploadState = InstaUploadState.Completed;
-                            progress?.Invoke(upProgress);
-                        }
-                        return mediaResponse.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+                        upProgress.UploadState = mediaResponse.IsSucceed ? InstaUploadState.Configured : InstaUploadState.Completed;
+                        progress?.Invoke(upProgress);
+
+                        return mediaResponse.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
                     }
                     upProgress.UploadState = InstaUploadState.Error;
                     progress?.Invoke(upProgress);
@@ -1075,11 +1060,11 @@ namespace InstagramApiSharp.API.Processors
 
                     if (response.IsSuccessStatusCode)
                     {
-                        var mediaResponse = JsonConvert.DeserializeObject<InstaDefault>(json);
+                        var mediaResponse = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
 
                         upProgress.UploadState = InstaUploadState.Configured;
                         progress?.Invoke(upProgress);
-                        return mediaResponse.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+                        return mediaResponse.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
                     }
                     upProgress.UploadState = InstaUploadState.Error;
                     progress?.Invoke(upProgress);
@@ -1575,15 +1560,6 @@ namespace InstagramApiSharp.API.Processors
                     }
                 };
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                //X-Pigeon-Session-Id: f4089ddb-ac42-4428-8682-70786e72df4e
-                //X-Pigeon-Rawclienttime: 1553994145.044
-                //X-IG-Connection-Speed: -1kbps
-                //X-IG-Bandwidth-Speed-KBPS: -1.000
-                //X-IG-Bandwidth-TotalBytes-B: 0
-                //X-IG-Bandwidth-TotalTime-MS: 0
-                //retry_context: {"num_reupload":0,"num_step_auto_retry":0,"num_step_manual_retry":0}
-                //request.Headers.AddHeader("X-Pigeon-Session-Id", pigeonSessionId);
-                //request.Headers.AddHeader("X-Pigeon-Rawclienttime", DateTime.UtcNow.ToUnixTime().ToString());
                 request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -1594,10 +1570,10 @@ namespace InstagramApiSharp.API.Processors
                     progress?.Invoke(upProgress);
                     return Result.UnExpectedResponse<bool>(response, json);
                 }
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
 
-                
-                return obj.Status.ToLower() == "ok" ? await ConfigureVoice(progress, upProgress, audio, uploadId, recipients, threadId/*, pigeonSessionId*/) : Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+
+                return obj.IsSucceed ? await ConfigureVoice(progress, upProgress, audio, uploadId, recipients, threadId/*, pigeonSessionId*/) : Result.UnExpectedResponse<bool>(response, json);
 
             }
             catch (HttpRequestException httpException)

@@ -1,10 +1,14 @@
 ﻿//#if NETSTANDARD
 using System;
+using InstagramApiSharp.Helpers;
 using Newtonsoft.Json;
 
 namespace InstagramApiSharp.API.Push 
 {
-    // Reference https://github.com/mgp25/Instagram-API/blob/master/src/Push/Notification.php
+    public class PushReceivedEventArgs : MessageReceivedEventArgs
+    {
+        [JsonIgnore] public IInstaApi InstaApi { get; set; }
+    }
     public class MessageReceivedEventArgs : EventArgs
     {
         private string _notificationContentJson;
@@ -65,6 +69,44 @@ namespace InstagramApiSharp.API.Push
         }
         [JsonIgnore] public BadgeCount BadgeCount { get; set; }
         [JsonProperty("ia")] public string InAppActors { get; set; }
+
+        #region New Values
+        //{
+        //  "bc": "{\\\"dt\\\":0}",
+        //  "loc": "Tehran, Iran, IR",
+        //  "c": "two_factor_trusted_notification",
+        //  "gid": "None",
+        //  "device_id": "android-",
+        //  "SuppressBadge": "1",
+        //  "m": "A device is requesting access to log in (XiaoMi Redmi Note 7 in Tehran, Iran, IR).",
+        //  "long": "51.",
+        //  "collapse_key": "two_factor_trusted_notification",
+        //  "device_name": "Xi",
+        //  "s": "None",
+        //  "u": 12457575,
+        //  "PushNotifID": "",
+        //  "time_to_live": "3600",
+        //  "pi": "",
+        //  "tf_id": "=",
+        //  "time": "1624192552",
+        //  "ig": "trusted_notification",
+        //  "lat": "35."
+        //}
+        [JsonProperty("loc")] public string Location { get; set; }
+        [JsonProperty("gid")] public string Guid { get; set; }
+        [JsonProperty("device_id")] public string DeviceId { get; set; }
+        [JsonProperty("SuppressBadge")] public string SuppressBadge { get; set; }
+        [JsonProperty("long")] public double Longitude { get; set; }
+        [JsonProperty("lat")] public double Latitude { get; set; }
+        [JsonProperty("device_name")] public string DeviceName { get; set; }
+        [JsonProperty("time_to_live")] public string TimezoneOffset { get; set; }
+        [JsonProperty("tf_id")] public string TwoFactorIdentifier { get; set; }
+        [JsonProperty("time")] public string OriginalTime { get; set; }
+        public DateTime Time => !string.IsNullOrEmpty(OriginalTime) ? DateTimeHelper.FromUnixTimeSeconds(long.Parse(OriginalTime)) : DateTime.UtcNow;
+
+
+        #endregion
+
     }
 }
 

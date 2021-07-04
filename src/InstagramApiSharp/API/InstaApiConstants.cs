@@ -20,7 +20,7 @@ namespace InstagramApiSharp.API
     /// <summary>
     ///     Place of every endpoints, headers and other constants and variables.
     /// </summary>
-    internal static class InstaApiConstants
+    public static class InstaApiConstants
     {
         #region New
 
@@ -81,8 +81,16 @@ namespace InstagramApiSharp.API
         public const string SI_FETCH_HEADERS = API_SUFFIX + "/si/fetch_headers/";
         public const string CONSENT_CHECK_AGE_ELIGIBILITY = API_SUFFIX + "/consent/check_age_eligibility/";
 
+        public const string TWO_FACTOR_CHECK_TRUSTED_NOTIFICATION_STATUS = API_SUFFIX + "/two_factor/check_trusted_notification_status/";
+        public const string TWO_FACTOR_UPDATE_TRUSTED_NOTIFICATION_STATUS = API_SUFFIX + "/two_factor/update_trusted_notification_status/";
+        public const string TWO_FACTOR_UPDATE_TRUSTED_NOTIFICATION_SETTING = API_SUFFIX + "/two_factor/update_trusted_notification_setting/";
+
+        public const string STORY_QUESTION_RESPONSES = API_SUFFIX + "/media/{0}/{1}/story_question_responses/";
+        public const string STORY_QUIZ_PARTICIPANTS = API_SUFFIX + "/media/{0}/{1}/story_quiz_participants/";
+        public const string STORY_SLIDER_VOTERS = API_SUFFIX + "/media/{0}/{1}/story_slider_voters/";
+
         #endregion New
-        
+
         #region B Url endpoints
 
         public const string MULTIPLE_ACCOUNTS_GET_ACCOUNT_FAMILY = API_SUFFIX + "/multiple_accounts/get_account_family/";
@@ -826,7 +834,7 @@ namespace InstagramApiSharp.API
         public const string MEDIA_BLOCKED = API_SUFFIX + "/media/blocked/";
         public const string MEDIA_ARCHIVE = API_SUFFIX + "/media/{0}/only_me/";
         public const string MEDIA_UNARCHIVE = API_SUFFIX + "/media/{0}/undo_only_me/";
-        public const string MEDIA_STORY_POLL_VOTERS = API_SUFFIX + "/media/{0}/{1}/story_poll_voters/";
+        public const string MEDIA_STORY_POLL_VOTERS = API_SUFFIX + "/media/{0}/{1}/story_poll_voters/?vote={2}";
         public const string MEDIA_STORY_POLL_VOTE = API_SUFFIX + "/media/{0}/{1}/story_poll_vote/";
         public const string MEDIA_STORY_SLIDER_VOTE = API_SUFFIX + "/media/{0}/{1}/story_slider_vote/";
         public const string MEDIA_STORY_QUESTION_RESPONSE = API_SUFFIX + "/media/{0}/{1}/story_question_response/";

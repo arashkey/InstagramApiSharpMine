@@ -27,6 +27,7 @@ Imports InstagramApiSharp.Classes.Models
 Imports System.Net
 Imports InstagramApiSharp
 Imports InstagramApiSharp.Classes.SessionHandlers
+Imports InstagramApiSharp.Enums
 
 Public Class Form1
 
@@ -94,6 +95,8 @@ Public Class Form1
     Dim InstaApi As IInstaApi
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        CheckForIllegalCrossThreadCalls = False ' lets disable this, note that you should invoke the controls, this isn't right
+        ' but since it's a example I avoided it 
         Size = NormalSize
     End Sub
 
@@ -110,6 +113,8 @@ Public Class Form1
         Text = $"{AppName} Connecting"
         LoadSession()
 
+        Dim freshLoginFromTwoFactor As Boolean = False
+RetryFromTwoFactor:
         If Not InstaApi.IsUserAuthenticated Then
 
             ' Send requests for login flows (contact prefill, read msisdn header, launcher sync And qe sync)
@@ -153,6 +158,66 @@ Public Class Form1
                 End If
 
             ElseIf (logInResult.Value = InstaLoginResult.TwoFactorRequired) Then
+                ' lets check for pending trusted notification first
+                If (InstaApi.TwoFactorLoginInfo?.PendingTrustedNotification) Then
+                    ' ///////////// IF YOU WANT TO SUPPORT NOTIFICATION LOGIN DO THIS> /////////////
+                    If (freshLoginFromTwoFactor = False) Then
+                        Dim Random = New Random()
+                        Dim tried As Integer = 0
+RetryLabel:
+                        Dim trustedNotification = Await InstaApi.Check2FATrustedNotificationAsync()
+                        If (trustedNotification.Succeeded) Then
+                            Dim reviewStatus = trustedNotification.Value.ReviewStatus
+                            If (reviewStatus = Insta2FANotificationReviewStatus.Approved) Then
+                                ' lets wait 3 times with a different delays
+                                If (tried <= 3) Then
+                                    tried += 1
+                                    Await Task.Delay(Random.Next(2, 6) * 1000).ConfigureAwait(False)
+                                    GoTo RetryLabel
+                                End If
+                            ElseIf (reviewStatus = Insta2FANotificationReviewStatus.Denied) Then
+                                ' if user approved login notification, we can simply login, without any further hard work
+                                ' >>>>>>>>>>>>>> DON'T CHANGE "code" AND "twoFactorOption" VALUES <<<<<<<<<<<<<<
+
+                                Dim code = "" ' we have To pass "" As a verification code,
+                                ' since Instagram doesn't need code in approved case
+
+                                Dim trustedDevice = False  ' set true if you want to add this to the trusted device list
+
+                                Dim twoFactorOption = InstaTwoFactorVerifyOptions.Notification ' we must use Notification
+
+                                Dim twoFactorLogin = Await InstaApi.TwoFactorLoginAsync(code,
+                                                    trustedDevice,
+                                                    twoFactorOption)
+                                If (twoFactorLogin.Succeeded) Then
+                                    ' connected
+                                    ' save session
+                                    SaveSession()
+                                    Size = ChallengeSize
+                                    TwoFactorGroupBox.Visible = False
+                                    GetFeedButton.Visible = True
+                                    Text = $"{AppName} Connected"
+                                    Size = NormalSize
+                                Else
+                                    ' this shouldn't happen, so I don't know what to do in this situation
+                                    MessageBox.Show($"{logInResult.Info?.Message}", "Error")
+                                End If
+
+                            Else
+                                ' if user, denied it, we need a fresh login 
+                                freshLoginFromTwoFactor = True
+                                ' we ignore notification login, for this situation, although we can use notification again!
+                                GoTo RetryFromTwoFactor
+                            End If
+
+                            ' if none of above codes didn't work, let try SMS code>
+                            Await InstaApi.SendTwoFactorLoginSMSAsync()
+                            Await InstaApi.Check2FATrustedNotificationAsync()
+                        End If
+                    End If
+                End If
+
+
                 TwoFactorGroupBox.Visible = True
                 Size = ChallengeSize
             Else

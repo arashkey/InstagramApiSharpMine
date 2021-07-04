@@ -517,6 +517,7 @@ namespace InstagramApiSharp.API.Processors
                 var timelineFeeds = await GetUserTimelineFeed(paginationParameters,
                     seenMediaIds, refreshRequest, paginationSource,
                     batteryLevel, isCharging, isDarkMode, willSoundOn);
+
                 if (!timelineFeeds.Succeeded)
                     return Result.Fail(timelineFeeds.Info, feed);
 
@@ -534,6 +535,7 @@ namespace InstagramApiSharp.API.Processors
 
                     var nextFeed = await GetUserTimelineFeed(paginationParameters, null, false, paginationSource,
                     batteryLevel, isCharging, isDarkMode, willSoundOn);
+                    
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, feed);
 
@@ -812,7 +814,7 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("is_pull_to_refresh", "0");
                 }
 
-                var request = await _httpHelper.GetDefaultGZipRequestAsync(HttpMethod.Post, userFeedUri, _deviceInfo, data);
+                var request = /*await*/ _httpHelper.GetDefaultRequest(HttpMethod.Post, userFeedUri, _deviceInfo, data);
                 request.Headers.AddHeader("X-Ads-Opt-Out", "0", _instaApi);
                 request.Headers.AddHeader("X-Google-AD-ID", _deviceInfo.GoogleAdId.ToString(), _instaApi);
                 request.Headers.AddHeader("X-DEVICE-ID", _deviceInfo.DeviceGuid.ToString(), _instaApi);
@@ -826,7 +828,7 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<InstaFeedResponse>(response, json);
 
                 var feedResponse = JsonConvert.DeserializeObject<InstaFeedResponse>(json,
-                    new InstaFeedResponseDataConverter());
+                    new InstaFeedResponseDataConverter(_user.LoggedInUser.Pk, removeAds));
                 return Result.Success(feedResponse);
             }
             catch (HttpRequestException httpException)

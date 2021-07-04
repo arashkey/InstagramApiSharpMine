@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaRecentActivityFeed
+    public class InstaRecentActivityFeed : INotifyPropertyChanged
     {
+        private bool _hasLikedComment = false;
         public long ProfileId { get; set; }
 
         public string ProfileImage { get; set; }
@@ -45,5 +47,23 @@ namespace InstagramApiSharp.Classes.Models
         public string SubText { get; set; }
 
         public string IconUrl { get; set; }
+
+
+
+        public bool HasLikedComment { get => _hasLikedComment; set { _hasLikedComment = value; OnPropertyChanged("HasLikedComment"); } }
+        public bool DisplayUfi { get; set; }
+        public bool Clicked { get; set; }
+        public string CommentNotifType { get; set; }
+        public string Tuuid { get; set; }
+        public List<string> Actions { get; set; } = new List<string>();
+        public long LatestReelMedia { get; set; }
+        public List<InstaActivityMedia> Images { get; set; } = new List<InstaActivityMedia>();
+        public bool IsRestricted { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string memberName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
     }
 }

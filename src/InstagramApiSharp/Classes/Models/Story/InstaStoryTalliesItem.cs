@@ -16,5 +16,8 @@ namespace InstagramApiSharp.Classes.Models
         public float FontSize { get; set; }
 
         public int Count { get; set; }
+        public string TextColor { get; set; }
+        public string GradientBackgroundColor { get; set; }
+        public bool CorrectAnswer { get; set; }
     }
 }

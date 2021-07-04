@@ -24,7 +24,8 @@ namespace InstagramApiSharp.Converters
             {
                 CanReply = SourceObject.CanReply,
                 LastSeenBroadcastTs = SourceObject.LastSeenBroadcastTs ?? 0,
-                Pk = SourceObject.Pk
+                Pk = SourceObject.Pk,
+                RankedPosition = SourceObject.RankedPosition ?? -1
             };
 
             if (SourceObject.User != null)

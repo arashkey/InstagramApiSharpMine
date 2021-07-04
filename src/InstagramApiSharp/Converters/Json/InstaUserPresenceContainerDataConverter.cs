@@ -34,16 +34,17 @@ namespace InstagramApiSharp.Converters.Json
             var extras = userPresenceRoot.ToObject<InstaExtraResponse>();
             try
             {
-                foreach (var item in extras.Extras)
-                {
-                    try
+                if (extras.Extras != null)
+                    foreach (var item in extras.Extras)
                     {
-                        var p = item.Value.ToObject<InstaUserPresenceResponse>();
-                        p.Pk = long.Parse(item.Key);
-                        presence.Items.Add(p);
+                        try
+                        {
+                            var p = item.Value.ToObject<InstaUserPresenceResponse>();
+                            p.Pk = long.Parse(item.Key);
+                            presence.Items.Add(p);
+                        }
+                        catch { }
                     }
-                    catch { }
-                }
             }
             catch { }
             return presence;

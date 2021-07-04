@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaDirectInboxThread
+    public class InstaDirectInboxThread : INotifyPropertyChanged
     {
         public bool Muted { get; set; }
 
         public List<InstaUserShortFriendship> Users { get; set; } = new List<InstaUserShortFriendship>();
 
-        public string Title { get; set; }
+        private string _title;
+        public string Title { get { return _title; } set { _title = value; OnPropertyChanged("Title"); } }
 
         public string OldestCursor { get; set; }
         
         public DateTime LastActivity { get; set; }
-
-        public bool HasUnreadMessage { get; set; }
+        public string LastActivityUnix { get; set; }
+        private bool _hasUnreadMessage;
+        public bool HasUnreadMessage { get { return _hasUnreadMessage; } set { _hasUnreadMessage = value; OnPropertyChanged("HasUnreadMessage"); } }
 
         public string VieweId { get; set; }
 
@@ -81,5 +84,25 @@ namespace InstagramApiSharp.Classes.Models
 
         public List<InstaDirectInboxItem> DirectStories { get; set; } = new List<InstaDirectInboxItem>();
         public List<long> AdminUserIds { get; set; } = new List<long>();
+        public string LastNonSenderItemAt { get; set; }
+        public string AssignedAdminId { get; set; }
+        private bool _selected = false;
+        public bool? Selected
+        {
+            get { return _selected; }
+            set { _selected = value ?? false; OnPropertyChanged("Selected"); }
+        }
+
+        private bool _closeButton = false;
+        public bool? CloseButton
+        {
+            get { return _closeButton; }
+            set { _closeButton = value ?? false; OnPropertyChanged("CloseButton"); }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        void OnPropertyChanged(string memberName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
+        }
     }
 }

@@ -19,10 +19,12 @@ namespace InstagramApiSharp.Converters
             {
                 ClientContext = SourceObject.ClientContext,
                 ItemId = SourceObject.ItemId,
-                HideInThread = System.Convert.ToBoolean(SourceObject.HideInThread ?? 0)
+                HideInThread = System.Convert.ToBoolean(SourceObject.HideInThread ?? 0),
+                ItemTypeOriginalText = SourceObject.ItemType
             };
 
             threadItem.TimeStamp = DateTimeHelper.UnixTimestampMilisecondsToDateTime(SourceObject.TimeStamp);
+            threadItem.TimeStampUnix = SourceObject.TimeStamp;
             threadItem.UserId = SourceObject.UserId;
 
             var truncatedItemType = SourceObject.ItemType.Trim().Replace("_", "");

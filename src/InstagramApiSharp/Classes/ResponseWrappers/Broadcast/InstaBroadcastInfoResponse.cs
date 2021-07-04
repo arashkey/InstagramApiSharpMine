@@ -17,6 +17,10 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public long Id { get; set; }
         [JsonProperty("broadcast_status")]
         public string BroadcastStatus { get; set; }
+        [JsonProperty("dash_playback_url")]
+        public string DashPlaybackUrl { get; set; }
+        [JsonProperty("dash_abr_playback_url")]
+        public string DashAbrPlaybackUrl { get; set; }
         [JsonProperty("dash_manifest")]
         public string DashManifest { get; set; }
         [JsonProperty("expire_at")]

@@ -45,7 +45,7 @@ namespace InstagramApiSharp.API
 
         private uint _startupCountryCode = 1;
         private int _timeZoneOffset = -14400; // USA, New york
-
+        internal IEncryptedPasswordEncryptor _encryptedPasswordEncryptor;
         private IConfigureMediaDelay _configureMediaDelay = ConfigureMediaDelay.Empty();
         private IRequestDelay _delay = RequestDelay.Empty();
         private readonly IHttpRequestProcessor _httpRequestProcessor;
@@ -78,6 +78,7 @@ namespace InstagramApiSharp.API
         ///     Gets or sets two factor login info
         /// </summary>
         public InstaTwoFactorLoginInfo TwoFactorLoginInfo { get { return _twoFactorInfo; } set { _twoFactorInfo = value; } }
+        public bool DontGenerateToken { get; set; }
 
         private bool _isUserAuthenticated;
         /// <summary>
@@ -106,6 +107,9 @@ namespace InstagramApiSharp.API
         ///     Registration Service
         /// </summary>
         public IRegistrationService RegistrationService { get; }
+#if WINDOWS_UWP
+        public IPushClient PushClient { get; set; }
+#endif
 
         public bool LoadProxyFromSessionFile { get; set; } = false;
         #region Locale
@@ -1117,7 +1121,9 @@ namespace InstagramApiSharp.API
                         _httpRequestProcessor.RequestMessage.CsrfToken = null;
                     else
                         _httpRequestProcessor.RequestMessage.CsrfToken = csrftoken;
-                    var encruptedPassword = this.GetEncryptedPassword(_user.Password);
+                    var encruptedPassword = _encryptedPasswordEncryptor != null ?
+                        await _encryptedPasswordEncryptor.GetEncryptedPassword(this, _user.Password).ConfigureAwait(false) :
+                        this.GetEncryptedPassword(_user.Password);
                     _httpRequestProcessor.RequestMessage.EncPassword = encruptedPassword;
                 }
                 _httpRequestProcessor.RequestMessage.CsrfToken = csrftoken;
@@ -1327,7 +1333,9 @@ namespace InstagramApiSharp.API
         ///     CodeExpired --> The code is expired, please request a new one.
         ///     Exception --> Something wrong happened
         /// </returns>
-        public async Task<IResult<InstaLoginTwoFactorResult>> TwoFactorLoginAsync(string verificationCode, bool trustThisDevice = false, InstaTwoFactorVerifyOptions twoFactorVerifyOptions = InstaTwoFactorVerifyOptions.SmsCode)
+        public async Task<IResult<InstaLoginTwoFactorResult>> TwoFactorLoginAsync(string verificationCode, 
+            bool trustThisDevice = false,
+            InstaTwoFactorVerifyOptions twoFactorVerifyOptions = InstaTwoFactorVerifyOptions.SmsCode)
         {
             if (_twoFactorInfo == null)
                 return Result.Fail<InstaLoginTwoFactorResult>("Re-login required");
@@ -1347,6 +1355,7 @@ namespace InstagramApiSharp.API
                 //    "waterfall_id": "rnd",
                 //    "verification_method": "1"
                 //}
+
                 var data = new Dictionary<string, string>
                 {
                     {"verification_code", verificationCode},
@@ -1364,7 +1373,7 @@ namespace InstagramApiSharp.API
                     data.Add("fb_access_token", FbAccessToken);
 
                 var instaUri = UriCreator.GetTwoFactorLoginUri();
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -1423,7 +1432,48 @@ namespace InstagramApiSharp.API
                     ? Result.Success(_twoFactorInfo)
                     : Result.Fail<InstaTwoFactorLoginInfo>("No Two Factor info available."));
         }
+        /// <summary>
+        ///     Check two factor trusted notification status
+        /// </summary>
+        /// <remarks>
+        ///         This will checks for response from another logged in device.
+        /// </remarks>
+        public async Task<IResult<InstaTwoFactorTrustedNotification>> Check2FATrustedNotificationAsync()
+        {
+            try
+            {
+                if (_twoFactorInfo == null)
+                    return Result.Fail<InstaTwoFactorTrustedNotification>("Try to Login first");
 
+                var instaUri = UriCreator.Get2FATrustedNotificationCheckUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"two_factor_identifier", _twoFactorInfo.TwoFactorIdentifier},
+                    {"username", _httpRequestProcessor.RequestMessage.Username.ToLower()},
+                    {"device_id", _deviceInfo.DeviceId}
+                };
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK) 
+                    return Result.UnExpectedResponse<InstaTwoFactorTrustedNotification>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaTwoFactorTrustedNotification>(json);
+
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaTwoFactorTrustedNotification), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                LogException(exception);
+                return Result.Fail<InstaTwoFactorTrustedNotification>(exception);
+            }
+        }
         /// <summary>
         ///     Logout from instagram asynchronously
         /// </summary>
@@ -1436,11 +1486,6 @@ namespace InstagramApiSharp.API
             ValidateLoggedIn();
             try
             {
-                //phone_id=3dc84281-dd5a-45a3-a0a8-bc32a2dd9038&
-                //_csrftoken=DddfrffN2m4DfUEmytTgfY&
-                //guid=6324ecb2-e663-4dc8-a3a1-289c699cc876&
-                //device_id=android-21c311d494a974fe&
-                //_uuid=6324ecb2-e663-4dc8-a3a1-289c699cc876
                 var instaUri = UriCreator.GetLogoutUri();
                 var data = new Dictionary<string, string>
                 {
@@ -1455,7 +1500,7 @@ namespace InstagramApiSharp.API
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK) return Result.UnExpectedResponse<bool>(response, json);
                 var logoutInfo = JsonConvert.DeserializeObject<BaseStatusResponse>(json);
-                if (logoutInfo.Status == "ok")
+                if (logoutInfo.IsOk())
                     IsUserAuthenticated = false;
                 return Result.Success(!IsUserAuthenticated);
             }
@@ -1679,7 +1724,7 @@ namespace InstagramApiSharp.API
             try
             {
                 if (_twoFactorInfo == null)
-                    return Result.Fail<TwoFactorLoginSMS>("Login first");
+                    return Result.Fail<TwoFactorLoginSMS>("Try to Login first");
                 //{  // v191.1.0.41.124
                 //  "two_factor_identifier": "bluh bluh bluh",
                 //  "username": "bluh bluh",
@@ -1688,9 +1733,9 @@ namespace InstagramApiSharp.API
                 //}
                 var data = new Dictionary<string, string>
                 {
-                    //{"_csrftoken", _user.CsrfToken},// remove?!
+                    {"_csrftoken", _user.CsrfToken},// remove?!
                     {"two_factor_identifier", _twoFactorInfo.TwoFactorIdentifier},
-                    {"username", _httpRequestProcessor.RequestMessage.Username.ToLower()},
+                    {"username", (_httpRequestProcessor.RequestMessage.Username ?? _user.UserName).ToLower()},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId}
                 };
@@ -2100,10 +2145,13 @@ namespace InstagramApiSharp.API
                 return Result.Fail(ex, InstaLoginResult.Exception);
             }
         }
-#endregion Challenge part
+        #endregion Challenge part
 
-        internal async Task GetToken() =>
+        internal async Task GetToken()
+        {
+            if (DontGenerateToken) return;
             await LauncherSyncPrivate().ConfigureAwait(false);
+        }
 
         #endregion Authentication and challenge functions
 
@@ -2423,9 +2471,11 @@ namespace InstagramApiSharp.API
                 return Result.Fail(ex, false);
             }
         }
-#endregion ORIGINAL FACEBOOK LOGIN
+        #endregion ORIGINAL FACEBOOK LOGIN
 
-#region Other public functions
+        #region Other public functions
+
+        public IInstaLogger GetLogger() => _logger;
         /// <summary>
         ///     Get current API version info (signature key, api version info, app id)
         /// </summary>
@@ -2567,7 +2617,7 @@ namespace InstagramApiSharp.API
             _configureMediaDelay = configureMediaDelay;
             _httpRequestProcessor.ConfigureMediaDelay = _configureMediaDelay;
         }
-        internal IRequestDelay GetRequestDelay() => _delay;
+        public IRequestDelay GetRequestDelay() => _delay;
 
         /// <summary>
         ///     Set instagram api version (for user agent version)
@@ -2874,12 +2924,12 @@ namespace InstagramApiSharp.API
                         if (suggestions.Threads?.Count > 0)
                         {
                             foreach (var thread in suggestions.Threads)
-                                suggestions.Items.Add(thread.Users.FirstOrDefault());
+                                suggestions.Items.Add(thread);
                         }
                         if (suggestions.Users?.Count > 0)
                         {
                             foreach (var user in suggestions.Users)
-                                suggestions.Items.Add(user);
+                                suggestions.Items.Add(user.CreateFakeThread());
                         }
 
                         //if (suggestions.Items?.Count > 0)
@@ -2902,6 +2952,10 @@ namespace InstagramApiSharp.API
                 return Result.Fail(exception, suggestions);
             }
         }
+
+        public void SetEncryptedPasswordEncryptor(IEncryptedPasswordEncryptor
+            encryptedPasswordEncryptor) => _encryptedPasswordEncryptor = encryptedPasswordEncryptor;
+
         #endregion Other public functions
 
         #region Giphy
@@ -3269,6 +3323,8 @@ namespace InstagramApiSharp.API
             {
                 //await GetNotificationBadge();
                 await GetContactPointPrefill();
+                await RegistrationService.GetZrTokenResultAsync();
+                await RegistrationService.GetZrTokenResultAsync();
                 //await GetReadMsisdnHeader();
                 await LauncherSyncPrivate();
                 await QeSync();

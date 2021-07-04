@@ -22,7 +22,7 @@ using System.Text;
 using System.Security.Cryptography;
 using InstagramApiSharp.Classes;
 using System.Net.Http;
-#if NETSTANDARD
+#if NETSTANDARD || WINDOWS_UWP
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Engines;
@@ -30,7 +30,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 #endif
 namespace InstagramApiSharp
 {
-    internal static class ExtensionHelper
+    public static class ExtensionHelper
     {
         public static void SetCsrfTokenIfAvailable(this UserSessionData data, HttpResponseMessage response,
             IHttpRequestProcessor _httpRequestProcessor, bool dontCheck = false)
@@ -174,7 +174,7 @@ namespace InstagramApiSharp
                 ix += (int)ch;
             return "2" + ix;
         }
-#if NETSTANDARD
+#if NETSTANDARD || WINDOWS_UWP
         static private readonly SecureRandom secureRandom = new SecureRandom();
 
         public static string GetEncryptedPassword(this IInstaApi api, string password, long? providedTime = null) 
@@ -325,6 +325,31 @@ namespace InstagramApiSharp
                 r += Rnd.Next(0, 9).ToString();
             return r;
         }
+        public static InstaDirectInboxThread CreateFakeThread(this InstaUserShort user)
+        {
+            var fakeThread = new InstaDirectInboxThread
+            {
+                ThreadId = "FAKETHREAD" + user.Pk,
+                Title = user.UserName.ToLower()
+            };
+            var userFriendship = new InstaUserShortFriendship
+            {
+                FriendshipStatus = new InstaFriendshipShortStatus(),
+                FullName = user.FullName,
+                HasAnonymousProfilePicture = user.HasAnonymousProfilePicture,
+                IsBestie = user.IsBestie,
+                UserName = user.UserName,
+                IsPrivate = user.IsPrivate,
+                IsVerified = user.IsVerified,
+                ProfilePicUrl = user.ProfilePicUrl,
+                Pk = user.Pk,
+                ProfilePicture = user.ProfilePicture,
+                ProfilePictureId = user.ProfilePictureId
+            };
+            fakeThread.Users.Add(userFriendship);
+            return fakeThread;
+        }
+
         public static string GetJson(this InstaLocationShort location)
         {
             if (location == null)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using InstagramApiSharp.Helpers;
 using Newtonsoft.Json;
 
 namespace InstagramApiSharp.API.Push 
@@ -60,6 +61,7 @@ namespace InstagramApiSharp.API.Push
             }
         }
         public DateTime FbnsTokenLastUpdated { get; private set; }
+        public long FbnsTokenUpdatedAt { get; set; }
 
 
         public void UpdateAuth(string json)
@@ -90,6 +92,20 @@ namespace InstagramApiSharp.API.Push
                 DeviceSecret = ds;
 
             // TODO: sr, rc ?
+        }
+        public void Clear()
+        {
+            ClientId = Guid.NewGuid().ToString().Substring(0, 20);
+#pragma warning disable IDE0034 // Simplify 'default' expression
+            UserAgent = default(string);
+            ClientMqttSessionId = default(long);
+            UserId = default(long);
+            Password = default(string);
+            DeviceId = default(string);
+            DeviceSecret = default(string);
+            _fbnsToken = default(string);
+#pragma warning restore IDE0034 // Simplify 'default' expression
+            FbnsTokenUpdatedAt = DateTime.UtcNow.ToUnixTime();
         }
     }
 }

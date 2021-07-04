@@ -33,5 +33,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public string Status { get; set; }
         [JsonProperty("dash_manifest")]
         public string DashManifest { get; set; }
+        [JsonProperty("ranked_position")]
+        public int? RankedPosition { get; set; }
     }
 }

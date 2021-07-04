@@ -23,7 +23,8 @@ namespace InstagramApiSharp.Converters
                 ExternalUrl = SourceObject.ExternalURL,
                 ShowConversionEditEntry = SourceObject.ShowConversationEditEntry,
                 Gender = (InstaGenderType)SourceObject.Gender,
-                PhoneNumber = SourceObject.PhoneNumber
+                PhoneNumber = SourceObject.PhoneNumber,
+                CustomGender = SourceObject.CustomGender
             };
 
             if (SourceObject.HDProfilePicVersions != null && SourceObject.HDProfilePicVersions?.Length > 0)

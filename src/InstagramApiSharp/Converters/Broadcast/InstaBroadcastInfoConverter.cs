@@ -28,6 +28,8 @@ namespace InstagramApiSharp.Converters
             {
                 BroadcastMessage = SourceObject.BroadcastMessage,
                 CoverFrameUrl = SourceObject.CoverFrameUrl,
+                DashPlaybackUrl = SourceObject.DashPlaybackUrl,
+                DashAbrPlaybackUrl = SourceObject.DashAbrPlaybackUrl,
                 DashManifest = SourceObject.DashManifest,
                 EncodingTag = SourceObject.EncodingTag,
                 Id = SourceObject.Id,

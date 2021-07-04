@@ -118,6 +118,8 @@ namespace InstagramApiSharp.Classes.Models
 
         public bool IsFavoriteForStories { get; set; }
 
+        public long LatestReelMedia { get; set; }
+
         public List<InstaUserContext> ProfileContextIds { get; set; } = new List<InstaUserContext>();
 
         public InstaStoryFriendshipStatus FriendshipStatus { get; set; }

@@ -31,7 +31,5 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("mutual_followers_count")] public string MulualFollowersCount { get; set; }
 
         [JsonProperty("unseen_count")] public int UnseenCount { get; set; }
-
-        [JsonProperty("latest_reel_media")] public long? LatestReelMedia { get; set; }
     }
 }

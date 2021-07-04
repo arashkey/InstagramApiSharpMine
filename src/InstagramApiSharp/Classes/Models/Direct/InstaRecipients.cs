@@ -7,6 +7,7 @@ namespace InstagramApiSharp.Classes.Models
         public List<InstaRankedRecipientThread> Threads { get; set; } = new List<InstaRankedRecipientThread>();
 
         public List<InstaUserShort> Users { get; set; } = new List<InstaUserShort>();
+        public List<InstaDirectInboxThread> Items { get; set; } = new List<InstaDirectInboxThread>();
 
         public long ExpiresIn { get; set; }
 

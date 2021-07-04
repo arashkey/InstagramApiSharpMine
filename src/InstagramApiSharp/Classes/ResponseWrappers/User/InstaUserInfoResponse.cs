@@ -179,5 +179,6 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("page_id")] public long? PageId { get; set; }
         [JsonProperty("chaining_suggestions")] public List<InstaUserChainingResponse> ChainingSuggestions { get; set; }
+        [JsonProperty("latest_reel_media")] public long? LatestReelMedia { get; set; }
     }
 }

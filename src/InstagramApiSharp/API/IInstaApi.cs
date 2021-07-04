@@ -28,6 +28,7 @@ using InstagramApiSharp.API.Services;
 using InstagramApiSharp.Helpers;
 
 using InstagramApiSharp.API.Push;
+using InstagramApiSharp.Logger;
 #if WITH_NOTIFICATION
 using InstagramApiSharp.API.RealTime;
 #endif
@@ -98,6 +99,7 @@ namespace InstagramApiSharp.API
         ///     Get current api version of Instagram that <see cref="InstagramApiSharp"/> is using it
         /// </summary>
         InstaApiVersionType InstaApiVersionType { get; }
+        bool DontGenerateToken { get; set; }
 
         /// <summary>
         ///     Gets or sets two factor login info
@@ -227,6 +229,12 @@ namespace InstagramApiSharp.API
         ///     Registration Service
         /// </summary>
         IRegistrationService RegistrationService { get; }
+
+
+#if WINDOWS_UWP
+        IPushClient PushClient { get; set; }
+#endif
+
 #endregion
 
 #region State data
@@ -287,10 +295,15 @@ namespace InstagramApiSharp.API
         Task LoadStateDataFromStringAsync(string json);
 
 
-#endregion State data
+        #endregion State data
 
-#region Other public functions
+        #region Other public functions
 
+        /// <summary>
+        ///     Get logger
+        /// </summary>
+        /// <returns></returns>
+        IInstaLogger GetLogger();
         /// <summary>
         ///     Get current API version info (signature key, api version info, app id)
         /// </summary>
@@ -368,6 +381,7 @@ namespace InstagramApiSharp.API
         /// </summary>
         /// <param name="configureMediaDelay">Timespan delay for configuring Media</param>
         void SetConfigureMediaDelay(IConfigureMediaDelay configureMediaDelay);
+        IRequestDelay GetRequestDelay();
         /// <summary>
         ///     Set instagram api version (for user agent version)
         /// </summary>
@@ -437,6 +451,8 @@ namespace InstagramApiSharp.API
         /// <param name="uri">Desire uri (must include https://i.instagram.com/api/v...) </param>
         /// <param name="data">Data to post</param>
         Task<IResult<string>> SendPostRequestAsync(System.Uri uri, Dictionary<string, string> data);
+
+        void SetEncryptedPasswordEncryptor(IEncryptedPasswordEncryptor encryptedPasswordEncryptor);
 #endregion Other public functions
 
 #region Authentication, challenge functions
@@ -662,6 +678,15 @@ namespace InstagramApiSharp.API
         /// </summary>
         Task<IResult<TwoFactorLoginSMS>> SendTwoFactorLoginSMSAsync();
         /// <summary>
+        ///     Check two factor trusted notification status
+        /// </summary>
+        /// <remarks>
+        ///         This will checks for response from another logged in device.
+        ///         <para>Review status can be 0, 1 or 2</para>
+        ///         <para>At the momemnt I don't know, but I'll check it for understand these values</para>
+        /// </remarks>
+        Task<IResult<InstaTwoFactorTrustedNotification>> Check2FATrustedNotificationAsync();
+        /// <summary>
         ///     Logout from instagram asynchronously
         /// </summary>
         /// <returns>True if logged out without errors</returns>
@@ -676,9 +701,9 @@ namespace InstagramApiSharp.API
         Task<IResult<bool>> LauncherSyncAsync();
         Task<IResult<InstaBanyanSuggestions>> GetBanyanSuggestionsAsync();
 
-        #endregion Authentication, challenge functions
+#endregion Authentication, challenge functions
 
-        #region Giphy
+#region Giphy
 
         /// <summary>
         ///     Get trending giphy

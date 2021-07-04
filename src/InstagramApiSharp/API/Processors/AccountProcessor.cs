@@ -764,9 +764,27 @@ namespace InstagramApiSharp.API.Processors
                     await _instaApi.SendRequestsBeforeLoginAsync();
                 var time = DateTime.UtcNow.ToUnixTime();
 
-                var enc1 = _instaApi.GetEncryptedPassword(oldPassword, time);
-                var enc2 = _instaApi.GetEncryptedPassword(newPassword, time);
-                var enc3 = _instaApi.GetEncryptedPassword(newPassword, time);
+                string GetPassword(string pass) => _instaApi.GetEncryptedPassword(pass, time);
+
+                string enc1;
+                string enc2; 
+                string enc3;
+                if (_instaApi._encryptedPasswordEncryptor != null)
+                {
+                    var result = await _instaApi
+                        ._encryptedPasswordEncryptor
+                        .GetEncryptedPassword(_instaApi, oldPassword, newPassword, time).ConfigureAwait(false);
+
+                    enc1 = result.Item1;
+                    enc2 = result.Item2;
+                    enc3 = result.Item3;
+                }
+                else
+                {
+                    enc1 = GetPassword(oldPassword);
+                    enc2 = GetPassword(newPassword);
+                    enc3 = GetPassword(newPassword);
+                }
                 if (_httpHelper.IsNewerApis)
                 {
                     data.Add("enc_old_password", enc1);
@@ -974,9 +992,7 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
-                if (obj.Status.ToLower() == "ok")
-                    return Result.Success(true);
-                return Result.Success(false);
+                return Result.Success(obj.IsSucceed);
             }
             catch (HttpRequestException httpException)
             {
@@ -1005,7 +1021,8 @@ namespace InstagramApiSharp.API.Processors
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     { "_csrftoken", _user.CsrfToken}
                 };
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);                var response = await _httpRequestProcessor.SendAsync(request);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaUserEdit>(response, json);
@@ -1246,10 +1263,8 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                if (obj.Status.ToLower() == "ok")
-                    return Result.Success(true);
-                return Result.Success(false);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return Result.Success(obj.IsSucceed);
             }
             catch (HttpRequestException httpException)
             {
@@ -1283,10 +1298,8 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                if (obj.Status.ToLower() == "ok")
-                    return Result.Success(true);
-                return Result.Success(false);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return Result.Success(obj.IsSucceed);
             }
             catch (HttpRequestException httpException)
             {
@@ -1323,10 +1336,8 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<bool>(response, json);
 
                 var obj = JsonConvert.DeserializeObject<InstaAccountArchiveStory>(json);
-                if (obj.ReelAutoArchive.ToLower() == "on")
-                    return Result.Success(true);
-                return Result.Success(false);
-
+                
+                return Result.Success(obj.ReelAutoArchive.ToLower() == "on");
             }
             catch (HttpRequestException httpException)
             {
@@ -1362,9 +1373,7 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaAccountArchiveStory>(json);
-                if(obj.ReelAutoArchive.ToLower() == "off")
-                    return Result.Success(true);
-                return Result.Success(false);
+                return Result.Success(obj.ReelAutoArchive.ToLower() == "off");
             }
             catch (HttpRequestException httpException)
             {
@@ -1403,9 +1412,8 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaAccountArchiveStory>(json);
-                if (obj.Status.ToLower() == "off")
-                    return Result.Success(true);
-                return Result.Success(false);
+
+                return Result.Success(obj.Status.ToLower() == "off");
             }
             catch (HttpRequestException httpException)
             {
@@ -1536,6 +1544,91 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaAccountSecuritySettings>(exception);
             }
         }
+
+        /// <summary>
+        ///     Check new login request notification
+        /// </summary>
+        /// <param name="twoFactorIdentifier">TwoFactorIndentifier from push notifications</param>
+        /// <param name="requestorDeviceId">Resquestor device id from push notifications</param>
+        public async Task<IResult<InstaTwoFactorTrustedNotification>> CheckNewLoginRequestNotificationAsync(string twoFactorIdentifier,
+            string requestorDeviceId)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.Get2FATrustedNotificationCheckUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"two_factor_identifier", twoFactorIdentifier},
+                    {"username", _httpRequestProcessor.RequestMessage.Username.ToLower()},
+                    {"device_id", requestorDeviceId},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()}
+                };
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaTwoFactorTrustedNotification>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaTwoFactorTrustedNotification>(json);
+
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaTwoFactorTrustedNotification), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaTwoFactorTrustedNotification>(exception);
+            }
+        }
+
+        /// <summary>
+        ///     Deny new login reques from push/realtime notification
+        /// </summary>
+        /// <param name="twoFactorIdentifier">TwoFactorIndentifier from push notifications</param>
+        /// <param name="requestorDeviceId">Resquestor device id from push notifications</param>
+        public async Task<IResult<InstaTwoFactorTrustedNotification>> DenyNewLoginRequestAsync(
+            string twoFactorIdentifier,
+            string requestorDeviceId) =>
+            await Update2FATrustedNotification(Insta2FANotificationReviewStatus.Denied, twoFactorIdentifier,
+                requestorDeviceId).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Approve new login reques from push/realtime notification
+        /// </summary>
+        /// <param name="twoFactorIdentifier">TwoFactorIndentifier from push notifications</param>
+        /// <param name="requestorDeviceId">Resquestor device id from push notifications</param>
+        public async Task<IResult<InstaTwoFactorTrustedNotification>> ApproveNewLoginRequestAsync(
+            string twoFactorIdentifier,
+            string requestorDeviceId) =>
+            await Update2FATrustedNotification(Insta2FANotificationReviewStatus.Approved, twoFactorIdentifier, 
+                requestorDeviceId).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Disable login request notifications
+        /// </summary>
+        /// <remarks>
+        ///     Instagram description: We'll send a notification to approve new devices that try to login
+        /// </remarks>
+        /// <returns>False, if succeeded</returns>
+        public async Task<IResult<bool>> DisableLoginRequestNotificationAsync() =>
+            await EnableDisableLoginRequestNotification(false).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Enable login request notifications
+        /// </summary>
+        /// <remarks>
+        ///     Instagram description: We'll send a notification to approve new devices that try to login
+        /// </remarks>
+        /// <returns>True, if succeeded</returns>
+        public async Task<IResult<bool>> EnableLoginRequestNotificationAsync() =>
+            await EnableDisableLoginRequestNotification(true).ConfigureAwait(false);
+
         /// <summary>
         ///     Disable two factor authentication.
         /// </summary>        
@@ -1556,10 +1649,8 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                if (obj.Status.ToLower() == "ok")
-                    return Result.Success(true);
-                return Result.Success(false);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return Result.Success(obj.IsSucceed);
             }
             catch (HttpRequestException httpException)
             {
@@ -1823,7 +1914,7 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<TwoFactorRegenBackupCodes>(response, json);
 
                 var obj = JsonConvert.DeserializeObject<TwoFactorRegenBackupCodes>(json);
-                return obj.Status.ToLower() == "ok" ? Result.Success(obj) : Result.UnExpectedResponse<TwoFactorRegenBackupCodes>(response, json);
+                return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<TwoFactorRegenBackupCodes>(response, json);
             }
             catch (HttpRequestException httpException)
             {
@@ -2042,8 +2133,8 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
 
-                var obj = JsonConvert.DeserializeObject<InstaDefault>(json);
-                return obj.Status.ToLower() == "ok" ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
             }
             catch (HttpRequestException httpException)
             {
@@ -2056,9 +2147,93 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<bool>(exception);
             }
         }
-#endregion Other functions
+        #endregion Other functions
 
-#region NOT COMPLETE FUNCTIONS
+        #region Private functions
+        private async Task<IResult<bool>> EnableDisableLoginRequestNotification(bool enable)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetUpdate2FATrustedNotificationSettingsUri();
+                var data = new JObject
+                {
+                    //{"_csrftoken", _user.CsrfToken},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"enable", enable.ToString().ToLower()}
+                };
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<JObject>(json);
+                var status = obj["status"];
+                if (status.Value<string>() == "ok")
+                {
+                    var enabled = obj["enabled"].Value<bool>();
+                    //{"enabled":true,"status":"ok"} // false
+                    return Result.Success(enable == enabled);
+                }
+                else 
+                    return Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
+        async Task<IResult<InstaTwoFactorTrustedNotification>> Update2FATrustedNotification(
+            Insta2FANotificationReviewStatus reviewStatus,
+            string twoFactorIdentifier,
+            string requestorDeviceId)
+        {
+            try
+            {
+                var instaUri = UriCreator.Get2FATrustedNotificationUpdateUri();
+                // two_factor_identifier==&
+                //_uuid=----&
+                //requestor_device_id=android-&
+                //review_status=1
+                var data = new Dictionary<string, string>
+                {
+                    {"two_factor_identifier", twoFactorIdentifier},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"requestor_device_id", requestorDeviceId},
+                    {"review_status", ((int)reviewStatus).ToString()},
+                };
+
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaTwoFactorTrustedNotification>(response, json);
+
+                var obj = JsonConvert.DeserializeObject<InstaTwoFactorTrustedNotification>(json);
+
+                return Result.Success(obj);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaTwoFactorTrustedNotification), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaTwoFactorTrustedNotification>(exception);
+            }
+        }
+        #endregion Private functions
+
+        #region NOT COMPLETE FUNCTIONS
 
 
         //NOT COMPLETE

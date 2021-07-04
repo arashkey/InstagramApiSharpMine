@@ -21,7 +21,9 @@ namespace InstagramApiSharp.Converters
                 ProfilePictureId = SourceObject.ProfilePictureId,
                 IsVerified = SourceObject.IsVerified,
                 ProfilePicUrl = SourceObject.ProfilePicture,
-                HasAnonymousProfilePicture = SourceObject.HasAnonymousProfilePicture ?? false
+                HasAnonymousProfilePicture = SourceObject.HasAnonymousProfilePicture ?? false,
+                IsBestie = SourceObject.IsBestie ?? false,
+                LatestReelMedia = SourceObject.LatestReelMedia ?? 0
             };
             return user;
         }

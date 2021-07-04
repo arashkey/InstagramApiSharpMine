@@ -1,13 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿/*
+ * Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https://t.me/ramtinak ]
+ * 
+ * Github source: https://github.com/ramtinak/InstagramApiSharpMine
+ * 
+ * IRANIAN DEVELOPERS
+ */
+
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaAllCatchedUp
     {
-        [JsonProperty("id")]
         public long Id { get; set; }
-        [JsonProperty("title")]
         public string Title { get; set; }
-        [JsonProperty("subtitle")]
         public string Subtitle { get; set; }
+        public string Style { get; set; }
+        public bool Pause { get; set; }
+        public InstaFeedGroupSet GroupSet { get; set; }
     }
 }

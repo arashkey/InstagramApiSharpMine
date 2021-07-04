@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace InstagramApiSharp.Helpers
 {
-    internal class UriCreator
+    public class UriCreator
     {
         private static readonly Uri BaseInstagramUri = new Uri(InstaApiConstants.INSTAGRAM_URL);
         private static readonly Uri BaseInstagramBUri = new Uri(InstaApiConstants.INSTAGRAM_B_URL);
@@ -517,14 +517,22 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetDirectInboxThreadUri(string threadId, string NextId)
+        public static Uri GetDirectInboxThreadUri(string threadId, string NextId, int seqId = 0, string itemIds = null)
         {
             if (
                 !Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.GET_DIRECT_THREAD, threadId),
                     out var instaUri)) throw new Exception("Cant create URI for get inbox thread by id");
+
+            //return !string.IsNullOrEmpty(NextId)
+            //    ? new UriBuilder(instaUri) { Query = $"use_unified_inbox=true&cursor={NextId}&direction=older" }.Uri
+            //    : new UriBuilder(instaUri) { Query = $"use_unified_inbox=true" }.Uri;
+            var query = "";
+            if (!string.IsNullOrEmpty(itemIds))
+                query = "&item_ids=" + itemIds;
+
             return !string.IsNullOrEmpty(NextId)
-                ? new UriBuilder(instaUri) { Query = $"use_unified_inbox=true&cursor={NextId}&direction=older" }.Uri
-                : new UriBuilder(instaUri) { Query = $"use_unified_inbox=true" }.Uri;
+                ? new UriBuilder(instaUri) { Query = $"visual_message_return_type=unseene&cursor={NextId}&seq_id={seqId}&direction=older&limit=20" }.Uri
+                : new UriBuilder(instaUri) { Query = $"visual_message_return_type=unseen&seq_id={seqId}&limit=20" + query }.Uri;
         }
 
         public static Uri GetDirectInboxUri(string nextId = "", int seqId = 0)
@@ -762,7 +770,7 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetGraphStatisticsUri(string locale, InstaInsightSurfaceType surfaceType = InstaInsightSurfaceType.Account)
+        public static Uri GetGraphStatisticsUri(string locale, InstaInsightSurfaceType surfaceType = InstaInsightSurfaceType.Post)
         {
             if (
                 !Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.GRAPH_QL_STATISTICS, locale, surfaceType.ToString().ToLower()),
@@ -2165,10 +2173,10 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetStoryPollVotersUri(string storyMediaId, string pollId, string maxId)
+        public static Uri GetStoryPollVotersUri(string storyMediaId, string pollId, string maxId, uint abc)
         {
             if (!Uri.TryCreate(BaseInstagramUri, 
-                string.Format(InstaApiConstants.MEDIA_STORY_POLL_VOTERS, storyMediaId, pollId), out var instaUri))
+                string.Format(InstaApiConstants.MEDIA_STORY_POLL_VOTERS, storyMediaId, pollId, abc), out var instaUri))
                 throw new Exception("Cant create URI for get story poll voters list");
             return !string.IsNullOrEmpty(maxId)
                 ? new UriBuilder(instaUri) { Query = $"max_id={maxId}" }.Uri
@@ -3032,6 +3040,45 @@ namespace InstagramApiSharp.Helpers
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DIRECT_BROADCAST_CLIPS_SHARE, out var instaUri))
                 throw new Exception("Cant create URI for direct broadcast reel clips share");
             return instaUri;
+        }
+        public static Uri Get2FATrustedNotificationCheckUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.TWO_FACTOR_CHECK_TRUSTED_NOTIFICATION_STATUS, out var instaUri))
+                throw new Exception("Cant create URI for check two factor notifications status");
+            return instaUri;
+        }
+        public static Uri GetUpdate2FATrustedNotificationSettingsUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.TWO_FACTOR_UPDATE_TRUSTED_NOTIFICATION_SETTING, out var instaUri))
+                throw new Exception("Cant create URI for update two factor notifications setting");
+            return instaUri;
+        }
+        public static Uri Get2FATrustedNotificationUpdateUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.TWO_FACTOR_UPDATE_TRUSTED_NOTIFICATION_STATUS, out var instaUri))
+                throw new Exception("Cant create URI for check two factor notifications status");
+            return instaUri;
+        }
+        public static Uri GetStorySliderVotesUri(string storyId, string sliderId, string maxId = null)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.STORY_SLIDER_VOTERS, storyId, sliderId), out var instaUri))
+                throw new Exception("Cant create URI for story slider vote");
+            return instaUri
+                .AddQueryParameter("max_id", maxId);
+        }
+        public static Uri GetStoryQuizParticipantsUri(string storyId, string quizId, string maxId = null)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.STORY_QUIZ_PARTICIPANTS, storyId, quizId), out var instaUri))
+                throw new Exception("Cant create URI for story quiz praticipants");
+            return instaUri
+                .AddQueryParameter("max_id", maxId);
+        }
+        public static Uri GetStoryQuestionResponsesUri(string storyId, string questionId, string maxId = null)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.STORY_QUESTION_RESPONSES, storyId, questionId), out var instaUri))
+                throw new Exception("Cant create URI for story question responses");
+            return instaUri
+                .AddQueryParameter("max_id", maxId);
         }
     }
 }

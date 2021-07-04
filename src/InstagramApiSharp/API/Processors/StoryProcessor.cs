@@ -46,6 +46,161 @@ namespace InstagramApiSharp.API.Processors
             _httpHelper = httpHelper;
         }
 
+        public async Task<IResult<InstaStorySliderVoterInfoItem>> GetStorySliderVotersAsync(string storyMediaId, string sliderId, PaginationParameters paginationParameters)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+
+                InstaStorySliderVoterInfoItem Convert(InstaStorySliderVoterInfoItemResponse sInfo)
+                {
+                    return ConvertersFabric.Instance.GetStorySliderVoterInfoItemConverter(sInfo).Convert();
+                }
+
+                var sliderResult = await GetStorySliderVoters(storyMediaId, sliderId, paginationParameters?.NextMaxId);
+
+                if (!sliderResult.Succeeded)
+                    return Result.Fail(sliderResult.Info, default(InstaStorySliderVoterInfoItem));
+
+                var sliderResponse = sliderResult.Value;
+                paginationParameters.NextMaxId = sliderResponse.MaxId;
+                var moreAvailable = false;
+                moreAvailable = sliderResponse.MoreAvailable;
+                while (moreAvailable && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
+                && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                {
+                    paginationParameters.PagesLoaded++;
+                    var nextSlider = await GetStorySliderVoters(storyMediaId, sliderId, paginationParameters.NextMaxId);
+                    if (!nextSlider.Succeeded)
+                        return Result.Fail(nextSlider.Info, Convert(nextSlider.Value));
+                    sliderResponse.MaxId = paginationParameters.NextMaxId = nextSlider.Value.MaxId;
+                    sliderResponse.Voters.AddRange(nextSlider.Value.Voters);
+                    sliderResponse.MoreAvailable = nextSlider.Value.MoreAvailable;
+                    moreAvailable = nextSlider.Value.MoreAvailable;
+                }
+
+                return Result.Success(Convert(sliderResponse));
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaStorySliderVoterInfoItem), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaStorySliderVoterInfoItem>(exception);
+            }
+        }
+
+        public async Task<IResult<InstaStoryQuizParticipant>> GetStoryQuizParticipantsAsync(string storyMediaId, string quizId, PaginationParameters paginationParameters)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+
+                InstaStoryQuizParticipant Convert(InstaStoryQuizParticipantResponse qInfo)
+                {
+                    return ConvertersFabric.Instance.GetStoryQuizParticipantConverter(qInfo).Convert();
+                }
+
+                var quizResult = await GetStoryQuizParticipants(storyMediaId, quizId, paginationParameters?.NextMaxId);
+
+                if (!quizResult.Succeeded)
+                    return Result.Fail(quizResult.Info, default(InstaStoryQuizParticipant));
+
+                var quizResponse = quizResult.Value;
+                paginationParameters.NextMaxId = quizResponse.MaxId;
+                var moreAvailable = false;
+                if (quizResponse.MoreAvailable != null)
+                    moreAvailable = quizResponse.MoreAvailable.Value;
+                while (moreAvailable && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
+                && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                {
+                    paginationParameters.PagesLoaded++;
+                    var nextVoters = await GetStoryQuizParticipants(storyMediaId, quizId, paginationParameters.NextMaxId);
+                    if (!nextVoters.Succeeded)
+                        return Result.Fail(nextVoters.Info, Convert(nextVoters.Value));
+                    quizResponse.MaxId = paginationParameters.NextMaxId = nextVoters.Value.MaxId;
+                    quizResponse.Participants.AddRange(nextVoters.Value.Participants);
+                    quizResponse.QuizId = nextVoters.Value.QuizId;
+                    quizResponse.MoreAvailable = nextVoters.Value.MoreAvailable;
+                    if (nextVoters.Value.MoreAvailable.HasValue)
+                        moreAvailable = nextVoters.Value.MoreAvailable.Value;
+                    else moreAvailable = false;
+                }
+
+                return Result.Success(Convert(quizResponse));
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaStoryQuizParticipant), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaStoryQuizParticipant>(exception);
+            }
+        }
+
+        public async Task<IResult<InstaStoryQuestionInfo>> GetStoryQuestionRespondersAsync(string storyMediaId, string questionId, PaginationParameters paginationParameters)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                if (paginationParameters == null)
+                    paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+
+                InstaStoryQuestionInfo Convert(InstaStoryQuestionInfoResponse qInfo)
+                {
+                    return ConvertersFabric.Instance.GetStoryQuestionInfoConverter(qInfo).Convert();
+                }
+
+                var respondersResult = await GetStoryQuestionResponders(storyMediaId, questionId, paginationParameters?.NextMaxId);
+
+                if (!respondersResult.Succeeded)
+                    return Result.Fail(respondersResult.Info, default(InstaStoryQuestionInfo));
+
+                var respondersResponse = respondersResult.Value;
+                paginationParameters.NextMaxId = respondersResponse.MaxId;
+                var moreAvailable = false;
+                if (respondersResponse.MoreAvailable != null)
+                    moreAvailable = respondersResponse.MoreAvailable.Value;
+                while (moreAvailable && !string.IsNullOrEmpty(paginationParameters.NextMaxId)
+                && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
+                {
+                    paginationParameters.PagesLoaded++;
+                    var nextVoters = await GetStoryQuestionResponders(storyMediaId, questionId, paginationParameters.NextMaxId);
+                    if (!nextVoters.Succeeded)
+                        return Result.Fail(nextVoters.Info, Convert(nextVoters.Value));
+                    respondersResponse.MaxId = paginationParameters.NextMaxId = nextVoters.Value.MaxId;
+                    respondersResponse.Responders.AddRange(nextVoters.Value.Responders);
+                    respondersResponse.LatestQuestionResponseTime = nextVoters.Value.LatestQuestionResponseTime;
+                    respondersResponse.MoreAvailable = nextVoters.Value.MoreAvailable;
+                    if (nextVoters.Value.MoreAvailable.HasValue)
+                        moreAvailable = nextVoters.Value.MoreAvailable.Value;
+                    else moreAvailable = false;
+                }
+
+                return Result.Success(Convert(respondersResponse));
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaStoryQuestionInfo), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaStoryQuestionInfo>(exception);
+            }
+        }
+
         /// <summary>
         ///     Get user story and lives
         /// </summary>
@@ -891,7 +1046,8 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="storyMediaId">Story media id</param>
         /// <param name="pollId">Story poll id</param>
         /// <param name="paginationParameters">Pagination parameters</param>
-        public async Task<IResult<InstaStoryPollVotersList>> GetStoryPollVotersAsync(string storyMediaId, string pollId, PaginationParameters paginationParameters)
+        public async Task<IResult<InstaStoryPollVotersList>> GetStoryPollVotersAsync(string storyMediaId, 
+            string pollId, PaginationParameters paginationParameters, uint abc)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
@@ -904,7 +1060,7 @@ namespace InstagramApiSharp.API.Processors
                     return ConvertersFabric.Instance.GetStoryPollVotersListConverter(storyVotersResponse).Convert();
                 }
 
-                var votersResult = await GetStoryPollVoters(storyMediaId, pollId, paginationParameters?.NextMaxId);
+                var votersResult = await GetStoryPollVoters(storyMediaId, pollId, paginationParameters?.NextMaxId, abc);
 
                 if (!votersResult.Succeeded)
                     return Result.Fail(votersResult.Info, default(InstaStoryPollVotersList));
@@ -917,7 +1073,7 @@ namespace InstagramApiSharp.API.Processors
                     && paginationParameters.PagesLoaded < paginationParameters.MaximumPagesToLoad)
                 {
                     paginationParameters.PagesLoaded++;
-                    var nextVoters = await GetStoryPollVoters(storyMediaId, pollId, paginationParameters.NextMaxId);
+                    var nextVoters = await GetStoryPollVoters(storyMediaId, pollId, paginationParameters.NextMaxId, abc);
                     if (!nextVoters.Succeeded)
                         return Result.Fail(nextVoters.Info, Convert(nextVoters.Value));
                     votersResponse.MaxId = paginationParameters.NextMaxId = nextVoters.Value.MaxId;
@@ -2622,11 +2778,11 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        private async Task<IResult<InstaStoryPollVotersListResponse>> GetStoryPollVoters(string storyMediaId, string pollId, string maxId)
+        private async Task<IResult<InstaStoryPollVotersListResponse>> GetStoryPollVoters(string storyMediaId, string pollId, string maxId, uint abc)
         {
             try
             {
-                var directInboxUri = UriCreator.GetStoryPollVotersUri(storyMediaId, pollId, maxId);
+                var directInboxUri = UriCreator.GetStoryPollVotersUri(storyMediaId, pollId, maxId, abc);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, directInboxUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -2715,6 +2871,89 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
+
+        private async Task<IResult<InstaStorySliderVoterInfoItemResponse>> GetStorySliderVoters(string storyMediaId, string sliderId, string maxId)
+        {
+            try
+            {
+                var instaUri = UriCreator.GetStorySliderVotesUri(storyMediaId, sliderId, maxId);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaStorySliderVoterInfoItemResponse>(response, json);
+
+                var storySliderVoterInfoItemContainerResponse = JsonConvert.DeserializeObject<InstaStorySliderVoterInfoItemContainerResponse>(json);
+
+                return Result.Success(storySliderVoterInfoItemContainerResponse.VoterInfo);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaStorySliderVoterInfoItemResponse), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaStorySliderVoterInfoItemResponse>(exception);
+            }
+        }
+        private async Task<IResult<InstaStoryQuizParticipantResponse>> GetStoryQuizParticipants(string storyMediaId, string quizId, string maxId)
+        {
+            try
+            {
+                var instaUri = UriCreator.GetStoryQuizParticipantsUri(storyMediaId, quizId, maxId);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaStoryQuizParticipantResponse>(response, json);
+
+                var storyQuizParticipantContainerResponse = JsonConvert.DeserializeObject<InstaStoryQuizParticipantContainerResponse>(json);
+
+                return Result.Success(storyQuizParticipantContainerResponse.ParticipantInfo);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaStoryQuizParticipantResponse), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaStoryQuizParticipantResponse>(exception);
+            }
+        }
+
+        private async Task<IResult<InstaStoryQuestionInfoResponse>> GetStoryQuestionResponders(string storyMediaId, string questionId, string maxId)
+        {
+            try
+            {
+                var instaUri = UriCreator.GetStoryQuestionResponsesUri(storyMediaId, questionId, maxId);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaStoryQuestionInfoResponse>(response, json);
+
+                var instaStoryQuestionInfoContainerResponse = JsonConvert.DeserializeObject<InstaStoryQuestionInfoContainerResponse>(json);
+
+                return Result.Success(instaStoryQuestionInfoContainerResponse.ResponderInfo);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaStoryQuestionInfoResponse), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<InstaStoryQuestionInfoResponse>(exception);
+            }
+        }
 
         private async Task<IResult<InstaStoryFeedResponse>> GetStoryFeedWithPostMethod(PaginationParameters pagination, bool forceRefresh = false, string[] preloadedReelIds = null)
         {

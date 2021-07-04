@@ -22,5 +22,9 @@ namespace InstagramApiSharp.Classes.Models
         public InstaUserShort User { get; set; }
 
         public DateTime Time { get; set; }
+
+        public string BackgroundColor { get; set; }
+
+        public string TextColor { get; set; }
     }
 }
