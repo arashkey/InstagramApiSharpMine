@@ -2725,27 +2725,23 @@ namespace InstagramApiSharp.API.Processors
 
                 var isFreshPagination = HasMore(forceRefresh);
 
-                if (isFreshPagination)
+                if (isFreshPagination || string.IsNullOrEmpty(pagination.SessionId))
                     pagination.SessionId = Guid.NewGuid().ToString();
 
                 var storyFeedUri = UriCreator.GetStoryFeedUri();
 
                 var data = new Dictionary<string, string>
                 {
-                    {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None)},
-                    {"_csrftoken", _user.CsrfToken},
+                    {"reason", forceRefresh ? "pull_to_refresh" : "cold_start"},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"tray_session_id", pagination.SessionId},
                     {"request_id", Guid.NewGuid().ToString()}
                 };
-                if (forceRefresh)
-                    data.Add("reason", "pull_to_refresh");
-                else
-                    data.Add("reason", "cold_start");
                 string nextId = "50";
                 if (isFreshPagination || forceRefresh)
                 {
                     nextId = "50";
+                    data.Add(InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None));
                     data.Add(InstaApiConstants.HEADER_TIMEZONE, _instaApi.TimezoneOffset.ToString());
                     data.Add("page_size", "50");
                 }
