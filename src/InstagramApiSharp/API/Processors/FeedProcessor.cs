@@ -580,7 +580,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns><see cref="InstaTopicalExploreFeed" /></returns>
         public async Task<IResult<InstaTopicalExploreFeed>> GetTopicalExploreFeedAsync(PaginationParameters paginationParameters,
-            CancellationToken cancellationToken,string clusterId = null)
+            CancellationToken cancellationToken, string clusterId = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var topicalExploreFeed = new InstaTopicalExploreFeed();
@@ -594,7 +594,7 @@ namespace InstagramApiSharp.API.Processors
                     return ConvertersFabric.Instance.GetTopicalExploreFeedConverter(topicalExploreFeedResponse).Convert();
                 }
 
-                var feeds = await GetTopicalExploreFeed(paginationParameters, clusterId);
+                var feeds = await GetTopicalExploreFeed(paginationParameters, clusterId).ConfigureAwait(false);
                 if (!feeds.Succeeded)
                 {
                     if (feeds.Value != null)
@@ -612,7 +612,7 @@ namespace InstagramApiSharp.API.Processors
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var nextFeed = await GetTopicalExploreFeed(paginationParameters, clusterId);
+                    var nextFeed = await GetTopicalExploreFeed(paginationParameters, clusterId).ConfigureAwait(false);
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, Convert(feeds.Value));
 
@@ -763,7 +763,6 @@ namespace InstagramApiSharp.API.Processors
             bool isDarkMode = false,
             bool willSoundOn = false)
         {
-            
             try
             {
                 var userFeedUri = UriCreator.GetUserFeedUri();
@@ -897,19 +896,19 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        private string TopicalSessionId = null;
         private async Task<IResult<InstaTopicalExploreFeedResponse>> GetTopicalExploreFeed(PaginationParameters paginationParameters, string clusterId)
         {
             try
             {
-                if (string.IsNullOrEmpty(clusterId))
-                    clusterId = "explore_all:0";
+                //if (string.IsNullOrEmpty(clusterId))
+                //    clusterId = "explore_all:0";
 
-                if (string.IsNullOrEmpty(TopicalSessionId))
-                    TopicalSessionId = Guid.NewGuid().ToString();
-                var exploreUri = UriCreator.GetTopicalExploreUri(TopicalSessionId, paginationParameters?.NextMaxId, clusterId, _instaApi.TimezoneOffset);
+                if (string.IsNullOrEmpty(paginationParameters.SessionId))
+                    paginationParameters.SessionId = Guid.NewGuid().ToString();
+
+                var exploreUri = UriCreator.GetTopicalExploreUri(paginationParameters.SessionId, paginationParameters?.NextMaxId, clusterId, _instaApi.TimezoneOffset);
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, exploreUri, _deviceInfo);
-                var response = await _httpRequestProcessor.SendAsync(request, true);
+                var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK)
