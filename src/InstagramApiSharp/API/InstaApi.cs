@@ -3321,18 +3321,15 @@ namespace InstagramApiSharp.API
         {
             try
             {
-                //await GetNotificationBadge();
-                await GetContactPointPrefill();
-                await RegistrationService.GetZrTokenResultAsync();
-                await RegistrationService.GetZrTokenResultAsync();
-                //await GetReadMsisdnHeader();
-                await LauncherSyncPrivate();
-                await QeSync();
-                await Task.Delay(1000);
-                await GetPrefillCandidates();
-                await LauncherSyncPrivate();
-                await QeSync();
-                await Task.Delay(2500);
+                await Task.WhenAll(GetContactPointPrefill(),
+                      LauncherSyncPrivate(),
+                      QeSync(),
+                      GetPrefillCandidates(),
+                      LauncherSyncPrivate(true),
+                      QeSync(),
+                      GetPrefillCandidates()).ConfigureAwait(false);
+
+                await Task.Delay(4000);
                 return Result.Success(true);
             }
             catch (HttpRequestException httpException)
