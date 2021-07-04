@@ -2855,7 +2855,7 @@ namespace InstagramApiSharp.API
                     {"id", _user.LoggedInUser.Pk.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"configs", InstaApiConstants.LOGIN_EXPERIMENTS_CONFIGS},
+                    {"configs", InstaApiConstants.LOGIN_V180_OR_OLDER_EXPERIMENTS_CONFIGS},
                 };
                 var uri = UriCreator.GetLauncherSyncUri();
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
@@ -3533,25 +3533,31 @@ namespace InstagramApiSharp.API
         {
             try
             {
+                string GetExperiments() => _httpHelper.NewerThan180 ? 
+                    InstaApiConstants.LOGIN_EXPERIMENTS : InstaApiConstants.LOGIN_V180_OR_OLDER_EXPERIMENTS_CONFIGS;
+
                 var data = new JObject();
                 var csrftoken = GetCsrfTokenFromCookies();
-                if (!string.IsNullOrEmpty(csrftoken))
-                    data.Add("_csrftoken", csrftoken);
-                else if (!string.IsNullOrEmpty(_user.CsrfToken))
-                    data.Add("_csrftoken", _user.CsrfToken);
+                if (!_httpHelper.NewerThan180)
+                {
+                    if (!string.IsNullOrEmpty(csrftoken))
+                        data.Add("_csrftoken", csrftoken);
+                    else if (!string.IsNullOrEmpty(_user.CsrfToken))
+                        data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (IsUserAuthenticated && _user?.LoggedInUser != null)
                 {
                     data.Add("id", _deviceInfo.DeviceGuid.ToString());
                     data.Add("_uid", _deviceInfo.DeviceGuid.ToString());
                     data.Add("server_config_retrieval", "1");
                     //data.Add("_uuid", _deviceInfo.DeviceGuid.ToString());
-                    data.Add("experiments", InstaApiConstants./*AFTER_*/LOGIN_EXPERIMENTS_CONFIGS);
+                    data.Add("experiments", GetExperiments());
                 }
                 else
                 {
                     data.Add("id", _deviceInfo.DeviceGuid.ToString());
                     data.Add("server_config_retrieval", "1");
-                    data.Add("experiments", InstaApiConstants.LOGIN_EXPERIMENTS_CONFIGS);
+                    data.Add("experiments", GetExperiments());
                 }
 
                 var uri = UriCreator.GetQeSyncUri();

@@ -238,7 +238,9 @@ namespace InstagramApiSharp.API
             }
         };
 
-        public const string LOGIN_EXPERIMENTS_CONFIGS = "ig_android_fci_onboarding_friend_search,ig_android_device_detection_info_upload," +
+        public const string LOGIN_EXPERIMENTS = "ig_android_gmail_oauth_in_reg,ig_android_device_verification_fb_signup,ig_growth_android_profile_pic_prefill_with_fb_pic_2,ig_android_sim_info_upload";
+
+        public const string LOGIN_V180_OR_OLDER_EXPERIMENTS_CONFIGS = "ig_android_fci_onboarding_friend_search,ig_android_device_detection_info_upload," +
             "ig_android_sms_retriever_backtest_universe,ig_android_direct_add_direct_to_android_native_photo_share_sheet," +
             "ig_growth_android_profile_pic_prefill_with_fb_pic_2,ig_account_identity_logged_out_signals_global_holdout_universe," +
             "ig_android_login_identifier_fuzzy_match,ig_android_reliability_leak_fixes_h1_2019,ig_android_push_fcm," +
