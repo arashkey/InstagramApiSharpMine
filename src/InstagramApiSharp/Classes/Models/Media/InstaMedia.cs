@@ -53,7 +53,7 @@ namespace InstagramApiSharp.Classes.Models
         public List<InstaUserTag> UserTags { get; set; } = new List<InstaUserTag>();
 
         public InstaUserShortList Likers { get; set; } = new InstaUserShortList();
-        public InstaCarousel Carousel { get; set; }
+        public InstaCarousel Carousel { get; set; } = new InstaCarousel();
 
         public int ViewCount { get; set; }
 
