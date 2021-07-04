@@ -149,7 +149,7 @@ namespace InstagramApiSharp.API
         public const string HEADER_X_IG_BLOKS_PANORAMA_ENABLED = "X-Bloks-Is-Panorama-Enabled";
         public const string HEADER_X_IG_DEVICE_ID = "X-IG-Device-ID";
         public const string HEADER_X_IG_ANDROID_ID = "X-IG-Android-ID";
-        public const string CURRENT_BLOKS_VERSION_ID = "fe808146fcbce04d3a692219680092ef89873fda1e6ef41c09a5b6a9852bed94";
+        public const string CURRENT_BLOKS_VERSION_ID = "53994863f17156fb18b1595fe4c5e699135d27de64c73949ac9399c61ce540b9";
 
         public const string ACCEPT_ENCODING = "gzip, deflate, sdch";
         public const string API = "/api";
@@ -195,7 +195,7 @@ namespace InstagramApiSharp.API
         public const string USER_AGENT =
                                     "Instagram {0} Android ({1}/{2}; {3}; {4}; {5}/{6}; {7}; {8}; {9}; {10}; {11})";
         public const string USER_AGENT_DEFAULT =
-        "Instagram 169.3.0.30.135 Android (26/8; 480dpi; 1080x1794; HUAWEI/HONOR; PRA-LA1; HWPRA-H; hi6250; en_US; 264009049)";
+        "Instagram 191.1.0.41.124 Android (26/8; 480dpi; 1080x1794; HUAWEI/HONOR; PRA-LA1; HWPRA-H; hi6250; en_US; 297313674)";
         public static readonly JArray SupportedCapabalities = new JArray
         {
             new JObject
