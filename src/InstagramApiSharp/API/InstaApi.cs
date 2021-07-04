@@ -3543,8 +3543,8 @@ namespace InstagramApiSharp.API
                 }
                 if (IsUserAuthenticated && _user?.LoggedInUser != null)
                 {
-                    data.Add("id", _httpHelper.NewerThan180 ? _user.LoggedInUser.Pk.ToString() : _deviceInfo.DeviceGuid.ToString());
-                    data.Add("_uid", _httpHelper.NewerThan180 ? _user.LoggedInUser.Pk.ToString() : _deviceInfo.DeviceGuid.ToString());
+                    data.Add("id", _user.LoggedInUser.Pk.ToString());
+                    data.Add("_uid",_user.LoggedInUser.Pk.ToString());
                     //data.Add("_uuid", _deviceInfo.DeviceGuid.ToString());
                     data.Add("experiments", _httpHelper.NewerThan180 ?
                     InstaApiConstants.LOGIN_EXPERIMENTS : InstaApiConstants.LOGIN_V180_OR_OLDER_EXPERIMENTS_CONFIGS);
