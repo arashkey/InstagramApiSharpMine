@@ -1419,7 +1419,7 @@ namespace InstagramApiSharp.API.Processors
                 var data = new Dictionary<string, string>
                 {
                     {"media_id", mediaId},
-                    {"_csrftoken", _user.CsrfToken},
+                    {"delivery_class", "organic"},
                     {"radio_type", "wifi-none"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
