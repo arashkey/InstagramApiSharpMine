@@ -471,14 +471,16 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
-            string[] seenMediaIds = null, bool refreshRequest = false,
+            string[] seenMediaIds = null, 
+            bool refreshRequest = false,
+            bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,
             ushort batteryLevel = 100,
             bool isCharging = false,
             bool isDarkMode = false,
             bool willSoundOn = false) =>
             await GetUserTimelineFeedAsync(paginationParameters, CancellationToken.None, seenMediaIds,
-               refreshRequest, paginationSource, batteryLevel, isCharging, isDarkMode, willSoundOn).ConfigureAwait(false);
+               refreshRequest, removeAds, paginationSource, batteryLevel, isCharging, isDarkMode, willSoundOn).ConfigureAwait(false);
 
 
         /// <summary>
@@ -493,7 +495,10 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
-            CancellationToken cancellationToken, string[] seenMediaIds = null, bool refreshRequest = false,
+            CancellationToken cancellationToken, 
+            string[] seenMediaIds = null,
+            bool refreshRequest = false,
+            bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,
             ushort batteryLevel = 100,
             bool isCharging = false,
@@ -515,7 +520,7 @@ namespace InstagramApiSharp.API.Processors
                     return ConvertersFabric.Instance.GetFeedConverter(instaFeedResponse).Convert();
                 }
                 var timelineFeeds = await GetUserTimelineFeed(paginationParameters,
-                    seenMediaIds, refreshRequest, paginationSource,
+                    seenMediaIds, refreshRequest, removeAds, paginationSource,
                     batteryLevel, isCharging, isDarkMode, willSoundOn);
 
                 if (!timelineFeeds.Succeeded)
@@ -533,7 +538,7 @@ namespace InstagramApiSharp.API.Processors
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var nextFeed = await GetUserTimelineFeed(paginationParameters, null, false, paginationSource,
+                    var nextFeed = await GetUserTimelineFeed(paginationParameters, null, false, removeAds, paginationSource,
                     batteryLevel, isCharging, isDarkMode, willSoundOn);
                     
                     if (!nextFeed.Succeeded)
@@ -757,6 +762,7 @@ namespace InstagramApiSharp.API.Processors
 
         private async Task<IResult<InstaFeedResponse>> GetUserTimelineFeed(PaginationParameters paginationParameters, 
             string[] seenMediaIds = null, bool refreshRequest = false,
+            bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,
             ushort batteryLevel = 100,
             bool isCharging = false,
