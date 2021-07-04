@@ -2761,6 +2761,7 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("reel_ids_to_fetch", jArr.ToString(Formatting.None));
                 }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, storyFeedUri, _deviceInfo, data);
+                request.Headers.AppendPriorityHeader(InstaApiConstants.HEADER_PRIORITY_VALUE_0, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
