@@ -863,16 +863,21 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetHighlightFeedsUri(long userId, string phoneId)
+        public static Uri GetHighlightFeedsUri(long userId, string phoneId,
+            ushort batteryLevel = 100,
+            bool isCharging = false,
+            bool isDarkMode = false,
+            bool willSoundOn = false)
         {
             if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.HIGHLIGHT_TRAY, userId), out var instaUri))
                 throw new Exception("Cant create URI for highlight feeds");
             return instaUri
-                .AddQueryParameter(InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None))
-               .AddQueryParameter("battery_level", "100")
-               .AddQueryParameter("is_charging", "0")
-               .AddQueryParameter("will_sound_on", "0")
-               .AddQueryParameter("phone_id", phoneId);
+               .AddQueryParameter(InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None))
+               .AddQueryParameter("phone_id", phoneId)
+               .AddQueryParameter("battery_level", batteryLevel.ToString())
+               .AddQueryParameter("is_charging", Convert.ToUInt16(isCharging).ToString())
+               .AddQueryParameter("is_dark_mode", Convert.ToUInt16(isDarkMode).ToString())
+               .AddQueryParameter("will_sound_on", Convert.ToUInt16(willSoundOn).ToString());
         }
 
         public static Uri GetHighlightsArchiveUri()
