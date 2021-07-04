@@ -46,25 +46,52 @@ namespace InstagramApiSharp.Helpers
             ub.Query = q;
             return ub.Uri;
         }
-        internal static void AddHeader(this HttpRequestHeaders headers, string name, string value, IInstaApi instaApi)
+        internal static void AddHeader(this HttpRequestHeaders headers, 
+            string name, 
+            string value,
+            IInstaApi instaApi,
+            bool removeHeader = false)
         {
             var IsNewerApis = instaApi == null || instaApi.HttpHelper.IsNewerApis;
             var currentCulture = HttpHelper.GetCurrentCulture();
             System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
+            
+            if (removeHeader)
+                headers.Remove(name);
 
             headers.Add(IsNewerApis ? name.ToLower() : name, value);
 
             System.Globalization.CultureInfo.CurrentCulture = currentCulture;
         }
-        internal static void AddHeader(this HttpContentHeaders headers, string name, string value, IInstaApi instaApi)
+        internal static void AddHeader(this HttpContentHeaders headers, string name, string value, IInstaApi instaApi,
+            bool removeHeader = false)
         {
             var IsNewerApis = instaApi == null || instaApi.HttpHelper.IsNewerApis;
             var currentCulture = HttpHelper.GetCurrentCulture();
             System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
+            
+            if (removeHeader)
+                headers.Remove(name);
 
             headers.Add(IsNewerApis ? name.ToLower() : name, value);
 
             System.Globalization.CultureInfo.CurrentCulture = currentCulture;
+        }
+        internal static void AppendPriorityHeader(this HttpRequestHeaders headers, IInstaApi instaApi)
+        {
+            AppendPriorityHeader(headers, InstaApiConstants.HEADER_PRIORITY_VALUE_3, instaApi);
+        }
+        internal static void AppendPriorityHeader(this HttpRequestHeaders headers, string priority, IInstaApi instaApi)
+        {
+            AddHeader(headers, InstaApiConstants.HEADER_PRIORITY, priority, instaApi, true);
+        }
+        internal static void AppendPriorityHeader(this HttpContentHeaders headers, IInstaApi instaApi)
+        {
+            AppendPriorityHeader(headers, InstaApiConstants.HEADER_PRIORITY_VALUE_3, instaApi);
+        }
+        internal static void AppendPriorityHeader(this HttpContentHeaders headers, string priority, IInstaApi instaApi)
+        {
+            AddHeader(headers, InstaApiConstants.HEADER_PRIORITY, priority, instaApi, true);
         }
     }
 }

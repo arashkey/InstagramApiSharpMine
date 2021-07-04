@@ -153,7 +153,7 @@ namespace InstagramApiSharp.Helpers
 
             request.Headers.Add(InstaApiConstants.HEADER_X_FB_SERVER_CLUSTER, "True");
 
-            request.Headers.Add(InstaApiConstants.HEADER_PRIORITY, InstaApiConstants.HEADER_PRIORITY_VALUE);
+            request.Headers.Add(InstaApiConstants.HEADER_PRIORITY, InstaApiConstants.HEADER_PRIORITY_VALUE_3);
 
             System.Globalization.CultureInfo.CurrentCulture = currentCulture;
             return request;

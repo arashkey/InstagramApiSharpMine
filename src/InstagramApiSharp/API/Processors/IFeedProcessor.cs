@@ -160,8 +160,13 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters, 
-            string[] seenMediaIds = null, bool refreshRequest = false,
-            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None);
+            string[] seenMediaIds = null, 
+            bool refreshRequest = false,
+            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,
+            ushort batteryLevel = 100,
+            bool isCharging = false,
+            bool isDarkMode = false,
+            bool willSoundOn = false);
 
         /// <summary>
         ///     Get user timeline feed (feed of recent posts from users you follow) asynchronously.
@@ -175,8 +180,14 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
-            CancellationToken cancellationToken, string[] seenMediaIds = null, bool refreshRequest = false,
-            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None);
+            CancellationToken cancellationToken,
+            string[] seenMediaIds = null,
+            bool refreshRequest = false,
+            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,
+            ushort batteryLevel = 100,
+            bool isCharging = false,
+            bool isDarkMode = false,
+            bool willSoundOn = false);
 
         /// <summary>
         ///     Get user topical explore feeds asynchronously

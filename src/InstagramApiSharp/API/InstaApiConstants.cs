@@ -116,7 +116,8 @@ namespace InstagramApiSharp.API
         public const string HEADER_X_IG_FAMILY_DEVICE_ID = "X-IG-Family-Device-ID";
 
         public const string HEADER_PRIORITY = "Priority";
-        public const string HEADER_PRIORITY_VALUE = "u=3";
+        public const string HEADER_PRIORITY_VALUE_3 = "u=3";
+        public const string HEADER_PRIORITY_VALUE_0 = "u=0";
         public const string HEADER_IG_TIMEZONE_OFFSET = "X-IG-Timezone-Offset";
         public const string HEADER_IG_INTENDED_USER_ID = "IG-INTENDED-USER-ID";
 
