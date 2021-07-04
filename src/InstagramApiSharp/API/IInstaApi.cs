@@ -593,7 +593,7 @@ namespace InstagramApiSharp.API
         /// <summary>
         ///     Send requests after you logged in successfully (Act as an real instagram user)
         /// </summary>
-        /// <param name="sendAllRequests">Sends 18 requests or more</param>
+        /// <param name="sendAllRequests">Sends 27 requests or more</param>
         Task<IResult<bool>> SendRequestsAfterLoginAsync(bool sendAllRequests = true);
         /// <summary>
         ///     Login using given credentials asynchronously

@@ -3346,44 +3346,59 @@ namespace InstagramApiSharp.API
         /// <summary>
         ///     Send requests after you logged in successfully (Act as an real instagram user)
         /// </summary>
-        /// <param name="sendAllRequests">Sends 18 requests or more</param>
+        /// <param name="sendAllRequests">Sends 27 requests or more</param>
         public async Task<IResult<bool>> SendRequestsAfterLoginAsync(bool sendAllRequests = true)
         {
             try
             {
                 if (IsUserAuthenticated && FeedProcessor != null)
                 {
-                    var tasks = new List<Task>()
-                    {
+                    await Task.WhenAll(
+                        SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/business/eligibility/get_monetization_products_eligibility_data/?product_types=branded_content,user_pay")),
                         LauncherSyncPrivate(),
                         QeSync(),
-                        PushProcessor.RegisterPushAsync(),
-                    };
+                        SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/multiple_accounts/get_account_family/")))
+                        .ConfigureAwait(false);
+                    
                     if (sendAllRequests)
                     {
-                        tasks.AddRange(new List<Task>()
-                        {
-                            SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/business/eligibility/get_monetization_products_eligibility_data/?product_types=branded_content,user_pay")),
-                            SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/multiple_accounts/get_account_family/")),
+                        // while deviding tasks into multiple Task.WhenAll ? because instagram sends some requests together and waits for their reponses,
+                        // this is the exact requests instagram is sending>
+                        await Task.WhenAll(
+                            PushProcessor.RegisterPushAsync(),
                             SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/devices/ndx/api/async_get_ndx_ig_steps/")),
-                            SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/banyan/banyan/?views=%5B%22story_share_sheet%22%2C%22direct_user_search_nullstate%22%2C%22forwarding_recipient_sheet%22%2C%22threads_people_picker%22%2C%22direct_inbox_active_now%22%2C%22group_stories_share_sheet%22%2C%22call_recipients%22%2C%22reshare_share_sheet%22%2C%22direct_user_search_keypressed%22%5D")),
                             FeedProcessor.GetUserTimelineFeedAsync(PaginationParameters.MaxPagesToLoad(1)),
                             StoryProcessor.GetStoryFeedWithPostMethodAsync(PaginationParameters.MaxPagesToLoad(1)),
+                            GetNotificationBadge(),
+                            SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/banyan/banyan/?views=%5B%22story_share_sheet%22%2C%22direct_user_search_nullstate%22%2C%22forwarding_recipient_sheet%22%2C%22threads_people_picker%22%2C%22direct_inbox_active_now%22%2C%22group_stories_share_sheet%22%2C%22call_recipients%22%2C%22reshare_share_sheet%22%2C%22direct_user_search_keypressed%22%5D")))
+                            .ConfigureAwait(false);
+                        
+                        await Task.WhenAll(
+                            PushProcessor.RegisterPushAsync(),
                             UserProcessor.GetUserInfoByIdAsync(_user.LoggedInUser.Pk),
                             UserProcessor.GetUserMediaByIdAsync(_user.LoggedInUser.Pk, PaginationParameters.MaxPagesToLoad(1)),
-                            GetNotificationBadge(),
                             SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/loom/fetch_config/")),
-                            SendGetRequestAsync(new Uri($"https://i.instagram.com/api/v1/news/inbox/?mark_as_seen=false&timezone_offset={TimezoneOffset}")),
+                            StoryProcessor.GetHighlightFeedsAsync(_user.LoggedInUser.Pk),
                             SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/scores/bootstrap/users/?surfaces=%5B%22autocomplete_user_list%22%2C%22coefficient_besties_list_ranking%22%2C%22coefficient_rank_recipient_user_suggestion%22%2C%22coefficient_ios_section_test_bootstrap_ranking%22%2C%22coefficient_direct_recipients_ranking_variant_2%22%5D")),
-                            SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/qp/get_cooldowns/?signed_body=SIGNATURE.%7B%7D")),
-                            MediaProcessor.GetBlockedMediasAsync(),
+                            MediaProcessor.GetBlockedMediasAsync())
+                            .ConfigureAwait(false);
+                      
+                        await Task.WhenAll(
+                            SendGetRequestAsync(new Uri($"https://i.instagram.com/api/v1/news/inbox/?mark_as_seen=false&timezone_offset={TimezoneOffset}")),
+                            SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/qp/get_cooldowns/?signed_body=SIGNATURE.%7B%7D")))
+                            .ConfigureAwait(false);
+
+                        await Task.WhenAll(
                             SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/ig_fb_xposting/account_linking/user_xposting_destination/?signed_body=SIGNATURE.%7B%7D")),
                             FeedProcessor.GetTopicalExploreFeedAsync(PaginationParameters.MaxPagesToLoad(1)),
+                            SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/direct_v2/has_interop_upgraded/")),
+                            MessagingProcessor.GetUsersPresenceAsync(),
                             SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/status/get_viewable_statuses/?include_authors=true")),
+                            GetNotificationBadge(),
                             SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/direct_v2/inbox/?visual_message_return_type=unseen&thread_message_limit=10&persistentBadging=true&limit=20&fetch_reason=initial_snapshot")),
-                        });
+                            SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/users/arlink_download_info/?version_override=2.2.1"))
+                        ).ConfigureAwait(false);
                     }
-                    await Task.WhenAll(tasks.ToArray()).ConfigureAwait(false);
                     return Result.Success(true);
                 }
                 else
