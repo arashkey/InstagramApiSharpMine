@@ -208,11 +208,11 @@ namespace InstagramApiSharp.API
                 {"name","FACE_TRACKER_VERSION"},
                 {"value","14"}
             },
-            new JObject
-            {
-                {"name","segmentation"},
-                {"value","segmentation_enabled"}
-            },
+            //new JObject
+            //{
+            //    {"name","segmentation"},
+            //    {"value","segmentation_enabled"}
+            //},
             new JObject
             {
                 {"name","COMPRESSION"},
