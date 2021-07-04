@@ -83,7 +83,8 @@ namespace InstagramApiSharp.Helpers
         }
         internal static void AppendPriorityHeader(this HttpRequestHeaders headers, string priority, IInstaApi instaApi)
         {
-            AddHeader(headers, InstaApiConstants.HEADER_PRIORITY, priority, instaApi, true);
+            if (instaApi.GetApiVersionType() > Enums.InstaApiVersionType.Version180)
+                AddHeader(headers, InstaApiConstants.HEADER_PRIORITY, priority, instaApi, true);
         }
         internal static void AppendPriorityHeader(this HttpContentHeaders headers, IInstaApi instaApi)
         {
@@ -91,7 +92,8 @@ namespace InstagramApiSharp.Helpers
         }
         internal static void AppendPriorityHeader(this HttpContentHeaders headers, string priority, IInstaApi instaApi)
         {
-            AddHeader(headers, InstaApiConstants.HEADER_PRIORITY, priority, instaApi, true);
+            if (instaApi.GetApiVersionType() > Enums.InstaApiVersionType.Version180)
+                AddHeader(headers, InstaApiConstants.HEADER_PRIORITY, priority, instaApi, true);
         }
     }
 }
