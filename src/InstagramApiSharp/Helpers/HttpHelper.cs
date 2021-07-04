@@ -25,6 +25,7 @@ namespace InstagramApiSharp.Helpers
         public IHttpRequestProcessor _httpRequestProcessor;
         public IInstaApi _instaApi;
         internal bool IsNewerApis => _instaApi.InstaApiVersionType > InstaApiVersionType.Version146;
+        internal bool NewerThan180 => _instaApi.InstaApiVersionType > InstaApiVersionType.Version180;
         internal static readonly System.Globalization.CultureInfo EnglishCulture = new System.Globalization.CultureInfo("en-us");
 
         internal HttpHelper(InstaApiVersion apiVersionType, IHttpRequestProcessor httpRequestProcessor, IInstaApi instaApi)
@@ -57,11 +58,19 @@ namespace InstagramApiSharp.Helpers
 
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_MAPPED_LOCALE, _instaApi.MappedLocale);
 
-            request.Headers.Add(InstaApiConstants.HEADER_PIGEON_SESSION_ID, deviceInfo.PigeonSessionId.ToString());
+            if (NewerThan180)
+            {
+                var pigeonId = "UFS-" + deviceInfo.PigeonSessionId.ToString() +
+                    (_instaApi.IsUserAuthenticated || request.RequestUri.ToString().IndexOf("/launcher/sync") != -1 ||
+                    request.RequestUri.ToString().IndexOf("/accounts/login") != -1 ? "-1" : "-0");
+                request.Headers.Add(InstaApiConstants.HEADER_PIGEON_SESSION_ID, pigeonId);
+            }
+            else
+                request.Headers.Add(InstaApiConstants.HEADER_PIGEON_SESSION_ID, deviceInfo.PigeonSessionId.ToString());
 
-            request.Headers.Add(InstaApiConstants.HEADER_PIGEON_RAWCLINETTIME, $"{DateTime.UtcNow.ToUnixTime()}.0{Rnd.Next(10, 99)}");
+            request.Headers.Add(InstaApiConstants.HEADER_PIGEON_RAWCLINETTIME, DateTime.UtcNow.ToUnixTimeAsDouble().ToString());
 
-            request.Headers.Add(InstaApiConstants.HEADER_X_IG_CONNECTION_SPEED, "-1kbps");
+            //request.Headers.Add(InstaApiConstants.HEADER_X_IG_CONNECTION_SPEED, "-1kbps");
 
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_BANDWIDTH_SPEED_KBPS, deviceInfo.IGBandwidthSpeedKbps);
 
@@ -93,8 +102,12 @@ namespace InstagramApiSharp.Helpers
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_BLOKS_ENABLE_RENDERCODE, "false");
 
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_DEVICE_ID, deviceInfo.DeviceGuid.ToString());
-
+           
+            request.Headers.Add(InstaApiConstants.HEADER_X_IG_FAMILY_DEVICE_ID, deviceInfo.PhoneGuid.ToString());
+            
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_ANDROID_ID, deviceInfo.DeviceId);
+
+            request.Headers.Add(InstaApiConstants.HEADER_IG_TIMEZONE_OFFSET, _instaApi.TimezoneOffset.ToString());
 
             request.Headers.Add(InstaApiConstants.HEADER_IG_CONNECTION_TYPE, InstaApiConstants.IG_CONNECTION_TYPE);
 
@@ -111,6 +124,8 @@ namespace InstagramApiSharp.Helpers
 
             if (!string.IsNullOrEmpty(mid))
                 request.Headers.Add(InstaApiConstants.HEADER_X_MID, mid);
+
+            request.Headers.Add(InstaApiConstants.HEADER_IG_INTENDED_USER_ID, (_instaApi.GetLoggedUser().LoggedInUser?.Pk ?? 0).ToString());
 
             if (!string.IsNullOrEmpty(dsUserId) && !string.IsNullOrEmpty(authorization) && !string.IsNullOrEmpty(igDirectRegionHint))
                 request.Headers.Add(InstaApiConstants.HEADER_IG_U_DIRECT_REGION_HINT, igDirectRegionHint);
@@ -138,11 +153,11 @@ namespace InstagramApiSharp.Helpers
 
             request.Headers.Add(InstaApiConstants.HEADER_X_FB_SERVER_CLUSTER, "True");
 
-            //request.Headers.Add(InstaApiConstants.HEADER_PRIORITY, InstaApiConstants.HEADER_PRIORITY_VALUE);
-
             request.Headers.Add(InstaApiConstants.HEADER_IG_TIMEZONE_OFFSET, _instaApi.TimezoneOffset.ToString());
 
             //request.Headers.Add(InstaApiConstants.HEADER_IG_INTENDED_USER_ID, (_instaApi.GetLoggedUser().LoggedInUser?.Pk ?? 0).ToString());
+          
+            request.Headers.Add(InstaApiConstants.HEADER_PRIORITY, InstaApiConstants.HEADER_PRIORITY_VALUE_3);
 
             System.Globalization.CultureInfo.CurrentCulture = currentCulture;
             return request;

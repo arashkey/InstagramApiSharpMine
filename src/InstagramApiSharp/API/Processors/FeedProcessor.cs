@@ -471,12 +471,14 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
-            string[] seenMediaIds = null,
-            bool refreshRequest = false,
-            bool removeAds = false,
-            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None) =>
+            string[] seenMediaIds = null, bool refreshRequest = false,
+            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,
+            ushort batteryLevel = 100,
+            bool isCharging = false,
+            bool isDarkMode = false,
+            bool willSoundOn = false) =>
             await GetUserTimelineFeedAsync(paginationParameters, CancellationToken.None, seenMediaIds,
-               refreshRequest, removeAds, paginationSource).ConfigureAwait(false);
+               refreshRequest, paginationSource, batteryLevel, isCharging, isDarkMode, willSoundOn).ConfigureAwait(false);
 
 
         /// <summary>
@@ -491,11 +493,12 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
-            CancellationToken cancellationToken,
-            string[] seenMediaIds = null, 
-            bool refreshRequest = false,
-            bool removeAds = false,
-            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None)
+            CancellationToken cancellationToken, string[] seenMediaIds = null, bool refreshRequest = false,
+            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,
+            ushort batteryLevel = 100,
+            bool isCharging = false,
+            bool isDarkMode = false,
+            bool willSoundOn = false)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var feed = new InstaFeed();
@@ -503,13 +506,18 @@ namespace InstagramApiSharp.API.Processors
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
+                
+                if (refreshRequest || string.IsNullOrEmpty(paginationParameters.SessionId))
+                    paginationParameters.SessionId = Guid.NewGuid().ToString();
 
                 InstaFeed Convert(InstaFeedResponse instaFeedResponse)
                 {
                     return ConvertersFabric.Instance.GetFeedConverter(instaFeedResponse).Convert();
                 }
                 var timelineFeeds = await GetUserTimelineFeed(paginationParameters,
-                    seenMediaIds, refreshRequest, removeAds, paginationSource);
+                    seenMediaIds, refreshRequest, paginationSource,
+                    batteryLevel, isCharging, isDarkMode, willSoundOn);
+
                 if (!timelineFeeds.Succeeded)
                     return Result.Fail(timelineFeeds.Info, feed);
 
@@ -525,7 +533,9 @@ namespace InstagramApiSharp.API.Processors
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var nextFeed = await GetUserTimelineFeed(paginationParameters, null, false, removeAds, paginationSource);
+                    var nextFeed = await GetUserTimelineFeed(paginationParameters, null, false, paginationSource,
+                    batteryLevel, isCharging, isDarkMode, willSoundOn);
+                    
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, feed);
 
@@ -746,34 +756,32 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaFeedResponse>> GetUserTimelineFeed(PaginationParameters paginationParameters, 
-            string[] seenMediaIds = null, 
-            bool refreshRequest = false, 
-            bool removeAds = false,
-            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None)
+            string[] seenMediaIds = null, bool refreshRequest = false,
+            InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,
+            ushort batteryLevel = 100,
+            bool isCharging = false,
+            bool isDarkMode = false,
+            bool willSoundOn = false)
         {
+            
             try
             {
                 var userFeedUri = UriCreator.GetUserFeedUri();
                 var data = new Dictionary<string, string>
                 {
-                    {"is_prefetch", "0"},
-                    {"_csrftoken", _user.CsrfToken},
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"device_id", _deviceInfo.DeviceGuid.ToString()},
                     {"phone_id", _deviceInfo.PhoneGuid.ToString()},
-                    {"session_id", Guid.NewGuid().ToString()},
-                    {"timezone_offset", _instaApi.GetTimezoneOffset().ToString()},
-                    {"battery_level", "100"},
-                    {"is_charging", "0"},
-                    {"rti_delivery_backend", "0"},
-                    {"is_async_ads_double_request", "0"},
-                    {"is_async_ads_rti", "0"},
-                    {"will_sound_on", "0"},
-                    {"bloks_versioning_id", _instaApi.GetApiVersionInfo().BloksVersionId},
-                    {"is_dark_mode", "0"},
-                    {"skip_source_and_rank", "0"},
+                    {"battery_level", batteryLevel.ToString()},
+                    {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
+                    {"device_id", _deviceInfo.DeviceGuid.ToString()},
                     {"request_id", Guid.NewGuid().ToString()},
-                    {"skip_ads_controller", "0"},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"is_charging", Convert.ToUInt16(isCharging).ToString()},
+                    {"is_dark_mode", Convert.ToUInt16(isDarkMode).ToString()},
+                    {"will_sound_on", Convert.ToUInt16(willSoundOn).ToString()},
+                    {"session_id", paginationParameters.SessionId},
+                    {"bloks_versioning_id", _instaApi.GetApiVersionInfo().BloksVersionId},
+                    //{"is_prefetch", "0"},
+                    //{"_csrftoken", _user.CsrfToken},
                 };
 
                 if (seenMediaIds != null)
@@ -784,6 +792,7 @@ namespace InstagramApiSharp.API.Processors
 
                 if (refreshRequest)
                 {
+                    data.Add("feed_view_info", "[]");
                     data.Add("reason", "pull_to_refresh");
                     data.Add("is_pull_to_refresh", "1");
                     data.Add("is_split_head_load", "0");
@@ -792,6 +801,7 @@ namespace InstagramApiSharp.API.Processors
                 {
                     if (string.IsNullOrEmpty(paginationParameters.NextMaxId))
                     {
+                        data.Add("feed_view_info", "[]");
                         data.Add("reason", "cold_start_fetch");
                         //data.Add("reason", "warm_start_fetch");
                         data.Add("is_split_head_load", "0");
@@ -808,8 +818,9 @@ namespace InstagramApiSharp.API.Processors
                 request.Headers.AddHeader("X-Ads-Opt-Out", "0", _instaApi);
                 request.Headers.AddHeader("X-Google-AD-ID", _deviceInfo.GoogleAdId.ToString(), _instaApi);
                 request.Headers.AddHeader("X-DEVICE-ID", _deviceInfo.DeviceGuid.ToString(), _instaApi);
-                request.Headers.AddHeader("X-FB", "1", _instaApi);
-
+                request.Headers.AddHeader("X-CM-Bandwidth-KBPS", "-1.000", _instaApi);
+                request.Headers.AddHeader("X-CM-Latency", "-1.000", _instaApi);
+                request.Headers.AppendPriorityHeader(InstaApiConstants.HEADER_PRIORITY_VALUE_0, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 

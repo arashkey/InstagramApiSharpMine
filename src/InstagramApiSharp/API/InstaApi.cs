@@ -3150,14 +3150,10 @@ namespace InstagramApiSharp.API
             AcceptLanguage = data.AcceptLanguage;
             TimezoneOffset = data.TimezoneOffset;
 
-            if (string.IsNullOrEmpty(_deviceInfo.IGBandwidthSpeedKbps))
-            {
-                _deviceInfo.IGBandwidthSpeedKbps = string.Format("{0}.{1}", Rnd.Next(1233, 1567), Rnd.Next(100, 999));
-                _deviceInfo.IGBandwidthTotalTimeMS = Rnd.Next(781, 999).ToString();
-                _deviceInfo.IGBandwidthTotalBytesB = ((int)((double.Parse(_deviceInfo.IGBandwidthSpeedKbps) * double.Parse(_deviceInfo.IGBandwidthTotalTimeMS)) + Rnd.Next(100, 999))).ToString();
-            }
+            _deviceInfo.IGBandwidthSpeedKbps = "-1.000";
+            _deviceInfo.IGBandwidthTotalTimeMS = "0";
+            _deviceInfo.IGBandwidthTotalBytesB = "0";
 
-            //Load Stream Edit 
             _httpRequestProcessor.RequestMessage.Username = data.UserSession.UserName;
             _httpRequestProcessor.RequestMessage.Password = data.UserSession.Password;
 
@@ -3171,10 +3167,9 @@ namespace InstagramApiSharp.API
                 _httpRequestProcessor.HttpHandler.CookieContainer.Add(new Uri(InstaApiConstants.INSTAGRAM_URL), cookie);
             }
 
-            if (data.InstaApiVersion == null)
-                data.InstaApiVersion = InstaApiVersionType.Version180;
-            if (!LoadApiVersionFromSessionFile)
-                data.InstaApiVersion = InstaApiVersionType.Version180;
+            if (data.InstaApiVersion == null || !LoadApiVersionFromSessionFile)
+                data.InstaApiVersion = InstaApiVersionType.Version191;
+
             ApiVersionType = data.InstaApiVersion.Value;
             _apiVersion = InstaApiVersionList.GetApiVersionList().GetApiVersion(ApiVersionType);
             _httpHelper = new HttpHelper(_apiVersion, _httpRequestProcessor, this);
@@ -3185,17 +3180,7 @@ namespace InstagramApiSharp.API
             IsUserAuthenticated = data.IsAuthenticated;
             TwoFactorLoginInfo = data.TwoFactorLoginInfo;
             ChallengeLoginInfo = data.ChallengeLoginInfo;
-            //if (_httpRequestProcessor.HttpHandler?.Proxy is WebProxy proxy)
-            //{
-            //    state.ProxyAddress = proxy.Address;
-            //    state.ProxyUseDefaultCredentials = proxy.UseDefaultCredentials;
-            //    state.ProxyBypassProxyOnLocal = proxy.BypassProxyOnLocal;
-            //    if (proxy.Credentials is NetworkCredential credential)
-            //    {
-            //        state.ProxyCredentialUsername = credential.UserName;
-            //        state.ProxyCredentialPassword = credential.Password;
-            //    }
-            //}
+
             if (data.ProxyAddress != null && LoadProxyFromSessionFile)// proxy is available
             {
                 try

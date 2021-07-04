@@ -121,8 +121,11 @@ namespace InstagramApiSharp.API
         public const string HEADER_X_IG_BANDWIDTH_TOTALTIME_MS = "X-IG-Bandwidth-TotalTime-MS";
         public const string HEADER_X_IG_MAPPED_LOCALE = "X-IG-Mapped-Locale";
         public const string HEADER_X_IG_TIGON_RETRY = "X-Tigon-Is-Retry";
+        public const string HEADER_X_IG_FAMILY_DEVICE_ID = "X-IG-Family-Device-ID";
+
         public const string HEADER_PRIORITY = "Priority";
-        public const string HEADER_PRIORITY_VALUE = "u=3";
+        public const string HEADER_PRIORITY_VALUE_3 = "u=3";
+        public const string HEADER_PRIORITY_VALUE_0 = "u=0";
         public const string HEADER_IG_TIMEZONE_OFFSET = "X-IG-Timezone-Offset";
         public const string HEADER_IG_INTENDED_USER_ID = "IG-INTENDED-USER-ID";
 
@@ -154,7 +157,7 @@ namespace InstagramApiSharp.API
         public const string HEADER_X_IG_BLOKS_PANORAMA_ENABLED = "X-Bloks-Is-Panorama-Enabled";
         public const string HEADER_X_IG_DEVICE_ID = "X-IG-Device-ID";
         public const string HEADER_X_IG_ANDROID_ID = "X-IG-Android-ID";
-        public const string CURRENT_BLOKS_VERSION_ID = "fe808146fcbce04d3a692219680092ef89873fda1e6ef41c09a5b6a9852bed94";
+        public const string CURRENT_BLOKS_VERSION_ID = "53994863f17156fb18b1595fe4c5e699135d27de64c73949ac9399c61ce540b9";
 
         public const string ACCEPT_ENCODING = "gzip, deflate, sdch";
         public const string API = "/api";
@@ -200,25 +203,24 @@ namespace InstagramApiSharp.API
         public const string USER_AGENT =
                                     "Instagram {0} Android ({1}/{2}; {3}; {4}; {5}/{6}; {7}; {8}; {9}; {10}; {11})";
         public const string USER_AGENT_DEFAULT =
-        "Instagram 169.3.0.30.135 Android (26/8; 480dpi; 1080x1794; HUAWEI/HONOR; PRA-LA1; HWPRA-H; hi6250; en_US; 264009049)";
+        "Instagram 191.1.0.41.124 Android (26/8; 480dpi; 1080x1794; HUAWEI/HONOR; PRA-LA1; HWPRA-H; hi6250; en_US; 297313674)";
         public static readonly JArray SupportedCapabalities = new JArray
         {
             new JObject
             {
                 {"name","SUPPORTED_SDK_VERSIONS"},
-                {"value","69.0,70.0,71.0,72.0,73.0,74.0,75.0,76.0,77.0,78.0,79.0,80.0,81.0,82.0,83.0"+
-                    "84.0,85.0,86.0,87.0,88.0,89.0,90.0,91.0,92.0,93.0,94.0,95.0,96.0,97.0,98.0,99.0,100.0,101.0,102.0,103.0,104.0"}
+                {"value","100.0,101.0,102.0,103.0,104.0,105.0,106.0,107.0,108.0,109.0,110.0,111.0,112.0,113.0,114.0,115.0"}
             },
             new JObject
             {
                 {"name","FACE_TRACKER_VERSION"},
                 {"value","14"}
             },
-            new JObject
-            {
-                {"name","segmentation"},
-                {"value","segmentation_enabled"}
-            },
+            //new JObject
+            //{
+            //    {"name","segmentation"},
+            //    {"value","segmentation_enabled"}
+            //},
             new JObject
             {
                 {"name","COMPRESSION"},
