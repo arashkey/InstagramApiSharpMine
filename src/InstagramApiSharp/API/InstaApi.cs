@@ -3399,7 +3399,6 @@ namespace InstagramApiSharp.API
         {
             try
             {
-                //.{"phone_id":"----","usage":"prefill"}&
                 var data = new Dictionary<string, string>
                 {
                     {"phone_id", _deviceInfo.PhoneGuid.ToString()},
@@ -3489,8 +3488,8 @@ namespace InstagramApiSharp.API
                     {"server_config_retrieval", "1"}
                 };
                 var csrftoken = GetCsrfTokenFromCookies();
-                if (!string.IsNullOrEmpty(csrftoken) && !_httpHelper.NewerThan180)
-                    data.Add("_csrftoken", csrftoken);
+                //if (!string.IsNullOrEmpty(csrftoken) && !_httpHelper.NewerThan180)
+                //    data.Add("_csrftoken", csrftoken);
 
                 if (IsUserAuthenticated && _user?.LoggedInUser != null)
                 {
@@ -3530,10 +3529,10 @@ namespace InstagramApiSharp.API
         {
             try
             {
-                string GetExperiments() => _httpHelper.NewerThan180 ? 
-                    InstaApiConstants.LOGIN_EXPERIMENTS : InstaApiConstants.LOGIN_V180_OR_OLDER_EXPERIMENTS_CONFIGS;
-
-                var data = new JObject();
+                var data = new JObject
+                {
+                    {"server_config_retrieval", "1"}
+                };
                 var csrftoken = GetCsrfTokenFromCookies();
                 if (!_httpHelper.NewerThan180)
                 {
@@ -3544,17 +3543,17 @@ namespace InstagramApiSharp.API
                 }
                 if (IsUserAuthenticated && _user?.LoggedInUser != null)
                 {
-                    data.Add("id", _deviceInfo.DeviceGuid.ToString());
-                    data.Add("_uid", _deviceInfo.DeviceGuid.ToString());
-                    data.Add("server_config_retrieval", "1");
+                    data.Add("id", _httpHelper.NewerThan180 ? _user.LoggedInUser.Pk.ToString() : _deviceInfo.DeviceGuid.ToString());
+                    data.Add("_uid", _httpHelper.NewerThan180 ? _user.LoggedInUser.Pk.ToString() : _deviceInfo.DeviceGuid.ToString());
                     //data.Add("_uuid", _deviceInfo.DeviceGuid.ToString());
-                    data.Add("experiments", GetExperiments());
+                    data.Add("experiments", _httpHelper.NewerThan180 ?
+                    InstaApiConstants.LOGIN_EXPERIMENTS : InstaApiConstants.LOGIN_V180_OR_OLDER_EXPERIMENTS_CONFIGS);
                 }
                 else
                 {
                     data.Add("id", _deviceInfo.DeviceGuid.ToString());
-                    data.Add("server_config_retrieval", "1");
-                    data.Add("experiments", GetExperiments());
+                    data.Add("experiments", _httpHelper.NewerThan180 ?
+                    InstaApiConstants.LOGIN_EXPERIMENTS : InstaApiConstants.LOGIN_V180_OR_OLDER_EXPERIMENTS_CONFIGS);
                 }
 
                 var uri = UriCreator.GetQeSyncUri();
