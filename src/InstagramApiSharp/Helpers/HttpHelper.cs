@@ -205,7 +205,7 @@ namespace InstagramApiSharp.Helpers
         public HttpRequestMessage GetSignedRequest(HttpMethod method,
             Uri uri,
             AndroidDevice deviceInfo,
-            Dictionary<string, string> data, bool appendD = false)
+            Dictionary<string, string> data, bool appendD = false, string dValue = null)
         {
             var hash = CryptoHelper.CalculateHash(_apiVersion.SignatureKey,
                 JsonConvert.SerializeObject(data));
@@ -219,7 +219,7 @@ namespace InstagramApiSharp.Helpers
             if (!IsNewerApis)
                 fields.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
             if (appendD)
-                fields.Add("d", "0");
+                fields.Add("d", dValue ?? "0");
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(fields);
             return request;
@@ -228,7 +228,7 @@ namespace InstagramApiSharp.Helpers
         public HttpRequestMessage GetSignedRequest(HttpMethod method,
             Uri uri,
             AndroidDevice deviceInfo,
-            JObject data, bool appendD = false)
+            JObject data, bool appendD = false, string dValue = null)
         {
             var hash = CryptoHelper.CalculateHash(_apiVersion.SignatureKey,
                 data.ToString(Formatting.None));
@@ -241,7 +241,7 @@ namespace InstagramApiSharp.Helpers
             if (!IsNewerApis)
                 fields.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
             if (appendD)
-                fields.Add("d", "0");
+                fields.Add("d", dValue ?? "0");
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(fields);
 

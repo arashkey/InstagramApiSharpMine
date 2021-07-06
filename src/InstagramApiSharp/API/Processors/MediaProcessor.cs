@@ -1443,7 +1443,15 @@ namespace InstagramApiSharp.API.Processors
                 if (!string.IsNullOrEmpty(chainingSessionId))
                     data.Add("chaining_session_id", chainingSessionId);
 
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data, true);
+                var likeD = instaUri.ToString().IndexOf("/like/") != -1 ? "1" : null;
+
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post,
+                    instaUri, 
+                    _deviceInfo,
+                    data,
+                    true, 
+                    likeD);
+
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 return response.StatusCode == HttpStatusCode.OK
