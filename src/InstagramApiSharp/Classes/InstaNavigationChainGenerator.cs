@@ -12,7 +12,7 @@ namespace InstagramApiSharp.Classes
     /// <summary>
     ///     A bunch of navigation chains generated in instagram app
     /// </summary>
-    public class InstaNavigationChainGenerator
+    public static class InstaNavigationChainGenerator
     {
         /// <summary>
         ///     DM TEXT TIMELINE
