@@ -1227,6 +1227,7 @@ namespace InstagramApiSharp.API
                         _user.Authorization = string.Join(" ", authorization);
                 }
                 catch { }
+                await LauncherSyncPrivate(/*false, true*/).ConfigureAwait(false);
                 return Result.Success(InstaLoginResult.Success);
             }
             catch (HttpRequestException httpException)
@@ -3166,7 +3167,19 @@ namespace InstagramApiSharp.API
             {
                 _httpRequestProcessor.HttpHandler.CookieContainer.Add(new Uri(InstaApiConstants.INSTAGRAM_URL), cookie);
             }
-
+            if (data.RawCookies?.Count > 0)
+            {
+                var rurCookie = data.RawCookies.FirstOrDefault(x => x.Name == InstaApiConstants.COOKIES_RUR);
+                if (rurCookie != null)
+                {
+                    _user.RurHeader = rurCookie.Value;
+                }
+                var midCookie = data.RawCookies.FirstOrDefault(x => x.Name == InstaApiConstants.COOKIES_MID);
+                if (rurCookie != null)
+                {
+                    _user.XMidHeader = midCookie.Value;
+                }
+            }
             if (data.InstaApiVersion == null || !LoadApiVersionFromSessionFile)
                 data.InstaApiVersion = InstaApiVersionType.Version191;
 
@@ -3353,6 +3366,7 @@ namespace InstagramApiSharp.API
             {
                 if (IsUserAuthenticated && FeedProcessor != null)
                 {
+
                     await Task.WhenAll(
                         SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/business/eligibility/get_monetization_products_eligibility_data/?product_types=branded_content,user_pay")),
                         LauncherSyncPrivate(),
@@ -3524,7 +3538,7 @@ namespace InstagramApiSharp.API
                 _logger?.LogException(exception);
             }
         }
-        private async Task LauncherSyncPrivate(bool second = false)
+        private async Task LauncherSyncPrivate(bool second = false, bool isBUrl = false)
         {
             try
             {
@@ -3545,8 +3559,13 @@ namespace InstagramApiSharp.API
                 else
                     data.Add("id", _deviceInfo.DeviceGuid.ToString());
 
-                var uri = UriCreator.GetLauncherSyncUri();
+                var uri = UriCreator.GetLauncherSyncUri(isBUrl);
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
+
+                if (isBUrl)
+                {
+                    request.Headers.Remove(InstaApiConstants.HEADER_PIGEON_SESSION_ID);
+                }
                 var response = await _httpRequestProcessor.SendAsync(request);
 
                 _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor, second);
@@ -3558,6 +3577,22 @@ namespace InstagramApiSharp.API
                     {
                         _user.PublicKey = pubKey;
                         _user.PublicKeyId = pubKeyId;
+                    }
+
+                    var cookies = _httpRequestProcessor.HttpHandler.CookieContainer
+                        .GetCookies(_httpRequestProcessor.Client.BaseAddress);
+
+                    string mid = cookies[InstaApiConstants.COOKIES_MID]?.Value ?? string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_SET_X_MID));
+                    string rur = cookies[InstaApiConstants.COOKIES_RUR]?.Value ?? string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_X_IG_ORIGIN_REGION));
+
+                    if (!string.IsNullOrEmpty(mid))
+                    {
+                        _user.XMidHeader = mid;
+                    }
+
+                    if (!string.IsNullOrEmpty(rur))
+                    {
+                        _user.RurHeader = rur;
                     }
                 }
             }
