@@ -2645,6 +2645,14 @@ namespace InstagramApiSharp.API
             IsCustomDeviceSet = true;
         }
         /// <summary>
+        ///     Get all cookies, if available.
+        /// </summary>
+        public CookieCollection GetCookies()
+        {
+            return _httpRequestProcessor.HttpHandler.CookieContainer
+                .GetCookies(_httpRequestProcessor.Client.BaseAddress);
+        }
+        /// <summary>
         ///     Set Accept Language
         /// </summary>
         /// <param name="languageCodeAndCountryCode">Language Code and Country Code. For example:

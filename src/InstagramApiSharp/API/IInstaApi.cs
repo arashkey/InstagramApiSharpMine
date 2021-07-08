@@ -29,6 +29,7 @@ using InstagramApiSharp.Helpers;
 
 using InstagramApiSharp.API.Push;
 using InstagramApiSharp.Logger;
+using System.Net;
 #if WITH_NOTIFICATION
 using InstagramApiSharp.API.RealTime;
 #endif
@@ -394,6 +395,10 @@ namespace InstagramApiSharp.API
         /// </summary>
         /// <param name="device">Android device</param>
         void SetDevice(AndroidDevice device);
+        /// <summary>
+        ///     Get all cookies, if available.
+        /// </summary>
+        CookieCollection GetCookies();
         /// <summary>
         ///     Set Accept Language
         /// </summary>
