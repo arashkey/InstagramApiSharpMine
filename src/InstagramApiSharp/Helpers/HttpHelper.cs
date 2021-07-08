@@ -21,7 +21,6 @@ namespace InstagramApiSharp.Helpers
     public class HttpHelper
     {
         public InstaApiVersion _apiVersion;
-        readonly Random Rnd = new Random();
         public IHttpRequestProcessor _httpRequestProcessor;
         public IInstaApi _instaApi;
         internal bool IsNewerApis => _instaApi.InstaApiVersionType > InstaApiVersionType.Version146;
@@ -40,16 +39,13 @@ namespace InstagramApiSharp.Helpers
             var currentCulture = GetCurrentCulture();
             System.Globalization.CultureInfo.CurrentCulture = EnglishCulture;
             var userAgent = deviceInfo.GenerateUserAgent(_apiVersion, _instaApi);
-
+            var currentUser = _instaApi.GetLoggedUser();
             var request = new HttpRequestMessage(method, uri);
             var cookies = _httpRequestProcessor.HttpHandler.CookieContainer.GetCookies(_httpRequestProcessor.Client
                        .BaseAddress);
-            var mid = cookies[InstaApiConstants.COOKIES_MID]?.Value ?? string.Empty;
-            var dsUserId = cookies[InstaApiConstants.COOKIES_DS_USER_ID]?.Value ?? string.Empty;
             //var sessionId = cookies[InstaApiConstants.COOKIES_SESSION_ID]?.Value ?? string.Empty;
             var shbid = cookies[InstaApiConstants.COOKIES_SHBID]?.Value ?? string.Empty;
             var shbts = cookies[InstaApiConstants.COOKIES_SHBTS]?.Value ?? string.Empty;
-            var rur = cookies[InstaApiConstants.COOKIES_RUR]?.Value ?? string.Empty;
             var igDirectRegionHint = cookies[InstaApiConstants.COOKIES_IG_DIRECT_REGION_HINT]?.Value ?? string.Empty;
 
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_APP_LOCALE, _instaApi.AppLocale);
@@ -85,16 +81,16 @@ namespace InstagramApiSharp.Helpers
 
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_BLOKS_PANORAMA_ENABLED, "true");
 
-            var wwwClaim = _instaApi.GetLoggedUser()?.WwwClaim;
+            var wwwClaim = currentUser?.WwwClaim;
 
             if (!string.IsNullOrEmpty(wwwClaim))
                 request.Headers.Add(InstaApiConstants.HEADER_X_WWW_CLAIM, wwwClaim);
             else
                 request.Headers.Add(InstaApiConstants.HEADER_X_WWW_CLAIM, InstaApiConstants.HEADER_X_WWW_CLAIM_DEFAULT);
 
-            var authorization = _instaApi.GetLoggedUser()?.Authorization;
+            var authorization = currentUser?.Authorization;
 
-            if (!string.IsNullOrEmpty(dsUserId) && !string.IsNullOrEmpty(authorization))
+            if (IsLoggedIn())
                 request.Headers.Add(InstaApiConstants.HEADER_AUTHORIZATION, authorization);
          
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_BLOKS_IS_LAYOUT_RTL, "false");
@@ -121,27 +117,25 @@ namespace InstagramApiSharp.Helpers
 
             request.Headers.Add(InstaApiConstants.HEADER_ACCEPT_LANGUAGE, _instaApi.AcceptLanguage);
 
+            if (!string.IsNullOrEmpty(currentUser.XMidHeader))
+                request.Headers.Add(InstaApiConstants.HEADER_X_MID, currentUser.XMidHeader);
 
-            if (!string.IsNullOrEmpty(mid))
-                request.Headers.Add(InstaApiConstants.HEADER_X_MID, mid);
+            request.Headers.Add(InstaApiConstants.HEADER_IG_INTENDED_USER_ID, (currentUser.LoggedInUser?.Pk ?? 0).ToString());
 
-            request.Headers.Add(InstaApiConstants.HEADER_IG_INTENDED_USER_ID, (_instaApi.GetLoggedUser().LoggedInUser?.Pk ?? 0).ToString());
-
-            if (!string.IsNullOrEmpty(dsUserId) && !string.IsNullOrEmpty(authorization) && !string.IsNullOrEmpty(igDirectRegionHint))
+            if (!string.IsNullOrEmpty(igDirectRegionHint) && IsLoggedIn())
                 request.Headers.Add(InstaApiConstants.HEADER_IG_U_DIRECT_REGION_HINT, igDirectRegionHint);
 
-            if (!string.IsNullOrEmpty(dsUserId) && !string.IsNullOrEmpty(authorization) && !string.IsNullOrEmpty(shbid))
+            if (!string.IsNullOrEmpty(shbid) && IsLoggedIn())
                 request.Headers.Add(InstaApiConstants.HEADER_IG_U_SHBID, shbid);
 
-            if (!string.IsNullOrEmpty(dsUserId) && !string.IsNullOrEmpty(authorization) && !string.IsNullOrEmpty(shbts))
+            if (!string.IsNullOrEmpty(shbts) && IsLoggedIn())
                 request.Headers.Add(InstaApiConstants.HEADER_IG_U_SHBTS, shbts);
 
-            if (!string.IsNullOrEmpty(dsUserId) && !string.IsNullOrEmpty(authorization))
-                request.Headers.Add(InstaApiConstants.HEADER_IG_U_DS_USER_ID, dsUserId);
+            if (currentUser?.LoggedInUser?.Pk > 0 && IsLoggedIn())
+                request.Headers.Add(InstaApiConstants.HEADER_IG_U_DS_USER_ID, currentUser.LoggedInUser.Pk.ToString());
 
-            if (!string.IsNullOrEmpty(dsUserId) && !string.IsNullOrEmpty(authorization) && !string.IsNullOrEmpty(rur))
-                request.Headers.Add(InstaApiConstants.HEADER_IG_U_RUR, rur);
-
+            if (!string.IsNullOrEmpty(currentUser.RurHeader))
+                request.Headers.Add(InstaApiConstants.HEADER_IG_U_RUR, currentUser.RurHeader);
 
             request.Headers.TryAddWithoutValidation(InstaApiConstants.HEADER_ACCEPT_ENCODING, InstaApiConstants.ACCEPT_ENCODING2);
 
@@ -155,11 +149,15 @@ namespace InstagramApiSharp.Helpers
 
             request.Headers.Add(InstaApiConstants.HEADER_IG_TIMEZONE_OFFSET, _instaApi.TimezoneOffset.ToString());
 
-            //request.Headers.Add(InstaApiConstants.HEADER_IG_INTENDED_USER_ID, (_instaApi.GetLoggedUser().LoggedInUser?.Pk ?? 0).ToString());
-          
             request.Headers.Add(InstaApiConstants.HEADER_PRIORITY, InstaApiConstants.HEADER_PRIORITY_VALUE_3);
 
             System.Globalization.CultureInfo.CurrentCulture = currentCulture;
+
+            bool IsLoggedIn()
+            {
+                return !string.IsNullOrEmpty(authorization) && _instaApi.IsUserAuthenticated;
+            }
+
             return request;
         }
         public HttpRequestMessage GetDefaultRequest(HttpMethod method, Uri uri, AndroidDevice deviceInfo, Dictionary<string, string> data)
@@ -205,7 +203,7 @@ namespace InstagramApiSharp.Helpers
         public HttpRequestMessage GetSignedRequest(HttpMethod method,
             Uri uri,
             AndroidDevice deviceInfo,
-            Dictionary<string, string> data, bool appendD = false)
+            Dictionary<string, string> data, bool appendD = false, string dValue = null)
         {
             var hash = CryptoHelper.CalculateHash(_apiVersion.SignatureKey,
                 JsonConvert.SerializeObject(data));
@@ -219,7 +217,7 @@ namespace InstagramApiSharp.Helpers
             if (!IsNewerApis)
                 fields.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
             if (appendD)
-                fields.Add("d", "0");
+                fields.Add("d", dValue ?? "0");
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(fields);
             return request;
@@ -228,7 +226,7 @@ namespace InstagramApiSharp.Helpers
         public HttpRequestMessage GetSignedRequest(HttpMethod method,
             Uri uri,
             AndroidDevice deviceInfo,
-            JObject data, bool appendD = false)
+            JObject data, bool appendD = false, string dValue = null)
         {
             var hash = CryptoHelper.CalculateHash(_apiVersion.SignatureKey,
                 data.ToString(Formatting.None));
@@ -241,7 +239,7 @@ namespace InstagramApiSharp.Helpers
             if (!IsNewerApis)
                 fields.Add(InstaApiConstants.HEADER_IG_SIGNATURE_KEY_VERSION, InstaApiConstants.IG_SIGNATURE_KEY_VERSION);
             if (appendD)
-                fields.Add("d", "0");
+                fields.Add("d", dValue ?? "0");
             var request = GetDefaultRequest(HttpMethod.Post, uri, deviceInfo);
             request.Content = new FormUrlEncodedContent(fields);
 

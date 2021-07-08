@@ -863,16 +863,21 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetHighlightFeedsUri(long userId, string phoneId)
+        public static Uri GetHighlightFeedsUri(long userId, string phoneId,
+            ushort batteryLevel = 100,
+            bool isCharging = false,
+            bool isDarkMode = false,
+            bool willSoundOn = false)
         {
             if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.HIGHLIGHT_TRAY, userId), out var instaUri))
                 throw new Exception("Cant create URI for highlight feeds");
             return instaUri
-                .AddQueryParameter(InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None))
-               .AddQueryParameter("battery_level", "100")
-               .AddQueryParameter("is_charging", "0")
-               .AddQueryParameter("will_sound_on", "0")
-               .AddQueryParameter("phone_id", phoneId);
+               .AddQueryParameter(InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None))
+               .AddQueryParameter("phone_id", phoneId)
+               .AddQueryParameter("battery_level", batteryLevel.ToString())
+               .AddQueryParameter("is_charging", Convert.ToUInt16(isCharging).ToString())
+               .AddQueryParameter("is_dark_mode", Convert.ToUInt16(isDarkMode).ToString())
+               .AddQueryParameter("will_sound_on", Convert.ToUInt16(willSoundOn).ToString());
         }
 
         public static Uri GetHighlightsArchiveUri()
@@ -2334,22 +2339,24 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetTopicalExploreUri(string sessionId, string maxId = null, string clusterId = null, int timezoneOffset = -14400)
+        public static Uri GetTopicalExploreUri(string sessionId, 
+            string maxId = null, 
+            string clusterId = null, 
+            int timezoneOffset = -14400)
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DISCOVER_TOPICAL_EXPLORE, out var instaUri))
                 throw new Exception("Cant create URI for topical explore");
 
             instaUri = instaUri
                 .AddQueryParameter("is_prefetch", "false")
-                .AddQueryParameter("omit_cover_media", "true");
-            if (!string.IsNullOrEmpty(maxId))
-                instaUri = instaUri.AddQueryParameter("max_id", maxId);
-            instaUri = instaUri
+                .AddQueryParameter("omit_cover_media", "true")
+                .AddQueryParameter("max_id", maxId)
                 .AddQueryParameter("module", "explore_popular")
                 .AddQueryParameter("use_sectional_payload", "true")
                 .AddQueryParameter("timezone_offset", timezoneOffset.ToString())
                 .AddQueryParameter("session_id", sessionId)
                 .AddQueryParameter("include_fixed_destinations", "true");
+            
             if (clusterId.ToLower() == "explore_all:0" || clusterId.ToLower() == "explore_all%3A0")
             {
                 if (!string.IsNullOrEmpty(maxId))
@@ -2357,14 +2364,6 @@ namespace InstagramApiSharp.Helpers
                     instaUri = instaUri.AddQueryParameter("cluster_id", "explore_all%3A0");
                 }
             }
-            else
-            {
-                instaUri = instaUri.AddQueryParameter("cluster_id", Uri.EscapeDataString(clusterId));
-            }
-
-            instaUri = instaUri
-                .AddQueryParameter("session_id", sessionId)
-                .AddQueryParameter("include_fixed_destinations", "true");
             return instaUri;
         }
 

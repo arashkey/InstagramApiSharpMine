@@ -453,6 +453,8 @@ namespace InstagramApiSharp
                     return "self_comments_v2_feed_contextual_self_profile";
                 case InstaCommentContainerModuleType.SelfCommentsV2ClipsViewerClipsTab:
                     return "self_comments_v2_clips_viewer_clips_tab";
+                case InstaCommentContainerModuleType.ModalCommentComposerFeedTimeline:
+                    return "modal_comment_composer_feed_timeline";
             }
         }
 

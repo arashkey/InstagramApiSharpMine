@@ -620,12 +620,22 @@ namespace InstagramApiSharp.API.Processors
         ///     Get user highlight feeds by user id (pk)
         /// </summary>
         /// <param name="userId">User id (pk)</param>
-        public async Task<IResult<InstaHighlightFeeds>> GetHighlightFeedsAsync(long userId)
+        public async Task<IResult<InstaHighlightFeeds>> GetHighlightFeedsAsync(long userId,
+            ushort batteryLevel = 100,
+            bool isCharging = false,
+            bool isDarkMode = false,
+            bool willSoundOn = false)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var instaUri = UriCreator.GetHighlightFeedsUri(userId, _deviceInfo.PhoneGuid.ToString());
+                var instaUri = UriCreator.GetHighlightFeedsUri(userId, 
+                    _deviceInfo.PhoneGuid.ToString(),
+                    batteryLevel,
+                    isCharging,
+                    isDarkMode,
+                    willSoundOn);
+
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
