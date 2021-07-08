@@ -19,6 +19,7 @@ namespace InstagramApiSharp.Enums
         IgtvProfile,                // comments_v2_igtv_profile                             Igtv profile
         SelfIgtvProfile,            // self_comments_v2_igtv_profile                        Self igtv profile
         SelfFeedContextualProfile,  // self_comments_v2_feed_contextual_self_profile        Self comment [media, user tags]
-        SelfCommentsV2ClipsViewerClipsTab
+        SelfCommentsV2ClipsViewerClipsTab,
+        ModalCommentComposerFeedTimeline
     }
 }

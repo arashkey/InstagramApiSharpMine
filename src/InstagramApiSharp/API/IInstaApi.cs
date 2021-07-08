@@ -29,6 +29,7 @@ using InstagramApiSharp.Helpers;
 
 using InstagramApiSharp.API.Push;
 using InstagramApiSharp.Logger;
+using System.Net;
 #if WITH_NOTIFICATION
 using InstagramApiSharp.API.RealTime;
 #endif
@@ -395,6 +396,10 @@ namespace InstagramApiSharp.API
         /// <param name="device">Android device</param>
         void SetDevice(AndroidDevice device);
         /// <summary>
+        ///     Get all cookies, if available.
+        /// </summary>
+        CookieCollection GetCookies();
+        /// <summary>
         ///     Set Accept Language
         /// </summary>
         /// <param name="languageCodeAndCountryCode">Language Code and Country Code. For example:
@@ -593,7 +598,8 @@ namespace InstagramApiSharp.API
         /// <summary>
         ///     Send requests after you logged in successfully (Act as an real instagram user)
         /// </summary>
-        Task<IResult<bool>> SendRequestsAfterLoginAsync();
+        /// <param name="sendAllRequests">Sends 27 requests or more</param>
+        Task<IResult<bool>> SendRequestsAfterLoginAsync(bool sendAllRequests = true);
         /// <summary>
         ///     Login using given credentials asynchronously
         /// </summary>

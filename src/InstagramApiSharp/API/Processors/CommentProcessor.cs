@@ -88,7 +88,7 @@ namespace InstagramApiSharp.API.Processors
                     {"user_breadcrumb", breadcrumb},
                     {"delivery_class", "organic"},
                     {"idempotence_token", Guid.NewGuid().ToString()},
-                    {"_csrftoken", _user.CsrfToken},
+                    //{"_csrftoken", _user.CsrfToken},
                     {"radio_type", "wifi-none"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},

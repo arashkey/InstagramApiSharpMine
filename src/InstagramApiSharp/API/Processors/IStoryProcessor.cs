@@ -113,7 +113,11 @@ namespace InstagramApiSharp.API.Processors
         ///     Get user highlight feeds by user id (pk)
         /// </summary>
         /// <param name="userId">User id (pk)</param>
-        Task<IResult<InstaHighlightFeeds>> GetHighlightFeedsAsync(long userId);
+        Task<IResult<InstaHighlightFeeds>> GetHighlightFeedsAsync(long userId,
+            ushort batteryLevel = 100,
+            bool isCharging = false,
+            bool isDarkMode = false,
+            bool willSoundOn = false);
 
         /// <summary>
         ///     Get user highlights archive

@@ -620,12 +620,22 @@ namespace InstagramApiSharp.API.Processors
         ///     Get user highlight feeds by user id (pk)
         /// </summary>
         /// <param name="userId">User id (pk)</param>
-        public async Task<IResult<InstaHighlightFeeds>> GetHighlightFeedsAsync(long userId)
+        public async Task<IResult<InstaHighlightFeeds>> GetHighlightFeedsAsync(long userId,
+            ushort batteryLevel = 100,
+            bool isCharging = false,
+            bool isDarkMode = false,
+            bool willSoundOn = false)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var instaUri = UriCreator.GetHighlightFeedsUri(userId, _deviceInfo.PhoneGuid.ToString());
+                var instaUri = UriCreator.GetHighlightFeedsUri(userId, 
+                    _deviceInfo.PhoneGuid.ToString(),
+                    batteryLevel,
+                    isCharging,
+                    isDarkMode,
+                    willSoundOn);
+
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -2964,27 +2974,23 @@ namespace InstagramApiSharp.API.Processors
 
                 var isFreshPagination = HasMore(forceRefresh);
 
-                if (isFreshPagination)
+                if (isFreshPagination || string.IsNullOrEmpty(pagination.SessionId))
                     pagination.SessionId = Guid.NewGuid().ToString();
 
                 var storyFeedUri = UriCreator.GetStoryFeedUri();
 
                 var data = new Dictionary<string, string>
                 {
-                    {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None)},
-                    {"_csrftoken", _user.CsrfToken},
+                    {"reason", forceRefresh ? "pull_to_refresh" : "cold_start"},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"tray_session_id", pagination.SessionId},
                     {"request_id", Guid.NewGuid().ToString()}
                 };
-                if (forceRefresh)
-                    data.Add("reason", "pull_to_refresh");
-                else
-                    data.Add("reason", "cold_start");
                 string nextId = "50";
                 if (isFreshPagination || forceRefresh)
                 {
                     nextId = "50";
+                    data.Add(InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString(Formatting.None));
                     data.Add(InstaApiConstants.HEADER_TIMEZONE, _instaApi.TimezoneOffset.ToString());
                     data.Add("page_size", "50");
                 }
@@ -3004,6 +3010,7 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("reel_ids_to_fetch", jArr.ToString(Formatting.None));
                 }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, storyFeedUri, _deviceInfo, data);
+                request.Headers.AppendPriorityHeader(InstaApiConstants.HEADER_PRIORITY_VALUE_0, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
