@@ -104,7 +104,8 @@ namespace InstagramApiSharp.Converters
                     Text = SourceObject.StoryShare.Text,
                     IsLinked = SourceObject.StoryShare.IsLinked,
                     Message = SourceObject.StoryShare.Message,
-                    Title = SourceObject.StoryShare.Title
+                    Title = SourceObject.StoryShare.Title,
+                    ReelId = SourceObject.StoryShare.ReelId
                 };
                 if (SourceObject.StoryShare.Media != null)
                 {

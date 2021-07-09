@@ -11,5 +11,6 @@ namespace InstagramApiSharp.Classes
         public bool IsLinked { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
+        public string ReelId { get; set; }
     }
 }
