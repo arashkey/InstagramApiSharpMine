@@ -3342,13 +3342,28 @@ namespace InstagramApiSharp.API
         {
             try
             {
-                await Task.WhenAll(GetContactPointPrefill(),
-                      LauncherSyncPrivate(),
-                      QeSync(),
-                      GetPrefillCandidates(),
-                      LauncherSyncPrivate(true),
-                      QeSync(),
-                      GetPrefillCandidates()).ConfigureAwait(false);
+                // lets do it another way?!
+                var tasks = new List<Task>()
+                {
+                    GetContactPointPrefill(),
+                    LauncherSyncPrivate(),
+                };
+                if (!_httpHelper.NewerThan180)
+                    tasks.Add(QeSync());
+                tasks.Add(GetPrefillCandidates());
+                tasks.Add(LauncherSyncPrivate(true));
+                if (!_httpHelper.NewerThan180)
+                    tasks.Add(QeSync());
+                tasks.Add(GetPrefillCandidates());
+
+                await Task.WhenAll(tasks).ConfigureAwait(false);
+                //await Task.WhenAll(GetContactPointPrefill(),
+                //      LauncherSyncPrivate(),
+                //      QeSync(),
+                //      GetPrefillCandidates(),
+                //      LauncherSyncPrivate(true),
+                //      QeSync(),
+                //      GetPrefillCandidates()).ConfigureAwait(false);
 
                 await Task.Delay(4000);
                 return Result.Success(true);
@@ -3378,10 +3393,10 @@ namespace InstagramApiSharp.API
                     await Task.WhenAll(
                         SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/business/eligibility/get_monetization_products_eligibility_data/?product_types=branded_content,user_pay")),
                         LauncherSyncPrivate(),
-                        QeSync(),
                         SendGetRequestAsync(new Uri("https://i.instagram.com/api/v1/multiple_accounts/get_account_family/")))
                         .ConfigureAwait(false);
-                    
+                    if (!_httpHelper.NewerThan180)
+                        await QeSync().ConfigureAwait(false);
                     if (sendAllRequests)
                     {
                         // while deviding tasks into multiple Task.WhenAll ? because instagram sends some requests together and waits for their reponses,
