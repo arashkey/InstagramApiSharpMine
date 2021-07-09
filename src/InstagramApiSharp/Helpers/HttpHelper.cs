@@ -56,9 +56,9 @@ namespace InstagramApiSharp.Helpers
 
             if (NewerThan180)
             {
-                var pigeonId = "UFS-" + deviceInfo.PigeonSessionId.ToString() +
-                    (_instaApi.IsUserAuthenticated || request.RequestUri.ToString().IndexOf("/launcher/sync") != -1 ||
-                    request.RequestUri.ToString().IndexOf("/accounts/login") != -1 ? "-1" : "-0");
+                var pigeonId = "UFS-" + deviceInfo.PigeonSessionId.ToString() + "-0";
+                //(_instaApi.IsUserAuthenticated || request.RequestUri.ToString().IndexOf("/launcher/sync") != -1 ||
+                //request.RequestUri.ToString().IndexOf("/accounts/login") != -1 ? "-1" : "-0");
                 request.Headers.Add(InstaApiConstants.HEADER_PIGEON_SESSION_ID, pigeonId);
             }
             else
