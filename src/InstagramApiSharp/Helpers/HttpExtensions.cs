@@ -52,28 +52,26 @@ namespace InstagramApiSharp.Helpers
             IInstaApi instaApi,
             bool removeHeader = false)
         {
-            var IsNewerApis = instaApi == null || instaApi.HttpHelper.IsNewerApis;
             var currentCulture = HttpHelper.GetCurrentCulture();
             System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
             
             if (removeHeader)
                 headers.Remove(name);
 
-            headers.Add(IsNewerApis ? name.ToLower() : name, value);
+            headers.Add(name, value);
 
             System.Globalization.CultureInfo.CurrentCulture = currentCulture;
         }
         internal static void AddHeader(this HttpContentHeaders headers, string name, string value, IInstaApi instaApi,
             bool removeHeader = false)
         {
-            var IsNewerApis = instaApi == null || instaApi.HttpHelper.IsNewerApis;
             var currentCulture = HttpHelper.GetCurrentCulture();
             System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
             
             if (removeHeader)
                 headers.Remove(name);
 
-            headers.Add(IsNewerApis ? name.ToLower() : name, value);
+            headers.Add(name, value);
 
             System.Globalization.CultureInfo.CurrentCulture = currentCulture;
         }

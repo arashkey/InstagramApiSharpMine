@@ -105,7 +105,7 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<bool>> LikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
             uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
             bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
-            string parentMediaPK = null, string chainingSessionId = null);
+            string parentMediaPK = null, string chainingSessionId = null, string navChain = null);
 
         /// <summary>
         ///     Report media
@@ -134,7 +134,7 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<bool>> UnLikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
             uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
             bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
-            string parentMediaPK = null, string chainingSessionId = null);
+            string parentMediaPK = null, string chainingSessionId = null, string navChain = null);
 
         /// <summary>
         ///     Unsave media

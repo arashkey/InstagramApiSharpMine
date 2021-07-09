@@ -516,10 +516,10 @@ namespace InstagramApiSharp.API.Processors
         public async Task<IResult<bool>> LikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
             uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
             bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
-            string parentMediaPK = null, string chainingSessionId = null)
+            string parentMediaPK = null, string chainingSessionId = null, string navChain = null)
         {
             return await LikeUnlikeMediaInternal(UriCreator.GetLikeMediaUri(mediaId), mediaId, containerModule,
-               feedPosition, inventorySource, isCarouselBumpedPost, carouselIndex, exploreSourceToken, parentMediaPK, chainingSessionId);
+               feedPosition, inventorySource, isCarouselBumpedPost, carouselIndex, exploreSourceToken, parentMediaPK, chainingSessionId, navChain);
         }
 
         /// <summary>
@@ -613,10 +613,10 @@ namespace InstagramApiSharp.API.Processors
         public async Task<IResult<bool>> UnLikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
            uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
             bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
-            string parentMediaPK = null, string chainingSessionId = null)
+            string parentMediaPK = null, string chainingSessionId = null, string navChain = null)
         {
             return await LikeUnlikeMediaInternal(UriCreator.GetUnLikeMediaUri(mediaId), mediaId, containerModule,
-               feedPosition, inventorySource, isCarouselBumpedPost, carouselIndex, exploreSourceToken, parentMediaPK, chainingSessionId);
+               feedPosition, inventorySource, isCarouselBumpedPost, carouselIndex, exploreSourceToken, parentMediaPK, chainingSessionId, navChain);
         }
 
         /// <summary>
@@ -1410,8 +1410,14 @@ namespace InstagramApiSharp.API.Processors
         }
         private async Task<IResult<bool>> LikeUnlikeMediaInternal(Uri instaUri, string mediaId,
             InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
-            uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None, bool? isCarouselBumpedPost = false,
-            int? carouselIndex = null, string exploreSourceToken = null, string parentMediaPK = null, string chainingSessionId = null)
+            uint feedPosition = 0, 
+            InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None, 
+            bool? isCarouselBumpedPost = false,
+            int? carouselIndex = null, 
+            string exploreSourceToken = null,
+            string parentMediaPK = null,
+            string chainingSessionId = null,
+            string navChain = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
@@ -1442,7 +1448,8 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("parent_m_pk", parentMediaPK);
                 if (!string.IsNullOrEmpty(chainingSessionId))
                     data.Add("chaining_session_id", chainingSessionId);
-
+                if (navChain.IsNotEmpty())
+                    data.Add("nav_chain", navChain);
                 var likeD = instaUri.ToString().IndexOf("/like/") != -1 ? "1" : null;
 
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post,
