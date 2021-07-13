@@ -1104,8 +1104,6 @@ namespace InstagramApiSharp.API
             {
                 bool needsRelogin = false;
                 ReloginLabel:
-                if (isNewLogin && !_httpHelper.NewerThan180)
-                    await GetToken().ConfigureAwait(false);
 
                 var csrftoken = GetCsrfTokenFromCookies();
                 _user.CsrfToken = csrftoken;
@@ -1134,7 +1132,7 @@ namespace InstagramApiSharp.API
                 {
                     if (string.IsNullOrEmpty(csrftoken))
                     {
-                        await GetToken();
+                        await GetToken().ConfigureAwait(false);
                         goto ReloginLabel;
                     }
                 }
