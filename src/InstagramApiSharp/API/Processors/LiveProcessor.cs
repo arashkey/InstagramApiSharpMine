@@ -68,13 +68,16 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"client_version", "1"},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"event_user_id", userIdToInvite.ToString()},
                     {"event_type", "JOINED"},
                     {"offset_to_video_start", offsetToVideoStart.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -109,12 +112,15 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"reason", "leave_broadcast"},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"num_participants", numParticipants.ToString()},
                     {"encoded_server_data_info", encodedServerDataInfo},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -149,13 +155,16 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetBroadcastInviteLiveUri(broadcastId);
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"invitees", userIdToInvite.ToString()},
                     {"offset_to_video_start", offsetToVideoStart.ToString()},
                     {"encoded_server_data_info", encodedServerDataInfo},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -191,12 +200,15 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"message_type", "CONFERENCE_STATE"},
                     {"cur_version", curVersion.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"transaction_id", ExtensionHelper.GetLiveTransactionToken()},
                     {"encoded_server_data_info", encodedServerDataInfo},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -234,11 +246,14 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"target_video_height", targetVideoHeight.ToString()},
                     {"target_video_width", targetVideoWidth.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"sdp_offer", sdpOffer},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -299,10 +314,13 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetBroadcastAddToPostLiveUri(broadcastId);
                 var data = new JObject
                 {
-                    { "_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -343,12 +361,15 @@ namespace InstagramApiSharp.API.Processors
                     {"user_breadcrumb", commentText},
                     {"live_or_vod", "1"},
                     {"idempotence_token",  Guid.NewGuid().ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"comment_text", commentText},
                     {"offset_to_video_start"," 0"},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -477,10 +498,13 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetBroadcastDisableCommenstUri(broadcastId);
                 var data = new JObject
                 {
-                    { "_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -514,10 +538,13 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetBroadcastEnableCommenstUri(broadcastId);
                 var data = new JObject
                 {
-                    { "_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -552,11 +579,14 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetBroadcastEndUri(broadcastId);
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"end_after_copyright_warning", endAfterCopyrightWarning.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -725,10 +755,13 @@ namespace InstagramApiSharp.API.Processors
                 var uploadId = ApiRequestMessage.GenerateUploadId();
                 var data = new Dictionary<string, string>
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"offset_to_video_start", "30"}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -1051,11 +1084,14 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetLikeLiveUri(broadcastId);
                 var data = new JObject
                 {
-                    { "_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"user_like_count", likeCount}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -1119,12 +1155,15 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetBroadcastPinCommentUri(broadcastId);
                 var data = new JObject
                 {
-                    { "_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"comment_id", commentId},
                     {"offset_to_video_start", 0}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -1204,13 +1243,16 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetBroadcastStartUri(broadcastId);
                 var data = new Dictionary<string,string>
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };
                 if (latitude != null && longitude != null)
                 {
                     data.Add("latitude", latitude.ToString());
                     data.Add("longitude", longitude.ToString());
+                }
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
                 }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
@@ -1264,9 +1306,12 @@ namespace InstagramApiSharp.API.Processors
                     {"broadcast_id", broadcastId},
                     {"action", "send_item"},
                     {"client_context", clientContext},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (threadIds?.Length > 0)
                 {
                     data.Add("thread_ids", $"[{threadIds.EncodeList(false)}]");
@@ -1319,12 +1364,15 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetBroadcastUnPinCommentUri(broadcastId);
                 var data = new JObject
                 {
-                    { "_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"comment_id", commentId},
                     {"offset_to_video_start", 0}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
                 var response = await _httpRequestProcessor.SendAsync(request);
