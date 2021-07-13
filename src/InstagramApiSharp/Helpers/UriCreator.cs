@@ -3079,5 +3079,11 @@ namespace InstagramApiSharp.Helpers
             return instaUri
                 .AddQueryParameter("max_id", maxId);
         }
+        public static Uri GetBroadcastQuestionStatusUri(string broadcastId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.LIVE_QUESTION_STATUS, broadcastId), out var instaUri))
+                throw new Exception("Cant create URI for broadcast question status");
+            return instaUri;
+        }
     }
 }

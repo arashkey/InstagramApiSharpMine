@@ -650,6 +650,7 @@ namespace InstagramApiSharp.API
         public const string LIVE_INVITE = API_SUFFIX + "/live/{0}/invite/";
         public const string LIVE_LEAVE = API_SUFFIX + "/live/{0}/leave/";
         public const string LIVE_BROADCAST_EVENT = API_SUFFIX + "/live/{0}/broadcast_event/";
+        public const string LIVE_QUESTION_STATUS = API_SUFFIX + "/live/{0}/question_status/";
 
         #endregion Live endpoints constants
 

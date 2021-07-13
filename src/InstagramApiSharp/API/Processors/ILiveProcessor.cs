@@ -20,6 +20,14 @@ namespace InstagramApiSharp.API.Processors
     public interface ILiveProcessor
     {
         /// <summary>
+        ///     Set live broadcast question status
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="allowQuestionSubmission">Allow people to submit questions</param>
+        Task<IResult<bool>> SetQuestionStatusAsync(string broadcastId,
+            bool allowQuestionSubmission = false);
+
+        /// <summary>
         ///     Let Instagram know that you invited someone to a live broadcast and joined successfully
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>

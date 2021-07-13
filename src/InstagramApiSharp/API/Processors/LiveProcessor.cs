@@ -54,6 +54,54 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
+        ///     Set live broadcast question status
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        /// <param name="allowQuestionSubmission">Allow people to submit questions</param>
+        public async Task<IResult<bool>> SetQuestionStatusAsync(string broadcastId, 
+            bool allowQuestionSubmission = false)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetBroadcastQuestionStatusUri(broadcastId);
+                var data = new JObject
+                {
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"allow_question_submission", allowQuestionSubmission.ToString()},
+                };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<JObject>(json);
+                var status = obj["status"];
+                if (status?.Value<string>() == "ok")
+                {
+                    var enabled = obj["is_question_submission_allowed"].Value<bool>();
+                    return Result.Success(allowQuestionSubmission == enabled);
+                }
+                else
+                    return Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
+            }
+        }
+
+        /// <summary>
         ///     Let Instagram know that you invited someone to a live broadcast and joined successfully
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
@@ -97,6 +145,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<bool>(exception);
             }
         }
+
         /// <summary>
         ///     Leave or cancel a live broadcast
         /// </summary>
