@@ -2,6 +2,7 @@
 {
     public class InstaUser : InstaUserShort
     {
+        public InstaUser() { }
         public InstaUser(InstaUserShort instaUserShort)
         {
             Pk = instaUserShort.Pk;

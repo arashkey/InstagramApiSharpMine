@@ -5,6 +5,7 @@ namespace InstagramApiSharp.Classes.Models
 {
     public class InstaCurrentUser : InstaUserShort
     {
+        public InstaCurrentUser() { }
         public InstaCurrentUser(InstaUserShort instaUserShort)
         {
             Pk = instaUserShort.Pk;
