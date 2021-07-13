@@ -668,7 +668,12 @@ namespace InstagramApiSharp.API.Processors
         ///     Get heart beat and viewer count.
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
-        public async Task<IResult<InstaBroadcastLiveHeartBeatViewerCount>> GetHeartBeatAndViewerCountAsync(string broadcastId)
+        /// <param name="offsetToVideoStart">
+        ///     Offset to video start, multiple by 2. 
+        ///     <para>i.e: 0 2 4 6 8 10 12 14 and etc.</para>
+        /// </param>
+        public async Task<IResult<InstaBroadcastLiveHeartBeatViewerCount>> GetHeartBeatAndViewerCountAsync(string broadcastId,
+            uint offsetToVideoStart = 0)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
@@ -678,7 +683,7 @@ namespace InstagramApiSharp.API.Processors
                 var data = new Dictionary<string, string>
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"offset_to_video_start", "30"}
+                    {"offset_to_video_start", offsetToVideoStart.ToString()}
                 };
                 if (!_httpHelper.NewerThan180)
                 {

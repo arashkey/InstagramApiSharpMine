@@ -132,7 +132,12 @@ namespace InstagramApiSharp.API.Processors
         ///     Get heart beat and viewer count.
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
-        Task<IResult<InstaBroadcastLiveHeartBeatViewerCount>> GetHeartBeatAndViewerCountAsync(string broadcastId);
+        /// <param name="offsetToVideoStart">
+        ///     Offset to video start, multiple by 2. 
+        ///     <para>i.e: 0 2 4 6 8 10 12 14 and etc.</para>
+        /// </param>
+        Task<IResult<InstaBroadcastLiveHeartBeatViewerCount>> GetHeartBeatAndViewerCountAsync(string broadcastId,
+            uint offsetToVideoStart = 0);
         
         /// <summary>
         ///     Get broadcast information.
