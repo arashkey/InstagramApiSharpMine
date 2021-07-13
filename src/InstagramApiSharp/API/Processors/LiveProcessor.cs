@@ -83,7 +83,7 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var instaUri = UriCreator.GetBroadcastQuestionStatusUri(broadcastId);
-                var data = new JObject
+                var data = new Dictionary<string, string>
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"allow_question_submission", allowQuestionSubmission.ToString()},
