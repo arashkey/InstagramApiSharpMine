@@ -24,6 +24,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
         Task<IResult<bool>> EnableJoinToLiveRequestAsync(string broadcastId);
+
         /// <summary>
         ///     Disable join to live broadcast request
         /// </summary>
