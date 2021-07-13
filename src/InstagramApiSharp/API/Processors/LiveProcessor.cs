@@ -378,7 +378,10 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="previewWidth">Preview width</param>
         /// <param name="previewHeight">Preview height</param>
-        public async Task<IResult<InstaBroadcastCreate>> CreateAsync(int previewWidth = 720, int previewHeight = 1184)
+        /// <param name="title">Title => optional</param>
+        public async Task<IResult<InstaBroadcastCreate>> CreateAsync(int previewWidth = 720,
+            int previewHeight = 1184,
+            string title = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
@@ -386,13 +389,23 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetBroadcastCreateUri();
                 var data = new Dictionary<string, string>
                 {
-                    {"_csrftoken", _user.CsrfToken},
+                    {"user_pay_enabled", "false"},
                     {"preview_height",  previewHeight.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"should_use_rsys_rtc_infra", "false"},
                     {"broadcast_type",  "RTMP_SWAP_ENABLED"},
                     {"preview_width",  previewWidth.ToString()},
-                    {"internal_only",  0.ToString()}
+                    {"internal_only",  "0"},
+                    {"visibility",  "0"},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
+                if (title.IsNotEmpty())
+                {
+                    data.Add("broadcast_message", title);
+                }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.Host = "i.instagram.com";
                 var response = await _httpRequestProcessor.SendAsync(request);
