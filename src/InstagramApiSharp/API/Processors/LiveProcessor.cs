@@ -54,6 +54,24 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
+        ///     Enable join to live broadcast request
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        public async Task<IResult<bool>> EnableJoinToLiveRequestAsync(string broadcastId)
+        {
+            return await EnableDisableJoinRequest(UriCreator.GetBroadcastEnableJoinRequestUri(broadcastId)).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        ///     Disable join to live broadcast request
+        /// </summary>
+        /// <param name="broadcastId">Broadcast id</param>
+        public async Task<IResult<bool>> DisableJoinToLiveRequestAsync(string broadcastId)
+        {
+            return await EnableDisableJoinRequest(UriCreator.GetBroadcastDisbaleJoinRequestUri(broadcastId)).ConfigureAwait(false);
+        }
+
+        /// <summary>
         ///     Set live broadcast question status
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
@@ -1392,6 +1410,40 @@ namespace InstagramApiSharp.API.Processors
             {
                 _logger?.LogException(exception);
                 return Result.Fail<InstaDiscoverTopLiveResponse>(exception);
+            }
+        }
+
+        private async Task<IResult<bool>> EnableDisableJoinRequest(Uri instaUri)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var data = new JObject
+                {
+                    {"_uid", _user.LoggedInUser.Pk.ToString()},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<bool>(response, json);
+                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
+                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail<bool>(exception);
             }
         }
     }

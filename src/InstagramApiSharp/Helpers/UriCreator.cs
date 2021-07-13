@@ -3085,5 +3085,17 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for broadcast question status");
             return instaUri;
         }
+        public static Uri GetBroadcastEnableJoinRequestUri(string broadcastId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.LIVE_ENABLE_REQUEST_TO_JOIN, broadcastId), out var instaUri))
+                throw new Exception("Cant create URI for enable join request broadcasts");
+            return instaUri;
+        }
+        public static Uri GetBroadcastDisbaleJoinRequestUri(string broadcastId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.LIVE_DISABLE_REQUEST_TO_JOIN, broadcastId), out var instaUri))
+                throw new Exception("Cant create URI for enable join request broadcasts");
+            return instaUri;
+        }
     }
 }

@@ -651,6 +651,8 @@ namespace InstagramApiSharp.API
         public const string LIVE_LEAVE = API_SUFFIX + "/live/{0}/leave/";
         public const string LIVE_BROADCAST_EVENT = API_SUFFIX + "/live/{0}/broadcast_event/";
         public const string LIVE_QUESTION_STATUS = API_SUFFIX + "/live/{0}/question_status/";
+        public const string LIVE_ENABLE_REQUEST_TO_JOIN = API_SUFFIX + "/live/{0}/enable_request_to_join/";
+        public const string LIVE_DISABLE_REQUEST_TO_JOIN = API_SUFFIX + "/live/{0}/disable_request_to_join/";
 
         #endregion Live endpoints constants
 
