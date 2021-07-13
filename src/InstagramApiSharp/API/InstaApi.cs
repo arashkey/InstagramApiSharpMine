@@ -3532,6 +3532,7 @@ namespace InstagramApiSharp.API
         {
             try
             {
+                if (_user?.UserName?.IsEmpty() ?? true) { return; }
                 var clientContactPoints = new JArray(new JObject
                 {
                     {"type", "omnistring"},

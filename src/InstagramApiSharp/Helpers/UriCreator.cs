@@ -2357,7 +2357,7 @@ namespace InstagramApiSharp.Helpers
                 .AddQueryParameter("session_id", sessionId)
                 .AddQueryParameter("include_fixed_destinations", "true");
             
-            if (clusterId.ToLower() == "explore_all:0" || clusterId.ToLower() == "explore_all%3A0")
+            if (clusterId?.ToLower() == "explore_all:0" || clusterId?.ToLower() == "explore_all%3A0")
             {
                 if (!string.IsNullOrEmpty(maxId))
                 {
