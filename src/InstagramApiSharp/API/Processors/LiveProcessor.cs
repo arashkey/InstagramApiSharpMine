@@ -302,47 +302,6 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaBroadcastThumbnails>(exception);
             }
         }
-        /// <summary>
-        ///     Add an broadcast to post live.
-        /// </summary>
-        /// <param name="broadcastId">Broadcast id</param>
-        public async Task<IResult<InstaBroadcastAddToPostLive>> AddToPostLiveAsync(string broadcastId)
-        {
-            UserAuthValidator.Validate(_userAuthValidate);
-            try
-            {
-                var instaUri = UriCreator.GetBroadcastAddToPostLiveUri(broadcastId);
-                var data = new JObject
-                {
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"_uid", _user.LoggedInUser.Pk.ToString()}
-                };
-                if (!_httpHelper.NewerThan180)
-                {
-                    data.Add("_csrftoken", _user.CsrfToken);
-                }
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Host = "i.instagram.com";
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode != HttpStatusCode.OK)
-                    return Result.UnExpectedResponse<InstaBroadcastAddToPostLive>(response, json);
-
-                var obj = JsonConvert.DeserializeObject<InstaBroadcastAddToPostLiveResponse>(json);
-
-                return Result.Success(ConvertersFabric.Instance.GetAddToPostLiveConverter(obj).Convert());
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaBroadcastAddToPostLive), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<InstaBroadcastAddToPostLive>(exception);
-            }
-        }
 
         /// <summary>
         ///     Post a new comment to broadcast.

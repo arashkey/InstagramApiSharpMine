@@ -62,12 +62,6 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="broadcastId">Broadcast identifier</param>
         Task<IResult<InstaBroadcastThumbnails>> GetPostLiveThumbnailsAsync(string broadcastId);
-        /// <summary>
-        ///     Add an broadcast to post live.
-        /// </summary>
-        /// <param name="broadcastId">Broadcast id</param>
-        [Obsolete("AddToPostLiveAsync API is deprecated by Instagram.\nSo this function will be deleted in the future releases.", true)]
-        Task<IResult<InstaBroadcastAddToPostLive>> AddToPostLiveAsync(string broadcastId);
 
         /// <summary>
         ///     Post a new comment to broadcast.
