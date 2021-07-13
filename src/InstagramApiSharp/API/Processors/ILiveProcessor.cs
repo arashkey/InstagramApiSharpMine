@@ -82,13 +82,6 @@ namespace InstagramApiSharp.API.Processors
             string title = null);
 
         /// <summary>
-        ///     Delete an broadcast from post live.
-        /// </summary>
-        /// <param name="broadcastId">Broadcast id</param>
-        [Obsolete("DeletePostLiveAsync API is deprecated by Instagram.\nSo this function will be deleted in the future releases.", true)]
-        Task<IResult<bool>> DeletePostLiveAsync(string broadcastId);
-
-        /// <summary>
         ///     Disable broadcast comments.
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>

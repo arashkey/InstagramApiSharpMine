@@ -409,43 +409,6 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
-        ///     Delete an broadcast from post live.
-        /// </summary>
-        /// <param name="broadcastId">Broadcast id</param>
-        public async Task<IResult<bool>> DeletePostLiveAsync(string broadcastId)
-        {
-            UserAuthValidator.Validate(_userAuthValidate);
-            try
-            {
-                var instaUri = UriCreator.GetBroadcastDeletePostLiveUri(broadcastId);
-                var data = new JObject
-                {
-                    { "_csrftoken", _user.CsrfToken},
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"_uid", _user.LoggedInUser.Pk.ToString()}
-                };
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.Host = "i.instagram.com";
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                if (response.StatusCode != HttpStatusCode.OK)
-                    return Result.UnExpectedResponse<bool>(response, json);
-                var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
-                return obj.IsSucceed ? Result.Success(true) : Result.UnExpectedResponse<bool>(response, json);
-            }
-            catch (HttpRequestException httpException)
-            {
-                _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
-            }
-            catch (Exception exception)
-            {
-                _logger?.LogException(exception);
-                return Result.Fail<bool>(exception);
-            }
-        }
-
-        /// <summary>
         ///     Disable broadcast comments.
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
