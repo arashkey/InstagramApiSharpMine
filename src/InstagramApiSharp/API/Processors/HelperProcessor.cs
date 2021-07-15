@@ -402,7 +402,6 @@ namespace InstagramApiSharp.API.Processors
                 {
                     videoUploadParamsObj = new JObject
                     {
-                        {"_csrftoken", _user.CsrfToken},
                         {"_uid", _user.LoggedInUser.Pk},
                         {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                         {"media_info", new JObject
@@ -417,6 +416,10 @@ namespace InstagramApiSharp.API.Processors
                             }
                         }
                     };
+                    if (!_httpHelper.NewerThan180)
+                    {
+                        videoUploadParamsObj.Add("_csrftoken", _user.CsrfToken);
+                    }
                     request = _httpHelper.GetSignedRequest(HttpMethod.Post, UriCreator.GetStoryMediaInfoUploadUri(), _deviceInfo, videoUploadParamsObj);
                     response = await _httpRequestProcessor.SendAsync(request);
                     json = await response.Content.ReadAsStringAsync();
@@ -576,15 +579,18 @@ namespace InstagramApiSharp.API.Processors
                 {
                     var data = new Dictionary<string, string>
                     {
-                         {"action","send_item"},
-                         {"client_context",clientContext},
-                         {"_csrftoken",_user.CsrfToken},
-                         {"video_result",""},
+                         {"action", "send_item"},
+                         {"client_context", clientContext},
+                         {"video_result", ""},
                          {"device_id", _deviceInfo.DeviceId},
                          {"mutation_token", clientContext},
-                         {"_uuid",_deviceInfo.DeviceGuid.ToString()},
-                         {"upload_id",uploadId}
+                         {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                         {"upload_id", uploadId}
                     };
+                    if (!_httpHelper.NewerThan180)
+                    {
+                        data.Add("_csrftoken", _user.CsrfToken);
+                    }
                     if (!string.IsNullOrEmpty(recipients))
                         data.Add("recipient_users", $"[[{recipients}]]");
                     else
@@ -616,7 +622,6 @@ namespace InstagramApiSharp.API.Processors
                     {
                         {"filter_type", "0"},
                         {"timezone_offset", "16200"},
-                        {"_csrftoken", _user.CsrfToken},
                         {"client_shared_at", (DateTime.UtcNow.ToUnixTime() - rnd.Next(25,55)).ToString()},
                         {"story_media_creation_date", (DateTime.UtcNow.ToUnixTime() - rnd.Next(50,70)).ToString()},
                         {"media_folder", "Camera"},
@@ -649,6 +654,10 @@ namespace InstagramApiSharp.API.Processors
                         {"audio_muted", false},
                         {"poster_frame_index", 0},
                     };
+                    if (!_httpHelper.NewerThan180)
+                    {
+                        data.Add("_csrftoken", _user.CsrfToken);
+                    }
                     if (isDisappearingVideo)
                     {
                         data.Add("view_mode", viewMode.ToString().ToLower());
@@ -853,7 +862,6 @@ namespace InstagramApiSharp.API.Processors
                 };
                 var uploadParamsObj = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"media_info", new JObject
@@ -868,6 +876,10 @@ namespace InstagramApiSharp.API.Processors
                         }
                     }
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    uploadParamsObj.Add("_csrftoken", _user.CsrfToken);
+                }
                 request = _httpHelper.GetSignedRequest(HttpMethod.Post, UriCreator.GetStoryMediaInfoUploadUri(), _deviceInfo, uploadParamsObj);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
@@ -992,7 +1004,6 @@ namespace InstagramApiSharp.API.Processors
                     var data = new JObject
                     {
                         {"timezone_offset", "16200"},
-                        {"_csrftoken", _user.CsrfToken},
                         {"client_shared_at", (DateTime.UtcNow.ToUnixTime() - rnd.Next(25,55)).ToString()},
                         {"story_media_creation_date", (DateTime.UtcNow.ToUnixTime() - rnd.Next(50,70)).ToString()},
                         {"media_folder", "Camera"},
@@ -1022,6 +1033,10 @@ namespace InstagramApiSharp.API.Processors
                             }
                         }
                     };
+                    if (!_httpHelper.NewerThan180)
+                    {
+                        data.Add("_csrftoken", _user.CsrfToken);
+                    }
                     if (isDisappearingPhoto)
                     {
                         data.Add("view_mode", viewMode.ToString().ToLower());
@@ -1233,7 +1248,6 @@ namespace InstagramApiSharp.API.Processors
                     //{"is_suggested_venue", "false"},
                     {"scene_capture_type", ""},
                     {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"media_folder", spl[rnd.Next(spl.Length)]},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
@@ -1266,6 +1280,10 @@ namespace InstagramApiSharp.API.Processors
                         }
                     }
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (location != null)
                 {
                     data.Add("location", location.GetJson());
@@ -1357,10 +1375,13 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"upload_id", uploadId},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -1544,7 +1565,6 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
@@ -1559,6 +1579,10 @@ namespace InstagramApiSharp.API.Processors
                         }
                     }
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -1615,7 +1639,6 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"action", "send_item"},
                     {"client_context", clientContext},
-                    {"_csrftoken", _user.CsrfToken},
                     {"device_id", _deviceInfo.DeviceId},
                     {"mutation_token", clientContext},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
@@ -1623,6 +1646,10 @@ namespace InstagramApiSharp.API.Processors
                     {"waveform_sampling_frequency_hz", audio.WaveformSamplingFrequencyHz.ToString()},
                     {"upload_id", uploadId}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (!string.IsNullOrEmpty(recipients))
                     data.Add("recipient_users", $"[[{recipients}]]");
                 else
@@ -1841,7 +1868,6 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"filter_type", "0"},
                     {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
@@ -1868,6 +1894,10 @@ namespace InstagramApiSharp.API.Processors
                     {"audio_muted", false},
                     {"poster_frame_index", 0},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 if (sharePreviewToFeed)
                     data.Add("igtv_share_preview_to_feed", "1");
@@ -2098,7 +2128,6 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"filter_type", "0"},
                     {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
@@ -2127,6 +2156,10 @@ namespace InstagramApiSharp.API.Processors
                     {"audio_muted", video.IsMuted},
                     {"poster_frame_index", 0},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 if (video.SharePreviewToFeed)
                     data.Add("igtv_share_preview_to_feed", "1");
@@ -2356,7 +2389,6 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"filter_type", "0"},
                     {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
@@ -2383,6 +2415,10 @@ namespace InstagramApiSharp.API.Processors
                     {"audio_muted", video.IsMuted},
                     {"poster_frame_index", 0},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (video.UserTags?.Count > 0)
                 {
                     var tagArr = new JArray();
@@ -2467,7 +2503,6 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"filter_type", "0"},
                     {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"source_type", "4"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
@@ -2494,6 +2529,10 @@ namespace InstagramApiSharp.API.Processors
                     {"audio_muted", video.IsMuted},
                     {"poster_frame_index", 0},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (video.UserTags?.Count > 0)
                 {
                     var tagArr = new JArray();
@@ -2655,13 +2694,16 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"phone_id", _deviceInfo.PhoneGuid.ToString()},
                     {"battery_level", "100"},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"is_charging", "0"},
                     {"will_sound_on", "1"},
                     {"rank_token", Guid.NewGuid().ToString()},
                     {"paging_token", jObj.ToString(Formatting.None)}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 if (instaUri.ToString().Contains("/tags/"))
                     data.Add("module", "feed_hashtag");
