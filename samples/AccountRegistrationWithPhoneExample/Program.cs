@@ -69,6 +69,15 @@ namespace AccountRegistrationWithPhoneExample
                 .SetSessionHandler(new FileSessionHandler { FilePath = username + ".state" })
                 .Build();
 
+            //// if you want to edit languages and startup country code or timezone, you can use these>
+            //InstaApi.StartupCountryCode = 44;
+            //InstaApi.StartupCountry = "GB"; // You can try unknown as well, for example if your phone's GPS wasn't turned on, they pass unknown to this header
+            //InstaApi.DeviceLocale = "en_GB";
+            //InstaApi.MappedLocale = InstaApi.AppLocale = "en_GB";// these two is always is same
+            //InstaApi.AcceptLanguage = "en-GB, en-US"; // it seems en-US is set automatically
+            //InstaApi.TimezoneOffset = 3600; // set timezone offset
+
+            // no need to do this but I just wanted to show you
             InstaApi.RegistrationService.Birthday = InstaApi.RegistrationService.GenerateRandomBirthday();
 
             // all functions related to account registration is available in the InstaApi.RegistrationService

@@ -110,6 +110,16 @@ Public Class Form1
         Dim sessionHandler = New FileSessionHandler With {.FilePath = StateFile}
 
         InstaApi = InstaApiBuilder.CreateBuilder.SetUser(userSession).UseLogger(New DebugLogger(LogLevel.All)).SetRequestDelay(RequestDelay.FromSeconds(0, 1)).SetSessionHandler(sessionHandler).Build
+
+        '' if you want to edit languages and startup country code or timezone, you can use these>
+        'InstaApi.StartupCountryCode = 44
+        'InstaApi.StartupCountry = "GB" ' You can try unknown as well, for example if your phone's GPS wasn't turned on, they pass unknown to this header
+        'InstaApi.DeviceLocale = "en_GB"
+        'InstaApi.MappedLocale = InstaApi.AppLocale = "en_GB" ' these two is always is same
+        'InstaApi.AcceptLanguage = "en-GB, en-US" ' it seems en-US is set automatically
+        'InstaApi.TimezoneOffset = 3600 ' set timezone offset
+
+
         Text = $"{AppName} Connecting"
         LoadSession()
 
