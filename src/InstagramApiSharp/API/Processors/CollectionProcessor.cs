@@ -62,8 +62,11 @@ namespace InstagramApiSharp.API.Processors
                     {"radio_type", "wifi-none"},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk},
-                    {"_csrftoken", _user.CsrfToken}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Get, editCollectionUri, _deviceInfo, data);
@@ -105,10 +108,13 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk},
-                    {"_csrftoken", _user.CsrfToken},
                     {"name", collectionName},
                     {"module_name", InstaApiConstants.COLLECTION_CREATE_MODULE}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Get, createCollectionUri, _deviceInfo, data);
@@ -150,9 +156,12 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk},
-                    {"_csrftoken", _user.CsrfToken},
                     {"module_name", "collection_editor"}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Get, createCollectionUri, _deviceInfo, data);
@@ -200,8 +209,11 @@ namespace InstagramApiSharp.API.Processors
                     {"name", name ?? string.Empty},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk},
-                    {"_csrftoken", _user.CsrfToken}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (!string.IsNullOrEmpty(photoCoverMediaId))
                     data.Add("cover_media_id", photoCoverMediaId);
 
