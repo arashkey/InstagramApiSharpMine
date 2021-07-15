@@ -341,7 +341,10 @@ namespace InstagramApiSharp.API.Processors
                 if (mediaIds?.Length == 0)
                     throw new ArgumentNullException("At least one media id is required");
 
-                var instaUri = UriCreator.GetMediaInfoByMultipleMediaIdsUri(mediaIds, _deviceInfo.DeviceGuid.ToString(), _user.CsrfToken);
+                var instaUri = UriCreator.GetMediaInfoByMultipleMediaIdsUri(mediaIds, 
+                    _deviceInfo.DeviceGuid.ToString(),
+                    !_httpHelper.NewerThan180 ? _user.CsrfToken : null);
+
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
