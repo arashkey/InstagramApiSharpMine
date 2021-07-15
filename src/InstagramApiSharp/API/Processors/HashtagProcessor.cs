@@ -63,7 +63,6 @@ namespace InstagramApiSharp.API.Processors
                 };
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"container_module", "hashtag_feed"},
@@ -74,6 +73,10 @@ namespace InstagramApiSharp.API.Processors
                     {"live_vods", new JObject()},
                     {"reel_media_skipped", new JObject()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -255,10 +258,13 @@ namespace InstagramApiSharp.API.Processors
 
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -648,13 +654,16 @@ namespace InstagramApiSharp.API.Processors
                 var instaUri = UriCreator.GetHashtagMediaReportUri();
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"tag", tagname},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"h_id", hashtagId},
                     {"m_pk", mediaId},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -687,10 +696,13 @@ namespace InstagramApiSharp.API.Processors
 
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -805,11 +817,14 @@ namespace InstagramApiSharp.API.Processors
                 }
                 var data = new Dictionary<string, string>
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"include_persistent", string.IsNullOrEmpty(nextMaxId) ? "true": "false"},
                     {"rank_token", _user.RankToken ?? Guid.NewGuid().ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (string.IsNullOrEmpty(nextMaxId))
                     data.Add("supported_tabs", supportedTabs.ToString(Formatting.None));
                 else
@@ -842,7 +857,5 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaSectionMediaListResponse>(exception);
             }
         }
-
-
     }
 }
