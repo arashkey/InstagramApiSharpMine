@@ -1368,6 +1368,10 @@ namespace InstagramApiSharp.API
                     {"waterfall_id", Guid.NewGuid().ToString()},
                     {"verification_method", ((int)twoFactorVerifyOptions).ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (!string.IsNullOrEmpty(FbAccessToken))
                     data.Add("fb_access_token", FbAccessToken);
 
@@ -1489,11 +1493,14 @@ namespace InstagramApiSharp.API
                 var data = new Dictionary<string, string>
                 {
                     {"phone_id", _deviceInfo.PhoneGuid.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -1528,7 +1535,7 @@ namespace InstagramApiSharp.API
                     csrfToken = _user.CsrfToken;
                 else
                 {
-                    await GetToken();
+                    //await GetToken();
                     csrfToken = GetCsrfTokenFromCookies();
                     if (_user != null)
                         _user.CsrfToken = csrfToken;
@@ -1552,13 +1559,16 @@ namespace InstagramApiSharp.API
                 var data = new JObject
                 {
                     {"country_codes", countryCodes.ToString(Formatting.None)},
-                    {"_csrftoken", csrfToken},
                     {"q", usernameOrEmailOrPhoneNumber?.ToLower()},
                     {"guid",  _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
                     {"directly_sign_in", "true"},
                 };
 
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var instaUri = UriCreator.GetUsersLookupUri();
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
@@ -1609,17 +1619,20 @@ namespace InstagramApiSharp.API
                         _user.CsrfToken = token;
                 }
 
-                var postData = new JObject
+                var data = new JObject
                 {
-                    {"_csrftoken", token},
                     {"adid", _deviceInfo.GoogleAdId},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", ApiRequestMessage.GenerateDeviceId()},
                     {"query", email}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var instaUri = UriCreator.GetAccountRecoveryEmailUri();
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, postData);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
                 var response = await _httpRequestProcessor.SendAsync(request);
 
@@ -1669,18 +1682,21 @@ namespace InstagramApiSharp.API
                 //  "query": "+989174314006",
                 //  "use_whatsapp": "false"
                 //}
-                var postData = new JObject
+                var data = new JObject
                 {
                     {"supports_sms_code", "true"},
-                    {"_csrftoken", token},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", ApiRequestMessage.GenerateDeviceId()},
                     {"query", phone},
                     {"use_whatsapp", "false"},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var instaUri = UriCreator.GetAccountRecoverPhoneUri();
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, postData);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var result = await response.Content.ReadAsStringAsync();
@@ -1732,12 +1748,15 @@ namespace InstagramApiSharp.API
                 //}
                 var data = new Dictionary<string, string>
                 {
-                    {"_csrftoken", _user.CsrfToken},// remove?!
                     {"two_factor_identifier", _twoFactorInfo.TwoFactorIdentifier},
                     {"username", (_httpRequestProcessor.RequestMessage.Username ?? _user.UserName).ToLower()},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var instaUri = UriCreator.GetAccount2FALoginAgainUri();
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
@@ -1814,12 +1833,15 @@ namespace InstagramApiSharp.API
                 var data = new JObject
                 {
                     {"choice", "0"},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -1859,7 +1881,6 @@ namespace InstagramApiSharp.API
                     {"android_device_id", _deviceInfo.DeviceId},
                     {"phone_id", _deviceInfo.PhoneGuid.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    //{"", ""},
                 };
                 //var instaUri = UriCreator.GetChallengeRequireFirstUri(_challengeinfo.ApiPath, _deviceInfo.DeviceGuid.ToString(), _deviceInfo.DeviceId);
                 var instaUri = UriCreator.GetChallengeRequireFirstUri(_challengeinfo.ApiPath, _deviceInfo, _challengeinfo.ChallengeContext);
@@ -1905,10 +1926,13 @@ namespace InstagramApiSharp.API
                 var instaUri = UriCreator.GetResetChallengeRequireUri(_challengeinfo.ApiPath);
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -1977,10 +2001,13 @@ namespace InstagramApiSharp.API
 
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (!string.IsNullOrEmpty(phoneNumber))
                     data.Add("phone_number", phoneNumber);
                 else
@@ -2039,10 +2066,13 @@ namespace InstagramApiSharp.API
                 var data = new JObject
                 {
                     {"choice", "1"},
-                    {"_csrftoken", _user.CsrfToken},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -2092,10 +2122,13 @@ namespace InstagramApiSharp.API
                 var data = new JObject
                 {
                     {"security_code", verifyCode},
-                    {"_csrftoken", _user.CsrfToken},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -2205,7 +2238,6 @@ namespace InstagramApiSharp.API
                 {
                     {"dryrun", dryrun.ToString().ToLower()},
                     {"phone_id", _deviceInfo.PhoneGuid.ToString()},
-                    {"_csrftoken", csrftoken},
                     {"adid", adId},
                     {"guid",  _deviceInfo.DeviceGuid.ToString()},
                     {"_uuid",  _deviceInfo.DeviceGuid.ToString()},
@@ -2213,6 +2245,10 @@ namespace InstagramApiSharp.API
                     {"waterfall_id", waterfallId},
                     {"fb_access_token", fbAccessToken},
                 };
+                if (!_httpHelper.NewerThan180 || csrftoken.IsNotEmpty())
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (username.IsNotEmpty())
                     data.Add("username", username);
 
@@ -2343,7 +2379,7 @@ namespace InstagramApiSharp.API
                 //  "tos_accepted": "false"
                 //}
 
-                var postData = new Dictionary<string, string>
+                var data = new Dictionary<string, string>
                 {
                     {"fb_connected",        "true"},
                     {"seen_steps",          "[]"},
@@ -2351,7 +2387,6 @@ namespace InstagramApiSharp.API
                     {"fb_installed",        "false"},
                     {"locale",              AppLocale},
                     {"timezone_offset",     TimezoneOffset.ToString()},
-                    {"_csrftoken",          csrftoken},
                     {"network_type",        "WIFI-UNKNOWN"},
                     {"guid",                _deviceInfo.DeviceGuid.ToString()},
                     {"_uuid",               _deviceInfo.DeviceGuid.ToString()},
@@ -2361,9 +2396,13 @@ namespace InstagramApiSharp.API
                     {"tos_accepted",        "false"}
                 };
 
+                if (!_httpHelper.NewerThan180 || csrftoken.IsNotEmpty())
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var instaUri = UriCreator.GetOnboardingStepsUri();
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, postData);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -2400,8 +2439,11 @@ namespace InstagramApiSharp.API
                 var data = new JObject
                 {
                     {"phone_id", _deviceInfo.PhoneGuid},
-                    {"_csrftoken", _user.CsrfToken}
                 };
+                if (!_httpHelper.NewerThan180 || _user.CsrfToken.IsNotEmpty())
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -2416,10 +2458,13 @@ namespace InstagramApiSharp.API
                 {
                     {"phone_id", _deviceInfo.PhoneGuid},
                     {"gdpr_s", ""},
-                    {"_csrftoken", _user.CsrfToken},
                     {"guid", _deviceInfo.DeviceGuid},
                     {"device_id", _deviceInfo.DeviceId}
                 };
+                if (!_httpHelper.NewerThan180 || _user.CsrfToken.IsNotEmpty())
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (email != null)
                     data.Add("email", email);
                 else
@@ -2446,11 +2491,14 @@ namespace InstagramApiSharp.API
                     {"current_screen_key", "age_consent_two_button"},
                     {"phone_id", _deviceInfo.PhoneGuid},
                     {"gdpr_s", "[0,0,0,null]"},
-                    {"_csrftoken", _user.CsrfToken},
                     {"updates", "{\"age_consent_state\":\"2\"}"},
                     {"guid", _deviceInfo.DeviceGuid},
                     {"device_id", _deviceInfo.DeviceId}
                 };
+                if (!_httpHelper.NewerThan180 || _user.CsrfToken.IsNotEmpty())
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
@@ -2757,14 +2805,22 @@ namespace InstagramApiSharp.API
                 {
                     JData.Add("_uuid", _deviceInfo.DeviceGuid.ToString());
                     JData.Add("_uid", _user.LoggedInUser.Pk.ToString());
-                    JData.Add("_csrftoken", _user.CsrfToken);
+
+                    if (!_httpHelper.NewerThan180)
+                    {
+                        JData.Add("_csrftoken", _user.CsrfToken);
+                    }
                     request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, JData);
                 }
                 else
                 {
                     DicData.Add("_uuid", _deviceInfo.DeviceGuid.ToString());
                     DicData.Add("_uid", _user.LoggedInUser.Pk.ToString());
-                    DicData.Add("_csrftoken", _user.CsrfToken);
+
+                    if (!_httpHelper.NewerThan180)
+                    {
+                        DicData.Add("_csrftoken", _user.CsrfToken);
+                    }
                     request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, DicData);
                 }
 
@@ -2794,9 +2850,11 @@ namespace InstagramApiSharp.API
                 if (uri == null)
                     return Result.Fail("Uri cannot be null!", default(string));
 
-                HttpRequestMessage request;
-                data.Add("_csrftoken", _user.CsrfToken);
-                request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
 
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -2831,7 +2889,11 @@ namespace InstagramApiSharp.API
 
                 data.Add("_uuid", _deviceInfo.DeviceGuid.ToString());
                 data.Add("_uid", _user.LoggedInUser.Pk.ToString());
-                data.Add("_csrftoken", _user.CsrfToken);
+
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, uri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -2858,12 +2920,15 @@ namespace InstagramApiSharp.API
             {
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"id", _user.LoggedInUser.Pk.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"configs", InstaApiConstants.LOGIN_V180_OR_OLDER_EXPERIMENTS_CONFIGS},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var uri = UriCreator.GetLauncherSyncUri();
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, uri, _deviceInfo, data);
 
@@ -3685,8 +3750,11 @@ namespace InstagramApiSharp.API
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -3719,10 +3787,13 @@ namespace InstagramApiSharp.API
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"current_screen_key", "qp_intro"},
                     {"existing_user_intro_state", "2"},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -3753,10 +3824,13 @@ namespace InstagramApiSharp.API
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"current_screen_key", "tos_and_two_age_button"},
                     {"updates", "{\"age_consent_state\":\"2\",\"tos_data_policy_consent_state\":\"2\"}"},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -3791,13 +3865,16 @@ namespace InstagramApiSharp.API
                 var data = new Dictionary<string, string>
                 {
                     {"current_screen_key", "dob"},
-                    {"_csrftoken", _user.CsrfToken},
                     {"day", day.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"year", year.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"month", month.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
