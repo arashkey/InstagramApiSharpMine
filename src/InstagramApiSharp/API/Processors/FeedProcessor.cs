@@ -786,8 +786,11 @@ namespace InstagramApiSharp.API.Processors
                     {"session_id", paginationParameters.SessionId},
                     {"bloks_versioning_id", _instaApi.GetApiVersionInfo().BloksVersionId},
                     //{"is_prefetch", "0"},
-                    //{"_csrftoken", _user.CsrfToken},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 if (seenMediaIds != null)
                     data.Add("seen_posts", seenMediaIds.EncodeList(false));
