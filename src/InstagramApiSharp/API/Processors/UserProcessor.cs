@@ -104,12 +104,15 @@ namespace InstagramApiSharp.API.Processors
 
                 var data = new Dictionary<string, string>
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"target_id", userId.ToString()},
                     {"module", "profile_social_context"},
                     {"mutual_followers_limit", "72"}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = await _httpHelper.GetDefaultGZipRequestAsync(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -161,15 +164,18 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var instaUri = UriCreator.GetAcceptFriendshipUri(userId);
-                var fields = new Dictionary<string, string>
+                var data = new Dictionary<string, string>
                 {
                     {"user_id", userId.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
-                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -503,10 +509,13 @@ namespace InstagramApiSharp.API.Processors
 
                 var data = new Dictionary<string, string>
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"user_ids", string.Join(",", userIds)},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, userUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -787,12 +796,15 @@ namespace InstagramApiSharp.API.Processors
                 var uploadId = ApiRequestMessage.GenerateUploadId();
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"gallery", "true"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"waterfall_id", Guid.NewGuid().ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var signedBody = _httpHelper.GetSignature(data);
 
                 var requestContent = new MultipartFormDataContent(uploadId)
@@ -1446,15 +1458,18 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var instaUri = UriCreator.GetDenyFriendshipUri(userId);
-                var fields = new Dictionary<string, string>
+                var data = new Dictionary<string, string>
                 {
                     {"user_id", userId.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
-                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -1499,8 +1514,11 @@ namespace InstagramApiSharp.API.Processors
                     {"user_id", userId.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -1551,18 +1569,21 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var instaUri = UriCreator.GetReportUserUri(userId);
-                var fields = new Dictionary<string, string>
+                var data = new Dictionary<string, string>
                 {
                     {"user_id", userId.ToString()},
                     {"source_name", "profile"},
                     {"reason", "1"},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"is_spam", "true"}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
-                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 return response.StatusCode == HttpStatusCode.OK
@@ -1660,12 +1681,15 @@ namespace InstagramApiSharp.API.Processors
 
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"user_id", userId.ToString()},
                     {"radio_type", "wifi-none"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
@@ -1734,12 +1758,15 @@ namespace InstagramApiSharp.API.Processors
 
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"module", "favorites_home_list"},
                     {"source", "audience_manager"}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (userIdsToAdd?.Length > 0)
                 {
                     var jArr = new JArray
@@ -1786,16 +1813,19 @@ namespace InstagramApiSharp.API.Processors
         {
             try
             {
-                var fields = new Dictionary<string, string>
+                var data = new Dictionary<string, string>
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"user_id", userId.ToString()},
                     {"radio_type", "wifi-none"}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
-                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                    _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK || string.IsNullOrEmpty(json))
@@ -1823,13 +1853,16 @@ namespace InstagramApiSharp.API.Processors
             {
                 var data = new Dictionary<string, string>
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"user_id", userId.ToString()},
                     {"radio_type", "wifi-none"},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"device_id", _deviceInfo.DeviceId},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var surface = surfaceType.GetSurfaceType();
                 if (!string.IsNullOrEmpty(surface))
@@ -2003,10 +2036,13 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"phone_id", _deviceInfo.PhoneGuid.ToString()},
                     {"module", "discover_people"},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"paginate", "true"},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 if (paginationParameters != null && !string.IsNullOrEmpty(paginationParameters.NextMaxId))
                     data.Add("max_id", paginationParameters.NextMaxId);
@@ -2181,8 +2217,11 @@ namespace InstagramApiSharp.API.Processors
                     {"user_id", userId.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -2214,8 +2253,11 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 switch (muteUnmuteOption)
                 {
                     case InstaMuteOption.All:
@@ -2263,8 +2305,11 @@ namespace InstagramApiSharp.API.Processors
                     {"source", "profile"},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -2299,8 +2344,11 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request =
                     _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -2357,12 +2405,15 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var fields = new Dictionary<string, string>
+                var data = new Dictionary<string, string>
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, fields);
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
