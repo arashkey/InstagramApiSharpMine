@@ -54,11 +54,14 @@ namespace InstagramApiSharp.API.Processors
 
                 var data = new JObject
                 {
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"type", "static_stickers"},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
@@ -94,10 +97,13 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {InstaApiConstants.SUPPORTED_CAPABALITIES_HEADER, InstaApiConstants.SupportedCapabalities.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
@@ -141,10 +147,13 @@ namespace InstagramApiSharp.API.Processors
                     {"lng", "0.0"},
                     {"type", "static_stickers"},
                     {"speed", "0.0"},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
 
