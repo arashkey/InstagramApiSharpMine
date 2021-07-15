@@ -90,12 +90,15 @@ namespace InstagramApiSharp.API.Processors
                     {"is_main_push_channel", (pushChannelType == InstaPushChannelType.Mqtt).ToString().ToLower()},
                     {"device_sub_type", "2"},
                     {"device_token", WebUtility.UrlEncode(token.ToString(Formatting.None))},
-                    {"_csrftoken", _user.CsrfToken},
                     {"guid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"users", _user.LoggedInUser.Pk.ToString()},
                     {"family_device_id", _deviceInfo.FamilyDeviceGuid.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
