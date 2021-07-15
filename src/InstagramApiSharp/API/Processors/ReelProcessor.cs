@@ -92,10 +92,13 @@ namespace InstagramApiSharp.API.Processors
                 var data = new JObject
                 {
                     {"impressions", impression.ToString(Formatting.None)},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
@@ -340,7 +343,6 @@ namespace InstagramApiSharp.API.Processors
                     {"audio_muted", false},
                     {"filter_type", "0"},
                     {"video_result", ""},
-                    {"_csrftoken", _user.CsrfToken},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
                     {
@@ -354,6 +356,10 @@ namespace InstagramApiSharp.API.Processors
                     },
                     {"clips_segments_metadata", clipsSegmentsMetadata}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
                 if (sharePreviewToFeed)
                     data.Add("clips_share_preview_to_feed", "1");
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
@@ -461,7 +467,6 @@ namespace InstagramApiSharp.API.Processors
                     instaUri = UriCreator.GetUserReelsClipsUri();
                     data = new Dictionary<string, string>
                     {
-                        {"_csrftoken", _user.CsrfToken},
                         {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                         {"target_user_id", userId.ToString()},
                     };
@@ -480,10 +485,13 @@ namespace InstagramApiSharp.API.Processors
                         {"seen_reels", "0"},
                         {"pct_reels", "0"},
                         {"tab_type", "clips_tab"},
-                        {"_csrftoken", _user.CsrfToken},
                         {"session_info" ,sessionInfo.ToString(Formatting.None)},
                         {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     };
+                }
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
                 }
 
                 if (!string.IsNullOrEmpty(paginationParameters.NextMaxId))
