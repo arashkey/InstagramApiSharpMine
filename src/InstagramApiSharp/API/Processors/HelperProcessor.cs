@@ -621,7 +621,7 @@ namespace InstagramApiSharp.API.Processors
                     var data = new JObject
                     {
                         {"filter_type", "0"},
-                        {"timezone_offset", "16200"},
+                        {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                         {"client_shared_at", (DateTime.UtcNow.ToUnixTime() - rnd.Next(25,55)).ToString()},
                         {"story_media_creation_date", (DateTime.UtcNow.ToUnixTime() - rnd.Next(50,70)).ToString()},
                         {"media_folder", "Camera"},
@@ -1003,7 +1003,7 @@ namespace InstagramApiSharp.API.Processors
                     var rnd = new Random();
                     var data = new JObject
                     {
-                        {"timezone_offset", "16200"},
+                        {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
                         {"client_shared_at", (DateTime.UtcNow.ToUnixTime() - rnd.Next(25,55)).ToString()},
                         {"story_media_creation_date", (DateTime.UtcNow.ToUnixTime() - rnd.Next(50,70)).ToString()},
                         {"media_folder", "Camera"},
