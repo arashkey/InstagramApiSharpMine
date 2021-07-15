@@ -173,21 +173,24 @@ namespace InstagramApiSharp.API.Processors
             {
                 var uri = UriCreator.GetLocationSearchUri();
 
-                var fields = new Dictionary<string, string>
+                var data = new Dictionary<string, string>
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                     {"_uid", _user.LoggedInUser.Pk.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"latitude", latitude.ToString(CultureInfo.InvariantCulture)},
                     {"longitude", longitude.ToString(CultureInfo.InvariantCulture)},
                     {"rank_token", _user.RankToken}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 if (!string.IsNullOrEmpty(query))
-                    fields.Add("search_query", query);
+                    data.Add("search_query", query);
                 else
-                    fields.Add("timestamp", DateTimeHelper.GetUnixTimestampSeconds().ToString());
-                if (!Uri.TryCreate(uri, fields.AsQueryString(), out var newuri))
+                    data.Add("timestamp", DateTimeHelper.GetUnixTimestampSeconds().ToString());
+                if (!Uri.TryCreate(uri, data.AsQueryString(), out var newuri))
                     return Result.Fail<InstaLocationShortList>("Unable to create uri for location search");
 
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, newuri, _deviceInfo);
@@ -582,10 +585,13 @@ namespace InstagramApiSharp.API.Processors
                 {
                     {"rank_token", _deviceInfo.DeviceGuid.ToString()},
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"_csrftoken", _user.CsrfToken},
                     {"session_id", Guid.NewGuid().ToString()},
                     {"tab", sectionType.ToString().ToLower()}
                 };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
 
                 if (!string.IsNullOrEmpty(maxId))
                     data.Add("max_id", maxId);
