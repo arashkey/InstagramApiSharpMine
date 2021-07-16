@@ -79,11 +79,16 @@ namespace InstagramApiSharp.API.Processors
 
         public async Task<IResult<string>> UploadSinglePhoto(Action<InstaUploaderProgress> progress, 
             InstaImageUpload image, InstaUploaderProgress upProgress, string uploadId = null,
-            bool album = true, string recipient = null, string broadcastId = null)
+            bool album = true, string recipient = null, string broadcastId = null, 
+            string preferredWaterfallId = null)
         {
             if (string.IsNullOrEmpty(uploadId))
-                uploadId = ApiRequestMessage.GenerateUnknownUploadId();
+                uploadId = ExtensionHelper.GenerateUploadingUploadId()/*ApiRequestMessage.GenerateUnknownUploadId()*/;
             var photoHashCode = Path.GetFileName(image.Uri ?? $"C:\\{13.GenerateRandomString()}.jpg").GetPositiveHashCode();
+            photoHashCode *= 2;
+            if (photoHashCode > 0)
+                photoHashCode *= -1;
+
             var photoEntityName = $"{uploadId}_0_{photoHashCode}";
             var photoUri = UriCreator.GetStoryUploadPhotoUri(uploadId, photoHashCode);
             var photoUploadParamsObj = new JObject
@@ -115,7 +120,7 @@ namespace InstagramApiSharp.API.Processors
             request.Headers.AddHeader("X-Instagram-Rupload-Params", photoUploadParams, _instaApi);
             request.Headers.AddHeader("X-Entity-Name", photoEntityName, _instaApi);
             request.Headers.AddHeader("X-Entity-Length", imageBytes.Length.ToString(), _instaApi);
-            request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", Guid.NewGuid().ToString(), _instaApi);
+            request.Headers.AddHeader("X_FB_PHOTO_WATERFALL_ID", preferredWaterfallId ?? Guid.NewGuid().ToString(), _instaApi);
             var response = await _httpRequestProcessor.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
 
@@ -133,25 +138,48 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        public async Task<IResult<string>> UploadSingleVideo(Action<InstaUploaderProgress> progress, InstaVideoUpload video, InstaUploaderProgress upProgress, bool album = true)
+        public async Task<IResult<(string, string)>> UploadSingleVideo(Action<InstaUploaderProgress> progress, 
+            InstaVideoUpload video, 
+            InstaUploaderProgress upProgress, 
+            bool album = true, 
+            bool useDefaultCover = true)
         {
-            var uploadId = ApiRequestMessage.GenerateUnknownUploadId();
+            var uploadId = ExtensionHelper.GenerateUploadingUploadId();
             var videoHashCode = Path.GetFileName(video.Video.Uri ?? $"C:\\{13.GenerateRandomString()}.mp4").GetHashCode();
+            videoHashCode *= 2;
+            if (videoHashCode < 0)
+                videoHashCode *= -1;
+
             var waterfallId = Guid.NewGuid().ToString();
             var videoEntityName = $"{uploadId}_0_{videoHashCode}";
             var videoUri = UriCreator.GetStoryUploadVideoUri(uploadId, videoHashCode.ToString());
             var retryContext = GetRetryContext();
-
+            //{
+            //  "upload_media_height": "480",
+            //  "xsharing_user_ids": "[\"11292195227\",\"48321748823\",\"8651542203\"]",
+            //  "upload_media_width": "480",
+            //  "upload_media_duration_ms": "6827",
+            //  "content_tags": "use_default_cover",
+            //  "upload_id": "403988992440848",
+            //  "retry_context": "{\"num_reupload\":0,\"num_step_auto_retry\":0,\"num_step_manual_retry\":0}",
+            //  "media_type": "2",
+            //  "is_fmp4": "1"
+            //}
             var videoUploadParamsObj = new JObject
             {
-                {"upload_media_height", "0"},
-                {"upload_media_width", "0"},
-                {"upload_media_duration_ms", "0"},
+                {"upload_media_height", video.Video.Height.ToString()},
+                {"xsharing_user_ids", "[]"},
+                {"upload_media_width", video.Video.Width.ToString()},
+                {"upload_media_duration_ms", video.Video.Length.ToString()},
                 {"upload_id", uploadId},
                 {"retry_context", retryContext},
                 {"media_type", "2"},
-                {"xsharing_user_ids", "[]"}
             };
+            if (useDefaultCover)
+            {
+                videoUploadParamsObj.Add("content_tags", "use_default_cover");
+            }
+
             if (album)
                 videoUploadParamsObj.Add("is_sidecar", "1");
 
@@ -159,6 +187,8 @@ namespace InstagramApiSharp.API.Processors
             var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, videoUri, _deviceInfo);
             request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
             request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
+            request.Headers.AddHeader(InstaApiConstants.HEADER_PRIORITY, InstaApiConstants.HEADER_PRIORITY_VALUE_6_I, _instaApi, true);
+
             var response = await _httpRequestProcessor.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
 
@@ -167,7 +197,7 @@ namespace InstagramApiSharp.API.Processors
             {
                 upProgress.UploadState = InstaUploadState.Error;
                 progress?.Invoke(upProgress);
-                return Result.UnExpectedResponse<string>(response, json);
+                return Result.UnExpectedResponse<(string, string)>(response, json);
             }
 
             var videoBytes = video.Video.VideoBytes ?? File.ReadAllBytes(video.Video.Uri);
@@ -185,13 +215,15 @@ namespace InstagramApiSharp.API.Processors
             //if (vidExt == "mov")
             //    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
             //else
-                request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
+            request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
 
             request.Headers.AddHeader("Offset", "0", _instaApi);
             request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
             request.Headers.AddHeader("X-Entity-Name", videoEntityName, _instaApi);
             request.Headers.AddHeader("X-Entity-Length", videoBytes.Length.ToString(), _instaApi);
             request.Headers.AddHeader("X_FB_VIDEO_WATERFALL_ID", waterfallId, _instaApi);
+            request.Headers.AddHeader(InstaApiConstants.HEADER_PRIORITY, InstaApiConstants.HEADER_PRIORITY_VALUE_6_I, _instaApi, true);
+
             response = await _httpRequestProcessor.SendAsync(request);
             json = await response.Content.ReadAsStringAsync();
 
@@ -199,9 +231,9 @@ namespace InstagramApiSharp.API.Processors
             {
                 upProgress.UploadState = InstaUploadState.Error;
                 progress?.Invoke(upProgress);
-                return Result.UnExpectedResponse<string>(response, json);
+                return Result.UnExpectedResponse<(string, string)>(response, json);
             }
-            return Result.Success(uploadId);
+            return Result.Success((uploadId, waterfallId));
         }
 
         public JObject GetImageConfigure(string uploadId, InstaImageUpload image)

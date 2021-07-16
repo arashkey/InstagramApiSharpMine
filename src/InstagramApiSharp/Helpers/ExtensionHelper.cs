@@ -321,7 +321,15 @@ namespace InstagramApiSharp
         {
             //192855733414842
             string r = "19";
-            for (int i = 0; i < 15; i++)
+            for (int i = 0; i < 14; i++)
+                r += Rnd.Next(0, 9).ToString();
+            return r;
+        }
+        static public string GenerateUploadingUploadId()
+        {
+            //403988992440848
+            string r = "405";
+            for (int i = 0; i < 13; i++)
                 r += Rnd.Next(0, 9).ToString();
             return r;
         }

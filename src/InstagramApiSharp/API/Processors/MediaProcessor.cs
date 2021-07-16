@@ -800,8 +800,8 @@ namespace InstagramApiSharp.API.Processors
                         upProgress.UploadState = InstaUploadState.Uploading;
                         progress?.Invoke(upProgress);
                         var uploadId = await _instaApi.HelperProcessor.UploadSingleVideo(progress, video, upProgress);
-                        var thumb = await _instaApi.HelperProcessor.UploadSinglePhoto(progress, video.VideoThumbnail.ConvertToImageUpload(), upProgress, uploadId.Value);
-                        videosDic.Add(uploadId.Value, video);
+                        var thumb = await _instaApi.HelperProcessor.UploadSinglePhoto(progress, video.VideoThumbnail.ConvertToImageUpload(), upProgress, uploadId.Value.Item1);
+                        videosDic.Add(uploadId.Value.Item1, video);
 
                         upProgress.UploadState = InstaUploadState.Uploaded;
                         progress?.Invoke(upProgress);
@@ -946,8 +946,8 @@ namespace InstagramApiSharp.API.Processors
                         var video = await _instaApi.HelperProcessor.UploadSingleVideo(progress, al.VideoToUpload, upProgress);
                         if (video.Succeeded)
                         {
-                            var image = await _instaApi.HelperProcessor.UploadSinglePhoto(progress, al.VideoToUpload.VideoThumbnail.ConvertToImageUpload(), upProgress, video.Value);
-                            uploadIds.Add(video.Value, al);
+                            var image = await _instaApi.HelperProcessor.UploadSinglePhoto(progress, al.VideoToUpload.VideoThumbnail.ConvertToImageUpload(), upProgress, video.Value.Item1);
+                            uploadIds.Add(video.Value.Item1, al);
                         }
                     }
                     index++;
@@ -1156,7 +1156,8 @@ namespace InstagramApiSharp.API.Processors
                 }
                 upProgress.UploadState = InstaUploadState.Uploading;
                 progress?.Invoke(upProgress);
-                var uploadVideo = await _instaApi.HelperProcessor.UploadSingleVideo(progress, video, upProgress, false);
+                var uploadVideo = await _instaApi.HelperProcessor.UploadSingleVideo(progress, 
+                    video, upProgress, false, true);
 
                 if (!uploadVideo.Succeeded)
                 {
@@ -1170,14 +1171,19 @@ namespace InstagramApiSharp.API.Processors
                 upProgress.UploadState = InstaUploadState.UploadingThumbnail;
                 progress?.Invoke(upProgress);
 
-                var uploadPhoto = await _instaApi.HelperProcessor.UploadSinglePhoto(progress, video.VideoThumbnail.ConvertToImageUpload(), upProgress, uploadVideo.Value, false);
+                var uploadPhoto = await _instaApi.HelperProcessor.UploadSinglePhoto(progress,
+                    video.VideoThumbnail.ConvertToImageUpload(),
+                    upProgress, 
+                    uploadVideo.Value.Item1, 
+                    false, null, null,
+                    uploadVideo.Value.Item2);
 
                 if (uploadPhoto.Succeeded)
                 {
                     //upProgress = progressContent?.UploaderProgress;
                     upProgress.UploadState = InstaUploadState.ThumbnailUploaded;
                     progress?.Invoke(upProgress);
-                    return await ConfigureVideoAsync(progress, upProgress, video, uploadVideo.Value, caption, location);
+                    return await ConfigureVideoAsync(progress, upProgress, video, uploadVideo.Value.Item1, caption, location);
                 }
                 upProgress.UploadState = InstaUploadState.Error;
                 progress?.Invoke(upProgress);
