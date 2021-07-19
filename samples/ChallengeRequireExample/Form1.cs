@@ -290,6 +290,8 @@ namespace ChallengeRequireExample
                                                 return;
                                         }
                                     }
+                                    else
+                                        break;
                                 }
                                 // if none of above codes didn't work, lets try SMS code>
                                 await InstaApi.SendTwoFactorLoginSMSAsync();
