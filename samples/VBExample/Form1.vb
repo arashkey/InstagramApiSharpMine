@@ -93,6 +93,7 @@ Public Class Form1
     Dim NormalSize As Size = New Size(432, 164)
     Dim ChallengeSize As Size = New Size(432, 604)
     Dim InstaApi As IInstaApi
+    Dim FreshLoginFromTwoFactor As Boolean = False
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         CheckForIllegalCrossThreadCalls = False ' lets disable this, note that you should invoke the controls, this isn't right
@@ -109,7 +110,9 @@ Public Class Form1
         ' Session handler, set a file path to save/load your state/session data
         Dim sessionHandler = New FileSessionHandler With {.FilePath = StateFile}
 
-        InstaApi = InstaApiBuilder.CreateBuilder.SetUser(userSession).UseLogger(New DebugLogger(LogLevel.All)).SetRequestDelay(RequestDelay.FromSeconds(0, 1)).SetSessionHandler(sessionHandler).Build
+        If InstaApi Is Nothing Then
+            InstaApi = InstaApiBuilder.CreateBuilder.SetUser(userSession).UseLogger(New DebugLogger(LogLevel.All)).SetRequestDelay(RequestDelay.FromSeconds(0, 1)).SetSessionHandler(sessionHandler).Build
+        End If
 
         '' if you want to edit languages and startup country code or timezone, you can use these>
         'InstaApi.StartupCountryCode = 44
@@ -123,8 +126,6 @@ Public Class Form1
         Text = $"{AppName} Connecting"
         LoadSession()
 
-        Dim freshLoginFromTwoFactor As Boolean = False
-RetryFromTwoFactor:
         If Not InstaApi.IsUserAuthenticated Then
 
             ' Send requests for login flows (contact prefill, read msisdn header, launcher sync And qe sync)
@@ -171,59 +172,62 @@ RetryFromTwoFactor:
                 ' lets check for pending trusted notification first
                 If (InstaApi.TwoFactorLoginInfo?.PendingTrustedNotification) Then
                     ' ///////////// IF YOU WANT TO SUPPORT NOTIFICATION LOGIN DO THIS> /////////////
-                    If (freshLoginFromTwoFactor = False) Then
+                    If (FreshLoginFromTwoFactor = False) Then
                         Dim Random = New Random()
                         Dim tried As Integer = 0
-RetryLabel:
-                        Dim trustedNotification = Await InstaApi.Check2FATrustedNotificationAsync()
-                        If (trustedNotification.Succeeded) Then
-                            Dim reviewStatus = trustedNotification.Value.ReviewStatus
-                            If (reviewStatus = Insta2FANotificationReviewStatus.Approved) Then
-                                ' lets wait 3 times with a different delays
-                                If (tried <= 3) Then
-                                    tried += 1
-                                    Await Task.Delay(Random.Next(2, 6) * 1000).ConfigureAwait(False)
-                                    GoTo RetryLabel
-                                End If
-                            ElseIf (reviewStatus = Insta2FANotificationReviewStatus.Denied) Then
-                                ' if user approved login notification, we can simply login, without any further hard work
-                                ' >>>>>>>>>>>>>> DON'T CHANGE "code" AND "twoFactorOption" VALUES <<<<<<<<<<<<<<
+                        While tried <= 3
+                            Dim trustedNotification = Await InstaApi.Check2FATrustedNotificationAsync()
+                            If (trustedNotification.Succeeded) Then
+                                Dim reviewStatus = trustedNotification.Value.ReviewStatus
+                                If (reviewStatus = Insta2FANotificationReviewStatus.Unchanged) Then
+                                    ' lets wait 3 times with a different delays
+                                    If (tried <= 3) Then
+                                        tried += 1
+                                        Await Task.Delay(Random.Next(2, 6) * 1000).ConfigureAwait(False)
+                                        Continue While
+                                    End If
+                                    Return
+                                ElseIf (reviewStatus = Insta2FANotificationReviewStatus.Approved) Then
+                                    ' if user approved login notification, we can simply login, without any further hard work
+                                    ' >>>>>>>>>>>>>> DON'T CHANGE "code" AND "twoFactorOption" VALUES <<<<<<<<<<<<<<
 
-                                Dim code = "" ' we have To pass "" As a verification code,
-                                ' since Instagram doesn't need code in approved case
+                                    Dim code = "" ' we have To pass "" As a verification code,
+                                    ' since Instagram doesn't need code in approved case
 
-                                Dim trustedDevice = False  ' set true if you want to add this to the trusted device list
+                                    Dim trustedDevice = False  ' set true if you want to add this to the trusted device list
 
-                                Dim twoFactorOption = InstaTwoFactorVerifyOptions.Notification ' we must use Notification
+                                    Dim twoFactorOption = InstaTwoFactorVerifyOptions.Notification ' we must use Notification
 
-                                Dim twoFactorLogin = Await InstaApi.TwoFactorLoginAsync(code,
-                                                    trustedDevice,
-                                                    twoFactorOption)
-                                If (twoFactorLogin.Succeeded) Then
-                                    ' connected
-                                    ' save session
-                                    SaveSession()
-                                    Size = ChallengeSize
-                                    TwoFactorGroupBox.Visible = False
-                                    GetFeedButton.Visible = True
-                                    Text = $"{AppName} Connected"
-                                    Size = NormalSize
+                                    Dim twoFactorLogin = Await InstaApi.TwoFactorLoginAsync(code,
+                                                        trustedDevice,
+                                                        twoFactorOption)
+                                    If (twoFactorLogin.Succeeded) Then
+                                        ' connected
+                                        ' save session
+                                        SaveSession()
+                                        Size = ChallengeSize
+                                        TwoFactorGroupBox.Visible = False
+                                        GetFeedButton.Visible = True
+                                        Text = $"{AppName} Connected"
+                                        Size = NormalSize
+                                    Else
+                                        ' this shouldn't happen, so I don't know what to do in this situation
+                                        MessageBox.Show($"{logInResult.Info?.Message}", "Error")
+                                    End If
+
                                 Else
-                                    ' this shouldn't happen, so I don't know what to do in this situation
-                                    MessageBox.Show($"{logInResult.Info?.Message}", "Error")
+                                    ' if user, denied it, we need a fresh login 
+                                    FreshLoginFromTwoFactor = True
+                                    ' we ignore notification login, for this situation, although we can use notification again!
+                                    LoginButton_Click(Nothing, Nothing)
+                                    Return
                                 End If
 
-                            Else
-                                ' if user, denied it, we need a fresh login 
-                                freshLoginFromTwoFactor = True
-                                ' we ignore notification login, for this situation, although we can use notification again!
-                                GoTo RetryFromTwoFactor
+                                ' if none of above codes didn't work, let try SMS code>
+                                Await InstaApi.SendTwoFactorLoginSMSAsync()
+                                Await InstaApi.Check2FATrustedNotificationAsync()
                             End If
-
-                            ' if none of above codes didn't work, let try SMS code>
-                            Await InstaApi.SendTwoFactorLoginSMSAsync()
-                            Await InstaApi.Check2FATrustedNotificationAsync()
-                        End If
+                        End While
                     End If
                 End If
 
