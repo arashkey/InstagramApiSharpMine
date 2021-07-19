@@ -171,9 +171,9 @@ Public Class Form1
             ElseIf (logInResult.Value = InstaLoginResult.TwoFactorRequired) Then
                 ' lets check for pending trusted notification first
                 If (InstaApi.TwoFactorLoginInfo?.PendingTrustedNotification) Then
+                    Dim Random = New Random()
                     ' ///////////// IF YOU WANT TO SUPPORT NOTIFICATION LOGIN DO THIS> /////////////
                     If (FreshLoginFromTwoFactor = False) Then
-                        Dim Random = New Random()
                         Dim tried As Integer = 0
                         While tried <= 3
                             Dim trustedNotification = Await InstaApi.Check2FATrustedNotificationAsync()
@@ -222,12 +222,38 @@ Public Class Form1
                                     LoginButton_Click(Nothing, Nothing)
                                     Return
                                 End If
-
-                                ' if none of above codes didn't work, let try SMS code>
-                                Await InstaApi.SendTwoFactorLoginSMSAsync()
-                                Await InstaApi.Check2FATrustedNotificationAsync()
+                            Else
+                                Exit While
                             End If
                         End While
+
+
+                        ' if none of above codes didn't work, lets try SMS code>
+                        Await InstaApi.SendTwoFactorLoginSMSAsync()
+                        Await InstaApi.Check2FATrustedNotificationAsync()
+
+                    Else '///////////// IF YOU WANT TO SEND SMS CODE, USE BELOW CODE /////////////
+
+                        ' Let us check the required APIs by calling these functions
+
+                        ' I checked Instagram again, it seems they wait 9 to 12 seconds before checking /two_factor/check_trusted_notification_status/ API
+                        ' So lets wait between this range
+                        Await DelayAndCheck(Random.Next(9, 12))
+
+                        Await DelayAndCheck(4) ' lets wait 4 seconds and try again
+
+                        Await DelayAndCheck(5) ' 5 seconds delay
+
+                        Await DelayAndCheck(5) ' 5 seconds delay
+
+                        Await Task.Delay(4000) ' 4 seconds delay before sending SendTwoFactorLoginSMSAsync
+
+                        ' now we are allowed to call this function to send it via SMS
+                        Await InstaApi.SendTwoFactorLoginSMSAsync()
+
+                        ' lets wait 1 second for one last time
+                        ' we have to send trusted device API one more time, after we call SendTwoFactorLoginSMSAsync
+                        Await DelayAndCheck(1)
                     End If
                 End If
 
@@ -243,6 +269,11 @@ Public Class Form1
             GetFeedButton.Visible = True
         End If
     End Sub
+
+    Private Async Function DelayAndCheck(ByVal delayInSeconds As Integer) As Task
+        Await Task.Delay(TimeSpan.FromSeconds(delayInSeconds))
+        Await InstaApi.Check2FATrustedNotificationAsync().ConfigureAwait(False)
+    End Function
 
     Private Async Sub SubmitPhoneChallengeButton_Click(ByVal sender As Object, ByVal e As EventArgs) Handles SubmitPhoneChallengeButton.Click
         Try
