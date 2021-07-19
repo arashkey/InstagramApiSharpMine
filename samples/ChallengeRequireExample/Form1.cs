@@ -89,6 +89,7 @@ namespace ChallengeRequireExample
         readonly Size NormalSize = new Size(432, 164);
         readonly Size ChallengeSize = new Size(432, 604);
         private static IInstaApi InstaApi;
+        private bool FreshLoginFromTwoFactor = false;
         public Form1()
         {
             InitializeComponent();
@@ -135,16 +136,19 @@ namespace ChallengeRequireExample
             // a quick example:
             // https://github.com/Yozer/BetterHttpClient/blob/1102325276fb2ee8b44cbc8d4974f85bbd63ba2f/UnitTestBetterHttpClient/UnitTestHttpClient.cs#L106-L152
 
-            InstaApi = InstaApiBuilder.CreateBuilder()
-                .SetUser(userSession)
-                .UseLogger(new DebugLogger(LogLevel.All))
-                .SetRequestDelay(RequestDelay.FromSeconds(0, 1))
-                // Session handler, set a file path to save/load your state/session data
-                .SetSessionHandler(new FileSessionHandler { FilePath =  StateFile })
+            if (InstaApi == null)
+            {
+                InstaApi = InstaApiBuilder.CreateBuilder()
+                    .SetUser(userSession)
+                    .UseLogger(new DebugLogger(LogLevel.All))
+                    .SetRequestDelay(RequestDelay.FromSeconds(0, 1))
+                    // Session handler, set a file path to save/load your state/session data
+                    .SetSessionHandler(new FileSessionHandler { FilePath = StateFile })
 
-                //// Setting up proxy if you needed
-                //.UseHttpClientHandler(httpClientHandler)
-                .Build();
+                    //// Setting up proxy if you needed
+                    //.UseHttpClientHandler(httpClientHandler)
+                    .Build();
+            }
 
             //// if you want to edit languages and startup country code or timezone, you can use these>
             //InstaApi.StartupCountryCode = 44;
@@ -158,8 +162,6 @@ namespace ChallengeRequireExample
             //Load session
             LoadSession();
 
-            var freshLoginFromTwoFactor = false;
-        RetryFromTwoFactor:
             if (!InstaApi.IsUserAuthenticated)
             {
 
@@ -222,72 +224,74 @@ namespace ChallengeRequireExample
                         {
                             var random = new Random();
                             ///////////// IF YOU WANT TO SUPPORT NOTIFICATION LOGIN DO THIS> /////////////
-                            if (!freshLoginFromTwoFactor) // false
+                            if (!FreshLoginFromTwoFactor) // false
                             {
                                 int tried = 0;
-                            RetryLabel:
-                                var trustedNotification = await InstaApi.Check2FATrustedNotificationAsync();
-                                if (trustedNotification.Succeeded)
+                                while (tried <= 3)
                                 {
-                                    var reviewStatus = trustedNotification.Value.ReviewStatus;
-
-                                    switch (reviewStatus)
+                                    var trustedNotification = await InstaApi.Check2FATrustedNotificationAsync();
+                                    if (trustedNotification.Succeeded)
                                     {
-                                        case Insta2FANotificationReviewStatus.Unchanged:
-                                            // lets wait 3 times with a different delays
-                                            if (tried <= 3)
-                                            {
-                                                tried++;
-                                                await Task.Delay(random.Next(2, 6) * 1000).ConfigureAwait(false);
+                                        var reviewStatus = trustedNotification.Value.ReviewStatus;
 
-                                                goto RetryLabel;
-                                            }
-                                            break;
-
-                                        case Insta2FANotificationReviewStatus.Approved:
-                                            {
-                                                // if user approved login notification, we can simply login, without any further hard work
-                                                // >>>>>>>>>>>>>> DON'T CHANGE "code" AND "twoFactorOption" VALUES <<<<<<<<<<<<<<
-
-                                                var code = ""; // we have to pass "" as a verification code,
-                                                               // since Instagram doesn't need code in approved case
-
-                                                var trustedDevice = false;  // set true if you want to add this to the trusted device list
-
-                                                var twoFactorOption = InstaTwoFactorVerifyOptions.Notification;// we must use Notification
-
-                                                var twoFactorLogin = await InstaApi
-                                                    .TwoFactorLoginAsync(code,
-                                                    trustedDevice,
-                                                    twoFactorOption);
-
-                                                if (twoFactorLogin.Succeeded)
+                                        switch (reviewStatus)
+                                        {
+                                            case Insta2FANotificationReviewStatus.Unchanged:
+                                                // lets wait 3 times with a different delays
+                                                if (tried <= 3)
                                                 {
-                                                    // connected
-                                                    // save session
-                                                    SaveSession();
-                                                    Size = ChallengeSize;
-                                                    TwoFactorGroupBox.Visible = false;
-                                                    GetFeedButton.Visible = true;
-                                                    Text = $"{AppName} Connected";
-                                                    Size = NormalSize;
+                                                    tried++;
+                                                    await Task.Delay(random.Next(2, 6) * 1000).ConfigureAwait(false);
+
+                                                    continue;
                                                 }
-                                                else
+                                                return;
+
+                                            case Insta2FANotificationReviewStatus.Approved:
                                                 {
-                                                    // this shouldn't happen, so I don't know what to do in this situation
-                                                    MessageBox.Show(twoFactorLogin.Info.Message, "ERR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                    // if user approved login notification, we can simply login, without any further hard work
+                                                    // >>>>>>>>>>>>>> DON'T CHANGE "code" AND "twoFactorOption" VALUES <<<<<<<<<<<<<<
+
+                                                    var code = ""; // we have to pass "" as a verification code,
+                                                                   // since Instagram doesn't need code in approved case
+
+                                                    var trustedDevice = false;  // set true if you want to add this to the trusted device list
+
+                                                    var twoFactorOption = InstaTwoFactorVerifyOptions.Notification;// we must use Notification
+
+                                                    var twoFactorLogin = await InstaApi
+                                                        .TwoFactorLoginAsync(code,
+                                                        trustedDevice,
+                                                        twoFactorOption);
+
+                                                    if (twoFactorLogin.Succeeded)
+                                                    {
+                                                        // connected
+                                                        // save session
+                                                        SaveSession();
+                                                        Size = ChallengeSize;
+                                                        TwoFactorGroupBox.Visible = false;
+                                                        GetFeedButton.Visible = true;
+                                                        Text = $"{AppName} Connected";
+                                                        Size = NormalSize;
+                                                    }
+                                                    else
+                                                    {
+                                                        // this shouldn't happen, so I don't know what to do in this situation
+                                                        MessageBox.Show(twoFactorLogin.Info.Message, "ERR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                                    }
                                                 }
-                                            }
-                                            return;
-                                        case Insta2FANotificationReviewStatus.Denied:
-                                            // if user, denied it, we need a fresh login 
-                                            freshLoginFromTwoFactor = true;
-                                            // we ignore notification login, for this situation, although we can use notification again!
-                                            goto RetryFromTwoFactor;
+                                                return;
+                                            case Insta2FANotificationReviewStatus.Denied:
+                                                // if user, denied it, we need a fresh login 
+                                                FreshLoginFromTwoFactor = true;
+                                                // we ignore notification login, for this situation, although we can use notification again!
+                                                LoginButton_Click(null, null);
+                                                return;
+                                        }
                                     }
                                 }
-
-                                // if none of above codes didn't work, let try SMS code>
+                                // if none of above codes didn't work, lets try SMS code>
                                 await InstaApi.SendTwoFactorLoginSMSAsync();
                                 await InstaApi.Check2FATrustedNotificationAsync();
                             }
@@ -296,7 +300,7 @@ namespace ChallengeRequireExample
                                 // Let us check the required APIs by calling these functions
 
                                 // >>>>>>>>>>>> NEW <<<<<<<<<<<
-                                // I check Instagram again, it seems they wait 9 to 12 seconds before checking /two_factor/check_trusted_notification_status/ API
+                                // I checked Instagram again, it seems they wait 9 to 12 seconds before checking /two_factor/check_trusted_notification_status/ API
                                 // So lets wait between this range
                                 await DelayAndCheck(random.Next(9, 12));
 
@@ -311,10 +315,9 @@ namespace ChallengeRequireExample
                                 // now we are allowed to call this function to send it via SMS
                                 await InstaApi.SendTwoFactorLoginSMSAsync();
 
-                                await Task.Delay(1000);// lets wait 1 second for one last time
-
+                                // lets wait 1 second for one last time
                                 // we have to send trusted device API one more time, after we call SendTwoFactorLoginSMSAsync
-                                await InstaApi.Check2FATrustedNotificationAsync();
+                                await DelayAndCheck(1);
 
                                 async Task DelayAndCheck(int delayInSeconds)
                                 {
