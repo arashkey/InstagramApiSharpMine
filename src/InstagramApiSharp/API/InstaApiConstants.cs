@@ -114,6 +114,7 @@ namespace InstagramApiSharp.API
         public const string COOKIES_SHBID = "shbid";
         public const string COOKIES_RUR = "rur";
 
+        public const string HEADER_BEARER_IGT_2_VALUE = "Bearer IGT:2:";
 
         public const string HEADER_PIGEON_SESSION_ID = "X-Pigeon-Session-Id";
         public const string HEADER_PIGEON_RAWCLINETTIME = "X-Pigeon-Rawclienttime";

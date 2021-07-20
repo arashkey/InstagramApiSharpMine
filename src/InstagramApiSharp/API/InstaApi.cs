@@ -1202,30 +1202,11 @@ namespace InstagramApiSharp.API
                 var converter = ConvertersFabric.Instance.GetUserShortConverter(loginInfo.User);
                 _user.LoggedInUser = converter.Convert();
                 _user.RankToken = $"{_user.LoggedInUser.Pk}_{_httpRequestProcessor.RequestMessage.PhoneId}";
-                if (string.IsNullOrEmpty(_user.CsrfToken))
+                if (string.IsNullOrEmpty(_user.CsrfToken) && !_httpHelper.NewerThan180)
                     _user.CsrfToken = GetCsrfTokenFromCookies();
-                try
-                {
-                    var wwwClaim = response.Headers.GetValues(InstaApiConstants.HEADER_RESPONSE_X_WWW_CLAIM);
-                    if (wwwClaim != null)
-                        _user.WwwClaim = string.Join("", wwwClaim);
-                }
-                catch { }
-                try
-                {
-                    var fbTripId = response.Headers.GetValues(InstaApiConstants.HEADER_X_FB_TRIP_ID);
-                    if (fbTripId != null)
-                        _user.FbTripId = string.Join("", fbTripId);
-                }
-                catch { }
-                try
-                {
-                    var authorization = response.Headers.GetValues(InstaApiConstants.HEADER_RESPONSE_AUTHORIZATION);
-                    if (authorization != null)
-                        _user.Authorization = string.Join(" ", authorization);
-                }
-                catch { }
-                await LauncherSyncPrivate(/*false, true*/).ConfigureAwait(false);
+           
+                await AfterLoginAsync(response).ConfigureAwait(false);
+
                 return Result.Success(InstaLoginResult.Success);
             }
             catch (HttpRequestException httpException)
@@ -1341,7 +1322,7 @@ namespace InstagramApiSharp.API
 
             try
             {
-                if (string.IsNullOrEmpty(_user.CsrfToken))
+                if (string.IsNullOrEmpty(_user.CsrfToken) && !_httpHelper.NewerThan180)
                     _user.CsrfToken = GetCsrfTokenFromCookies();
                 //{
                 //    "verification_code": "bluh",
@@ -1359,7 +1340,6 @@ namespace InstagramApiSharp.API
                 {
                     {"verification_code", verificationCode},
                     {"phone_id", _deviceInfo.PhoneGuid.ToString()},
-                    //{"_csrftoken", _user.CsrfToken}, // why they keep deleting csrftoken from requests?! v190, v191.0 and v192 doesn't have it either
                     {"two_factor_identifier", _twoFactorInfo.TwoFactorIdentifier},
                     {"username", _httpRequestProcessor.RequestMessage.Username.ToLower()},
                     {"trust_this_device", Convert.ToInt16(trustThisDevice).ToString()},
@@ -1392,6 +1372,8 @@ namespace InstagramApiSharp.API
                     _user.LoggedInUser = converter.Convert();
                     _user.RankToken = $"{_user.LoggedInUser.Pk}_{_httpRequestProcessor.RequestMessage.PhoneId}";
                     InvalidateProcessors();
+                    await AfterLoginAsync(response).ConfigureAwait(false);
+
                     return Result.Success(InstaLoginTwoFactorResult.Success);
                 }
 
@@ -2151,8 +2133,10 @@ namespace InstagramApiSharp.API
                     {
                         ValidateUserAsync(obj.LoggedInUser, csrftoken);
                         await Task.Delay(3000);
-                        await _messagingProcessor.GetDirectInboxAsync(PaginationParameters.MaxPagesToLoad(1));
-                        await _feedProcessor.GetRecentActivityFeedAsync(PaginationParameters.MaxPagesToLoad(1));
+                        await AfterLoginAsync(response).ConfigureAwait(false);
+
+                        await _messagingProcessor.GetDirectInboxAsync(PaginationParameters.MaxPagesToLoad(1)).ConfigureAwait(false);
+                        await _feedProcessor.GetRecentActivityFeedAsync(PaginationParameters.MaxPagesToLoad(1)).ConfigureAwait(false);
 
                         return Result.Success(InstaLoginResult.Success);
                     }
@@ -2181,7 +2165,7 @@ namespace InstagramApiSharp.API
 
         internal async Task GetToken()
         {
-            if (DontGenerateToken) return;
+            if (DontGenerateToken || _httpHelper.NewerThan180) return;
             await LauncherSyncPrivate().ConfigureAwait(false);
         }
 
@@ -2337,8 +2321,9 @@ namespace InstagramApiSharp.API
                 InvalidateProcessors();
 
                 _user.RankToken = $"{_user.LoggedInUser.Pk}_{_httpRequestProcessor.RequestMessage.PhoneId}";
-                if (string.IsNullOrEmpty(_user.CsrfToken))
+                if (string.IsNullOrEmpty(_user.CsrfToken) && !_httpHelper.NewerThan180)
                     _user.CsrfToken = GetCsrfTokenFromCookies();
+                await AfterLoginAsync(response).ConfigureAwait(false);
 
                 return Result.Success(InstaLoginResult.Success);
             }
@@ -3359,7 +3344,7 @@ namespace InstagramApiSharp.API
                 {
                     _user.RankToken = $"{_user.LoggedInUser.Pk}_{_httpRequestProcessor.RequestMessage.PhoneId}";
                     _user.CsrfToken = csrfToken;
-                    if (string.IsNullOrEmpty(_user.CsrfToken))
+                    if (string.IsNullOrEmpty(_user.CsrfToken) && !_httpHelper.NewerThan180)
                         _user.CsrfToken = GetCsrfTokenFromCookies();
 
                     IsUserAuthenticated = true;
@@ -3896,7 +3881,42 @@ namespace InstagramApiSharp.API
             }
         }
 
+        internal async Task AfterLoginAsync(HttpResponseMessage response)
+        {
+            try
+            {
+                var wwwClaimHeader = response.Headers.GetValues(InstaApiConstants.HEADER_RESPONSE_X_WWW_CLAIM);
+                if (wwwClaimHeader != null &&
+                    string.Join("", wwwClaimHeader) is string wwwClaim && 
+                    !string.IsNullOrEmpty(wwwClaim))
+                {
+                    _user.WwwClaim = wwwClaim;
+                }
 
+                var fbTripIdHeader = response.Headers.GetValues(InstaApiConstants.HEADER_X_FB_TRIP_ID);
+                if (fbTripIdHeader != null && 
+                    string.Join("", fbTripIdHeader) is string fbTripId && 
+                    !string.IsNullOrEmpty(fbTripId))
+                { 
+                    _user.FbTripId = fbTripId; 
+                }
+
+                var authorizationHeader = response.Headers.GetValues(InstaApiConstants.HEADER_RESPONSE_AUTHORIZATION);
+                if (authorizationHeader != null && 
+                    string.Join("", authorizationHeader) is string authorization && 
+                    !string.IsNullOrEmpty(authorization) &&
+                    authorization != InstaApiConstants.HEADER_BEARER_IGT_2_VALUE)
+                {
+                    _user.Authorization = authorization;
+                }
+
+                await LauncherSyncPrivate(/*false, true*/).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                LogException(exception);
+            }
+        }
         string GetCsrfTokenFromCookies()
         {
             var cookies = _httpRequestProcessor.HttpHandler.CookieContainer
