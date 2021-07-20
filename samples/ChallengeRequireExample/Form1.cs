@@ -85,7 +85,7 @@ namespace ChallengeRequireExample
         // Verify sms or email verification code for login.
 
         const string AppName = "Challenge Required";
-        const string StateFile = "state-rmtjokar1373.bin";
+        const string StateFile = "state.bin";
         readonly Size NormalSize = new Size(432, 164);
         readonly Size ChallengeSize = new Size(432, 604);
         private static IInstaApi InstaApi;
