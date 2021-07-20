@@ -3,7 +3,7 @@
  * 
  * Github source: https://github.com/ramtinak/InstagramApiSharp
  * Nuget package: https://www.nuget.org/packages/InstagramApiSharp
- * Update date: 21 MAY 2019
+ * Latest update: 20 JULY 2021
  * IRANIAN DEVELOPERS
  */
 using InstagramApiSharp.API;

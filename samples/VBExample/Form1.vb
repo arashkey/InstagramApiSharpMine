@@ -1,9 +1,9 @@
 ﻿'
-'  Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https :  //t.me/ramtinak ]
+'  Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https://t.me/ramtinak ]
 '
-'  Github source : https :  //github.com/ramtinak/InstagramApiSharp
-'  Nuget package : https :    //www.nuget.org/packages/InstagramApiSharp
-'  Update Date:   01 October 2018
+'  Github source: https://github.com/ramtinak/InstagramApiSharp
+'  Nuget package: https://www.nuget.org/packages/InstagramApiSharp
+'  Latest update: 20 JULY 2021
 '  IRANIAN DEVELOPERS
 '
 Imports InstagramApiSharp.API
