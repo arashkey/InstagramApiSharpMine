@@ -126,5 +126,6 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("top_likers")] public InstaMediaIdList TopLikers { get; set; }
         [JsonProperty("carousel_share_child_media_id")] public string CarouselShareChildMediaId { get; set; }
 
+        [JsonProperty("play_count")] public int? PlayCount { get; set; }
     }
 }

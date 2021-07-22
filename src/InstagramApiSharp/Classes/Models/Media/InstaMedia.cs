@@ -131,7 +131,7 @@ namespace InstagramApiSharp.Classes.Models
         public long InlineComposerImpTriggerTime { get; set; }
         public InstaMediaIdList TopLikers { get; set; } = new InstaMediaIdList();
         public string CarouselShareChildMediaId { get; set; }
-
+        public int PlayCount { get; set; }
         private void OnPropertyChanged(string memberName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));

@@ -64,8 +64,8 @@ namespace InstagramApiSharp.Converters
                 UnifyTagDisplay = SourceObject.UnifyTagDisplay ?? false,
                 InlineComposerDisplayCondition= SourceObject.InlineComposerDisplayCondition ,
                 InlineComposerImpTriggerTime = SourceObject.InlineComposerImpTriggerTime ?? 0,
-                CarouselShareChildMediaId = SourceObject.CarouselShareChildMediaId
-
+                CarouselShareChildMediaId = SourceObject.CarouselShareChildMediaId,
+                PlayCount = SourceObject.PlayCount ?? 0
             };
             if (!string.IsNullOrEmpty(SourceObject.TakenAtUnixLike))
                 media.TakenAt = DateTimeHelper.UnixTimestampToDateTime(SourceObject.TakenAtUnixLike);
