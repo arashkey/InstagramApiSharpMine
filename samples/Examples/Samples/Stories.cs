@@ -155,12 +155,12 @@ namespace Examples.Samples
             };
             // At least 2 answer is required, maximum answers is 4.
             // First Answer
-            quiz.Options.Add(new InstaStoryQuizAnswer
-            {
-                Text = "Me"
+            quiz.Options.Add(new InstaStoryQuizAnswerUpload
+            { 
+                    Text = "Me"
             });
             // Second Answer
-            quiz.Options.Add(new InstaStoryQuizAnswer
+            quiz.Options.Add(new InstaStoryQuizAnswerUpload
             {
                 Text = "Myself" // for example, this is my question's answer
             });
