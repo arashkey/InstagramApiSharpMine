@@ -465,7 +465,17 @@ namespace InstagramApiSharp
                     return "modal_comment_composer_feed_timeline";
             }
         }
-
+        public static string GetContainerModule(this InstaRestrictContainerModule module)
+        {
+            switch (module)
+            {
+                default:
+                case InstaRestrictContainerModule.Profile:
+                    return "profile";
+                case InstaRestrictContainerModule.RestrictHalfSheet:
+                    return "restrict_half_sheet";
+            }
+        }
         public static string GetSurfaceType(this InstaMediaSurfaceType surfaceType)
         {
             switch (surfaceType)

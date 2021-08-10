@@ -7,10 +7,16 @@
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.Classes.Models;
 using Newtonsoft.Json;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
+    public class InstaUserShortFriendshipFullContainerResponse : InstaDefaultResponse
+    {
+        [JsonProperty("users")] public InstaUserShortFriendshipFullResponse[] Users { get; set; }
+    }
+
     public class InstaUserShortFriendshipFullResponse : InstaUserShortResponse
     {
         [JsonProperty("friendship_status")] public InstaFriendshipFullStatusResponse FriendshipStatus { get; set; }

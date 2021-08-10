@@ -7,8 +7,12 @@
  * IRANIAN DEVELOPERS
  */
 
+using System.Collections.Generic;
+
 namespace InstagramApiSharp.Classes.Models
 {
+    public class InstaUserShortFriendshipFullList : List<InstaUserShortFriendshipFull> { }
+
     public class InstaUserShortFriendshipFull : InstaUserShort
     {
         private InstaFriendshipFullStatus _status;

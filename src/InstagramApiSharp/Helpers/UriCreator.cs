@@ -3103,5 +3103,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for enable join request broadcasts");
             return instaUri;
         }
+        public static Uri GetRestrictManyUsersUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.RESTRICT_ACTION_RESTRICT_MANY, out var instaUri))
+                throw new Exception("Cant create URI for restrict users");
+            return instaUri;
+        }
     }
 }

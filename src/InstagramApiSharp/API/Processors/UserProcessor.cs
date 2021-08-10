@@ -47,6 +47,23 @@ namespace InstagramApiSharp.API.Processors
 
 
         /// <summary>
+        ///     Restrict users
+        /// </summary>
+        /// <param name="userIds">User ids (pk) to restrict</param>
+        public async Task<IResult<InstaUserShortFriendshipFullList>> RestrictUserAsync(params long[] userIds)
+        {
+            if (userIds == null || userIds.Length == 0)
+                return Result.Fail<InstaUserShortFriendshipFullList>("At least 1 user id is required");
+            
+            var data = new Dictionary<string, string>
+            {
+                {"user_ids", string.Join(",", userIds)}
+            };
+
+            return await RestrictUnrestrictUser(UriCreator.GetRestrictManyUsersUri(), data, InstaRestrictContainerModule.RestrictHalfSheet).ConfigureAwait(false);
+        }
+
+        /// <summary>
         ///     Mark activities news inbox
         /// </summary>
         public async Task<IResult<bool>> MarkNewsInboxSeenAsync()
@@ -2432,7 +2449,53 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-#endregion private parts
+        private async Task<IResult<InstaUserShortFriendshipFullList>> RestrictUnrestrictUser(Uri instaUri,
+            Dictionary<string, string> extras, InstaRestrictContainerModule containerModule)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var data = new Dictionary<string, string>
+                {
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"container_module",  containerModule.GetContainerModule()}
+                };
+
+                foreach (var item in extras)
+                    data.Add(item.Key, item.Value);
+
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<InstaUserShortFriendshipFullContainerResponse>(json);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaUserShortFriendshipFullList>(response, obj.Message, null);
+
+                var list = new InstaUserShortFriendshipFullList();
+
+                if(obj.Users?.Length > 0)
+                    foreach (var item in obj.Users)
+                        list.Add(ConvertersFabric.Instance.GetUserShortFriendshipFullConverter(item).Convert());
+
+                return Result.Success(list);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaUserShortFriendshipFullList), ResponseType.NetworkProblem);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail<InstaUserShortFriendshipFullList>(ex);
+            }
+        }
+
+        #endregion private parts
 
     }
 }
