@@ -22,7 +22,7 @@ using System.Text;
 using System.Security.Cryptography;
 using InstagramApiSharp.Classes;
 using System.Net.Http;
-#if NETSTANDARD || WINDOWS_UWP
+#if NETSTANDARD || WINDOWS_UWP || NET461_OR_GREATER
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Engines;
@@ -174,7 +174,7 @@ namespace InstagramApiSharp
                 ix += (int)ch;
             return "2" + ix;
         }
-#if NETSTANDARD || WINDOWS_UWP
+#if NETSTANDARD || WINDOWS_UWP || NET461_OR_GREATER
         static private readonly SecureRandom secureRandom = new SecureRandom();
 
         public static string GetEncryptedPassword(this IInstaApi api, string password, long? providedTime = null) 
