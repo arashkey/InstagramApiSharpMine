@@ -1739,7 +1739,8 @@ namespace InstagramApiSharp.API.Processors
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         public async Task<IResult<InstaMedia>> SendIGTVVideoAsync(Action<InstaUploaderProgress> progress,
-            InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false)
+            InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false,
+            int maxRetriesOnMediaConfiguration = 10)
         {
             var upProgress = new InstaUploaderProgress
             {
@@ -1859,7 +1860,7 @@ namespace InstagramApiSharp.API.Processors
                     //upProgress = progressContent?.UploaderProgress;
                     upProgress.UploadState = InstaUploadState.ThumbnailUploaded;
                     progress?.Invoke(upProgress);
-                    return await ConfigureIGTVVideo(progress, upProgress, uploadId, title, caption, video, sharePreviewToFeed);
+                    return await ConfigureIGTVVideo(progress, upProgress, uploadId, title, caption, video, sharePreviewToFeed, maxRetriesOnMediaConfiguration);
                 }
                 upProgress.UploadState = InstaUploadState.Error;
                 progress?.Invoke(upProgress);
@@ -1881,7 +1882,13 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaMedia>> ConfigureIGTVVideo(Action<InstaUploaderProgress> progress,
-            InstaUploaderProgress upProgress, string uploadId, string title,  string caption, InstaVideoUpload video, bool sharePreviewToFeed = false)
+            InstaUploaderProgress upProgress, 
+            string uploadId, 
+            string title,  
+            string caption, 
+            InstaVideoUpload video, 
+            bool sharePreviewToFeed = false,
+            int maxRetriesOnMediaConfiguration = 10)
         {
             try
             {
@@ -1896,11 +1903,9 @@ namespace InstagramApiSharp.API.Processors
                 var retryContext = GetRetryContext();
                 var clientContext = Guid.NewGuid().ToString();
 
-                const int maxRetries = 10;
-
-                for (var i = 0; i < maxRetries; ++i)
+                var rnd = new Random();
+                for (var i = 0; i < maxRetriesOnMediaConfiguration; ++i)
                 {
-                    var rnd = new Random();
                     var data = new JObject
                     {
                         {"filter_type", "0"},
@@ -1909,7 +1914,7 @@ namespace InstagramApiSharp.API.Processors
                         {"_uid", _user.LoggedInUser.Pk.ToString()},
                         {"device_id", _deviceInfo.DeviceId},
                         {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                        {"title", title ?? string.Empty },
+                        {"title", title ?? string.Empty},
                         {"caption", caption ?? string.Empty},
                         {"upload_id", uploadId},
                         {
@@ -1951,10 +1956,14 @@ namespace InstagramApiSharp.API.Processors
 
                     if (json.Contains("Transcode not finished"))
                     {
-                        if (i == maxRetries - 1)
+                        if (i == maxRetriesOnMediaConfiguration - 1)
                         {
                             return Result.UnExpectedResponse<InstaMedia>(response, json);
                         }
+                        
+                        // let's wait a few seconds
+                        await Task.Delay(TimeSpan.FromSeconds(i + 1)).ConfigureAwait(false);
+
                         continue;
                     }
 
@@ -1973,7 +1982,7 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<InstaMedia>(response, json);
                 }
 
-                throw new Exception("unreachable");
+                return Result.Fail<InstaMedia>("unreachable");
             }
             catch (HttpRequestException httpException)
             {
@@ -1993,7 +2002,9 @@ namespace InstagramApiSharp.API.Processors
 
 
 
-        public async Task<IResult<InstaMedia>> SendTVVideoAsync(InstaTVVideoUpload video, string title, string caption, bool sharePreviewToFeed = false)
+        public async Task<IResult<InstaMedia>> SendTVVideoAsync(InstaTVVideoUpload video, 
+            string title, string caption, bool sharePreviewToFeed = false,
+            int maxRetriesOnMediaConfiguration = 10)
         {
             try
             {
@@ -2142,7 +2153,7 @@ namespace InstagramApiSharp.API.Processors
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return await ConfigureTVVideo(video, uploadId, title, caption);
+                    return await ConfigureTVVideo(video, uploadId, title, caption, false, maxRetriesOnMediaConfiguration);
                 }
                 return Result.UnExpectedResponse<InstaMedia>(response, json);
             }
@@ -2161,7 +2172,8 @@ namespace InstagramApiSharp.API.Processors
 
 
         private async Task<IResult<InstaMedia>> ConfigureTVVideo(InstaTVVideoUpload video, string uploadId, string title, string caption,
-            bool ignoreMediaDelay = false)
+            bool ignoreMediaDelay = false,
+            int maxRetriesOnMediaConfiguration = 10)
         {
             try
             {
@@ -2176,7 +2188,9 @@ namespace InstagramApiSharp.API.Processors
                 var clientContext = Guid.NewGuid().ToString();
 
                 var rnd = new Random();
-                var data = new JObject
+                for (var i = 0; i < maxRetriesOnMediaConfiguration; ++i)
+                {
+                    var data = new JObject
                 {
                     {"filter_type", "0"},
                     {"timezone_offset", _instaApi.TimezoneOffset.ToString()},
@@ -2208,42 +2222,47 @@ namespace InstagramApiSharp.API.Processors
                     {"audio_muted", video.IsMuted},
                     {"poster_frame_index", 0},
                 };
-                if (!_httpHelper.NewerThan180)
-                {
-                    data.Add("_csrftoken", _user.CsrfToken);
-                }
-
-                if (video.SharePreviewToFeed)
-                    data.Add("igtv_share_preview_to_feed", "1");
-
-                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                request.Headers.AddHeader("is_igtv_video", "1", _instaApi);
-                request.Headers.AddHeader("retry_context", retryContext, _instaApi);
-                var response = await _httpRequestProcessor.SendAsync(request);
-                var json = await response.Content.ReadAsStringAsync();
-                // igtv:
-                //{"message": "Transcode error: Video's aspect ratio is too large 1.3333333333333", "status": "fail"}
-                //{"message": "Transcode error: Video's aspect ratio is too large 1.7777777777778", "status": "fail"}
-                //{"message": "Uploaded image isn't in an allowed aspect ratio", "status": "fail"}
-                //{"media": {"taken_at": 1536588655, "pk": 1865362680669764409, "id": "1865362680669764409_1647718432", "device_timestamp": 153658858130102, "media_type": 2, "code": "BnjGXmWl3s5", "client_cache_key": "MTg2NTM2MjY4MDY2OTc2NDQwOQ==.2", "filter_type": 0, "comment_likes_enabled": false, "comment_threading_enabled": false, "has_more_comments": false, "max_num_visible_preview_comments": 2, "preview_comments": [], "can_view_more_preview_comments": false, "comment_count": 0, "product_type": "igtv", "nearly_complete_copyright_match": false, "image_versions2": {"candidates": [{"width": 1080, "height": 1680, "url": "https://scontent-lga3-1.cdninstagram.com/vp/59b658bc87fac07bfb12fc493d810147/5B990274/t51.2885-15/e35/40958056_2159975094323981_8136119356155744850_n.jpg?se=7\u0026ig_cache_key=MTg2NTM2MjY4MDY2OTc2NDQwOQ%3D%3D.2"}, {"width": 240, "height": 373, "url": "https://scontent-lga3-1.cdninstagram.com/vp/524297318efe8ac05afbe7c267673f33/5B98BF5D/t51.2885-15/e35/p240x240/40958056_2159975094323981_8136119356155744850_n.jpg?ig_cache_key=MTg2NTM2MjY4MDY2OTc2NDQwOQ%3D%3D.2"}]}, "original_width": 1080, "original_height": 1680, "thumbnails": {}, "video_versions": [{"type": 101, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}, {"type": 103, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}, {"type": 102, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}], "has_audio": true, "video_duration": 122.669, "user": {"pk": 1647718432, "username": "kajokoleha", "full_name": "kajokoleha", "is_private": false, "profile_pic_url": "https://scontent-lga3-1.cdninstagram.com/vp/82572ce26b79cec0394c295ff1b486b7/5C203459/t51.2885-19/s150x150/29094366_375967546140243_535690319979610112_n.jpg", "profile_pic_id": "1746518311616597634_1647718432", "has_anonymous_profile_picture": false, "can_boost_post": false, "can_see_organic_insights": false, "show_insights_terms": false, "reel_auto_archive": "on", "is_unpublished": false, "allowed_commenter_type": "any"}, "caption": {"pk": 17977422871018862, "user_id": 1647718432, "text": "captioooooooooooooooooooon", "type": 1, "created_at": 1536588656, "created_at_utc": 1536588656, "content_type": "comment", "status": "Active", "bit_flags": 0, "user": {"pk": 1647718432, "username": "kajokoleha", "full_name": "kajokoleha", "is_private": false, "profile_pic_url": "https://scontent-lga3-1.cdninstagram.com/vp/82572ce26b79cec0394c295ff1b486b7/5C203459/t51.2885-19/s150x150/29094366_375967546140243_535690319979610112_n.jpg", "profile_pic_id": "1746518311616597634_1647718432", "has_anonymous_profile_picture": false, "can_boost_post": false, "can_see_organic_insights": false, "show_insights_terms": false, "reel_auto_archive": "on", "is_unpublished": false, "allowed_commenter_type": "any"}, "did_report_as_spam": false, "media_id": 1865362680669764409}, "title": "ramtin vid e o", "caption_is_edited": false, "photo_of_you": false, "can_viewer_save": true, "organic_tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjpmYWxzZSwidXVpZCI6IjgyYzkyZjU0Y2EyMzRhNjM5YzBiOTBlZDAzODcwODlhMTg2NTM2MjY4MDY2OTc2NDQwOSIsInNlcnZlcl90b2tlbiI6IjE1MzY1ODg2NTc4Mzd8MTg2NTM2MjY4MDY2OTc2NDQwOXwxNjQ3NzE4NDMyfGMwZjkxNmNmMjk2NTU4NzQ1MWRlZmU3NTY2NjY3ZDdiNjE4OTMxYjM3NTQ0YjdhYjg1NmUxYWEwZjhmMmM4MWIifSwic2lnbmF0dXJlIjoiIn0="}, "upload_id": "153658858130102", "status": "ok"}
-                var defResponse = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
-                if (response.StatusCode == HttpStatusCode.Accepted && defResponse?.Message != null)
-                {
-                    if (defResponse.Message.ToLower().Contains("transcode not finished yet"))
+                    if (!_httpHelper.NewerThan180)
                     {
-                        await Task.Delay(10000);
-                        return await ConfigureTVVideo(video, uploadId, title, caption, true);
+                        data.Add("_csrftoken", _user.CsrfToken);
                     }
-                }
-                if (response.IsSuccessStatusCode)
-                {
-                    var mediaResponse = JsonConvert.DeserializeObject<InstaMediaItemResponse>(json, new InstaMediaDataConverter());
-                    var converter = ConvertersFabric.Instance.GetSingleMediaConverter(mediaResponse);
 
-                    return Result.Success(converter.Convert());
-                }
-                return Result.UnExpectedResponse<InstaMedia>(response, json);
+                    if (video.SharePreviewToFeed)
+                        data.Add("igtv_share_preview_to_feed", "1");
 
+                    var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                    request.Headers.AddHeader("is_igtv_video", "1", _instaApi);
+                    request.Headers.AddHeader("retry_context", retryContext, _instaApi);
+                    var response = await _httpRequestProcessor.SendAsync(request);
+                    var json = await response.Content.ReadAsStringAsync();
+                    // igtv:
+                    //{"message": "Transcode error: Video's aspect ratio is too large 1.3333333333333", "status": "fail"}
+                    //{"message": "Transcode error: Video's aspect ratio is too large 1.7777777777778", "status": "fail"}
+                    //{"message": "Uploaded image isn't in an allowed aspect ratio", "status": "fail"}
+                    //{"media": {"taken_at": 1536588655, "pk": 1865362680669764409, "id": "1865362680669764409_1647718432", "device_timestamp": 153658858130102, "media_type": 2, "code": "BnjGXmWl3s5", "client_cache_key": "MTg2NTM2MjY4MDY2OTc2NDQwOQ==.2", "filter_type": 0, "comment_likes_enabled": false, "comment_threading_enabled": false, "has_more_comments": false, "max_num_visible_preview_comments": 2, "preview_comments": [], "can_view_more_preview_comments": false, "comment_count": 0, "product_type": "igtv", "nearly_complete_copyright_match": false, "image_versions2": {"candidates": [{"width": 1080, "height": 1680, "url": "https://scontent-lga3-1.cdninstagram.com/vp/59b658bc87fac07bfb12fc493d810147/5B990274/t51.2885-15/e35/40958056_2159975094323981_8136119356155744850_n.jpg?se=7\u0026ig_cache_key=MTg2NTM2MjY4MDY2OTc2NDQwOQ%3D%3D.2"}, {"width": 240, "height": 373, "url": "https://scontent-lga3-1.cdninstagram.com/vp/524297318efe8ac05afbe7c267673f33/5B98BF5D/t51.2885-15/e35/p240x240/40958056_2159975094323981_8136119356155744850_n.jpg?ig_cache_key=MTg2NTM2MjY4MDY2OTc2NDQwOQ%3D%3D.2"}]}, "original_width": 1080, "original_height": 1680, "thumbnails": {}, "video_versions": [{"type": 101, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}, {"type": 103, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}, {"type": 102, "width": 480, "height": 746, "url": "https://scontent-lga3-1.cdninstagram.com/vp/04d231154d0d1c95289445a348f26bde/5B98AC98/t50.16885-16/10000000_232772710752607_772643665699930112_n.mp4", "id": "17962568050122118"}], "has_audio": true, "video_duration": 122.669, "user": {"pk": 1647718432, "username": "kajokoleha", "full_name": "kajokoleha", "is_private": false, "profile_pic_url": "https://scontent-lga3-1.cdninstagram.com/vp/82572ce26b79cec0394c295ff1b486b7/5C203459/t51.2885-19/s150x150/29094366_375967546140243_535690319979610112_n.jpg", "profile_pic_id": "1746518311616597634_1647718432", "has_anonymous_profile_picture": false, "can_boost_post": false, "can_see_organic_insights": false, "show_insights_terms": false, "reel_auto_archive": "on", "is_unpublished": false, "allowed_commenter_type": "any"}, "caption": {"pk": 17977422871018862, "user_id": 1647718432, "text": "captioooooooooooooooooooon", "type": 1, "created_at": 1536588656, "created_at_utc": 1536588656, "content_type": "comment", "status": "Active", "bit_flags": 0, "user": {"pk": 1647718432, "username": "kajokoleha", "full_name": "kajokoleha", "is_private": false, "profile_pic_url": "https://scontent-lga3-1.cdninstagram.com/vp/82572ce26b79cec0394c295ff1b486b7/5C203459/t51.2885-19/s150x150/29094366_375967546140243_535690319979610112_n.jpg", "profile_pic_id": "1746518311616597634_1647718432", "has_anonymous_profile_picture": false, "can_boost_post": false, "can_see_organic_insights": false, "show_insights_terms": false, "reel_auto_archive": "on", "is_unpublished": false, "allowed_commenter_type": "any"}, "did_report_as_spam": false, "media_id": 1865362680669764409}, "title": "ramtin vid e o", "caption_is_edited": false, "photo_of_you": false, "can_viewer_save": true, "organic_tracking_token": "eyJ2ZXJzaW9uIjo1LCJwYXlsb2FkIjp7ImlzX2FuYWx5dGljc190cmFja2VkIjpmYWxzZSwidXVpZCI6IjgyYzkyZjU0Y2EyMzRhNjM5YzBiOTBlZDAzODcwODlhMTg2NTM2MjY4MDY2OTc2NDQwOSIsInNlcnZlcl90b2tlbiI6IjE1MzY1ODg2NTc4Mzd8MTg2NTM2MjY4MDY2OTc2NDQwOXwxNjQ3NzE4NDMyfGMwZjkxNmNmMjk2NTU4NzQ1MWRlZmU3NTY2NjY3ZDdiNjE4OTMxYjM3NTQ0YjdhYjg1NmUxYWEwZjhmMmM4MWIifSwic2lnbmF0dXJlIjoiIn0="}, "upload_id": "153658858130102", "status": "ok"}
+                    if (json.Contains("Transcode not finished"))
+                    {
+                        if (i == maxRetriesOnMediaConfiguration - 1)
+                        {
+                            return Result.UnExpectedResponse<InstaMedia>(response, json);
+                        }
+
+                        // let's wait a few seconds
+                        await Task.Delay(TimeSpan.FromSeconds(i + 1)).ConfigureAwait(false);
+
+                        continue;
+                    }
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var mediaResponse = JsonConvert.DeserializeObject<InstaMediaItemResponse>(json, new InstaMediaDataConverter());
+                        var converter = ConvertersFabric.Instance.GetSingleMediaConverter(mediaResponse);
+
+                        return Result.Success(converter.Convert());
+                    }
+                    return Result.UnExpectedResponse<InstaMedia>(response, json);
+                }
+
+                return Result.Fail<InstaMedia>("unreachable");
             }
             catch (HttpRequestException httpException)
             {

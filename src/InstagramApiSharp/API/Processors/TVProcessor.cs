@@ -529,10 +529,11 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
         /// <param name="sharePreviewToFeed">Show a preview on the feed</param>
-        public async Task<IResult<InstaMedia>> UploadVideoAsync(InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false
+        public async Task<IResult<InstaMedia>> UploadVideoAsync(InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false,
+            int maxRetriesOnMediaConfiguration = 10
             /*, InstaVideoUploadOption videoUploadOption = null*/)
         {
-            return await UploadVideoAsync(null, video, title, caption, sharePreviewToFeed/*, videoUploadOption*/);
+            return await UploadVideoAsync(null, video, title, caption, sharePreviewToFeed, maxRetriesOnMediaConfiguration/*, videoUploadOption*/);
         }
 
         /// <summary>
@@ -544,10 +545,11 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="caption">Caption</param>
         /// <param name="sharePreviewToFeed">Show a preview on the feed</param>
         public async Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress, 
-            InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false/*, InstaVideoUploadOption videoUploadOption = null*/)
+            InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false,
+            int maxRetriesOnMediaConfiguration = 10/*, InstaVideoUploadOption videoUploadOption = null*/)
         {
             UserAuthValidator.Validate(_userAuthValidate);
-            return await _instaApi.HelperProcessor.SendIGTVVideoAsync(progress, video, title, caption, sharePreviewToFeed/*, videoUploadOption*/);
+            return await _instaApi.HelperProcessor.SendIGTVVideoAsync(progress, video, title, caption, sharePreviewToFeed, maxRetriesOnMediaConfiguration/*, videoUploadOption*/);
         }
 
         /// <summary>
@@ -556,10 +558,11 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="tvVideo">IgTV Video to upload</param>
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
-        public async Task<IResult<InstaMedia>> UploadSegmentedVideoToTVAsync(InstaTVVideoUpload tvVideo, string title, string caption)
+        public async Task<IResult<InstaMedia>> UploadSegmentedVideoToTVAsync(InstaTVVideoUpload tvVideo, string title, string caption,
+            int maxRetriesOnMediaConfiguration = 10)
         {
             UserAuthValidator.Validate(_userAuthValidate);
-            return await _instaApi.HelperProcessor.SendTVVideoAsync(tvVideo, title, caption);
+            return await _instaApi.HelperProcessor.SendTVVideoAsync(tvVideo, title, caption, false, maxRetriesOnMediaConfiguration);
         }
 
         /// <summary>

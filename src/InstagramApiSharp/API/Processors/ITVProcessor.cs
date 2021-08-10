@@ -127,7 +127,8 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
         /// <param name="sharePreviewToFeed">Show a preview on the feed</param>
-        Task<IResult<InstaMedia>> UploadVideoAsync(InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false);
+        Task<IResult<InstaMedia>> UploadVideoAsync(InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false,
+            int maxRetriesOnMediaConfiguration = 10);
         /// <summary>
         ///     Upload video to Instagram TV with progress
         /// </summary>
@@ -136,14 +137,16 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
         /// <param name="sharePreviewToFeed">Show a preview on the feed</param>
-        Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false);
+        Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false,
+            int maxRetriesOnMediaConfiguration = 10);
         /// <summary>
         ///     Upload segmented video to igtv 
         /// </summary>
         /// <param name="tvVideo">IgTV Video to upload</param>
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
-        Task<IResult<InstaMedia>> UploadSegmentedVideoToTVAsync(InstaTVVideoUpload tvVideo, string title, string caption);
+        Task<IResult<InstaMedia>> UploadSegmentedVideoToTVAsync(InstaTVVideoUpload tvVideo, string title, string caption,
+            int maxRetriesOnMediaConfiguration = 10);
 
         /// <summary>
         ///     Mark a media or medias as seen
