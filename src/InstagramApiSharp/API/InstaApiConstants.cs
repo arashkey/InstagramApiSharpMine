@@ -89,6 +89,9 @@ namespace InstagramApiSharp.API
         public const string STORY_QUIZ_PARTICIPANTS = API_SUFFIX + "/media/{0}/{1}/story_quiz_participants/";
         public const string STORY_SLIDER_VOTERS = API_SUFFIX + "/media/{0}/{1}/story_slider_voters/";
 
+        public const string RESTRICT_ACTION_RESTRICT_MANY = API_SUFFIX + "/restrict_action/restrict_many/";
+        public const string RESTRICT_ACTION_UNRESTRICT = API_SUFFIX + "/restrict_action/unrestrict/";
+
         #endregion New
 
         #region B Url endpoints
@@ -299,7 +302,13 @@ namespace InstagramApiSharp.API
         public const string CLIPS_USER = API_SUFFIX + "/clips/user/";
         public const string DIRECT_BROADCAST_CLIPS_SHARE = API_SUFFIX + "/direct_v2/threads/broadcast/clip_share/";
 
-        #endregion  Clips (reels) constants
+        #endregion Clips (reels) constants
+
+        #region Bloks endpoints constants
+
+        public const string BLOKS_RESTRICT_NUX_ACTION = API_SUFFIX + "/bloks/apps/com.instagram.bullying.restrict_nux_action/";
+
+        #endregion
 
         #region Account endpoints constants
 
