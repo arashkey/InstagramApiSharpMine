@@ -41,5 +41,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public bool? IsBlockingReel { get; set; }
         [JsonProperty("is_muting_reel")]
         public bool? IsMutingReel { get; set; }
+        [JsonProperty("is_restricted")]
+        public bool? IsRestricted { get; set; }
     }
 }

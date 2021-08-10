@@ -30,5 +30,7 @@ namespace InstagramApiSharp.Classes.Models
         public bool IsBlockingReel { get; set; }
 
         public bool IsMutingReel { get; set; }
+
+        public bool IsRestricted { get; set; }
     }
 }
