@@ -45,7 +45,19 @@ namespace InstagramApiSharp.API.Processors
             _httpHelper = httpHelper;
         }
 
+        /// <summary>
+        ///     Unrestrict a user
+        /// </summary>
+        /// <param name="userId">User id (pk) to unrestrict</param>
+        public async Task<IResult<InstaUserShortFriendshipFullList>> UnRestrictUserAsync(long userId, InstaRestrictContainerModule containerModule = InstaRestrictContainerModule.Profile)
+        {
+            var data = new Dictionary<string, string>
+            {
+                {"target_user_id", userId.ToString()}
+            };
 
+            return await RestrictUnrestrictUser(UriCreator.GetUnRestrictUserUri(), data, containerModule).ConfigureAwait(false);
+        }
         /// <summary>
         ///     Restrict users
         /// </summary>

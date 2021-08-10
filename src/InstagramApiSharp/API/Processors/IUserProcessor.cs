@@ -14,6 +14,11 @@ namespace InstagramApiSharp.API.Processors
     public interface IUserProcessor
     {
         /// <summary>
+        ///     Unrestrict a user
+        /// </summary>
+        /// <param name="userId">User id (pk) to unrestrict</param>
+        Task<IResult<InstaUserShortFriendshipFullList>> UnRestrictUserAsync(long userId, InstaRestrictContainerModule containerModule = InstaRestrictContainerModule.Profile);
+        /// <summary>
         ///     Restrict users
         /// </summary>
         /// <param name="userIds">User ids (pk) to restrict</param>

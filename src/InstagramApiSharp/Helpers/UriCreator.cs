@@ -3109,5 +3109,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for restrict users");
             return instaUri;
         }
+        public static Uri GetUnRestrictUserUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.RESTRICT_ACTION_UNRESTRICT, out var instaUri))
+                throw new Exception("Cant create URI for unrestrict user");
+            return instaUri;
+        }
     }
 }
