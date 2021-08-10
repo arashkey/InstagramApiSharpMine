@@ -46,6 +46,16 @@ namespace InstagramApiSharp.API.Processors
         }
 
         /// <summary>
+        ///     Get restricted users
+        /// </summary>
+        public async Task<IResult<InstaUserShortFriendshipFullList>> GetRestrictedUsersAsync()
+        {
+            var instaUri = UriCreator.GetRestrictedUsersUri();
+            var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+
+            return await RestrictAction(request).ConfigureAwait(false);
+        }
+        /// <summary>
         ///     Unrestrict a user
         /// </summary>
         /// <param name="userId">User id (pk) to unrestrict</param>
@@ -2464,23 +2474,29 @@ namespace InstagramApiSharp.API.Processors
         private async Task<IResult<InstaUserShortFriendshipFullList>> RestrictUnrestrictUser(Uri instaUri,
             Dictionary<string, string> extras, InstaRestrictContainerModule containerModule)
         {
+            var data = new Dictionary<string, string>
+            {
+                {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                {"container_module",  containerModule.GetContainerModule()}
+            };
+
+            foreach (var item in extras)
+                data.Add(item.Key, item.Value);
+
+            if (!_httpHelper.NewerThan180)
+            {
+                data.Add("_csrftoken", _user.CsrfToken);
+            }
+            var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+
+            return await RestrictAction(request).ConfigureAwait(false);
+        }
+
+        private async Task<IResult<InstaUserShortFriendshipFullList>> RestrictAction(HttpRequestMessage request)
+        {
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var data = new Dictionary<string, string>
-                {
-                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
-                    {"container_module",  containerModule.GetContainerModule()}
-                };
-
-                foreach (var item in extras)
-                    data.Add(item.Key, item.Value);
-
-                if (!_httpHelper.NewerThan180)
-                {
-                    data.Add("_csrftoken", _user.CsrfToken);
-                }
-                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 var obj = JsonConvert.DeserializeObject<InstaUserShortFriendshipFullContainerResponse>(json);
@@ -2488,7 +2504,10 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaUserShortFriendshipFullList>(response, obj.Message, null);
 
-                var list = new InstaUserShortFriendshipFullList();
+                var list = new InstaUserShortFriendshipFullList()
+                {
+                    UserCount = obj.UserCount ?? 0
+                };
 
                 if(obj.Users?.Length > 0)
                     foreach (var item in obj.Users)

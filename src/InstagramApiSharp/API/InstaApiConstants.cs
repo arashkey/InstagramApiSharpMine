@@ -91,6 +91,7 @@ namespace InstagramApiSharp.API
 
         public const string RESTRICT_ACTION_RESTRICT_MANY = API_SUFFIX + "/restrict_action/restrict_many/";
         public const string RESTRICT_ACTION_UNRESTRICT = API_SUFFIX + "/restrict_action/unrestrict/";
+        public const string RESTRICT_ACTION_GET_RESTRICTED_USERS = API_SUFFIX + "/restrict_action/get_restricted_users/";
 
         #endregion New
 

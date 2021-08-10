@@ -15,6 +15,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
     public class InstaUserShortFriendshipFullContainerResponse : InstaDefaultResponse
     {
         [JsonProperty("users")] public InstaUserShortFriendshipFullResponse[] Users { get; set; }
+        [JsonProperty("user_count")] public long? UserCount { get; set; }
     }
 
     public class InstaUserShortFriendshipFullResponse : InstaUserShortResponse

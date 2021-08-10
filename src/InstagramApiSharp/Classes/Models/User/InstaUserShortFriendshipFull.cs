@@ -11,7 +11,10 @@ using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.Models
 {
-    public class InstaUserShortFriendshipFullList : List<InstaUserShortFriendshipFull> { }
+    public class InstaUserShortFriendshipFullList : List<InstaUserShortFriendshipFull>
+    {
+        public long UserCount { get; set; }
+    }
 
     public class InstaUserShortFriendshipFull : InstaUserShort
     {
