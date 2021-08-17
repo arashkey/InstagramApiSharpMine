@@ -29,7 +29,8 @@ namespace InstagramApiSharp.Converters
                 IsBlockingReel = SourceObject.IsBlockingReel ?? false,
                 IsMutingReel = SourceObject.IsMutingReel ?? false,
                 IncomingRequest = SourceObject.IncomingRequest ?? false,
-                IsPrivate = SourceObject.IsPrivate ?? false
+                IsPrivate = SourceObject.IsPrivate ?? false,
+                IsRestricted = SourceObject.IsRestricted ?? false
             };
             return friendShip;
         }
