@@ -19,6 +19,6 @@ namespace InstagramApiSharp.Classes.Models
     }
     public class InstaDefaultResponse : InstaDefault
     {
-        public bool IsSucceed => Status.ToLower() == "ok";
+        public bool IsSucceed => Status?.ToLower() == "ok";
     }
 }
