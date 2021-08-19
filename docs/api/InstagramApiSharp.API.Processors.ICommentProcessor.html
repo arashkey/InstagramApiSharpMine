@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface ICommentProcessor
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface ICommentProcessor
+   ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor">
+  
+  
+  <h1 id="InstagramApiSharp_API_Processors_ICommentProcessor" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor" class="text-break">Interface ICommentProcessor
+  </h1>
+  <div class="markdown level0 summary"><p>Comments api functions.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="InstagramApiSharp.API.Processors.html">InstagramApiSharp.API.Processors</a></h6>
+  <h6><strong>Assembly</strong>: InstagramApiSharp.dll</h6>
+  <h5 id="InstagramApiSharp_API_Processors_ICommentProcessor_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface ICommentProcessor</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_BlockUserCommentingAsync_System_Int64___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.BlockUserCommentingAsync(System.Int64%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L31">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_BlockUserCommentingAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.BlockUserCommentingAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_BlockUserCommentingAsync_System_Int64___" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.BlockUserCommentingAsync(System.Int64[])">BlockUserCommentingAsync(Int64[])</h4>
+  <div class="markdown level1 summary"><p>Block an user from commenting to medias</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; BlockUserCommentingAsync(params long[] userIds)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span>[]</td>
+        <td><span class="parametername">userIds</span></td>
+        <td><p>User ids (pk)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_CheckOffensiveCaptionAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.CheckOffensiveCaptionAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L18">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_CheckOffensiveCaptionAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.CheckOffensiveCaptionAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_CheckOffensiveCaptionAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.CheckOffensiveCaptionAsync(System.String)">CheckOffensiveCaptionAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Check offensive text for caption</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaOffensiveText&gt;&gt; CheckOffensiveCaptionAsync(string captionText)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">captionText</span></td>
+        <td><p>Caption text</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaOffensiveText.html">InstaOffensiveText</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_CheckOffensiveTextAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.CheckOffensiveTextAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L25">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_CheckOffensiveTextAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.CheckOffensiveTextAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_CheckOffensiveTextAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.CheckOffensiveTextAsync(System.String,System.String)">CheckOffensiveTextAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Check offensive text for comment</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaOffensiveText&gt;&gt; CheckOffensiveTextAsync(string mediaId, string commentText)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media identifier</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">commentText</span></td>
+        <td><p>Comment text</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaOffensiveText.html">InstaOffensiveText</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_CommentMediaAsync_System_String_System_String_InstagramApiSharp_Enums_InstaCommentContainerModuleType_System_UInt32_System_Boolean_System_Nullable_System_Int32__.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.CommentMediaAsync(System.String%2CSystem.String%2CInstagramApiSharp.Enums.InstaCommentContainerModuleType%2CSystem.UInt32%2CSystem.Boolean%2CSystem.Nullable%7BSystem.Int32%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L42">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_CommentMediaAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.CommentMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_CommentMediaAsync_System_String_System_String_InstagramApiSharp_Enums_InstaCommentContainerModuleType_System_UInt32_System_Boolean_System_Nullable_System_Int32__" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.CommentMediaAsync(System.String,System.String,InstagramApiSharp.Enums.InstaCommentContainerModuleType,System.UInt32,System.Boolean,System.Nullable{System.Int32})">CommentMediaAsync(String, String, InstaCommentContainerModuleType, UInt32, Boolean, Nullable&lt;Int32&gt;)</h4>
+  <div class="markdown level1 summary"><p>Comment media</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaComment&gt;&gt; CommentMediaAsync(string mediaId, string text, InstaCommentContainerModuleType containerModule = InstaCommentContainerModuleType.FeedTimeline, uint feedPosition = 0U, bool isCarouselBumpedPost = false, int? carouselIndex = default(int? ))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>Comment text</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Enums.InstaCommentContainerModuleType.html">InstaCommentContainerModuleType</a></td>
+        <td><span class="parametername">containerModule</span></td>
+        <td><p>Container module</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">feedPosition</span></td>
+        <td><p>Feed position</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">isCarouselBumpedPost</span></td>
+        <td><p>Is carousel post?</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">carouselIndex</span></td>
+        <td><p>Carousel index</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaComment.html">InstaComment</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_DeleteCommentAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.DeleteCommentAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L51">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_DeleteCommentAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.DeleteCommentAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_DeleteCommentAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.DeleteCommentAsync(System.String,System.String)">DeleteCommentAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Delete media comment</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DeleteCommentAsync(string mediaId, string commentId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">commentId</span></td>
+        <td><p>Comment id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_DeleteMultipleCommentsAsync_System_String_System_String___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.DeleteMultipleCommentsAsync(System.String%2CSystem.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L58">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_DeleteMultipleCommentsAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.DeleteMultipleCommentsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_DeleteMultipleCommentsAsync_System_String_System_String___" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.DeleteMultipleCommentsAsync(System.String,System.String[])">DeleteMultipleCommentsAsync(String, String[])</h4>
+  <div class="markdown level1 summary"><p>Delete media comments(multiple)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DeleteMultipleCommentsAsync(string mediaId, params string[] commentIds)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">commentIds</span></td>
+        <td><p>Comment id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_DisableMediaCommentAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.DisableMediaCommentAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L64">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_DisableMediaCommentAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.DisableMediaCommentAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_DisableMediaCommentAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.DisableMediaCommentAsync(System.String)">DisableMediaCommentAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Disable media comments</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DisableMediaCommentAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_EnableMediaCommentAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.EnableMediaCommentAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L70">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_EnableMediaCommentAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.EnableMediaCommentAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_EnableMediaCommentAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.EnableMediaCommentAsync(System.String)">EnableMediaCommentAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Allow media comments</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; EnableMediaCommentAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_GetBlockedCommentersAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.GetBlockedCommentersAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L75">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_GetBlockedCommentersAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetBlockedCommentersAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_GetBlockedCommentersAsync" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetBlockedCommentersAsync">GetBlockedCommentersAsync()</h4>
+  <div class="markdown level1 summary"><p>Get blocked users from commenting</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserShortList&gt;&gt; GetBlockedCommentersAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserShortList.html">InstaUserShortList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaCommentLikersAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaCommentLikersAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L81">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaCommentLikersAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaCommentLikersAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaCommentLikersAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaCommentLikersAsync(System.String)">GetMediaCommentLikersAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get media comments likers</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaLikersList&gt;&gt; GetMediaCommentLikersAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaLikersList.html">InstaLikersList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaCommentsAsync_System_String_InstagramApiSharp_PaginationParameters_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaCommentsAsync(System.String%2CInstagramApiSharp.PaginationParameters%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L89">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaCommentsAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaCommentsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaCommentsAsync_System_String_InstagramApiSharp_PaginationParameters_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaCommentsAsync(System.String,InstagramApiSharp.PaginationParameters,System.String)">GetMediaCommentsAsync(String, PaginationParameters, String)</h4>
+  <div class="markdown level1 summary"><p>Get media comments</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaCommentList&gt;&gt; GetMediaCommentsAsync(string mediaId, PaginationParameters paginationParameters, string targetCommentId = &quot;&quot;)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.PaginationParameters.html">PaginationParameters</a></td>
+        <td><span class="parametername">paginationParameters</span></td>
+        <td><p>Pagination parameters: next id and max amount of pages to load</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">targetCommentId</span></td>
+        <td><p>Target comment id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaCommentList.html">InstaCommentList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaCommentsAsync_System_String_InstagramApiSharp_PaginationParameters_System_Threading_CancellationToken_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaCommentsAsync(System.String%2CInstagramApiSharp.PaginationParameters%2CSystem.Threading.CancellationToken%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L99">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaCommentsAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaCommentsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaCommentsAsync_System_String_InstagramApiSharp_PaginationParameters_System_Threading_CancellationToken_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaCommentsAsync(System.String,InstagramApiSharp.PaginationParameters,System.Threading.CancellationToken,System.String)">GetMediaCommentsAsync(String, PaginationParameters, CancellationToken, String)</h4>
+  <div class="markdown level1 summary"><p>Get media comments</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaCommentList&gt;&gt; GetMediaCommentsAsync(string mediaId, PaginationParameters paginationParameters, CancellationToken cancellationToken, string targetCommentId = &quot;&quot;)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.PaginationParameters.html">PaginationParameters</a></td>
+        <td><span class="parametername">paginationParameters</span></td>
+        <td><p>Pagination parameters: next id and max amount of pages to load</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Cancellation token</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">targetCommentId</span></td>
+        <td><p>Target comment id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaCommentList.html">InstaCommentList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaRepliesCommentsAsync_System_String_System_String_InstagramApiSharp_PaginationParameters_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaRepliesCommentsAsync(System.String%2CSystem.String%2CInstagramApiSharp.PaginationParameters)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L109">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaRepliesCommentsAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaRepliesCommentsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaRepliesCommentsAsync_System_String_System_String_InstagramApiSharp_PaginationParameters_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaRepliesCommentsAsync(System.String,System.String,InstagramApiSharp.PaginationParameters)">GetMediaRepliesCommentsAsync(String, String, PaginationParameters)</h4>
+  <div class="markdown level1 summary"><p>Get media inline comments</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaInlineCommentList&gt;&gt; GetMediaRepliesCommentsAsync(string mediaId, string targetCommentId, PaginationParameters paginationParameters)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">targetCommentId</span></td>
+        <td><p>Target comment id</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.PaginationParameters.html">PaginationParameters</a></td>
+        <td><span class="parametername">paginationParameters</span></td>
+        <td><p>Maximum amount of pages to load and start id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaInlineCommentList.html">InstaInlineCommentList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaRepliesCommentsAsync_System_String_System_String_InstagramApiSharp_PaginationParameters_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaRepliesCommentsAsync(System.String%2CSystem.String%2CInstagramApiSharp.PaginationParameters%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L119">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaRepliesCommentsAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaRepliesCommentsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_GetMediaRepliesCommentsAsync_System_String_System_String_InstagramApiSharp_PaginationParameters_System_Threading_CancellationToken_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.GetMediaRepliesCommentsAsync(System.String,System.String,InstagramApiSharp.PaginationParameters,System.Threading.CancellationToken)">GetMediaRepliesCommentsAsync(String, String, PaginationParameters, CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Get media inline comments</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaInlineCommentList&gt;&gt; GetMediaRepliesCommentsAsync(string mediaId, string targetCommentId, PaginationParameters paginationParameters, CancellationToken cancellationToken)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">targetCommentId</span></td>
+        <td><p>Target comment id</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.PaginationParameters.html">PaginationParameters</a></td>
+        <td><span class="parametername">paginationParameters</span></td>
+        <td><p>Maximum amount of pages to load and start id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Cancellation token</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaInlineCommentList.html">InstaInlineCommentList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_LikeCommentAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.LikeCommentAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L127">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_LikeCommentAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.LikeCommentAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_LikeCommentAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.LikeCommentAsync(System.String)">LikeCommentAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Like media comment</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; LikeCommentAsync(string commentId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">commentId</span></td>
+        <td><p>pass Pk.Tostring() for commentId</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_ReplyCommentMediaAsync_System_String_System_String_System_String_InstagramApiSharp_Enums_InstaCommentContainerModuleType_System_UInt32_System_Boolean_System_Nullable_System_Int32__InstagramApiSharp_Enums_InstaMediaInventorySource_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.ReplyCommentMediaAsync(System.String%2CSystem.String%2CSystem.String%2CInstagramApiSharp.Enums.InstaCommentContainerModuleType%2CSystem.UInt32%2CSystem.Boolean%2CSystem.Nullable%7BSystem.Int32%7D%2CInstagramApiSharp.Enums.InstaMediaInventorySource)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L140">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_ReplyCommentMediaAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.ReplyCommentMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_ReplyCommentMediaAsync_System_String_System_String_System_String_InstagramApiSharp_Enums_InstaCommentContainerModuleType_System_UInt32_System_Boolean_System_Nullable_System_Int32__InstagramApiSharp_Enums_InstaMediaInventorySource_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.ReplyCommentMediaAsync(System.String,System.String,System.String,InstagramApiSharp.Enums.InstaCommentContainerModuleType,System.UInt32,System.Boolean,System.Nullable{System.Int32},InstagramApiSharp.Enums.InstaMediaInventorySource)">ReplyCommentMediaAsync(String, String, String, InstaCommentContainerModuleType, UInt32, Boolean, Nullable&lt;Int32&gt;, InstaMediaInventorySource)</h4>
+  <div class="markdown level1 summary"><p>Inline comment media</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaComment&gt;&gt; ReplyCommentMediaAsync(string mediaId, string targetCommentId, string text, InstaCommentContainerModuleType containerModule = InstaCommentContainerModuleType.FeedTimeline, uint feedPosition = 0U, bool isCarouselBumpedPost = false, int? carouselIndex = default(int? ), InstaMediaInventorySource inventorySource = InstaMediaInventorySource.MediaOrAdd)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">targetCommentId</span></td>
+        <td><p>Target comment id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>Comment text</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Enums.InstaCommentContainerModuleType.html">InstaCommentContainerModuleType</a></td>
+        <td><span class="parametername">containerModule</span></td>
+        <td><p>Container module</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">feedPosition</span></td>
+        <td><p>Feed position</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">isCarouselBumpedPost</span></td>
+        <td><p>Is carousel post?</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">carouselIndex</span></td>
+        <td><p>Carousel index</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Enums.InstaMediaInventorySource.html">InstaMediaInventorySource</a></td>
+        <td><span class="parametername">inventorySource</span></td>
+        <td><p>Inventory source</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaComment.html">InstaComment</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_ReportCommentAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.ReportCommentAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L150">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_ReportCommentAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.ReportCommentAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_ReportCommentAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.ReportCommentAsync(System.String,System.String)">ReportCommentAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Report media comment</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; ReportCommentAsync(string mediaId, string commentId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">commentId</span></td>
+        <td><p>Comment id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_TranslateCommentAsync_System_Int64___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.TranslateCommentAsync(System.Int64%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L169">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_TranslateCommentAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.TranslateCommentAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_TranslateCommentAsync_System_Int64___" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.TranslateCommentAsync(System.Int64[])">TranslateCommentAsync(Int64[])</h4>
+  <div class="markdown level1 summary"><p>Translate comment or captions</p>
+<p>Note: use this function to translate captions too! (i.e: <a class="xref" href="InstagramApiSharp.Classes.Models.InstaCaption.html#InstagramApiSharp_Classes_Models_InstaCaption_Pk">Pk</a>)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaTranslateList&gt;&gt; TranslateCommentAsync(params long[] commentIds)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span>[]</td>
+        <td><span class="parametername">commentIds</span></td>
+        <td><p>Comment id(s) (Array of <a class="xref" href="InstagramApiSharp.Classes.Models.InstaComment.html#InstagramApiSharp_Classes_Models_InstaComment_Pk">Pk</a>)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaTranslateList.html">InstaTranslateList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_UnblockUserCommentingAsync_System_Int64___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.UnblockUserCommentingAsync(System.Int64%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L156">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_UnblockUserCommentingAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.UnblockUserCommentingAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_UnblockUserCommentingAsync_System_Int64___" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.UnblockUserCommentingAsync(System.Int64[])">UnblockUserCommentingAsync(Int64[])</h4>
+  <div class="markdown level1 summary"><p>Unblock an user from commenting to medias</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; UnblockUserCommentingAsync(params long[] userIds)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span>[]</td>
+        <td><span class="parametername">userIds</span></td>
+        <td><p>User ids (pk)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor_UnlikeCommentAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor.UnlikeCommentAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L162">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ICommentProcessor_UnlikeCommentAsync_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.UnlikeCommentAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ICommentProcessor_UnlikeCommentAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ICommentProcessor.UnlikeCommentAsync(System.String)">UnlikeCommentAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Unlike media comment</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; UnlikeCommentAsync(string commentId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">commentId</span></td>
+        <td><p>Comment id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="InstagramApiSharp.ExtensionHelper.html#InstagramApiSharp_ExtensionHelper_PrintInDebug_System_Object_">ExtensionHelper.PrintInDebug(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ICommentProcessor.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ICommentProcessor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ICommentProcessor.cs/#L12" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Ramtin Jokar [ <a href="mailto:ramtinak@live.com">Ramtinak@live.com</a> ] (c) 2021 | <a href="https://github.com/ramtinak/InstagramApiSharp/issues/243">InstagramApiSharp</a></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

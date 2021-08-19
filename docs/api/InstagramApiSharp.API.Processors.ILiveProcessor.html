@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface ILiveProcessor
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface ILiveProcessor
+   ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor">
+  
+  
+  <h1 id="InstagramApiSharp_API_Processors_ILiveProcessor" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor" class="text-break">Interface ILiveProcessor
+  </h1>
+  <div class="markdown level0 summary"><p>Live api functions.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="InstagramApiSharp.API.Processors.html">InstagramApiSharp.API.Processors</a></h6>
+  <h6><strong>Assembly</strong>: InstagramApiSharp.dll</h6>
+  <h5 id="InstagramApiSharp_API_Processors_ILiveProcessor_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface ILiveProcessor</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_BroadcastEventAsync_System_String_System_Int64_System_Int32_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.BroadcastEventAsync(System.String%2CSystem.Int64%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L48">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_BroadcastEventAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.BroadcastEventAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_BroadcastEventAsync_System_String_System_Int64_System_Int32_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.BroadcastEventAsync(System.String,System.Int64,System.Int32)">BroadcastEventAsync(String, Int64, Int32)</h4>
+  <div class="markdown level1 summary"><p>Let Instagram know that you invited someone to a live broadcast and joined successfully</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; BroadcastEventAsync(string broadcastId, long userIdToInvite, int offsetToVideoStart = 30)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">userIdToInvite</span></td>
+        <td><p>User id (pk) to invite</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offsetToVideoStart</span></td>
+        <td><p>Offset to video start</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_CommentAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.CommentAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L91">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_CommentAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.CommentAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_CommentAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.CommentAsync(System.String,System.String)">CommentAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Post a new comment to broadcast.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaComment&gt;&gt; CommentAsync(string broadcastId, string commentText)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">commentText</span></td>
+        <td><p>Comment text</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaComment.html">InstaComment</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_ConfirmJoinBroadcastAsync_System_String_System_String_System_UInt32_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.ConfirmJoinBroadcastAsync(System.String%2CSystem.String%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L70">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_ConfirmJoinBroadcastAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.ConfirmJoinBroadcastAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_ConfirmJoinBroadcastAsync_System_String_System_String_System_UInt32_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.ConfirmJoinBroadcastAsync(System.String,System.String,System.UInt32)">ConfirmJoinBroadcastAsync(String, String, UInt32)</h4>
+  <div class="markdown level1 summary"><p>Confirm a join broadcast request</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; ConfirmJoinBroadcastAsync(string broadcastId, string encodedServerDataInfo, uint curVersion = 2U)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">encodedServerDataInfo</span></td>
+        <td><p>Encoded server data information =&gt; from <a class="xref" href="InstagramApiSharp.API.Processors.ILiveProcessor.html#InstagramApiSharp_API_Processors_ILiveProcessor_JoinBroadcastAsync_System_String_System_String_System_UInt32_System_UInt32_">JoinBroadcastAsync(String, String, UInt32, UInt32)</a> response</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">curVersion</span></td>
+        <td><p>Cur version =&gt; 1 or 2 or 3</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_CreateAsync_System_Int32_System_Int32_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.CreateAsync(System.Int32%2CSystem.Int32%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L100">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_CreateAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.CreateAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_CreateAsync_System_Int32_System_Int32_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.CreateAsync(System.Int32,System.Int32,System.String)">CreateAsync(Int32, Int32, String)</h4>
+  <div class="markdown level1 summary"><p>Create live broadcast. After create an live broadcast you must call StartAsync.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastCreate&gt;&gt; CreateAsync(int previewWidth = 1080, int previewHeight = 1794, string title = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">previewWidth</span></td>
+        <td><p>Preview width</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">previewHeight</span></td>
+        <td><p>Preview height</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">title</span></td>
+        <td><p>Title =&gt; optional</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastCreate.html">InstaBroadcastCreate</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_DisableCommentsAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.DisableCommentsAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L108">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_DisableCommentsAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.DisableCommentsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_DisableCommentsAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.DisableCommentsAsync(System.String)">DisableCommentsAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Disable broadcast comments.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastCommentEnableDisable&gt;&gt; DisableCommentsAsync(string broadcastId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastCommentEnableDisable.html">InstaBroadcastCommentEnableDisable</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_DisableJoinToLiveRequestAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.DisableJoinToLiveRequestAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L32">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_DisableJoinToLiveRequestAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.DisableJoinToLiveRequestAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_DisableJoinToLiveRequestAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.DisableJoinToLiveRequestAsync(System.String)">DisableJoinToLiveRequestAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Disable join to live broadcast request</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DisableJoinToLiveRequestAsync(string broadcastId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_EnableCommentsAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.EnableCommentsAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L114">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_EnableCommentsAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.EnableCommentsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_EnableCommentsAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.EnableCommentsAsync(System.String)">EnableCommentsAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Enable broadcast comments.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastCommentEnableDisable&gt;&gt; EnableCommentsAsync(string broadcastId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastCommentEnableDisable.html">InstaBroadcastCommentEnableDisable</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_EnableJoinToLiveRequestAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.EnableJoinToLiveRequestAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L26">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_EnableJoinToLiveRequestAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.EnableJoinToLiveRequestAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_EnableJoinToLiveRequestAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.EnableJoinToLiveRequestAsync(System.String)">EnableJoinToLiveRequestAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Enable join to live broadcast request</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; EnableJoinToLiveRequestAsync(string broadcastId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_EndAsync_System_String_System_Boolean_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.EndAsync(System.String%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L121">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_EndAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.EndAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_EndAsync_System_String_System_Boolean_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.EndAsync(System.String,System.Boolean)">EndAsync(String, Boolean)</h4>
+  <div class="markdown level1 summary"><p>End live broadcast.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; EndAsync(string broadcastId, bool endAfterCopyrightWarning = false)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">endAfterCopyrightWarning</span></td>
+        <td><p>Copyright warning</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetCommentsAsync_System_String_System_String_System_Int32_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetCommentsAsync(System.String%2CSystem.String%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L129">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetCommentsAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetCommentsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetCommentsAsync_System_String_System_String_System_Int32_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetCommentsAsync(System.String,System.String,System.Int32)">GetCommentsAsync(String, String, Int32)</h4>
+  <div class="markdown level1 summary"><p>Get broadcast comments.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastCommentList&gt;&gt; GetCommentsAsync(string broadcastId, string lastCommentTs = &quot;&quot;, int commentsRequested = 4)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">lastCommentTs</span></td>
+        <td><p>Last comment time stamp</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">commentsRequested</span></td>
+        <td><p>Comments requested count</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastCommentList.html">InstaBroadcastCommentList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetDiscoverTopLiveAsync_InstagramApiSharp_PaginationParameters_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetDiscoverTopLiveAsync(InstagramApiSharp.PaginationParameters)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L135">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetDiscoverTopLiveAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetDiscoverTopLiveAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetDiscoverTopLiveAsync_InstagramApiSharp_PaginationParameters_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetDiscoverTopLiveAsync(InstagramApiSharp.PaginationParameters)">GetDiscoverTopLiveAsync(PaginationParameters)</h4>
+  <div class="markdown level1 summary"><p>Get discover top live.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaDiscoverTopLive&gt;&gt; GetDiscoverTopLiveAsync(PaginationParameters paginationParameters)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.PaginationParameters.html">PaginationParameters</a></td>
+        <td><span class="parametername">paginationParameters</span></td>
+        <td><p>Pagination parameters: next id and max amount of pages to load</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaDiscoverTopLive.html">InstaDiscoverTopLive</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetDiscoverTopLiveAsync_InstagramApiSharp_PaginationParameters_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetDiscoverTopLiveAsync(InstagramApiSharp.PaginationParameters%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L142">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetDiscoverTopLiveAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetDiscoverTopLiveAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetDiscoverTopLiveAsync_InstagramApiSharp_PaginationParameters_System_Threading_CancellationToken_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetDiscoverTopLiveAsync(InstagramApiSharp.PaginationParameters,System.Threading.CancellationToken)">GetDiscoverTopLiveAsync(PaginationParameters, CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Get discover top live.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaDiscoverTopLive&gt;&gt; GetDiscoverTopLiveAsync(PaginationParameters paginationParameters, CancellationToken cancellationToken)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.PaginationParameters.html">PaginationParameters</a></td>
+        <td><span class="parametername">paginationParameters</span></td>
+        <td><p>Pagination parameters: next id and max amount of pages to load</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Cancellation token</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaDiscoverTopLive.html">InstaDiscoverTopLive</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetFinalViewerListAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetFinalViewerListAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L149">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetFinalViewerListAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetFinalViewerListAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetFinalViewerListAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetFinalViewerListAsync(System.String)">GetFinalViewerListAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get final viewer list.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserShortList&gt;&gt; GetFinalViewerListAsync(string broadcastId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserShortList.html">InstaUserShortList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetHeartBeatAndViewerCountAsync_System_String_System_UInt32_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetHeartBeatAndViewerCountAsync(System.String%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L159">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetHeartBeatAndViewerCountAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetHeartBeatAndViewerCountAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetHeartBeatAndViewerCountAsync_System_String_System_UInt32_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetHeartBeatAndViewerCountAsync(System.String,System.UInt32)">GetHeartBeatAndViewerCountAsync(String, UInt32)</h4>
+  <div class="markdown level1 summary"><p>Get heart beat and viewer count.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastLiveHeartBeatViewerCount&gt;&gt; GetHeartBeatAndViewerCountAsync(string broadcastId, uint offsetToVideoStart = 0U)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">offsetToVideoStart</span></td>
+        <td><p>Offset to video start, multiple by 2.</p>
+<p>i.e: 0 2 4 6 8 10 12 14 and etc.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastLiveHeartBeatViewerCount.html">InstaBroadcastLiveHeartBeatViewerCount</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetInfoAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetInfoAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L166">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetInfoAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetInfoAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetInfoAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetInfoAsync(System.String)">GetInfoAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get broadcast information.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastInfo&gt;&gt; GetInfoAsync(string broadcastId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastInfo.html">InstaBroadcastInfo</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetJoinRequestsAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetJoinRequestsAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L172">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetJoinRequestsAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetJoinRequestsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetJoinRequestsAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetJoinRequestsAsync(System.String)">GetJoinRequestsAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get join requests to current live broadcast</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserShortList&gt;&gt; GetJoinRequestsAsync(string broadcastId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserShortList.html">InstaUserShortList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetLikeCountAsync_System_String_System_Int32_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetLikeCountAsync(System.String%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L179">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetLikeCountAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetLikeCountAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetLikeCountAsync_System_String_System_Int32_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetLikeCountAsync(System.String,System.Int32)">GetLikeCountAsync(String, Int32)</h4>
+  <div class="markdown level1 summary"><p>Get broadcast like count.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastLike&gt;&gt; GetLikeCountAsync(string broadcastId, int likeTs = 0)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">likeTs</span></td>
+        <td><p>Like time stamp</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastLike.html">InstaBroadcastLike</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetPostLiveThumbnailsAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetPostLiveThumbnailsAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L84">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetPostLiveThumbnailsAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetPostLiveThumbnailsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetPostLiveThumbnailsAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetPostLiveThumbnailsAsync(System.String)">GetPostLiveThumbnailsAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get post live thumbnails</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastThumbnails&gt;&gt; GetPostLiveThumbnailsAsync(string broadcastId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast identifier</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastThumbnails.html">InstaBroadcastThumbnails</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetPostLiveViewerListAsync_System_String_System_Nullable_System_Int32__.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetPostLiveViewerListAsync(System.String%2CSystem.Nullable%7BSystem.Int32%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L186">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetPostLiveViewerListAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetPostLiveViewerListAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetPostLiveViewerListAsync_System_String_System_Nullable_System_Int32__" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetPostLiveViewerListAsync(System.String,System.Nullable{System.Int32})">GetPostLiveViewerListAsync(String, Nullable&lt;Int32&gt;)</h4>
+  <div class="markdown level1 summary"><p>Get post live viewer list.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserShortList&gt;&gt; GetPostLiveViewerListAsync(string broadcastId, int? maxId = default(int? ))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">maxId</span></td>
+        <td><p>Max id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserShortList.html">InstaUserShortList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetSuggestedBroadcastsAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetSuggestedBroadcastsAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L191">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetSuggestedBroadcastsAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetSuggestedBroadcastsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetSuggestedBroadcastsAsync" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetSuggestedBroadcastsAsync">GetSuggestedBroadcastsAsync()</h4>
+  <div class="markdown level1 summary"><p>Get suggested broadcasts</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastList&gt;&gt; GetSuggestedBroadcastsAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastList.html">InstaBroadcastList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetTopLiveStatusAsync_System_String___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetTopLiveStatusAsync(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L196">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetTopLiveStatusAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetTopLiveStatusAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetTopLiveStatusAsync_System_String___" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetTopLiveStatusAsync(System.String[])">GetTopLiveStatusAsync(String[])</h4>
+  <div class="markdown level1 summary"><p>Get top live status.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastTopLiveStatusList&gt;&gt; GetTopLiveStatusAsync(params string[] broadcastIds)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">broadcastIds</span></td>
+        <td><p>Broadcast ids</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastTopLiveStatusList.html">InstaBroadcastTopLiveStatusList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_GetViewerListAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.GetViewerListAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L201">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_GetViewerListAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetViewerListAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_GetViewerListAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.GetViewerListAsync(System.String)">GetViewerListAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get broadcast viewer list.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserShortList&gt;&gt; GetViewerListAsync(string broadcastId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserShortList.html">InstaUserShortList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_InviteToBroadcastAsync_System_String_System_Int64_System_String_System_Int32_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.InviteToBroadcastAsync(System.String%2CSystem.Int64%2CSystem.String%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L63">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_InviteToBroadcastAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.InviteToBroadcastAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_InviteToBroadcastAsync_System_String_System_Int64_System_String_System_Int32_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.InviteToBroadcastAsync(System.String,System.Int64,System.String,System.Int32)">InviteToBroadcastAsync(String, Int64, String, Int32)</h4>
+  <div class="markdown level1 summary"><p>Invite to a live broadcast</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; InviteToBroadcastAsync(string broadcastId, long userIdToInvite, string encodedServerDataInfo, int offsetToVideoStart = 30)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">userIdToInvite</span></td>
+        <td><p>User id (pk) to invite</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">encodedServerDataInfo</span></td>
+        <td><p>Encoded server data information =&gt; from <a class="xref" href="InstagramApiSharp.API.Processors.ILiveProcessor.html#InstagramApiSharp_API_Processors_ILiveProcessor_JoinBroadcastAsync_System_String_System_String_System_UInt32_System_UInt32_">JoinBroadcastAsync(String, String, UInt32, UInt32)</a> response</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offsetToVideoStart</span></td>
+        <td><p>Offset to video start</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_JoinBroadcastAsync_System_String_System_String_System_UInt32_System_UInt32_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.JoinBroadcastAsync(System.String%2CSystem.String%2CSystem.UInt32%2CSystem.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L79">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_JoinBroadcastAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.JoinBroadcastAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_JoinBroadcastAsync_System_String_System_String_System_UInt32_System_UInt32_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.JoinBroadcastAsync(System.String,System.String,System.UInt32,System.UInt32)">JoinBroadcastAsync(String, String, UInt32, UInt32)</h4>
+  <div class="markdown level1 summary"><p>Requests to join a Live broadcast as a co-broadcaster</p>
+<p>If someone sends you a request to join your own live, you should send them a join request as well</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastJoin&gt;&gt; JoinBroadcastAsync(string broadcastId, string sdpOffer, uint targetVideoWidth = 848U, uint targetVideoHeight = 512U)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">sdpOffer</span></td>
+        <td><p>Sdp offer =&gt; I don't know what is this but it seems it's related to RTSP</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">targetVideoWidth</span></td>
+        <td><p>Video width</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">targetVideoHeight</span></td>
+        <td><p>Video height</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastJoin.html">InstaBroadcastJoin</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_LeaveBroadcastAsync_System_String_System_String_System_Int32_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.LeaveBroadcastAsync(System.String%2CSystem.String%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L55">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_LeaveBroadcastAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.LeaveBroadcastAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_LeaveBroadcastAsync_System_String_System_String_System_Int32_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.LeaveBroadcastAsync(System.String,System.String,System.Int32)">LeaveBroadcastAsync(String, String, Int32)</h4>
+  <div class="markdown level1 summary"><p>Leave or cancel a live broadcast</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; LeaveBroadcastAsync(string broadcastId, string encodedServerDataInfo, int numParticipants = 1)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">encodedServerDataInfo</span></td>
+        <td><p>Encoded server data information =&gt; from <a class="xref" href="InstagramApiSharp.API.Processors.ILiveProcessor.html#InstagramApiSharp_API_Processors_ILiveProcessor_JoinBroadcastAsync_System_String_System_String_System_UInt32_System_UInt32_">JoinBroadcastAsync(String, String, UInt32, UInt32)</a> response</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numParticipants</span></td>
+        <td><p>Number of participants</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_LikeAsync_System_String_System_Int32_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.LikeAsync(System.String%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L207">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_LikeAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.LikeAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_LikeAsync_System_String_System_Int32_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.LikeAsync(System.String,System.Int32)">LikeAsync(String, Int32)</h4>
+  <div class="markdown level1 summary"><p>Like broadcast.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastLike&gt;&gt; LikeAsync(string broadcastId, int likeCount = 1)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">likeCount</span></td>
+        <td><p>Like count (from 1 to 6)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastLike.html">InstaBroadcastLike</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_PinCommentAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.PinCommentAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L215">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_PinCommentAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.PinCommentAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_PinCommentAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.PinCommentAsync(System.String,System.String)">PinCommentAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Pin comment from broadcast.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastPinUnpin&gt;&gt; PinCommentAsync(string broadcastId, string commentId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">commentId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastPinUnpin.html">InstaBroadcastPinUnpin</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_SetQuestionStatusAsync_System_String_System_Boolean_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.SetQuestionStatusAsync(System.String%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L39">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_SetQuestionStatusAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.SetQuestionStatusAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_SetQuestionStatusAsync_System_String_System_Boolean_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.SetQuestionStatusAsync(System.String,System.Boolean)">SetQuestionStatusAsync(String, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Set live broadcast question status</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; SetQuestionStatusAsync(string broadcastId, bool allowQuestionSubmission = false)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">allowQuestionSubmission</span></td>
+        <td><p>Allow people to submit questions</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_ShareLiveToDirectRecipientAsync_System_String_System_String_System_String___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.ShareLiveToDirectRecipientAsync(System.String%2CSystem.String%2CSystem.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L247">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_ShareLiveToDirectRecipientAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.ShareLiveToDirectRecipientAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_ShareLiveToDirectRecipientAsync_System_String_System_String_System_String___" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.ShareLiveToDirectRecipientAsync(System.String,System.String,System.String[])">ShareLiveToDirectRecipientAsync(String, String, String[])</h4>
+  <div class="markdown level1 summary"><p>Share an live broadcast to direct recipients</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; ShareLiveToDirectRecipientAsync(string text, string broadcastId, params string[] recipients)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>Text to send</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id to send ( <a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcast.html#InstagramApiSharp_Classes_Models_InstaBroadcast_Id">Id</a> )</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">recipients</span></td>
+        <td><p>Recipients ids</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_ShareLiveToDirectThreadAsync_System_String_System_String_System_String___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.ShareLiveToDirectThreadAsync(System.String%2CSystem.String%2CSystem.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L230">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_ShareLiveToDirectThreadAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.ShareLiveToDirectThreadAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_ShareLiveToDirectThreadAsync_System_String_System_String_System_String___" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.ShareLiveToDirectThreadAsync(System.String,System.String,System.String[])">ShareLiveToDirectThreadAsync(String, String, String[])</h4>
+  <div class="markdown level1 summary"><p>Share an live broadcast to direct thread</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; ShareLiveToDirectThreadAsync(string text, string broadcastId, params string[] threadIds)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>Text to send</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id to send ( <a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcast.html#InstagramApiSharp_Classes_Models_InstaBroadcast_Id">Id</a> )</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">threadIds</span></td>
+        <td><p>Thread ids</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_ShareLiveToDirectThreadAsync_System_String_System_String_System_String___System_String___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.ShareLiveToDirectThreadAsync(System.String%2CSystem.String%2CSystem.String%5B%5D%2CSystem.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L239">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_ShareLiveToDirectThreadAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.ShareLiveToDirectThreadAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_ShareLiveToDirectThreadAsync_System_String_System_String_System_String___System_String___" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.ShareLiveToDirectThreadAsync(System.String,System.String,System.String[],System.String[])">ShareLiveToDirectThreadAsync(String, String, String[], String[])</h4>
+  <div class="markdown level1 summary"><p>Share an live broadcast to direct thread</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; ShareLiveToDirectThreadAsync(string text, string broadcastId, string[] threadIds, string[] recipients)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>Text to send</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id to send ( <a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcast.html#InstagramApiSharp_Classes_Models_InstaBroadcast_Id">Id</a> )</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">threadIds</span></td>
+        <td><p>Thread ids</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">recipients</span></td>
+        <td><p>Recipients ids</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_StartAsync_System_String_System_Nullable_System_Double__System_Nullable_System_Double__.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.StartAsync(System.String%2CSystem.Nullable%7BSystem.Double%7D%2CSystem.Nullable%7BSystem.Double%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L222">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_StartAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.StartAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_StartAsync_System_String_System_Nullable_System_Double__System_Nullable_System_Double__" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.StartAsync(System.String,System.Nullable{System.Double},System.Nullable{System.Double})">StartAsync(String, Nullable&lt;Double&gt;, Nullable&lt;Double&gt;)</h4>
+  <div class="markdown level1 summary"><p>Start live broadcast. NOTE: YOU MUST CREATE AN BROADCAST FIRST(CreateAsync) AND THEN CALL THIS METHOD.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastStart&gt;&gt; StartAsync(string broadcastId, double? latitude = default(double? ), double? longitude = default(double? ))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td><p>Broadcast id</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">latitude</span></td>
+        <td><p>longitude of your place</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">longitude</span></td>
+        <td><p>longitude of your place</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastStart.html">InstaBroadcastStart</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor_UnPinCommentAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor.UnPinCommentAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L254">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_ILiveProcessor_UnPinCommentAsync_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.UnPinCommentAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_ILiveProcessor_UnPinCommentAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.ILiveProcessor.UnPinCommentAsync(System.String,System.String)">UnPinCommentAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Unpin comment from broadcast.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBroadcastPinUnpin&gt;&gt; UnPinCommentAsync(string broadcastId, string commentId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">broadcastId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">commentId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBroadcastPinUnpin.html">InstaBroadcastPinUnpin</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="InstagramApiSharp.ExtensionHelper.html#InstagramApiSharp_ExtensionHelper_PrintInDebug_System_Object_">ExtensionHelper.PrintInDebug(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_ILiveProcessor.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.ILiveProcessor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/ILiveProcessor.cs/#L20" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Ramtin Jokar [ <a href="mailto:ramtinak@live.com">Ramtinak@live.com</a> ] (c) 2021 | <a href="https://github.com/ramtinak/InstagramApiSharp/issues/243">InstagramApiSharp</a></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

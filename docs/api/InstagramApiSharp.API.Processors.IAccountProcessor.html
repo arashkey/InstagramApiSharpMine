@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IAccountProcessor
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IAccountProcessor
+   ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor">
+  
+  
+  <h1 id="InstagramApiSharp_API_Processors_IAccountProcessor" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor" class="text-break">Interface IAccountProcessor
+  </h1>
+  <div class="markdown level0 summary"><p>Account api functions.</p>
+<p>Note: this is for self account.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="InstagramApiSharp.API.Processors.html">InstagramApiSharp.API.Processors</a></h6>
+  <h6><strong>Assembly</strong>: InstagramApiSharp.dll</h6>
+  <h5 id="InstagramApiSharp_API_Processors_IAccountProcessor_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IAccountProcessor</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_AcceptSessionAsMeAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.AcceptSessionAsMeAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L51">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_AcceptSessionAsMeAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.AcceptSessionAsMeAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_AcceptSessionAsMeAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.AcceptSessionAsMeAsync(System.String,System.String)">AcceptSessionAsMeAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Accept a session that was me</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; AcceptSessionAsMeAsync(string loginId, string timespan)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">loginId</span></td>
+        <td><p>Login identifier</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">timespan</span></td>
+        <td><p>Timespan</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_AllowStoryMessageRepliesAsync_InstagramApiSharp_Enums_InstaMessageRepliesType_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.AllowStoryMessageRepliesAsync(InstagramApiSharp.Enums.InstaMessageRepliesType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L211">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_AllowStoryMessageRepliesAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.AllowStoryMessageRepliesAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_AllowStoryMessageRepliesAsync_InstagramApiSharp_Enums_InstaMessageRepliesType_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.AllowStoryMessageRepliesAsync(InstagramApiSharp.Enums.InstaMessageRepliesType)">AllowStoryMessageRepliesAsync(InstaMessageRepliesType)</h4>
+  <div class="markdown level1 summary"><p>Allow story message replies.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; AllowStoryMessageRepliesAsync(InstaMessageRepliesType repliesType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Enums.InstaMessageRepliesType.html">InstaMessageRepliesType</a></td>
+        <td><span class="parametername">repliesType</span></td>
+        <td><p>Reply typo</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_AllowStorySharingAsync_System_Boolean_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.AllowStorySharingAsync(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L217">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_AllowStorySharingAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.AllowStorySharingAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_AllowStorySharingAsync_System_Boolean_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.AllowStorySharingAsync(System.Boolean)">AllowStorySharingAsync(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Allow story sharing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; AllowStorySharingAsync(bool allow = true)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">allow</span></td>
+        <td><p>Allow or disallow story sharing</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_ApproveNewLoginRequestAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.ApproveNewLoginRequestAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L275">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_ApproveNewLoginRequestAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ApproveNewLoginRequestAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_ApproveNewLoginRequestAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ApproveNewLoginRequestAsync(System.String,System.String)">ApproveNewLoginRequestAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Approve new login reques from push/realtime notification</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaTwoFactorTrustedNotification&gt;&gt; ApproveNewLoginRequestAsync(string twoFactorIdentifier, string requestorDeviceId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">twoFactorIdentifier</span></td>
+        <td><p>TwoFactorIndentifier from push notifications</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">requestorDeviceId</span></td>
+        <td><p>Resquestor device id from push notifications</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaTwoFactorTrustedNotification.html">InstaTwoFactorTrustedNotification</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_ApproveUsertagsAsync_System_String___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.ApproveUsertagsAsync(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L78">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_ApproveUsertagsAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ApproveUsertagsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_ApproveUsertagsAsync_System_String___" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ApproveUsertagsAsync(System.String[])">ApproveUsertagsAsync(String[])</h4>
+  <div class="markdown level1 summary"><p>Approve usertags</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; ApproveUsertagsAsync(params string[] mediaIds)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">mediaIds</span></td>
+        <td><p>Media identifiers</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_ChangeNotificationsSettingsAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.ChangeNotificationsSettingsAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L31">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_ChangeNotificationsSettingsAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ChangeNotificationsSettingsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_ChangeNotificationsSettingsAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ChangeNotificationsSettingsAsync(System.String,System.String)">ChangeNotificationsSettingsAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Change notification settings</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; ChangeNotificationsSettingsAsync(string contentType, string settingValue)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">contentType</span></td>
+        <td><p>Notification content type</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">settingValue</span></td>
+        <td><p>New setting value</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_ChangePasswordAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.ChangePasswordAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L123">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_ChangePasswordAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ChangePasswordAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_ChangePasswordAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ChangePasswordAsync(System.String,System.String)">ChangePasswordAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Change password</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; ChangePasswordAsync(string oldPassword, string newPassword)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">oldPassword</span></td>
+        <td><p>The old password</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newPassword</span></td>
+        <td><p>The new password (shouldn't be the same old password, and should be a password you never used
+here)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td><p>Return true if the password is changed</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_ChangeProfilePictureAsync_System_Action_InstagramApiSharp_Classes_InstaUploaderProgress__System_Byte___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.ChangeProfilePictureAsync(System.Action%7BInstagramApiSharp.Classes.InstaUploaderProgress%7D%2CSystem.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L136">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_ChangeProfilePictureAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ChangeProfilePictureAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_ChangeProfilePictureAsync_System_Action_InstagramApiSharp_Classes_InstaUploaderProgress__System_Byte___" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ChangeProfilePictureAsync(System.Action{InstagramApiSharp.Classes.InstaUploaderProgress},System.Byte[])">ChangeProfilePictureAsync(Action&lt;InstaUploaderProgress&gt;, Byte[])</h4>
+  <div class="markdown level1 summary"><p>Change profile picture(only jpg and jpeg formats).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserEdit&gt;&gt; ChangeProfilePictureAsync(Action&lt;InstaUploaderProgress&gt; progress, byte[] pictureBytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.InstaUploaderProgress.html">InstaUploaderProgress</a>&gt;</td>
+        <td><span class="parametername">progress</span></td>
+        <td><p>Progress action</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">pictureBytes</span></td>
+        <td><p>Picture(JPG,JPEG) bytes</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserEdit.html">InstaUserEdit</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_ChangeProfilePictureAsync_System_Byte___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.ChangeProfilePictureAsync(System.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L129">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_ChangeProfilePictureAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ChangeProfilePictureAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_ChangeProfilePictureAsync_System_Byte___" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.ChangeProfilePictureAsync(System.Byte[])">ChangeProfilePictureAsync(Byte[])</h4>
+  <div class="markdown level1 summary"><p>Change profile picture(only jpg and jpeg formats).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserEdit&gt;&gt; ChangeProfilePictureAsync(byte[] pictureBytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">pictureBytes</span></td>
+        <td><p>Picture(JPG,JPEG) bytes</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserEdit.html">InstaUserEdit</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_CheckNewLoginRequestNotificationAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.CheckNewLoginRequestNotificationAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L259">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_CheckNewLoginRequestNotificationAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.CheckNewLoginRequestNotificationAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_CheckNewLoginRequestNotificationAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.CheckNewLoginRequestNotificationAsync(System.String,System.String)">CheckNewLoginRequestNotificationAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Check new login request notification</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaTwoFactorTrustedNotification&gt;&gt; CheckNewLoginRequestNotificationAsync(string twoFactorIdentifier, string requestorDeviceId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">twoFactorIdentifier</span></td>
+        <td><p>TwoFactorIndentifier from push notifications</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">requestorDeviceId</span></td>
+        <td><p>Resquestor device id from push notifications</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaTwoFactorTrustedNotification.html">InstaTwoFactorTrustedNotification</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_CheckUsernameAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.CheckUsernameAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L223">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_CheckUsernameAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.CheckUsernameAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_CheckUsernameAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.CheckUsernameAsync(System.String)">CheckUsernameAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Check username availablity.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaAccountCheck&gt;&gt; CheckUsernameAsync(string desiredUsername)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">desiredUsername</span></td>
+        <td><p>Desired username</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaAccountCheck.html">InstaAccountCheck</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_DenyNewLoginRequestAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.DenyNewLoginRequestAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L267">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_DenyNewLoginRequestAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DenyNewLoginRequestAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_DenyNewLoginRequestAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DenyNewLoginRequestAsync(System.String,System.String)">DenyNewLoginRequestAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Deny new login reques from push/realtime notification</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaTwoFactorTrustedNotification&gt;&gt; DenyNewLoginRequestAsync(string twoFactorIdentifier, string requestorDeviceId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">twoFactorIdentifier</span></td>
+        <td><p>TwoFactorIndentifier from push notifications</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">requestorDeviceId</span></td>
+        <td><p>Resquestor device id from push notifications</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaTwoFactorTrustedNotification.html">InstaTwoFactorTrustedNotification</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_DisableLoginRequestNotificationAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.DisableLoginRequestNotificationAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L286">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableLoginRequestNotificationAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisableLoginRequestNotificationAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableLoginRequestNotificationAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisableLoginRequestNotificationAsync">DisableLoginRequestNotificationAsync()</h4>
+  <div class="markdown level1 summary"><p>Disable login request notifications</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DisableLoginRequestNotificationAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td><p>False, if succeeded</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableLoginRequestNotificationAsync_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Instagram description: We'll send a notification to approve new devices that try to login</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_DisableManualTagAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.DisableManualTagAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L82">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableManualTagAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisableManualTagAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableManualTagAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisableManualTagAsync">DisableManualTagAsync()</h4>
+  <div class="markdown level1 summary"><p>Disable manual tag</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DisableManualTagAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_DisablePresenceAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.DisablePresenceAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L358">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_DisablePresenceAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisablePresenceAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_DisablePresenceAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisablePresenceAsync">DisablePresenceAsync()</h4>
+  <div class="markdown level1 summary"><p>Disable presence (people can't track your activities and you can't see their activies too)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DisablePresenceAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_DisableSaveStoryToArchiveAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.DisableSaveStoryToArchiveAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L228">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableSaveStoryToArchiveAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisableSaveStoryToArchiveAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableSaveStoryToArchiveAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisableSaveStoryToArchiveAsync">DisableSaveStoryToArchiveAsync()</h4>
+  <div class="markdown level1 summary"><p>Disable Save story to archive.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DisableSaveStoryToArchiveAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_DisableSaveStoryToGalleryAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.DisableSaveStoryToGalleryAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L233">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableSaveStoryToGalleryAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisableSaveStoryToGalleryAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableSaveStoryToGalleryAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisableSaveStoryToGalleryAsync">DisableSaveStoryToGalleryAsync()</h4>
+  <div class="markdown level1 summary"><p>Disable Save story to gallery.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DisableSaveStoryToGalleryAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_DisableTwoFactorAuthenticationAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.DisableTwoFactorAuthenticationAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L300">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableTwoFactorAuthenticationAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisableTwoFactorAuthenticationAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_DisableTwoFactorAuthenticationAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.DisableTwoFactorAuthenticationAsync">DisableTwoFactorAuthenticationAsync()</h4>
+  <div class="markdown level1 summary"><p>Disable two factor authentication.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DisableTwoFactorAuthenticationAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_EditProfileAsync_System_String_System_String_System_String_System_String_System_String_System_Nullable_InstagramApiSharp_Enums_InstaGenderType__System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.EditProfileAsync(System.String%2CSystem.String%2CSystem.String%2CSystem.String%2CSystem.String%2CSystem.Nullable%7BInstagramApiSharp.Enums.InstaGenderType%7D%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L148">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_EditProfileAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EditProfileAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_EditProfileAsync_System_String_System_String_System_String_System_String_System_String_System_Nullable_InstagramApiSharp_Enums_InstaGenderType__System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EditProfileAsync(System.String,System.String,System.String,System.String,System.String,System.Nullable{InstagramApiSharp.Enums.InstaGenderType},System.String)">EditProfileAsync(String, String, String, String, String, Nullable&lt;InstaGenderType&gt;, String)</h4>
+  <div class="markdown level1 summary"><p>Edit profile</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserEdit&gt;&gt; EditProfileAsync(string name, string biography, string url, string email, string phone, InstaGenderType? gender, string newUsername = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>Name (leave null if you don't want to change it)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">biography</span></td>
+        <td><p>Biography (leave null if you don't want to change it)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">url</span></td>
+        <td><p>Url (leave null if you don't want to change it)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">email</span></td>
+        <td><p>Email (leave null if you don't want to change it)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">phone</span></td>
+        <td><p>Phone number (leave null if you don't want to change it)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<a class="xref" href="InstagramApiSharp.Enums.InstaGenderType.html">InstaGenderType</a>&gt;</td>
+        <td><span class="parametername">gender</span></td>
+        <td><p>Gender type (leave null if you don't want to change it)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newUsername</span></td>
+        <td><p>New username (optional) (leave null if you don't want to change it)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserEdit.html">InstaUserEdit</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_EnableLoginRequestNotificationAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.EnableLoginRequestNotificationAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L295">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_EnableLoginRequestNotificationAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EnableLoginRequestNotificationAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_EnableLoginRequestNotificationAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EnableLoginRequestNotificationAsync">EnableLoginRequestNotificationAsync()</h4>
+  <div class="markdown level1 summary"><p>Enable login request notifications</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; EnableLoginRequestNotificationAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td><p>True, if succeeded</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="InstagramApiSharp_API_Processors_IAccountProcessor_EnableLoginRequestNotificationAsync_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Instagram description: We'll send a notification to approve new devices that try to login</p>
+</div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_EnableManualTagAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.EnableManualTagAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L86">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_EnableManualTagAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EnableManualTagAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_EnableManualTagAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EnableManualTagAsync">EnableManualTagAsync()</h4>
+  <div class="markdown level1 summary"><p>Enable manual tag</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; EnableManualTagAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_EnablePresenceAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.EnablePresenceAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L353">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_EnablePresenceAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EnablePresenceAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_EnablePresenceAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EnablePresenceAsync">EnablePresenceAsync()</h4>
+  <div class="markdown level1 summary"><p>Enable presence (people can track your activities and you can see their activies too)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; EnablePresenceAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_EnableSaveStoryToArchiveAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.EnableSaveStoryToArchiveAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L238">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_EnableSaveStoryToArchiveAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EnableSaveStoryToArchiveAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_EnableSaveStoryToArchiveAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EnableSaveStoryToArchiveAsync">EnableSaveStoryToArchiveAsync()</h4>
+  <div class="markdown level1 summary"><p>Enable Save story to archive.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; EnableSaveStoryToArchiveAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_EnableSaveStoryToGalleryAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.EnableSaveStoryToGalleryAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L243">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_EnableSaveStoryToGalleryAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EnableSaveStoryToGalleryAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_EnableSaveStoryToGalleryAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.EnableSaveStoryToGalleryAsync">EnableSaveStoryToGalleryAsync()</h4>
+  <div class="markdown level1 summary"><p>Enable Save story to gallery.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; EnableSaveStoryToGalleryAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetLoginSessionsAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetLoginSessionsAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L55">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetLoginSessionsAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetLoginSessionsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetLoginSessionsAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetLoginSessionsAsync">GetLoginSessionsAsync()</h4>
+  <div class="markdown level1 summary"><p>Get Login Sessions</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaLoginSessionRespond&gt;&gt; GetLoginSessionsAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaLoginSessionRespond.html">InstaLoginSessionRespond</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetNotificationsSettingsAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetNotificationsSettingsAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L39">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetNotificationsSettingsAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetNotificationsSettingsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetNotificationsSettingsAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetNotificationsSettingsAsync(System.String)">GetNotificationsSettingsAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get Notifications</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaNotificationSettingsSectionList&gt;&gt; GetNotificationsSettingsAsync(string contentType = &quot;notifications&quot;)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">contentType</span></td>
+        <td><p>Notification content type</p>
+<p>Note: You should get content type from response of this function! the default value of content type is &apos;notifications&apos;</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaNotificationSettingsSectionList.html">InstaNotificationSettingsSectionList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetPendingUserTagsAsync_InstagramApiSharp_PaginationParameters_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetPendingUserTagsAsync(InstagramApiSharp.PaginationParameters)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L63">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetPendingUserTagsAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetPendingUserTagsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetPendingUserTagsAsync_InstagramApiSharp_PaginationParameters_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetPendingUserTagsAsync(InstagramApiSharp.PaginationParameters)">GetPendingUserTagsAsync(PaginationParameters)</h4>
+  <div class="markdown level1 summary"><p>Get pending user tags asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMediaList&gt;&gt; GetPendingUserTagsAsync(PaginationParameters paginationParameters)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.PaginationParameters.html">PaginationParameters</a></td>
+        <td><span class="parametername">paginationParameters</span></td>
+        <td><p>Pagination parameters: next id and max amount of pages to load</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaList.html">InstaMediaList</a>&gt;&gt;</td>
+        <td><p><a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaList.html">InstaMediaList</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetPendingUserTagsAsync_InstagramApiSharp_PaginationParameters_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetPendingUserTagsAsync(InstagramApiSharp.PaginationParameters%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L72">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetPendingUserTagsAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetPendingUserTagsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetPendingUserTagsAsync_InstagramApiSharp_PaginationParameters_System_Threading_CancellationToken_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetPendingUserTagsAsync(InstagramApiSharp.PaginationParameters,System.Threading.CancellationToken)">GetPendingUserTagsAsync(PaginationParameters, CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Get pending user tags asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMediaList&gt;&gt; GetPendingUserTagsAsync(PaginationParameters paginationParameters, CancellationToken cancellationToken)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.PaginationParameters.html">PaginationParameters</a></td>
+        <td><span class="parametername">paginationParameters</span></td>
+        <td><p>Pagination parameters: next id and max amount of pages to load</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Cancellation token</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaList.html">InstaMediaList</a>&gt;&gt;</td>
+        <td><p><a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaList.html">InstaMediaList</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetPendingUserTagsCountAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetPendingUserTagsCountAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L99">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetPendingUserTagsCountAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetPendingUserTagsCountAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetPendingUserTagsCountAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetPendingUserTagsCountAsync">GetPendingUserTagsCountAsync()</h4>
+  <div class="markdown level1 summary"><p>Get pending user tags count</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;int&gt;&gt; GetPendingUserTagsCountAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Int32</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetPresenceOptionsAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetPresenceOptionsAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L363">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetPresenceOptionsAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetPresenceOptionsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetPresenceOptionsAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetPresenceOptionsAsync">GetPresenceOptionsAsync()</h4>
+  <div class="markdown level1 summary"><p>Get presence options (see your presence is disable or not)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaPresence&gt;&gt; GetPresenceOptionsAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaPresence.html">InstaPresence</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetRequestForDownloadAccountDataAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetRequestForDownloadAccountDataAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L154">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetRequestForDownloadAccountDataAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetRequestForDownloadAccountDataAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetRequestForDownloadAccountDataAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetRequestForDownloadAccountDataAsync(System.String)">GetRequestForDownloadAccountDataAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get request for download backup account data.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaRequestDownloadData&gt;&gt; GetRequestForDownloadAccountDataAsync(string email)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">email</span></td>
+        <td><p>Email</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaRequestDownloadData.html">InstaRequestDownloadData</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetRequestForDownloadAccountDataAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetRequestForDownloadAccountDataAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L161">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetRequestForDownloadAccountDataAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetRequestForDownloadAccountDataAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetRequestForDownloadAccountDataAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetRequestForDownloadAccountDataAsync(System.String,System.String)">GetRequestForDownloadAccountDataAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Get request for download backup account data.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaRequestDownloadData&gt;&gt; GetRequestForDownloadAccountDataAsync(string email, string password)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">email</span></td>
+        <td><p>Email</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">password</span></td>
+        <td><p>Password (only for facebook logins)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaRequestDownloadData.html">InstaRequestDownloadData</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetRequestForEditProfileAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetRequestForEditProfileAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L166">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetRequestForEditProfileAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetRequestForEditProfileAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetRequestForEditProfileAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetRequestForEditProfileAsync">GetRequestForEditProfileAsync()</h4>
+  <div class="markdown level1 summary"><p>Get request for edit profile.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserEdit&gt;&gt; GetRequestForEditProfileAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserEdit.html">InstaUserEdit</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetSecuritySettingsInfoAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetSecuritySettingsInfoAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L306">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetSecuritySettingsInfoAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetSecuritySettingsInfoAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetSecuritySettingsInfoAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetSecuritySettingsInfoAsync">GetSecuritySettingsInfoAsync()</h4>
+  <div class="markdown level1 summary"><p>Get Security settings (two factor authentication and backup codes).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaAccountSecuritySettings&gt;&gt; GetSecuritySettingsInfoAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaAccountSecuritySettings.html">InstaAccountSecuritySettings</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_GetStorySettingsAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.GetStorySettingsAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L249">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_GetStorySettingsAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetStorySettingsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_GetStorySettingsAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.GetStorySettingsAsync">GetStorySettingsAsync()</h4>
+  <div class="markdown level1 summary"><p>Get story settings.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaStorySettings&gt;&gt; GetStorySettingsAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaStorySettings.html">InstaStorySettings</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_HideUsertagFromProfileAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.HideUsertagFromProfileAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L91">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_HideUsertagFromProfileAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.HideUsertagFromProfileAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_HideUsertagFromProfileAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.HideUsertagFromProfileAsync(System.String)">HideUsertagFromProfileAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Hide usertag from profile</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; HideUsertagFromProfileAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media identifier</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_LogoutSessionAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.LogoutSessionAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L45">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_LogoutSessionAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.LogoutSessionAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_LogoutSessionAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.LogoutSessionAsync(System.String)">LogoutSessionAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Logout a session</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; LogoutSessionAsync(string sessionId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">sessionId</span></td>
+        <td><p>Session identifier</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_RegenerateTwoFactorBackupCodesAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.RegenerateTwoFactorBackupCodesAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L310">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_RegenerateTwoFactorBackupCodesAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.RegenerateTwoFactorBackupCodesAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_RegenerateTwoFactorBackupCodesAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.RegenerateTwoFactorBackupCodesAsync">RegenerateTwoFactorBackupCodesAsync()</h4>
+  <div class="markdown level1 summary"><p>Regenerate two factor backup codes</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;TwoFactorRegenBackupCodes&gt;&gt; RegenerateTwoFactorBackupCodesAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.TwoFactorRegenBackupCodes.html">TwoFactorRegenBackupCodes</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_RemoveProfilePictureAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.RemoveProfilePictureAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L171">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_RemoveProfilePictureAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.RemoveProfilePictureAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_RemoveProfilePictureAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.RemoveProfilePictureAsync">RemoveProfilePictureAsync()</h4>
+  <div class="markdown level1 summary"><p>Remove profile picture.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserEdit&gt;&gt; RemoveProfilePictureAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserEdit.html">InstaUserEdit</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_RemoveTrustedDeviceAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.RemoveTrustedDeviceAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L205">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_RemoveTrustedDeviceAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.RemoveTrustedDeviceAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_RemoveTrustedDeviceAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.RemoveTrustedDeviceAsync(System.String)">RemoveTrustedDeviceAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Remove trusted device</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; RemoveTrustedDeviceAsync(string trustedDeviceGuid)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">trustedDeviceGuid</span></td>
+        <td><p>Trusted device guid (get it from <a class="xref" href="InstagramApiSharp.Classes.Models.InstaTrustedDevice.html#InstagramApiSharp_Classes_Models_InstaTrustedDevice_DeviceGuid">DeviceGuid</a>)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SendConfirmEmailAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SendConfirmEmailAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L315">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SendConfirmEmailAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SendConfirmEmailAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SendConfirmEmailAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SendConfirmEmailAsync">SendConfirmEmailAsync()</h4>
+  <div class="markdown level1 summary"><p>Send confirm email.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaAccountConfirmEmail&gt;&gt; SendConfirmEmailAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaAccountConfirmEmail.html">InstaAccountConfirmEmail</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SendSmsCodeAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SendSmsCodeAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L321">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SendSmsCodeAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SendSmsCodeAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SendSmsCodeAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SendSmsCodeAsync(System.String)">SendSmsCodeAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Send sms code.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaAccountSendSms&gt;&gt; SendSmsCodeAsync(string phoneNumber)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">phoneNumber</span></td>
+        <td><p>Phone number</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaAccountSendSms.html">InstaAccountSendSms</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SendTwoFactorEnableSmsAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SendTwoFactorEnableSmsAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L333">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SendTwoFactorEnableSmsAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SendTwoFactorEnableSmsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SendTwoFactorEnableSmsAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SendTwoFactorEnableSmsAsync(System.String)">SendTwoFactorEnableSmsAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Send two factor enable sms.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaAccountTwoFactorSms&gt;&gt; SendTwoFactorEnableSmsAsync(string phoneNumber)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">phoneNumber</span></td>
+        <td><p>Phone number</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaAccountTwoFactorSms.html">InstaAccountTwoFactorSms</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SetAccountPrivateAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SetAccountPrivateAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L176">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SetAccountPrivateAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetAccountPrivateAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SetAccountPrivateAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetAccountPrivateAsync">SetAccountPrivateAsync()</h4>
+  <div class="markdown level1 summary"><p>Set current account private</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserShort&gt;&gt; SetAccountPrivateAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserShort.html">InstaUserShort</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SetAccountPublicAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SetAccountPublicAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L180">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SetAccountPublicAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetAccountPublicAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SetAccountPublicAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetAccountPublicAsync">SetAccountPublicAsync()</h4>
+  <div class="markdown level1 summary"><p>Set current account public</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUserShort&gt;&gt; SetAccountPublicAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserShort.html">InstaUserShort</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SetBiographyAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SetBiographyAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L185">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SetBiographyAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetBiographyAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SetBiographyAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetBiographyAsync(System.String)">SetBiographyAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Set biography (support hashtags and user mentions)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBiography&gt;&gt; SetBiographyAsync(string bio)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">bio</span></td>
+        <td><p>Biography text, hashtags or user mentions</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaBiography.html">InstaBiography</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SetBirthdayAsync_System_DateTime_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SetBirthdayAsync(System.DateTime)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L113">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SetBirthdayAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetBirthdayAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SetBirthdayAsync_System_DateTime_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetBirthdayAsync(System.DateTime)">SetBirthdayAsync(DateTime)</h4>
+  <div class="markdown level1 summary"><p>Set birthday</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; SetBirthdayAsync(DateTime birthday)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.DateTime</span></td>
+        <td><span class="parametername">birthday</span></td>
+        <td><p>Birth date</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SetGenderAsync_InstagramApiSharp_Enums_InstaGenderType_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SetGenderAsync(InstagramApiSharp.Enums.InstaGenderType%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L108">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SetGenderAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetGenderAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SetGenderAsync_InstagramApiSharp_Enums_InstaGenderType_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetGenderAsync(InstagramApiSharp.Enums.InstaGenderType,System.String)">SetGenderAsync(InstaGenderType, String)</h4>
+  <div class="markdown level1 summary"><p>Set name and phone number.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; SetGenderAsync(InstaGenderType gender, string customGender = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Enums.InstaGenderType.html">InstaGenderType</a></td>
+        <td><span class="parametername">gender</span></td>
+        <td><p>Gender</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">customGender</span></td>
+        <td><p>Custom gender</p>
+<p>Note: must select <a class="xref" href="InstagramApiSharp.Enums.InstaGenderType.html#InstagramApiSharp_Enums_InstaGenderType_Custom">Custom</a> for setting custom gender</p> 
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SetNameAndPhoneNumberAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SetNameAndPhoneNumberAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L191">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SetNameAndPhoneNumberAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetNameAndPhoneNumberAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SetNameAndPhoneNumberAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SetNameAndPhoneNumberAsync(System.String,System.String)">SetNameAndPhoneNumberAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Set name and phone number.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; SetNameAndPhoneNumberAsync(string name, string phoneNumber = &quot;&quot;)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>Name</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">phoneNumber</span></td>
+        <td><p>Phone number</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SwitchToBusinessAccountAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SwitchToBusinessAccountAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L373">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SwitchToBusinessAccountAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SwitchToBusinessAccountAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SwitchToBusinessAccountAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SwitchToBusinessAccountAsync">SwitchToBusinessAccountAsync()</h4>
+  <div class="markdown level1 summary"><p>Switch to business account</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaBusinessUser&gt;&gt; SwitchToBusinessAccountAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.InstaBusinessUser.html">InstaBusinessUser</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_SwitchToPersonalAccountAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.SwitchToPersonalAccountAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L368">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_SwitchToPersonalAccountAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SwitchToPersonalAccountAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_SwitchToPersonalAccountAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.SwitchToPersonalAccountAsync">SwitchToPersonalAccountAsync()</h4>
+  <div class="markdown level1 summary"><p>Switch to personal account</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaUser&gt;&gt; SwitchToPersonalAccountAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaUser.html">InstaUser</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_TwoFactorEnableAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.TwoFactorEnableAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L339">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_TwoFactorEnableAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.TwoFactorEnableAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_TwoFactorEnableAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.TwoFactorEnableAsync(System.String,System.String)">TwoFactorEnableAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Verify enable two factor.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaAccountTwoFactor&gt;&gt; TwoFactorEnableAsync(string phoneNumber, string verificationCode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">phoneNumber</span></td>
+        <td><p>Phone number</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">verificationCode</span></td>
+        <td><p>Verification code</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaAccountTwoFactor.html">InstaAccountTwoFactor</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_UnlinkContactsAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.UnlinkContactsAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L95">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_UnlinkContactsAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.UnlinkContactsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_UnlinkContactsAsync" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.UnlinkContactsAsync">UnlinkContactsAsync()</h4>
+  <div class="markdown level1 summary"><p>Unlink contacts</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; UnlinkContactsAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_UploadNametagAsync_InstagramApiSharp_Classes_Models_InstaImage_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.UploadNametagAsync(InstagramApiSharp.Classes.Models.InstaImage)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L196">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_UploadNametagAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.UploadNametagAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_UploadNametagAsync_InstagramApiSharp_Classes_Models_InstaImage_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.UploadNametagAsync(InstagramApiSharp.Classes.Models.InstaImage)">UploadNametagAsync(InstaImage)</h4>
+  <div class="markdown level1 summary"><p>Upload nametag image</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; UploadNametagAsync(InstaImage nametagImage)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaImage.html">InstaImage</a></td>
+        <td><span class="parametername">nametagImage</span></td>
+        <td><p>Nametag image</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_VerifyEmailByVerificationUriAsync_System_Uri_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.VerifyEmailByVerificationUriAsync(System.Uri)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L327">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_VerifyEmailByVerificationUriAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.VerifyEmailByVerificationUriAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_VerifyEmailByVerificationUriAsync_System_Uri_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.VerifyEmailByVerificationUriAsync(System.Uri)">VerifyEmailByVerificationUriAsync(Uri)</h4>
+  <div class="markdown level1 summary"><p>Verify email by verification url</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; VerifyEmailByVerificationUriAsync(Uri verificationUri)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Uri</span></td>
+        <td><span class="parametername">verificationUri</span></td>
+        <td><p>Verification url</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor_VerifySmsCodeAsync_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor.VerifySmsCodeAsync(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L345">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IAccountProcessor_VerifySmsCodeAsync_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.VerifySmsCodeAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IAccountProcessor_VerifySmsCodeAsync_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IAccountProcessor.VerifySmsCodeAsync(System.String,System.String)">VerifySmsCodeAsync(String, String)</h4>
+  <div class="markdown level1 summary"><p>Verify sms code.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaAccountVerifySms&gt;&gt; VerifySmsCodeAsync(string phoneNumber, string verificationCode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">phoneNumber</span></td>
+        <td><p>Phone number (ex: +9891234...)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">verificationCode</span></td>
+        <td><p>Verification code</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaAccountVerifySms.html">InstaAccountVerifySms</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="InstagramApiSharp.ExtensionHelper.html#InstagramApiSharp_ExtensionHelper_PrintInDebug_System_Object_">ExtensionHelper.PrintInDebug(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IAccountProcessor.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IAccountProcessor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IAccountProcessor.cs/#L24" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Ramtin Jokar [ <a href="mailto:ramtinak@live.com">Ramtinak@live.com</a> ] (c) 2021 | <a href="https://github.com/ramtinak/InstagramApiSharp/issues/243">InstagramApiSharp</a></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
