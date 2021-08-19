@@ -88,7 +88,7 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Delete a media story (photo or video)
         /// </summary>
-        /// <param name="mediaId">Story media id</param>
+        /// <param name="storyMediaId">Story media id</param>
         /// <param name="sharingType">The type of the media</param>
         /// <returns>Return true if the story media is deleted</returns>
         Task<IResult<bool>> DeleteStoryAsync(string storyMediaId, InstaSharingType sharingType = InstaSharingType.Video);
@@ -113,6 +113,10 @@ namespace InstagramApiSharp.API.Processors
         ///     Get user highlight feeds by user id (pk)
         /// </summary>
         /// <param name="userId">User id (pk)</param>
+        /// <param name="batteryLevel">Battery level (optional)</param>
+        /// <param name="isCharging">Is your phone charging? (optional)</param>
+        /// <param name="isDarkMode">Is dark mode? (optional)</param>
+        /// <param name="willSoundOn">Will sound on? (optional)</param>
         Task<IResult<InstaHighlightFeeds>> GetHighlightFeedsAsync(long userId,
             ushort batteryLevel = 100,
             bool isCharging = false,
@@ -135,9 +139,9 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<InstaUserStoriesFeeds>> GetUsersStoriesAsHighlightsAsync(params string[] usersIds);
         /// <summary>
         ///     Get single highlight medias
-        ///     <para>Note: get highlight id from <see cref="IStoryProcessor.GetHighlightFeedsAsync(long)"/></para>
+        ///     <para>Note: get highlight id from <see cref="GetHighlightFeedsAsync(long, ushort, bool, bool, bool)"/></para>
         /// </summary>
-        /// <param name="highlightId">Highlight id (Get it from <see cref="IStoryProcessor.GetHighlightFeedsAsync(long)"/>)</param>
+        /// <param name="highlightId">Highlight id (Get it from <see cref="GetHighlightFeedsAsync(long, ushort, bool, bool, bool)"/>)</param>
         Task<IResult<InstaHighlightSingleFeed>> GetHighlightMediasAsync(string highlightId);
 
 
@@ -183,6 +187,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="storyMediaId">Story media id</param>
         /// <param name="pollId">Story poll id</param>
         /// <param name="paginationParameters">Pagination parameters</param>
+        /// <param name="abc"></param>
         Task<IResult<InstaStoryPollVotersList>> GetStoryPollVotersAsync(string storyMediaId, string pollId, PaginationParameters paginationParameters, uint abc);
 
         /// <summary>
@@ -217,9 +222,9 @@ namespace InstagramApiSharp.API.Processors
 
         /// <summary>
         ///     Seen highlight
-        ///     <para>Get media id from <see cref="InstaHighlightFeed.CoverMedia.MediaId"/></para>
+        ///     <para>Get media id from <see cref="InstaHighlightFeed.CoverMedia"/>.MediaId</para>
         /// </summary>
-        /// <param name="mediaId">Media identifier (get it from <see cref="InstaHighlightFeed.CoverMedia.MediaId"/>)</param>
+        /// <param name="mediaId">Media identifier (get it from <see cref="InstaHighlightFeed.CoverMedia"/>.MediaId)</param>
         /// <param name="highlightId">Highlight id</param>
         /// <param name="takenAtUnix">Taken at unix</param>
         Task<IResult<bool>> MarkHighlightAsSeenAsync(string mediaId, string highlightId, long takenAtUnix);
@@ -285,7 +290,9 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="reelId">Reel id</param>
         /// <param name="storyMediaId">Story media id</param>
-        /// <param name="threadIds">Thread id</param>
+        /// <param name="threadIds">Thread ids</param>
+        /// <param name="text">Text to send (optional)</param>
+        /// <param name="recipients">Recipients user ids</param>
         /// <param name="sharingType">Sharing type</param>
         Task<IResult<bool>> ShareStoryAsync(string reelId, string storyMediaId, string[] threadIds, long[] recipients, string text, InstaSharingType sharingType = InstaSharingType.Video);
 
@@ -294,7 +301,7 @@ namespace InstagramApiSharp.API.Processors
         ///     <para>Note: Get story media id from <see cref="InstaMedia.InstaIdentifier"/></para>
         /// </summary>
         /// <param name="storyMediaId">Media id (get it from <see cref="InstaMedia.InstaIdentifier"/>)</param>
-        /// <param name="userId">Story owner user pk (get it from <see cref="InstaMedia.User.Pk"/>)</param>
+        /// <param name="userId">Story owner user pk (get it from <see cref="InstaMedia.User"/>.Pk)</param>
         /// <param name="text">Text to send</param>
         /// <param name="sharingType">Sharing type</param>
         Task<IResult<bool>> ReplyToStoryAsync(string storyMediaId, long userId, string text, InstaSharingType sharingType);
@@ -380,12 +387,14 @@ namespace InstagramApiSharp.API.Processors
         ///     Upload story video (to self story)
         /// </summary>
         /// <param name="video">Video to upload</param>
+        /// <param name="uploadOptions">Upload options</param>
         Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(InstaVideoUpload video, InstaStoryUploadOptions uploadOptions = null);
         /// <summary>
         ///     Upload story video (to self story) with progress
         /// </summary>
         /// <param name="progress">Progress action</param>
         /// <param name="video">Video to upload</param>
+        /// <param name="uploadOptions">Upload options</param>
         Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, InstaStoryUploadOptions uploadOptions = null);
         /// <summary>
         ///     Upload story video [to self story, to direct threads or both(self and direct)]
@@ -393,6 +402,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="video">Video to upload</param>
         /// <param name="storyType">Story type</param>
         /// <param name="threadIds">Thread ids</param>
+        /// <param name="uploadOptions">Upload options</param>
         Task<IResult<bool>> UploadStoryVideoAsync(InstaVideoUpload video,
             InstaStoryType storyType = InstaStoryType.SelfStory, InstaStoryUploadOptions uploadOptions = null, params string[] threadIds);
 
@@ -403,6 +413,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="video">Video to upload</param>
         /// <param name="storyType">Story type</param>
         /// <param name="threadIds">Thread ids</param>
+        /// <param name="uploadOptions">Upload options</param>
         Task<IResult<bool>> UploadStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video,
             InstaStoryType storyType = InstaStoryType.SelfStory, InstaStoryUploadOptions uploadOptions = null, params string[] threadIds);
 
@@ -412,6 +423,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="video">Video to upload</param>
         /// <param name="uri">Uri to add</param>
+        /// <param name="uploadOptions">Upload options</param>
         Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(InstaVideoUpload video, Uri uri, InstaStoryUploadOptions uploadOptions = null);
         /// <summary>
         ///     Upload story video (to self story) with adding link address (with progress)
@@ -420,6 +432,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="progress">Progress action</param>
         /// <param name="video">Video to upload</param>
         /// <param name="uri">Uri to add</param>
+        /// <param name="uploadOptions">Upload options</param>
         Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress> progress,
             InstaVideoUpload video, Uri uri, InstaStoryUploadOptions uploadOptions = null);
         /// <summary>
@@ -430,6 +443,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="uri">Uri to add</param>
         /// <param name="storyType">Story type</param>
         /// <param name="threadIds">Thread ids</param>
+        /// <param name="uploadOptions">Upload options</param>
         Task<IResult<bool>> UploadStoryVideoWithUrlAsync(InstaVideoUpload video, Uri uri,
             InstaStoryType storyType = InstaStoryType.SelfStory, InstaStoryUploadOptions uploadOptions = null, params string[] threadIds);
         /// <summary>
@@ -438,8 +452,10 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="progress">Progress action</param>
         /// <param name="video">Video to upload</param>
+        /// <param name="uri">Uri to add</param>
         /// <param name="storyType">Story type</param>
         /// <param name="threadIds">Thread ids</param>
+        /// <param name="uploadOptions">Upload options</param>
         Task<IResult<bool>> UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, Uri uri,
             InstaStoryType storyType = InstaStoryType.SelfStory, InstaStoryUploadOptions uploadOptions = null, params string[] threadIds);
 

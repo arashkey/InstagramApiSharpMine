@@ -372,7 +372,7 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Get media by its id asynchronously
         /// </summary>
-        /// <param name="mediaId">Media id (<see cref="InstaMedia.InstaIdentifier>"/>)</param>
+        /// <param name="mediaId">Media id (<see cref="InstaMedia.InstaIdentifier"/>)</param>
         /// <returns>
         ///     <see cref="InstaMedia" />
         /// </returns>
@@ -522,6 +522,16 @@ namespace InstagramApiSharp.API.Processors
         ///     Like media (photo or video)
         /// </summary>
         /// <param name="mediaId">Media id</param>
+        /// <param name="containerModule">Container model (optional)</param>
+        /// <param name="feedPosition">Feed position (optional)</param>
+        /// <param name="inventorySource">Inventory source (optional)</param>
+        /// <param name="isCarouselBumpedPost">Is carousel post? (optional)</param>
+        /// <param name="carouselIndex">Carousel index (optional)</param>
+        /// <param name="exploreSourceToken">ExploreSourceToken (optional)</param>
+        /// <param name="parentMediaPK">ParentMediaPk (optional)</param>
+        /// <param name="chainingSessionId">ChainingSessionId</param>
+        /// <param name="navChain">Navigation chain</param>
+        /// <returns>Returns True, if succeeded</returns>
         public async Task<IResult<bool>> LikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
             uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
             bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
@@ -625,6 +635,16 @@ namespace InstagramApiSharp.API.Processors
         ///     Remove like from media (photo or video)
         /// </summary>
         /// <param name="mediaId">Media id</param>
+        /// <param name="containerModule">Container model (optional)</param>
+        /// <param name="feedPosition">Feed position (optional)</param>
+        /// <param name="inventorySource">Inventory source (optional)</param>
+        /// <param name="isCarouselBumpedPost">Is carousel post? (optional)</param>
+        /// <param name="carouselIndex">Carousel index (optional)</param>
+        /// <param name="exploreSourceToken">ExploreSourceToken (optional)</param>
+        /// <param name="parentMediaPK">ParentMediaPk (optional)</param>
+        /// <param name="chainingSessionId">ChainingSessionId</param>
+        /// <param name="navChain">Navigation chain</param>
+        /// <returns>Returns True, if succeeded</returns>
         public async Task<IResult<bool>> UnLikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
            uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
             bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,

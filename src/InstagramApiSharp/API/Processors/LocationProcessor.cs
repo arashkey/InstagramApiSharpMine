@@ -81,12 +81,12 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Get location(place) information by external id or facebook places id
         ///     <para>Get external id from this function: <see cref="ILocationProcessor.SearchLocationAsync(double, double, string)"/></para>
-        ///     <para>Get facebook places id from this function: <see cref="ILocationProcessor.SearchPlacesAsync(double, double, string)(double, double, string)"/></para>
+        ///     <para>Get facebook places id from this function: <see cref="ILocationProcessor.SearchPlacesAsync(double, double, PaginationParameters)"/></para>
         /// </summary>
         /// <param name="externalIdOrFacebookPlacesId">
         ///     External id or facebook places id of an location/place
         ///     <para>Get external id from this function: <see cref="ILocationProcessor.SearchLocationAsync(double, double, string)"/></para>
-        ///     <para>Get facebook places id from this function: <see cref="ILocationProcessor.SearchPlacesAsync(double, double, string)(double, double, string)"/></para>
+        ///     <para>Get facebook places id from this function: <see cref="ILocationProcessor.SearchPlacesAsync(double, double, PaginationParameters)"/></para>
         /// </param>
         public async Task<IResult<InstaPlaceShort>> GetLocationInfoAsync(string externalIdOrFacebookPlacesId)
         {

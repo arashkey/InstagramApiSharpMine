@@ -1958,6 +1958,7 @@ namespace InstagramApiSharp.API
         ///     <see cref="InstaChallengeRequireVerifyMethod.SubmitPhoneRequired"/> property is true.</para>
         /// </summary>
         /// <param name="phoneNumber">Phone number</param>
+        /// <param name="replayChallenge">Replay challenge</param>
         public async Task<IResult<InstaChallengeRequireSMSVerify>> SubmitPhoneNumberForChallengeRequireAsync(string phoneNumber, bool replayChallenge)
         {
             return await RequestVerifyCodeToSMSForChallengeRequire(replayChallenge, phoneNumber);

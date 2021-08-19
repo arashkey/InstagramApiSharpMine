@@ -376,11 +376,11 @@ namespace InstagramApiSharp.API.Processors
 
 
 
-        /// <summary>
-        ///     Send video story, direct video, disappearing video
-        /// </summary>
-        /// <param name="isDirectVideo">Direct video</param>
-        /// <param name="isDisappearingVideo">Disappearing video</param>
+        ///// <summary>
+        /////     Send video story, direct video, disappearing video
+        ///// </summary>
+        ///// <param name="isDirectVideo">Direct video</param>
+        ///// <param name="isDisappearingVideo">Disappearing video</param>
         public async Task<IResult<bool>> SendVideoAsync(Action<InstaUploaderProgress> progress, bool isDirectVideo, bool isDisappearingVideo,string caption, 
             InstaViewMode viewMode, InstaStoryType storyType,  string recipients, string threadId, InstaVideoUpload video, Uri uri = null, InstaStoryUploadOptions uploadOptions = null)
         {

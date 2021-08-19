@@ -360,9 +360,7 @@ namespace InstagramApiSharp.API
 
         #region Business endpoints constants
 
-        /// <summary>
-        /// /api/v1/business/instant_experience/get_ix_partners_bundle/?signed_body=b941ff07b83716087710019790b3529ab123c8deabfb216e056651e9cf4b4ca7.{}&ig_sig_key_version=4
-        /// </summary>
+        // /api/v1/business/instant_experience/get_ix_partners_bundle/?signed_body=b941ff07b83716087710019790b3529ab123c8deabfb216e056651e9cf4b4ca7.{}&ig_sig_key_version=4
         public const string BUSINESS_INSTANT_EXPERIENCE = API_SUFFIX + "/business/instant_experience/get_ix_partners_bundle/?signed_body={0}&ig_sig_key_version={1}";
 
         public const string BUSINESS_SET_CATEGORY = API_SUFFIX + "/business/account/set_business_category/";
@@ -517,9 +515,7 @@ namespace InstagramApiSharp.API
         #region Feed endpoints constants
 
         public const string FEED_ONLY_ME_FEED = API_SUFFIX + "/feed/only_me_feed/";
-        /// <summary>
-        /// {0} = rank token <<<<< this endpoint is deprecated
-        /// </summary>
+        // {0} = rank token <<<<< this endpoint is deprecated
         public const string FEED_POPULAR = API_VERSION + "/feed/popular/?people_teaser_supported=1&rank_token={0}&ranked_content=true";
 
         public const string FEED_PROMOTABLE_MEDIA = API_SUFFIX + "/feed/promotable_media/";

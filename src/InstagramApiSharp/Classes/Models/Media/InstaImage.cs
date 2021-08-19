@@ -20,10 +20,10 @@ namespace InstagramApiSharp.Classes.Models
 
         public int Height { get; set; }
 
-        [JsonIgnore]
         /// <summary>
-        /// This is only for .NET core apps like UWP(Windows 10) apps
+        ///     This is only for .NET core apps like UWP(Windows 10) apps
         /// </summary>
+        [JsonIgnore]
         public byte[] ImageBytes { get; set; }
     }
 }

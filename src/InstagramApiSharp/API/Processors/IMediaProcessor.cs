@@ -40,7 +40,6 @@ namespace InstagramApiSharp.API.Processors
         ///     Get archived medias
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
-        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>
@@ -50,6 +49,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Get archived medias
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>
@@ -73,7 +73,7 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Get media by its id asynchronously
         /// </summary>
-        /// <param name="mediaId">Media id (<see cref="InstaMedia.InstaIdentifier>"/>)</param>
+        /// <param name="mediaId">Media id (<see cref="InstaMedia.InstaIdentifier"/>)</param>
         /// <returns>
         ///     <see cref="InstaMedia" />
         /// </returns>
@@ -102,6 +102,16 @@ namespace InstagramApiSharp.API.Processors
         ///     Like media (photo or video)
         /// </summary>
         /// <param name="mediaId">Media id</param>
+        /// <param name="containerModule">Container model (optional)</param>
+        /// <param name="feedPosition">Feed position (optional)</param>
+        /// <param name="inventorySource">Inventory source (optional)</param>
+        /// <param name="isCarouselBumpedPost">Is carousel post? (optional)</param>
+        /// <param name="carouselIndex">Carousel index (optional)</param>
+        /// <param name="exploreSourceToken">ExploreSourceToken (optional)</param>
+        /// <param name="parentMediaPK">ParentMediaPk (optional)</param>
+        /// <param name="chainingSessionId">ChainingSessionId</param>
+        /// <param name="navChain">Navigation chain</param>
+        /// <returns>Returns True, if succeeded</returns>
         Task<IResult<bool>> LikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
             uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
             bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
@@ -120,7 +130,6 @@ namespace InstagramApiSharp.API.Processors
         Task<IResult<bool>> SaveMediaAsync(string mediaId);
 
         /// <summary>
-        /// <summary>
         ///     Remove an post from archive list (this will show the post for everyone!)
         /// </summary>
         /// <param name="mediaId">Media id (<see cref="InstaMedia.InstaIdentifier"/>)</param>
@@ -131,6 +140,16 @@ namespace InstagramApiSharp.API.Processors
         ///     Remove like from media (photo or video)
         /// </summary>
         /// <param name="mediaId">Media id</param>
+        /// <param name="containerModule">Container model (optional)</param>
+        /// <param name="feedPosition">Feed position (optional)</param>
+        /// <param name="inventorySource">Inventory source (optional)</param>
+        /// <param name="isCarouselBumpedPost">Is carousel post? (optional)</param>
+        /// <param name="carouselIndex">Carousel index (optional)</param>
+        /// <param name="exploreSourceToken">ExploreSourceToken (optional)</param>
+        /// <param name="parentMediaPK">ParentMediaPk (optional)</param>
+        /// <param name="chainingSessionId">ChainingSessionId</param>
+        /// <param name="navChain">Navigation chain</param>
+        /// <returns>Returns True, if succeeded</returns>
         Task<IResult<bool>> UnLikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
             uint feedPosition = 0, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
             bool? isCarouselBumpedPost = false, int? carouselIndex = null, string exploreSourceToken = null,
@@ -184,7 +203,6 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="image">Photo to upload</param>
         /// <param name="caption">Caption</param>
         /// <param name="location">Location => Optional (get it from <seealso cref="LocationProcessor.SearchLocationAsync"/></param>
-        /// <param name="userTags">User tags => Optional</param>
         Task<IResult<InstaMedia>> UploadPhotoAsync(InstaImageUpload image, string caption, InstaLocationShort location = null);
 
         /// <summary>
@@ -194,7 +212,6 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="image">Photo to upload</param>
         /// <param name="caption">Caption</param>
         /// <param name="location">Location => Optional (get it from <seealso cref="LocationProcessor.SearchLocationAsync"/></param>
-        /// <param name="userTags">User tags => Optional</param>
         Task<IResult<InstaMedia>> UploadPhotoAsync(Action<InstaUploaderProgress> progress, InstaImageUpload image, string caption, InstaLocationShort location = null);
 
         /// <summary>

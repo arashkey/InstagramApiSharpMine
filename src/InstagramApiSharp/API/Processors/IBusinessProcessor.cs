@@ -105,6 +105,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Get media insight
         /// </summary>
         /// <param name="mediaId">Media Id (<see cref="InstaMedia.InstaIdentifier"/>)</param>
+        /// <param name="surfaceType">Surface type</param>
         Task<IResult<InstaMediaInsightsX>> GetMediaInsightsAsync(string mediaId, InstaInsightSurfaceType surfaceType);
 
         /// <summary>

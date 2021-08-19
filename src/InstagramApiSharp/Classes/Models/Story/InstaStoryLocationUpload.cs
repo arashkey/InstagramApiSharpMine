@@ -7,6 +7,8 @@
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.API.Processors;
+
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaStoryLocationUpload
