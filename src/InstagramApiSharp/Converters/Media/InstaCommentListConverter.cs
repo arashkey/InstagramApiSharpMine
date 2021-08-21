@@ -1,6 +1,5 @@
 ﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
-using Newtonsoft.Json;
 using System.Linq;
 
 namespace InstagramApiSharp.Converters
@@ -25,7 +24,7 @@ namespace InstagramApiSharp.Converters
                 MediaHeaderDisplay = SourceObject.MediaHeaderDisplay,
                 ThreadingEnabled = SourceObject.ThreadingEnabled,
                 LikesEnabled = SourceObject.LikesEnabled,
-                MoreHeadLoadAvailable = SourceObject.MoreHeadLoadAvailable, 
+                MoreHeadLoadAvailable = SourceObject.MoreHeadLoadAvailable,
                 NextMaxId = SourceObject.NextMaxId,
                 NextMinId = SourceObject.NextMinId
             };

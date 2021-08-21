@@ -6,10 +6,10 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Linq;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using System;
+using System.Linq;
 
 namespace InstagramApiSharp.Converters
 {
@@ -29,7 +29,7 @@ namespace InstagramApiSharp.Converters
 
             if (SourceObject.Medias?.Count > 0)
                 reelsMediaList.Medias.AddRange(
-                    SourceObject.Medias.Select(x=> x.Media)
+                    SourceObject.Medias.Select(x => x.Media)
                     .Select(ConvertersFabric.Instance.GetSingleMediaConverter)
                         .Select(converter => converter.Convert()));
             return reelsMediaList;

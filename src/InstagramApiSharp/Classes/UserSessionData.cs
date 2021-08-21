@@ -1,5 +1,5 @@
-﻿using System;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
+using System;
 
 namespace InstagramApiSharp.Classes
 {
@@ -15,7 +15,7 @@ namespace InstagramApiSharp.Classes
         public string FbTripId { get; set; }
         public string Authorization { get; set; }
         public string XMidHeader { get; set; }
-        public string RurHeader { get; set; } 
+        public string RurHeader { get; set; }
 
         public InstaUserShort LoggedInUser { get; set; }
 
@@ -34,7 +34,7 @@ namespace InstagramApiSharp.Classes
 
         public static UserSessionData ForUsername(string username)
         {
-            return new UserSessionData {UserName = username};
+            return new UserSessionData { UserName = username };
         }
 
         public UserSessionData WithPassword(string password)

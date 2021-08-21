@@ -51,7 +51,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="seriesId">TV series identifier</param>
         /// <param name="mediaPk">Media pk</param>
-        Task<IResult<bool>> AddEpisodeToTVSeriesAsync(string seriesId, string mediaPk); 
+        Task<IResult<bool>> AddEpisodeToTVSeriesAsync(string seriesId, string mediaPk);
         /// <summary>
         ///     Update a TV series
         /// </summary>

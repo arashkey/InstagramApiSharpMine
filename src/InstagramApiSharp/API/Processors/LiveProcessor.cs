@@ -8,23 +8,22 @@
  */
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
-using InstagramApiSharp.Logger;
-using System;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using InstagramApiSharp.Helpers;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
-using System.Net;
-using System.Linq;
 using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Converters.Json;
-using InstagramApiSharp.Converters;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using InstagramApiSharp.Converters;
+using InstagramApiSharp.Converters.Json;
+using InstagramApiSharp.Helpers;
+using InstagramApiSharp.Logger;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -76,7 +75,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="broadcastId">Broadcast id</param>
         /// <param name="allowQuestionSubmission">Allow people to submit questions</param>
-        public async Task<IResult<bool>> SetQuestionStatusAsync(string broadcastId, 
+        public async Task<IResult<bool>> SetQuestionStatusAsync(string broadcastId,
             bool allowQuestionSubmission = false)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -1030,7 +1029,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaBroadcastTopLiveStatusList>(exception);
             }
         }
-        
+
         /// <summary>
         ///     Get broadcast viewer list.
         /// </summary>
@@ -1064,7 +1063,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail(exception, viewers);
             }
         }
-        
+
         /// <summary>
         ///     Like broadcast.
         /// </summary>
@@ -1235,7 +1234,7 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var instaUri = UriCreator.GetBroadcastStartUri(broadcastId);
-                var data = new Dictionary<string,string>
+                var data = new Dictionary<string, string>
                 {
                     {"_uuid", _deviceInfo.DeviceGuid.ToString()},
                 };

@@ -8,7 +8,6 @@
  */
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
-using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes
 {
@@ -57,57 +56,57 @@ namespace InstagramApiSharp.Classes
         public int ProfileVisitsCount { get; set; }
 
         public bool CanCrosspostWithoutFbToken { get; set; }
-        
+
         public bool ShowBusinessConversionIcon { get; set; }
-       
+
         public string PageName { get; set; }
-       
+
         public bool CanClaimPage { get; set; }
-       
+
         public long FbPageCallToActionIxAppId { get; set; }
-       
+
         public string FbPageCallToActionIxPartner { get; set; }
-       
+
         public bool IsCallToActionEnabled { get; set; }
-       
+
         public string InstagramLocationId { get; set; }
-       
+
         public string FbPageCallToActionIxUrl { get; set; }
-       
+
         public string Category { get; set; }
-       
+
         public long PageId { get; set; }
-       
+
         public string ZipCode { get; set; }
-       
+
         public string ContactPhoneNumber { get; set; }
-       
+
         public InstaBusinessContactType BusinessContactMethod { get; set; }
-       
+
         public string CityName { get; set; }
-       
+
         public string DirectMessaging { get; set; }
-       
+
         public float Longitude { get; set; }
-       
+
         public string FbPageCallToActionId { get; set; }
-       
+
         public long CityId { get; set; }
-       
+
         public int ProfileVisitsNumDays { get; set; }
-       
+
         public bool CanConvertToBusiness { get; set; }
-       
+
         public string PublicPhoneNumber { get; set; }
-       
+
         public float Latitude { get; set; }
-       
+
         public string PublicEmail { get; set; }
-       
+
         public string PublicPhoneCountryCode { get; set; }
-       
+
         public string AddressStreet { get; set; }
-       
+
         public InstaBusinessUserFbBundle FbPageCallToActionIxLabelBundle { get; set; }
     }
 

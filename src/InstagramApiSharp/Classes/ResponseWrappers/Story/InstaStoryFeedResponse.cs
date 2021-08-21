@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Classes.ResponseWrappers.BaseResponse;
+﻿using InstagramApiSharp.Classes.ResponseWrappers.BaseResponse;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {

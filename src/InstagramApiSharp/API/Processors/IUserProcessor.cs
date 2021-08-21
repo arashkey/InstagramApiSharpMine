@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -63,7 +62,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="userId">User id (pk)</param>
         Task<IResult<bool>> FavoriteUserAsync(long userId);
-        
+
         /// <summary>
         ///     Favorite user stories (user must be in your following list)
         /// </summary>
@@ -105,7 +104,7 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaUserShortList" />
         /// </returns>
         Task<IResult<InstaUserShortList>> GetBestFriendsSuggestionsAsync(PaginationParameters paginationParameters);
-        
+
         /// <summary>
         ///     Get best friends (besties) suggestions
         /// </summary>
@@ -209,7 +208,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="paginationParameters"></param>
         /// <param name="cancellationToken">Cancellation token</param>
-        Task<IResult<InstaActivityFeed>> GetRecentActivityFeedAsync(PaginationParameters paginationParameters, 
+        Task<IResult<InstaActivityFeed>> GetRecentActivityFeedAsync(PaginationParameters paginationParameters,
             CancellationToken cancellationToken);
 
         /// <summary>
@@ -240,7 +239,7 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaUser" />
         /// </returns>
         Task<IResult<InstaUser>> GetUserAsync(string username);
-       
+
         /// <summary>
         ///     Get user from a nametag image
         /// </summary>
@@ -555,7 +554,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="userId">User id</param>
         Task<IResult<InstaFriendshipFullStatus>> UnFollowUserAsync(long userId,
             InstaMediaSurfaceType surfaceType = InstaMediaSurfaceType.None, string mediaIdAttribution = null);
-        
+
         /// <summary>
         ///     Unhide my story from specific user
         /// </summary>

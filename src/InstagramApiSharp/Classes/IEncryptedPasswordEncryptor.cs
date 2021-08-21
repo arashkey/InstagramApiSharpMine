@@ -1,7 +1,4 @@
 ﻿using InstagramApiSharp.API;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace InstagramApiSharp.Classes
@@ -20,9 +17,9 @@ namespace InstagramApiSharp.Classes
         ///     Encrypted password for changing password
         /// </summary>
         /// <param name="api"></param>
-        Task<(string, string, string)> GetEncryptedPassword(IInstaApi api, 
+        Task<(string, string, string)> GetEncryptedPassword(IInstaApi api,
             string oldPassword,
-            string newPassword, 
+            string newPassword,
             long? providedTime = null);
     }
 }

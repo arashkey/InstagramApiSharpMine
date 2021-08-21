@@ -14,7 +14,7 @@ namespace InstagramApiSharp.Classes.Models
         public string Title { get { return _title; } set { _title = value; OnPropertyChanged("Title"); } }
 
         public string OldestCursor { get; set; }
-        
+
         public DateTime LastActivity { get; set; }
         public string LastActivityUnix { get; set; }
         private bool _hasUnreadMessage;
@@ -41,7 +41,7 @@ namespace InstagramApiSharp.Classes.Models
         public InstaDirectThreadType ThreadType { get; set; }
 
         public List<InstaDirectInboxItem> Items { get; set; } = new List<InstaDirectInboxItem>();
-        
+
         public InstaDirectInboxItem LastPermanentItem { get; set; }
 
         public bool IsPin { get; set; }

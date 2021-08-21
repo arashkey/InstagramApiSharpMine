@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 namespace InstagramApiSharp.API.Processors
 {
     /// <summary>
@@ -112,7 +112,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="mediaId">Media id</param>
         Task<IResult<bool>> ReportMediaAsync(string mediaId);
-        
+
         /// <summary>
         ///     Save media
         /// </summary>

@@ -8,23 +8,23 @@
  */
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
-using InstagramApiSharp.Logger;
-using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using InstagramApiSharp.Helpers;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
-using InstagramApiSharp.Converters;
-using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Classes.Models;
-using System.Net;
+using InstagramApiSharp.Classes.ResponseWrappers;
+using InstagramApiSharp.Converters;
 using InstagramApiSharp.Converters.Json;
 using InstagramApiSharp.Enums;
+using InstagramApiSharp.Helpers;
+using InstagramApiSharp.Logger;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -77,9 +77,9 @@ namespace InstagramApiSharp.API.Processors
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public async Task<IResult<string>> UploadSinglePhoto(Action<InstaUploaderProgress> progress, 
+        public async Task<IResult<string>> UploadSinglePhoto(Action<InstaUploaderProgress> progress,
             InstaImageUpload image, InstaUploaderProgress upProgress, string uploadId = null,
-            bool album = true, string recipient = null, string broadcastId = null, 
+            bool album = true, string recipient = null, string broadcastId = null,
             string preferredWaterfallId = null)
         {
             if (string.IsNullOrEmpty(uploadId))
@@ -139,10 +139,10 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        public async Task<IResult<(string, string)>> UploadSingleVideo(Action<InstaUploaderProgress> progress, 
-            InstaVideoUpload video, 
-            InstaUploaderProgress upProgress, 
-            bool album = true, 
+        public async Task<IResult<(string, string)>> UploadSingleVideo(Action<InstaUploaderProgress> progress,
+            InstaVideoUpload video,
+            InstaUploaderProgress upProgress,
+            bool album = true,
             bool useDefaultCover = true)
         {
             var uploadId = ExtensionHelper.GenerateUploadingUploadId();
@@ -381,8 +381,8 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="isDirectVideo">Direct video</param>
         /// <param name="isDisappearingVideo">Disappearing video</param>
-        public async Task<IResult<bool>> SendVideoAsync(Action<InstaUploaderProgress> progress, bool isDirectVideo, bool isDisappearingVideo,string caption, 
-            InstaViewMode viewMode, InstaStoryType storyType,  string recipients, string threadId, InstaVideoUpload video, Uri uri = null, InstaStoryUploadOptions uploadOptions = null)
+        public async Task<IResult<bool>> SendVideoAsync(Action<InstaUploaderProgress> progress, bool isDirectVideo, bool isDisappearingVideo, string caption,
+            InstaViewMode viewMode, InstaStoryType storyType, string recipients, string threadId, InstaVideoUpload video, Uri uri = null, InstaStoryUploadOptions uploadOptions = null)
         {
             var upProgress = new InstaUploaderProgress
             {
@@ -524,7 +524,7 @@ namespace InstagramApiSharp.API.Processors
                 //if (vidExt == "mov")
                 //    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
                 //else
-                    request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
+                request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
 
                 request.Headers.AddHeader("Offset", "0", _instaApi);
                 request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
@@ -580,7 +580,7 @@ namespace InstagramApiSharp.API.Processors
                     upProgress.UploadState = InstaUploadState.ThumbnailUploaded;
                     progress?.Invoke(upProgress);
                 }
-                return await ConfigureVideo(progress, upProgress, uploadId, isDirectVideo, isDisappearingVideo,caption, viewMode,storyType, recipients, threadId, uri, uploadOptions);
+                return await ConfigureVideo(progress, upProgress, uploadId, isDirectVideo, isDisappearingVideo, caption, viewMode, storyType, recipients, threadId, uri, uploadOptions);
             }
             catch (Exception exception)
             {
@@ -831,7 +831,7 @@ namespace InstagramApiSharp.API.Processors
                     }
                     instaUri = UriCreator.GetVideoStoryConfigureUri(true);
                     var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                 
+
                     request.Headers.AddHeader("retry_context", retryContext, _instaApi);
                     var response = await _httpRequestProcessor.SendAsync(request);
                     var json = await response.Content.ReadAsStringAsync();
@@ -997,7 +997,7 @@ namespace InstagramApiSharp.API.Processors
 
                 //if (isDirectVideo)
                 //{
-           
+
                 //}
                 //else
                 {
@@ -1237,7 +1237,7 @@ namespace InstagramApiSharp.API.Processors
                         return await ConfigureMediaPhotoAsNametagAsync(progress, upProgress, uploadId);
                     return await ConfigureMediaPhotoAsync(progress, upProgress, uploadId, caption, location, image.UserTags);
                 }
-    
+
                 upProgress.UploadState = InstaUploadState.Error;
                 progress?.Invoke(upProgress);
                 return Result.UnExpectedResponse<InstaMedia>(response, json);
@@ -1465,8 +1465,8 @@ namespace InstagramApiSharp.API.Processors
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        public async Task<IResult<bool>> SendVoiceAsync(Action<InstaUploaderProgress> progress, 
-            InstaAudioUpload audio, 
+        public async Task<IResult<bool>> SendVoiceAsync(Action<InstaUploaderProgress> progress,
+            InstaAudioUpload audio,
             string recipients, string threadId)
         {
             var upProgress = new InstaUploaderProgress
@@ -1761,7 +1761,7 @@ namespace InstagramApiSharp.API.Processors
                 string json = null;
                 upProgress.UploadId = uploadId;
                 progress?.Invoke(upProgress);
-              
+
                 var videoUploadParamsObj = new JObject
                 {
                     {"is_igtv_video", "1"},
@@ -1780,7 +1780,7 @@ namespace InstagramApiSharp.API.Processors
                 request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
-               
+
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
@@ -1806,7 +1806,7 @@ namespace InstagramApiSharp.API.Processors
                 //if (vidExt == "mov")
                 //    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
                 //else
-                    request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
+                request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
 
                 request.Headers.AddHeader("Offset", "0", _instaApi);
                 request.Headers.AddHeader("X-Instagram-Rupload-Params", videoUploadParams, _instaApi);
@@ -1881,7 +1881,7 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaMedia>> ConfigureIGTVVideo(Action<InstaUploaderProgress> progress,
-            InstaUploaderProgress upProgress, string uploadId, string title,  string caption, InstaVideoUpload video, bool sharePreviewToFeed = false)
+            InstaUploaderProgress upProgress, string uploadId, string title, string caption, InstaVideoUpload video, bool sharePreviewToFeed = false)
         {
             try
             {

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -35,7 +35,7 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>
-        Task<IResult<InstaMediaList>> GetExploreChannelVideosAsync(string channelId, string firstMediaId, 
+        Task<IResult<InstaMediaList>> GetExploreChannelVideosAsync(string channelId, string firstMediaId,
             PaginationParameters paginationParameters, CancellationToken cancellationToken);
 
         /// <summary>
@@ -159,8 +159,8 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaFeed" />
         /// </returns>
-        Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters, 
-            string[] seenMediaIds = null, 
+        Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
+            string[] seenMediaIds = null,
             bool refreshRequest = false,
             bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,

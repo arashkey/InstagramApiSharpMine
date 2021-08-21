@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers.BaseResponse;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
@@ -71,7 +71,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("input_mode")] public int? InputMode { get; set; }
 
         [JsonProperty("business_thread_folder")] public int? BusinessThreadFolder { get; set; }
-    
+
         [JsonProperty("read_state")] public int? ReadState { get; set; }
 
         [JsonProperty("left_users")] public List<InstaUserShortFriendshipResponse> LeftUsers { get; set; }

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using InstagramApiSharp.Classes;
+using InstagramApiSharp.Classes.Models;
+using InstagramApiSharp.Enums;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
-using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -50,7 +50,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="progress">Progress</param>
         /// <param name="image">Photo to send</param>
         /// <param name="userId">User id/pk of story creator</param>
-        Task<IResult<bool>> ReplyPhotoToStoryAsync(Action<InstaUploaderProgress> progress, InstaImageUpload image, 
+        Task<IResult<bool>> ReplyPhotoToStoryAsync(Action<InstaUploaderProgress> progress, InstaImageUpload image,
             /*string storyMediaId,*/ long userId);
 
         /// <summary>
@@ -277,7 +277,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Note 2: Get media pk from <see cref="InstaMedia.Pk"/>
         ///     </para>
         /// </param>
-        Task<IResult<InstaStoryMedia>> ShareMediaAsStoryAsync(Action<InstaUploaderProgress> progress, InstaImage image, 
+        Task<IResult<InstaStoryMedia>> ShareMediaAsStoryAsync(Action<InstaUploaderProgress> progress, InstaImage image,
             InstaMediaStoryUpload mediaStoryUpload);
 
         /// <summary>
@@ -362,15 +362,15 @@ namespace InstagramApiSharp.API.Processors
         [Obsolete("UploadStoryVideoAsync is deprecated. Use UploadStoryVideoAsync(InstaVideoUpload, InstaStoryUploadOptions) instead." +
             "\r\nThis function will be removed in the future releases.", true)]
         Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(InstaVideoUpload video, string caption, InstaStoryUploadOptions uploadOptions = null);
-        
+
         [Obsolete("UploadStoryVideoAsync is deprecated. Use UploadStoryVideoAsync(Action<InstaUploaderProgress>, InstaVideoUpload, InstaStoryUploadOptions) instead." +
             "\r\nThis function will be removed in the future releases.", true)]
         Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, string caption, InstaStoryUploadOptions uploadOptions = null);
-        
+
         [Obsolete("UploadStoryVideoWithUrlAsync is deprecated. Use UploadStoryVideoWithUrlAsync(InstaVideoUpload, Uri, InstaStoryUploadOptions) instead." +
             "\r\nThis function will be removed in the future releases.", true)]
         Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(InstaVideoUpload video, string caption, Uri uri, InstaStoryUploadOptions uploadOptions = null);
-        
+
         [Obsolete("UploadStoryVideoWithUrlAsync is deprecated. Use UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress>, InstaVideoUpload, Uri, InstaStoryUploadOptions) instead." +
             "\r\nThis function will be removed in the future releases.", true)]
         Task<IResult<InstaStoryMedia>> UploadStoryVideoWithUrlAsync(Action<InstaUploaderProgress> progress,

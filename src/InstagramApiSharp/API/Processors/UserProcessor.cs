@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
@@ -17,6 +9,14 @@ using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -280,7 +280,7 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaUserShortList" />
         /// </returns>
-        public async Task<IResult<InstaUserShortList>> GetBestFriendsAsync(PaginationParameters paginationParameters, 
+        public async Task<IResult<InstaUserShortList>> GetBestFriendsAsync(PaginationParameters paginationParameters,
             CancellationToken cancellationToken)
         {
             return await GetBesties(paginationParameters, false, cancellationToken).ConfigureAwait(false);
@@ -331,7 +331,7 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaUserShortList" />
         /// </returns>
-        public async Task<IResult<InstaBlockedUsers>> GetBlockedUsersAsync(PaginationParameters paginationParameters, 
+        public async Task<IResult<InstaBlockedUsers>> GetBlockedUsersAsync(PaginationParameters paginationParameters,
             CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -1745,9 +1745,9 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<string>(exception);
             }
         }
-#endregion public parts
+        #endregion public parts
 
-#region private parts
+        #region private parts
 
         private async Task<IResult<InstaFriendshipShortStatusList>> AddBestFriends(long[] userIdsToAdd, long[] userIdsToRemove)
         {
@@ -2097,7 +2097,7 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaUserShortList>> GetBesties(PaginationParameters paginationParameters, bool suggested = false,
-            CancellationToken cancellationToken = default(CancellationToken)) 
+            CancellationToken cancellationToken = default(CancellationToken))
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var besties = new InstaUserShortList();
@@ -2107,7 +2107,7 @@ namespace InstagramApiSharp.API.Processors
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
                 Uri bestiesUri = UriCreator.GetBestFriendsUri(paginationParameters.NextMaxId);
-                if(suggested)
+                if (suggested)
                     bestiesUri = UriCreator.GetBestiesSuggestionUri(paginationParameters.NextMaxId);
 
                 var bestiesResponse = await GetUserListByUriAsync(bestiesUri);
@@ -2432,7 +2432,7 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-#endregion private parts
+        #endregion private parts
 
     }
 }

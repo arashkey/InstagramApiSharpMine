@@ -1,8 +1,8 @@
-﻿using System.Globalization;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
 using System;
+using System.Globalization;
 
 namespace InstagramApiSharp.Converters
 {
@@ -21,7 +21,7 @@ namespace InstagramApiSharp.Converters
                 Text = SourceObject.Args.Text,
                 RichText = SourceObject.Args.RichText,
                 TimeStamp = DateTimeHelper.UnixTimestampToDateTime((long)System.Convert.ToDouble(SourceObject.Args.TimeStamp, new NumberFormatInfo { NumberDecimalSeparator = "." })),
-                CommentId= SourceObject.Args.CommentId,
+                CommentId = SourceObject.Args.CommentId,
                 CommentIds = SourceObject.Args.CommentIds,
                 Destination = SourceObject.Args.Destination,
                 ProfileImageDestination = SourceObject.Args.ProfileImageDestination,
@@ -33,7 +33,7 @@ namespace InstagramApiSharp.Converters
                 IconUrl = SourceObject.Args.IconUrl
             };
             if (!string.IsNullOrEmpty(SourceObject.Args.IconUrl))
-               activityStory.ProfileImage = SourceObject.Args.IconUrl;
+                activityStory.ProfileImage = SourceObject.Args.IconUrl;
             if (!string.IsNullOrEmpty(SourceObject.Args.SubText))
                 activityStory.Text = SourceObject.Args.SubText;
             if (!string.IsNullOrEmpty(SourceObject.Args.RichText))

@@ -19,19 +19,19 @@ namespace InstagramApiSharp.Classes.Models
         public string NextMaxId { get; set; }
 
         public int CommentsCount { get; set; }
-                
+
         public bool ThreadingEnabled { get; set; }
-        
+
         public string MediaHeaderDisplay { get; set; }
-        
+
         public bool InitiateAtTop { get; set; }
-        
+
         public bool InsertNewCommentToTop { get; set; }
-        
+
         public List<InstaComment> PreviewComments { get; set; }
-        
+
         public bool CanViewMorePreviewComments { get; set; }
-        
+
         public string NextMinId { get; set; }
 
 

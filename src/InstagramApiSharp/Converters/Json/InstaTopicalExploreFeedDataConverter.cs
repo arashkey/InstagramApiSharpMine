@@ -7,10 +7,10 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 namespace InstagramApiSharp.Converters.Json
 {
@@ -44,7 +44,7 @@ namespace InstagramApiSharp.Converters.Json
                     var medias = layoutContent["medias"];
                     if (medias != null)
                     {
-                        foreach(var med in medias)
+                        foreach (var med in medias)
                         {
                             var single = med["media"];
                             if (single != null)

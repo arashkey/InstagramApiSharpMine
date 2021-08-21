@@ -1,12 +1,12 @@
-﻿using System;
-using System.Net.Http;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
-using InstagramApiSharp.Logger;
-using InstagramApiSharp.Enums;
 using InstagramApiSharp.Classes.SessionHandlers;
-using System.Net;
+using InstagramApiSharp.Enums;
+using InstagramApiSharp.Logger;
+using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 
 namespace InstagramApiSharp.API.Builder
 {
@@ -127,7 +127,7 @@ namespace InstagramApiSharp.API.Builder
         {
             if (httpClient != null)
                 httpClient.BaseAddress = new Uri(InstaApiConstants.INSTAGRAM_URL);
-                
+
             _httpClient = httpClient;
             return this;
         }

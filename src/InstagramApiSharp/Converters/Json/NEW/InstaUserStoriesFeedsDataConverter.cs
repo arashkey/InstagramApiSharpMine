@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models.Business;
-using InstagramApiSharp.Classes.ResponseWrappers;
+﻿using InstagramApiSharp.Classes.ResponseWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Linq;
+using System;
 
 namespace InstagramApiSharp.Converters.Json
 {
@@ -25,7 +22,7 @@ namespace InstagramApiSharp.Converters.Json
             var reel = token.ToObject<InstaUserStoriesFeedsResponse>();
 
             var t = token["reels"];
-            foreach(var item in t)
+            foreach (var item in t)
             {
                 var r = item.First.ToObject<InstaReelFeedResponse>();
                 reel.Items.Add(r);

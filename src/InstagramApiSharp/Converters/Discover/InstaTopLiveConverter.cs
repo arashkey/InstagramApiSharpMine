@@ -7,9 +7,9 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using System;
 
 namespace InstagramApiSharp.Converters
 {
@@ -20,7 +20,7 @@ namespace InstagramApiSharp.Converters
         public InstaTopLive Convert()
         {
             if (SourceObject == null) throw new ArgumentNullException($"Source object");
-            var storyTray = new InstaTopLive {RankedPosition = SourceObject.RankedPosition};
+            var storyTray = new InstaTopLive { RankedPosition = SourceObject.RankedPosition };
             foreach (var owner in SourceObject.BroadcastOwners)
             {
                 var userOwner = ConvertersFabric.Instance.GetUserShortFriendshipFullConverter(owner).Convert();

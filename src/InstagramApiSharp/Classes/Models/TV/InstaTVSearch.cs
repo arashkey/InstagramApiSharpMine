@@ -8,8 +8,6 @@
  */
 
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using InstagramApiSharp.Classes.ResponseWrappers;
 
 namespace InstagramApiSharp.Classes.Models
 {

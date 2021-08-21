@@ -1,9 +1,9 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -410,7 +410,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadIds">Thread ids</param>
         /// <returns>Returns True if link sent</returns>
         Task<IResult<InstaDirectRespondPayload>> SendDirectLinkAsync(string text, string link, params string[] threadIds);
-        
+
         /// <summary>
         ///     Send link address to direct thread
         /// </summary>
@@ -626,7 +626,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadId">Thread id</param>
         /// <param name="title">New title</param>
         Task<IResult<bool>> UpdateDirectThreadTitleAsync(string threadId, string title);
-        
+
         /// <summary>
         ///     Send a like to the conversation
         /// </summary>

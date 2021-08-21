@@ -255,7 +255,7 @@ namespace InstagramApiSharp.Converters.Business
 
                     if (businessManager.AccountInsightsUnit.AccountActionsLastWeekDailyGraph != null &&
                         businessManager.AccountInsightsUnit.AccountActionsLastWeekDailyGraph.TotalCountGraph != null &&
-                        businessManager.AccountInsightsUnit.AccountActionsLastWeekDailyGraph.TotalCountGraph.DataPoints!= null)
+                        businessManager.AccountInsightsUnit.AccountActionsLastWeekDailyGraph.TotalCountGraph.DataPoints != null)
                     {
                         foreach (var dataPoint in businessManager.AccountInsightsUnit.AccountActionsLastWeekDailyGraph.TotalCountGraph.DataPoints)
                         {

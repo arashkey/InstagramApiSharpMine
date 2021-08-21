@@ -6,14 +6,6 @@
  * 
  * IRANIAN DEVELOPERS
  */
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
@@ -25,6 +17,13 @@ using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -62,7 +61,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="threadIds">Thread ids</param>
         /// <param name="module">Module => Default is ClipsViewerClipsTab</param>
         public async Task<IResult<InstaDirectRespondPayload>> SendDirectReelClipsAsync(string text,
-            string mediaPk, 
+            string mediaPk,
             string[] threadIds,
             InstaMediaContainerModuleType module = InstaMediaContainerModuleType.ClipsViewerClipsTab) =>
             await SendDirectReelClips(text, mediaPk, threadIds, null, module).ConfigureAwait(false);
@@ -346,7 +345,7 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaDirectInboxThread>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaDirectInboxThreadSingleContainerResponse>(json);
-                if(obj.Thread == null)
+                if (obj.Thread == null)
                     return Result.Fail<InstaDirectInboxThread>("Thread Not Found");
                 return Result.Success(ConvertersFabric.Instance.GetDirectThreadConverter(obj.Thread).Convert());
             }
@@ -1055,7 +1054,7 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="T:InstagramApiSharp.Classes.Models.InstaDirectInboxContainer" />
         /// </returns>
-        public async Task<IResult<InstaDirectInboxContainer>> GetPendingDirectAsync(PaginationParameters paginationParameters, 
+        public async Task<IResult<InstaDirectInboxContainer>> GetPendingDirectAsync(PaginationParameters paginationParameters,
             CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -2444,7 +2443,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<bool>(exception);
             }
         }
-        
+
         /// <summary>
         ///     Send a like to the conversation
         /// </summary>
@@ -2498,7 +2497,7 @@ namespace InstagramApiSharp.API.Processors
             };
             try
             {
-             
+
                 var uploadId = ApiRequestMessage.GenerateRandomUploadId();
                 var clientContext = Guid.NewGuid();
                 upProgress.UploadId = uploadId;

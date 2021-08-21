@@ -1,9 +1,9 @@
-﻿using System;
-using System.Net;
+﻿using InstagramApiSharp.API.Push;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
-using System.Collections.Generic;
 using InstagramApiSharp.Enums;
-using InstagramApiSharp.API.Push;
+using System;
+using System.Collections.Generic;
+using System.Net;
 namespace InstagramApiSharp.Classes
 {
     [Serializable]

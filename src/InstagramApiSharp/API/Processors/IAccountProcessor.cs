@@ -8,7 +8,6 @@
  */
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Enums;
 using System;
 using System.Threading;
@@ -249,7 +248,7 @@ namespace InstagramApiSharp.API.Processors
         #endregion Story settings
 
         #region two factor authentication enable/disable
-       
+
         /// <summary>
         ///     Check new login request notification
         /// </summary>

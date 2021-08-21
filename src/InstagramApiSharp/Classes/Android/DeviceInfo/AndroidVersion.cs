@@ -31,7 +31,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         private static AndroidVersion LastAndriodVersion = AndroidVersionList.GetVersionList().AndroidVersions()[AndroidVersionList.GetVersionList().AndroidVersions().Count - 2];
         public static AndroidVersion GetRandomAndriodVersion()
         {
-            TryLabel:
+        TryLabel:
             var randomDeviceIndex = Rnd.Next(0, AndroidVersionList.GetVersionList().AndroidVersions().Count);
             var androidVersion = AndroidVersionList.GetVersionList().AndroidVersions().ElementAt(randomDeviceIndex);
             if (LastAndriodVersion != null)

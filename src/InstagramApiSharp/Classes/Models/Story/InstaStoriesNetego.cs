@@ -1,8 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
-using Newtonsoft.Json;
 
 namespace InstagramApiSharp.Classes.Models
 {

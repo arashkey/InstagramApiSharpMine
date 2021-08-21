@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
+using System;
+using System.Linq;
 
 namespace InstagramApiSharp.Converters
 {
@@ -134,7 +134,7 @@ namespace InstagramApiSharp.Converters
                 foreach (var responderInfo in SourceObject.StoryQuestionsResponderInfos)
                     instaStory.StoryQuestionsResponderInfos.Add(ConvertersFabric.Instance.GetStoryQuestionInfoConverter(responderInfo).Convert());
 
-            if(SourceObject.Countdowns?.Count > 0)
+            if (SourceObject.Countdowns?.Count > 0)
                 foreach (var countdown in SourceObject.Countdowns)
                     instaStory.Countdowns.Add(ConvertersFabric.Instance.GetStoryCountdownItemConverter(countdown).Convert());
 

@@ -13,13 +13,13 @@ namespace InstagramApiSharp.Helpers.GZip
     public sealed class GZipHttpContent : HttpContent
     {
 
-        #region Private Members
+#region Private Members
 
         private readonly Ionic.Zlib.GZipStream m_stream;
 
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
 
         public GZipHttpContent(Stream stream)
         {
@@ -53,7 +53,7 @@ namespace InstagramApiSharp.Helpers.GZip
             base.Dispose(disposing);
         }
 
-        #endregion
+#endregion
 
     }
 }

@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
@@ -18,6 +9,14 @@ using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -647,7 +646,7 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                var instaUri = UriCreator.GetHighlightFeedsUri(userId, 
+                var instaUri = UriCreator.GetHighlightFeedsUri(userId,
                     _deviceInfo.PhoneGuid.ToString(),
                     batteryLevel,
                     isCharging,
@@ -735,7 +734,7 @@ namespace InstagramApiSharp.API.Processors
                 var obj = JsonConvert.DeserializeObject<InstaUserStoriesFeedsResponse>(json,
                     new InstaUserStoriesFeedsDataConverter());
 
-                if(obj != null)
+                if (obj != null)
                 {
                     var reels = new InstaUserStoriesFeeds();
                     foreach (var item in obj.Items)
@@ -872,7 +871,7 @@ namespace InstagramApiSharp.API.Processors
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, storyFeedUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                
+
                 if (response.StatusCode != HttpStatusCode.OK) return Result.UnExpectedResponse<InstaStoryFeed>(response, json);
                 var storyFeedResponse = JsonConvert.DeserializeObject<InstaStoryFeedResponse>(json);
                 var instaStoryFeed = ConvertersFabric.Instance.GetStoryFeedConverter(storyFeedResponse).Convert();
@@ -953,7 +952,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="forceRefresh">Force to use pull refresh</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        public async Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(PaginationParameters paginationParameters, 
+        public async Task<IResult<InstaStoryFeed>> GetStoryFeedWithPostMethodAsync(PaginationParameters paginationParameters,
             CancellationToken cancellationToken, bool forceRefresh = false)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -976,7 +975,7 @@ namespace InstagramApiSharp.API.Processors
                 }
                 if (feedResponse.Value == null)
                     Result.Fail(feedResponse.Info, default(InstaStoryFeed));
-                
+
                 storyFeedResponse = feedResponse.Value;
 
                 while (HasMore(paginationParameters)
@@ -1086,7 +1085,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="storyMediaId">Story media id</param>
         /// <param name="pollId">Story poll id</param>
         /// <param name="paginationParameters">Pagination parameters</param>
-        public async Task<IResult<InstaStoryPollVotersList>> GetStoryPollVotersAsync(string storyMediaId, 
+        public async Task<IResult<InstaStoryPollVotersList>> GetStoryPollVotersAsync(string storyMediaId,
             string pollId, PaginationParameters paginationParameters, uint abc)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -1150,7 +1149,7 @@ namespace InstagramApiSharp.API.Processors
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, userStoryUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                
+
                 if (response.StatusCode != HttpStatusCode.OK) Result.UnExpectedResponse<InstaStory>(response, json);
                 var userStoryResponse = JsonConvert.DeserializeObject<InstaStoryResponse>(json);
                 var userStory = ConvertersFabric.Instance.GetStoryConverter(userStoryResponse).Convert();
@@ -1214,7 +1213,7 @@ namespace InstagramApiSharp.API.Processors
                 {
                     //{ storyId, new JArray($"{takenAtUnix}_{dateTimeUnix}") }
                 };
-                foreach(var item in storiesWithTakenAt)
+                foreach (var item in storiesWithTakenAt)
                 {
                     var storyId = $"{item.Key}_{item.Key.Split('_')[1]}";
                     reel.Add(storyId, new JArray($"{item.Value}_{dateTimeUnix}"));
@@ -1578,7 +1577,7 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<bool>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
 
-                return obj.IsSucceed ? Result.Success(true): Result.Fail("",false);
+                return obj.IsSucceed ? Result.Success(true) : Result.Fail("", false);
             }
             catch (HttpRequestException httpException)
             {
@@ -1640,7 +1639,7 @@ namespace InstagramApiSharp.API.Processors
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                
+
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<bool>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
@@ -1693,7 +1692,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="uploadOptions">Upload options => Optional</param>
         public async Task<IResult<InstaStoryMedia>> UploadStoryPhotoAsync(InstaImage image, InstaStoryUploadOptions uploadOptions = null)
         {
-            return await UploadStoryPhotoAsync(null, image,  uploadOptions);
+            return await UploadStoryPhotoAsync(null, image, uploadOptions);
         }
         /// <summary>
         ///     Upload story photo with progress
@@ -1763,7 +1762,7 @@ namespace InstagramApiSharp.API.Processors
                     }
                     _instaApi.SetRequestDelay(currentDelay);
                 }
-                if(uploadOptions?.Questions?.Count > 0)
+                if (uploadOptions?.Questions?.Count > 0)
                 {
                     try
                     {
@@ -1808,7 +1807,7 @@ namespace InstagramApiSharp.API.Processors
                     {"upload_id", uploadId},
                     {"media_type", "1"},
                     {"retry_context", "{\"num_step_auto_retry\":0,\"num_reupload\":0,\"num_step_manual_retry\":0}"},
-                    {"image_compression", "{\"lib_name\":\"moz\",\"lib_version\":\"3.1.m\",\"quality\":\"" + 
+                    {"image_compression", "{\"lib_name\":\"moz\",\"lib_version\":\"3.1.m\",\"quality\":\"" +
                               ExtensionHelper.GetRandomQuality() + "\",\"ssim\":" + ExtensionHelper.GetSSIM() +"}"},
                     {"xsharing_user_ids", $"[\"{ _user.LoggedInUser.Pk}\"]"}
                 };
@@ -1868,7 +1867,7 @@ namespace InstagramApiSharp.API.Processors
         }
 
         [Obsolete()]
-        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(InstaVideoUpload video, 
+        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(InstaVideoUpload video,
             string caption, InstaStoryUploadOptions uploadOptions = null) =>
             await UploadStoryVideoAsync(null, video, uploadOptions);
 
@@ -1904,7 +1903,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="progress">Progress action</param>
         /// <param name="video">Video to upload</param>
         /// <param name="uploadOptions">Upload options => Optional</param>
-        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video, 
+        public async Task<IResult<InstaStoryMedia>> UploadStoryVideoAsync(Action<InstaUploaderProgress> progress, InstaVideoUpload video,
             InstaStoryUploadOptions uploadOptions = null) =>
             await UploadStoryVideoWithUrlAsync(progress, video, null, uploadOptions);
 
@@ -2079,7 +2078,7 @@ namespace InstagramApiSharp.API.Processors
                 //if (vidExt == "mov")
                 //    request.Headers.AddHeader("X-Entity-Type", "video/quicktime", _instaApi);
                 //else
-                    request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
+                request.Headers.AddHeader("X-Entity-Type", "video/mp4", _instaApi);
 
                 request.Headers.AddHeader("Segment-Start-Offset", "0", _instaApi);
                 request.Headers.AddHeader("Offset", "0", _instaApi);
@@ -2256,7 +2255,7 @@ namespace InstagramApiSharp.API.Processors
             {
                 if (sliderVote > 1)
                     return Result.Fail<InstaStoryItem>("sliderVote cannot be more than 1.\r\nIt must be between 0 and 1");
-                if(sliderVote < 0)
+                if (sliderVote < 0)
                     return Result.Fail<InstaStoryItem>("sliderVote cannot be less than 0.\r\nIt must be between 0 and 1");
 
                 var instaUri = UriCreator.GetVoteStorySliderUri(storyMediaId, pollId);
@@ -2899,7 +2898,7 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("_csrftoken", _user.CsrfToken);
                 }
 
-                var request =  _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 

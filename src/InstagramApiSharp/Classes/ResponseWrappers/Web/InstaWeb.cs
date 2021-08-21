@@ -7,10 +7,10 @@
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers.Web
 {
@@ -69,7 +69,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers.Web
         [JsonProperty("data")]
         public InstaWebDataListResponse Data { get; set; }
     }
-    
+
     public class InstaWebDataResponse
     {
         [JsonProperty("link")]

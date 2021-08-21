@@ -1,8 +1,8 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -93,7 +93,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="targetCommentId">Target comment id</param>
         /// <param name="cancellationToken">Cancellation token</param>
         Task<IResult<InstaCommentList>>
-            GetMediaCommentsAsync(string mediaId, PaginationParameters paginationParameters, 
+            GetMediaCommentsAsync(string mediaId, PaginationParameters paginationParameters,
             CancellationToken cancellationToken, string targetCommentId = "");
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Maximum amount of pages to load and start id</param>
         /// <param name="cancellationToken">Cancellation token</param>
         Task<IResult<InstaInlineCommentList>>
-           GetMediaRepliesCommentsAsync(string mediaId, string targetCommentId, PaginationParameters paginationParameters, 
+           GetMediaRepliesCommentsAsync(string mediaId, string targetCommentId, PaginationParameters paginationParameters,
             CancellationToken cancellationToken);
 
         /// <summary>

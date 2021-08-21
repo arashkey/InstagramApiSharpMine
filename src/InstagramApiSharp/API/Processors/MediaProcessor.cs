@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
@@ -17,6 +9,14 @@ using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -236,7 +236,7 @@ namespace InstagramApiSharp.API.Processors
         public async Task<IResult<InstaMediaList>> GetArchivedMediaAsync(PaginationParameters paginationParameters) =>
             await GetArchivedMediaAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
 
-        public async Task<IResult<InstaMediaList>> GetArchivedMediaAsync(PaginationParameters paginationParameters, 
+        public async Task<IResult<InstaMediaList>> GetArchivedMediaAsync(PaginationParameters paginationParameters,
             CancellationToken cancellationToken)
         {
             var mediaList = new InstaMediaList();
@@ -341,7 +341,7 @@ namespace InstagramApiSharp.API.Processors
                 if (mediaIds?.Length == 0)
                     throw new ArgumentNullException("At least one media id is required");
 
-                var instaUri = UriCreator.GetMediaInfoByMultipleMediaIdsUri(mediaIds, 
+                var instaUri = UriCreator.GetMediaInfoByMultipleMediaIdsUri(mediaIds,
                     _deviceInfo.DeviceGuid.ToString(),
                     !_httpHelper.NewerThan180 ? _user.CsrfToken : null);
 
@@ -1156,7 +1156,7 @@ namespace InstagramApiSharp.API.Processors
                 }
                 upProgress.UploadState = InstaUploadState.Uploading;
                 progress?.Invoke(upProgress);
-                var uploadVideo = await _instaApi.HelperProcessor.UploadSingleVideo(progress, 
+                var uploadVideo = await _instaApi.HelperProcessor.UploadSingleVideo(progress,
                     video, upProgress, false, true);
 
                 if (!uploadVideo.Succeeded)
@@ -1173,8 +1173,8 @@ namespace InstagramApiSharp.API.Processors
 
                 var uploadPhoto = await _instaApi.HelperProcessor.UploadSinglePhoto(progress,
                     video.VideoThumbnail.ConvertToImageUpload(),
-                    upProgress, 
-                    uploadVideo.Value.Item1, 
+                    upProgress,
+                    uploadVideo.Value.Item1,
                     false, null, null,
                     uploadVideo.Value.Item2);
 
@@ -1399,12 +1399,12 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("usertags", root.ToString(Formatting.None));
                 }
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, UriCreator.GetMediaUploadFinishUri(), _deviceInfo, data);
-                
+
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
 
                 request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
-                
+
                 response = await _httpRequestProcessor.SendAsync(request);
                 json = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
@@ -1443,10 +1443,10 @@ namespace InstagramApiSharp.API.Processors
         }
         private async Task<IResult<bool>> LikeUnlikeMediaInternal(Uri instaUri, string mediaId,
             InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline,
-            uint feedPosition = 0, 
-            InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None, 
+            uint feedPosition = 0,
+            InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None,
             bool? isCarouselBumpedPost = false,
-            int? carouselIndex = null, 
+            int? carouselIndex = null,
             string exploreSourceToken = null,
             string parentMediaPK = null,
             string chainingSessionId = null,
@@ -1490,10 +1490,10 @@ namespace InstagramApiSharp.API.Processors
                 var likeD = instaUri.ToString().IndexOf("/like/") != -1 ? "1" : null;
 
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post,
-                    instaUri, 
+                    instaUri,
                     _deviceInfo,
                     data,
-                    true, 
+                    true,
                     likeD);
 
                 var response = await _httpRequestProcessor.SendAsync(request);

@@ -1,7 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -54,7 +54,7 @@ namespace InstagramApiSharp.API.Processors
         /// </returns>
         Task<IResult<InstaCollectionItem>> GetSingleCollectionAsync(long collectionId,
             PaginationParameters paginationParameters);
-        
+
         /// <summary>
         ///     Get your collection for given collection id
         /// </summary>

@@ -8,9 +8,9 @@
  */
 
 using InstagramApiSharp.Classes.ResponseWrappers;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 using InstagramApiSharp.Enums;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.Models
 {
@@ -33,7 +33,7 @@ namespace InstagramApiSharp.Classes.Models
         public int Position { get; set; }
         [JsonProperty("user")]
         public InstaUserShortFriendshipResponse User { get; set; }
-        [JsonProperty("hashtag")] 
+        [JsonProperty("hashtag")]
         public InstaHashtagResponse Hashtag { get; set; }
         [JsonProperty("place")]
         public InstaPlaceResponse Place { get; set; }

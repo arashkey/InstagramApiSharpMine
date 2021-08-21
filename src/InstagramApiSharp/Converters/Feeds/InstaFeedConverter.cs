@@ -1,7 +1,7 @@
-﻿using System;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Enums;
+using System;
 
 namespace InstagramApiSharp.Converters
 {
@@ -39,7 +39,7 @@ namespace InstagramApiSharp.Converters
                     }
                     catch { }
                 }
-            if (SourceObject.Posts?.Count >0)
+            if (SourceObject.Posts?.Count > 0)
             {
                 foreach (var item in SourceObject.Posts)
                 {

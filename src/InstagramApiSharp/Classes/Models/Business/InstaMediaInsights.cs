@@ -34,5 +34,5 @@ namespace InstagramApiSharp.Classes.Models.Business
         [JsonProperty("media_organic_insights")]
         public InstaMediaInsights MediaOrganicInsights { get; set; }
     }
-    
+
 }

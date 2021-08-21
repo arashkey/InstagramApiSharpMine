@@ -1,13 +1,12 @@
 ﻿using InstagramApiSharp.API;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
-using InstagramApiSharp.Helpers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
 using System.Globalization;
-using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace InstagramApiSharp.Helpers
 {
@@ -128,7 +127,7 @@ namespace InstagramApiSharp.Helpers
 
         public static Uri GetBroadcastCommentUri(string broadcastId, string lastcommentts = "")
         {
-            if(lastcommentts == "")
+            if (lastcommentts == "")
             {
                 if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.LIVE_GET_COMMENT, broadcastId), out var instaUri))
                     throw new Exception("Cant create URI for broadcast get comments");
@@ -283,7 +282,7 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for challenge require url");
             return instaUri;
         }
-        public static Uri GetChallengeRequireFirstUri(string apiPath, Classes.Android.DeviceInfo. AndroidDevice device, string challengeContext)
+        public static Uri GetChallengeRequireFirstUri(string apiPath, Classes.Android.DeviceInfo.AndroidDevice device, string challengeContext)
         {
             if (!apiPath.EndsWith("/"))
                 apiPath += "/";
@@ -540,11 +539,17 @@ namespace InstagramApiSharp.Helpers
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.GET_DIRECT_INBOX, out var instaUri))
                 throw new Exception("Cant create URI for get inbox");
             return !string.IsNullOrEmpty(nextId)
-                ? new UriBuilder(instaUri) { Query = $"visual_message_return_type=unseen&thread_message_limit=10&limit=20&" +
-                $"persistentBadging=true&use_unified_inbox=true&cursor={nextId}&direction=older&seq_id={seqId}" }.Uri
+                ? new UriBuilder(instaUri)
+                {
+                    Query = $"visual_message_return_type=unseen&thread_message_limit=10&limit=20&" +
+                $"persistentBadging=true&use_unified_inbox=true&cursor={nextId}&direction=older&seq_id={seqId}"
+                }.Uri
 
-                 : new UriBuilder(instaUri) { Query = "visual_message_return_type=unseen&thread_message_limit=10&limit=20&" +
-                 "persistentBadging=true&use_unified_inbox=true" }.Uri;
+                 : new UriBuilder(instaUri)
+                 {
+                     Query = "visual_message_return_type=unseen&thread_message_limit=10&limit=20&" +
+                 "persistentBadging=true&use_unified_inbox=true"
+                 }.Uri;
             //: instaUri;
             //        return instaUri
             ////GET /api/v1/direct_v2/inbox/?visual_message_return_type=unseen&persistentBadging=true&use_unified_inbox=true
@@ -1116,7 +1121,7 @@ namespace InstagramApiSharp.Helpers
         public static Uri GetMediaShareUri(InstaMediaType mediaType)
         {
             var type = "photo";
-            switch(mediaType)
+            switch (mediaType)
             {
                 case InstaMediaType.Video:
                     type = "video";
@@ -1320,7 +1325,7 @@ namespace InstagramApiSharp.Helpers
             excludeList = excludeList ?? new List<long>();
             var excludeListStr = string.Empty;
 
-            if(excludeList?.Count() > 0)
+            if (excludeList?.Count() > 0)
                 excludeListStr = $"[{string.Join(",", excludeList)}]";
 
             if (!Uri.TryCreate(BaseInstagramUri,
@@ -1521,9 +1526,9 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for suggested search");
             return instaUri;
         }
-        public static Uri GetTopSearchUri(string rankToken,string querry = "", InstaDiscoverSearchType searchType = InstaDiscoverSearchType.Users, int timezone_offset = 12600)
+        public static Uri GetTopSearchUri(string rankToken, string querry = "", InstaDiscoverSearchType searchType = InstaDiscoverSearchType.Users, int timezone_offset = 12600)
         {
-            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.FBSEARCH_TOPSEARCH_FALT_PARAMETER,rankToken,timezone_offset,querry, searchType.ToString().ToLower()), out var instaUri))
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.FBSEARCH_TOPSEARCH_FALT_PARAMETER, rankToken, timezone_offset, querry, searchType.ToString().ToLower()), out var instaUri))
                 throw new Exception("Cant create URI for suggested search");
             return instaUri;
         }
@@ -1681,7 +1686,7 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetUserFollowersUri(long userPk, string rankToken, string searchQuery, bool mutualsfirst = false, 
+        public static Uri GetUserFollowersUri(long userPk, string rankToken, string searchQuery, bool mutualsfirst = false,
             string maxId = "", InstaFollowOrderType orderBy = InstaFollowOrderType.Default)
         {
             if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.FRIENDSHIPS_USER_FOLLOWERS, userPk),
@@ -1913,8 +1918,8 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for search places");
 
             var parameters = $"timezone_offset={timezoneOffset}&";
-            
-            if(lat!= null && lng != null)
+
+            if (lat != null && lng != null)
                 parameters += $"lat={lat.Value.ToString(CultureInfo.InvariantCulture)}&lng={lng.Value.ToString(CultureInfo.InvariantCulture)}";
 
             if (!string.IsNullOrEmpty(query))
@@ -2186,7 +2191,7 @@ namespace InstagramApiSharp.Helpers
 
         public static Uri GetStoryPollVotersUri(string storyMediaId, string pollId, string maxId, uint abc)
         {
-            if (!Uri.TryCreate(BaseInstagramUri, 
+            if (!Uri.TryCreate(BaseInstagramUri,
                 string.Format(InstaApiConstants.MEDIA_STORY_POLL_VOTERS, storyMediaId, pollId, abc), out var instaUri))
                 throw new Exception("Cant create URI for get story poll voters list");
             return !string.IsNullOrEmpty(maxId)
@@ -2281,7 +2286,7 @@ namespace InstagramApiSharp.Helpers
 
         public static Uri GetLocationSearchUri()
         {
-            if (!Uri.TryCreate(BaseInstagramUri, 
+            if (!Uri.TryCreate(BaseInstagramUri,
                 InstaApiConstants.LOCATION_SEARCH, out var instaUri))
                 throw new Exception("Cant create URI for location search");
             return instaUri;
@@ -2345,9 +2350,9 @@ namespace InstagramApiSharp.Helpers
             return instaUri;
         }
 
-        public static Uri GetTopicalExploreUri(string sessionId, 
-            string maxId = null, 
-            string clusterId = null, 
+        public static Uri GetTopicalExploreUri(string sessionId,
+            string maxId = null,
+            string clusterId = null,
             int timezoneOffset = -14400)
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DISCOVER_TOPICAL_EXPLORE, out var instaUri))
@@ -2362,7 +2367,7 @@ namespace InstagramApiSharp.Helpers
                 .AddQueryParameter("timezone_offset", timezoneOffset.ToString())
                 .AddQueryParameter("session_id", sessionId)
                 .AddQueryParameter("include_fixed_destinations", "true");
-            
+
             if (clusterId?.ToLower() == "explore_all:0" || clusterId?.ToLower() == "explore_all%3A0")
             {
                 if (!string.IsNullOrEmpty(maxId))
@@ -2447,7 +2452,7 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for discover dismiss suggestion");
             return instaUri;
         }
-        public static Uri GetHashtagMediaReportUri() 
+        public static Uri GetHashtagMediaReportUri()
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.TAG_MEDIA_REPORT, out var instaUri))
                 throw new Exception("Cant create URI for hashtag media report");

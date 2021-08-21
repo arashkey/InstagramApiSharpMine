@@ -3,11 +3,9 @@
  * 
  * IRANIAN DEVELOPERS
  */
-using Newtonsoft.Json;
 using InstagramApiSharp.Classes.ResponseWrappers;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text;
 #pragma warning disable IDE1006 // Naming Styles
 
 namespace InstagramApiSharp.Classes.Models

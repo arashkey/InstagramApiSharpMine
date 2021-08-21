@@ -1,9 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
@@ -13,6 +8,11 @@ using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -273,7 +273,7 @@ namespace InstagramApiSharp.API.Processors
                 var collectionList = await GetSingleCollection(collectionId, paginationParameters);
                 if (!collectionList.Succeeded)
                     return Result.Fail(collectionList.Info, default(InstaCollectionItem));
-                
+
                 collectionsListResponse = collectionList.Value;
                 paginationParameters.NextMaxId = collectionsListResponse.NextMaxId;
                 var pagesLoaded = 1;

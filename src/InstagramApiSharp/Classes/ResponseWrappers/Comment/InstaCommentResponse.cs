@@ -40,7 +40,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         //[JsonProperty("next_max_child_cursor")] public string NextMaxChildCursor { get; set; }
 
-        [JsonProperty("preview_child_comments")] public List<InstaCommentShortResponse> PreviewChildComments { get; set; } 
+        [JsonProperty("preview_child_comments")] public List<InstaCommentShortResponse> PreviewChildComments { get; set; }
 
         [JsonProperty("other_preview_users")] public List<InstaUserShortResponse> OtherPreviewUsers { get; set; }
 

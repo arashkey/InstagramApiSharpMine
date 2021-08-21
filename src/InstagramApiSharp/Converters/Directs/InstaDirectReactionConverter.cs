@@ -7,7 +7,6 @@
  */
 
 using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using System;
 

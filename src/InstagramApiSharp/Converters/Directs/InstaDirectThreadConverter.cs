@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace InstagramApiSharp.Converters
@@ -39,7 +39,7 @@ namespace InstagramApiSharp.Converters
                 NewestCursor = SourceObject.NewestCursor,
                 ThreadType = SourceObject.ThreadType,
                 Title = SourceObject.Title,
-            
+
                 MentionsMuted = SourceObject.MentionsMuted ?? false,
                 Archived = SourceObject.Archived ?? false,
                 ApprovalRequiredForNewMembers = SourceObject.ApprovalRequiredForNewMembers ?? false,
@@ -119,7 +119,7 @@ namespace InstagramApiSharp.Converters
                 if (thread.LastActivity != thread.LastSeenAt?.LastOrDefault()?.SeenTime)
                     thread.HasUnreadMessage = true;
             }
-            catch 
+            catch
             {
                 thread.HasUnreadMessage = false;
             }

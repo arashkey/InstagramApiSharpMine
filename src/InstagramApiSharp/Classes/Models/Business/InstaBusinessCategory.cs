@@ -7,11 +7,9 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.Models.Business
 {
@@ -24,7 +22,7 @@ namespace InstagramApiSharp.Classes.Models.Business
     }
     public class InstaBusinessCategoryList : List<InstaBusinessCategory> { }
 
-  
+
     public class InstaBusinessSuggestedCategory : InstaBusinessCategory
     {
         [JsonProperty("super_cat_name")]

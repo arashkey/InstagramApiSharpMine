@@ -9,9 +9,9 @@
 
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using InstagramApiSharp.Enums;
 using InstagramApiSharp.Helpers;
 using System;
-using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.Converters
 {

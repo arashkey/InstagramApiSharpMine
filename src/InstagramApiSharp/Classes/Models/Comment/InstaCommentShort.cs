@@ -5,7 +5,7 @@ namespace InstagramApiSharp.Classes.Models
 {
     public class InstaCommentShort : INotifyPropertyChanged
     {
-        public InstaContentType ContentType { get; set; } 
+        public InstaContentType ContentType { get; set; }
 
         public InstaUserShort User { get; set; }
 

@@ -6,23 +6,23 @@
  * 
  * IRANIAN DEVELOPERS
  */
- 
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
+
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Converters;
+using InstagramApiSharp.Enums;
 using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
-using InstagramApiSharp.Enums;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -375,7 +375,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        public async Task<IResult<InstaTVBrowseFeed>> BrowseFeedAsync(PaginationParameters paginationParameters, 
+        public async Task<IResult<InstaTVBrowseFeed>> BrowseFeedAsync(PaginationParameters paginationParameters,
             CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -543,7 +543,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="title">Title</param>
         /// <param name="caption">Caption</param>
         /// <param name="sharePreviewToFeed">Show a preview on the feed</param>
-        public async Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress, 
+        public async Task<IResult<InstaMedia>> UploadVideoAsync(Action<InstaUploaderProgress> progress,
             InstaVideoUpload video, string title, string caption, bool sharePreviewToFeed = false/*, InstaVideoUploadOption videoUploadOption = null*/)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -655,7 +655,7 @@ namespace InstagramApiSharp.API.Processors
 
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                
+
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaTVChannel>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaTVChannelResponse>(json);
@@ -701,7 +701,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaTVBrowseFeedResponse>(exception);
             }
         }
-        private async Task<IResult<bool>> EpisodeTVSeriesAsync(Uri instaUri, string mediaPk) 
+        private async Task<IResult<bool>> EpisodeTVSeriesAsync(Uri instaUri, string mediaPk)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try

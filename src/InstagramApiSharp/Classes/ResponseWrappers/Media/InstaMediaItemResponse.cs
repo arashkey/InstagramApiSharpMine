@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
@@ -108,8 +108,8 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
 
 
-        [JsonProperty("explore_source_token")] public string ExploreSourceToken { get; set; } 
-        [JsonProperty("explore_context")] public string ExploreContext { get; set; }  
+        [JsonProperty("explore_source_token")] public string ExploreSourceToken { get; set; }
+        [JsonProperty("explore_context")] public string ExploreContext { get; set; }
         [JsonProperty("explore")] public InstaMediaExplore Explore { get; set; }
         [JsonProperty("mezql_token")] public string MezqlToken { get; set; }
         [JsonProperty("connection_id")] public string ConnectionId { get; set; }

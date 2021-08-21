@@ -7,9 +7,8 @@
  * IRANIAN DEVELOPERS
  */
 
-using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
     public class InstaDiscoverSuggestedSearchesResponse
@@ -21,5 +20,5 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("status")]
         public string Status { get; set; }
     }
-    
+
 }

@@ -1,10 +1,9 @@
-using System.Net.Http;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
-using InstagramApiSharp.Logger;
-using System;
-using InstagramApiSharp.Enums;
 using InstagramApiSharp.Classes.SessionHandlers;
+using InstagramApiSharp.Enums;
+using InstagramApiSharp.Logger;
+using System.Net.Http;
 
 namespace InstagramApiSharp.API.Builder
 {

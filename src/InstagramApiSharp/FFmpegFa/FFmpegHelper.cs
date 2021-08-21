@@ -7,11 +7,9 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -74,7 +72,7 @@ namespace InstagramApiSharp.FFmpegFa
             var buffer = File.ReadAllBytes(inputFile);
             string fileSha1 = "";
             using (var cryptoProvider = new SHA1CryptoServiceProvider())
-                fileSha1 = BitConverter.ToString(cryptoProvider.ComputeHash(buffer)).Replace("-","");
+                fileSha1 = BitConverter.ToString(cryptoProvider.ComputeHash(buffer)).Replace("-", "");
 
             var newFolder = $"{outputFolder}\\{Path.GetRandomFileName()}";
             Directory.CreateDirectory(newFolder);
@@ -94,7 +92,8 @@ namespace InstagramApiSharp.FFmpegFa
             process.StartInfo.RedirectStandardError = true;
             process.Start();
 
-            new Thread(new ThreadStart(() => {
+            new Thread(new ThreadStart(() =>
+            {
 
                 StreamReader sr = process.StandardError;
                 Output("Start.....");
@@ -170,7 +169,8 @@ namespace InstagramApiSharp.FFmpegFa
             process.StartInfo.RedirectStandardError = true;
             process.Start();
 
-            new Thread(new ThreadStart(() => {
+            new Thread(new ThreadStart(() =>
+            {
 
                 StreamReader sr = process.StandardError;
                 Output("Start.....");
@@ -240,7 +240,7 @@ namespace InstagramApiSharp.FFmpegFa
             //-vframes 1              only handle one video frame
             //output.jpg              output filename, should have a well-known extension
             var cmd = $"-i \"{inputFile}\" -ss {time.EncodeTime()} -vframes 1 \"{outputFile}\"";
-            
+
 
             Output(cmd);
 
@@ -254,7 +254,8 @@ namespace InstagramApiSharp.FFmpegFa
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardError = true;
             process.Start();
-            new Thread(new ThreadStart(() => {
+            new Thread(new ThreadStart(() =>
+            {
 
                 StreamReader sr = process.StandardError;
                 Output("Start.....");
@@ -294,7 +295,8 @@ namespace InstagramApiSharp.FFmpegFa
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardError = true;
             process.Start();
-            new Thread(new ThreadStart(() => {
+            new Thread(new ThreadStart(() =>
+            {
 
                 StreamReader sr = process.StandardError;
                 Output("Start.....");
@@ -370,7 +372,8 @@ namespace InstagramApiSharp.FFmpegFa
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardError = true;
             process.Start();
-            new Thread(new ThreadStart(() => {
+            new Thread(new ThreadStart(() =>
+            {
 
                 StreamReader sr = process.StandardError;
                 Output("Start.....");
@@ -449,7 +452,8 @@ namespace InstagramApiSharp.FFmpegFa
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.RedirectStandardError = true;
             process.Start();
-            new Thread(new ThreadStart(() => {
+            new Thread(new ThreadStart(() =>
+            {
 
                 StreamReader sr = process.StandardError;
                 Output("Start.....");
@@ -578,7 +582,7 @@ namespace InstagramApiSharp.FFmpegFa
         void Output(object obj)
         {
             if (obj == null)
-                return;;
+                return; ;
             if (!IsDebugMode)
                 return;
             Debug.WriteLine(obj);

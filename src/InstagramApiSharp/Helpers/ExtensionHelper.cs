@@ -19,7 +19,6 @@ using InstagramApiSharp.Enums;
 using InstagramApiSharp.API.Versions;
 using InstagramApiSharp.Helpers;
 using System.Text;
-using System.Security.Cryptography;
 using InstagramApiSharp.Classes;
 using System.Net.Http;
 #if NETSTANDARD || WINDOWS_UWP
@@ -87,7 +86,7 @@ namespace InstagramApiSharp
             //Mozilla/5.0 (Linux; Android 7.0; PRA-LA1 Build/HONORPRA-LA1; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/69.0.3497.100 Mobile Safari/537.36
 
             return string.Format(InstaApiConstants.FACEBOOK_USER_AGENT,
-              deviceInfo.AndroidVer.VersionNumber,deviceInfo.DeviceModelIdentifier,
+              deviceInfo.AndroidVer.VersionNumber, deviceInfo.DeviceModelIdentifier,
               $"{deviceInfo.AndroidBoardName}{deviceInfo.DeviceModel}");
         }
 
@@ -177,7 +176,7 @@ namespace InstagramApiSharp
 #if NETSTANDARD || WINDOWS_UWP
         static private readonly SecureRandom secureRandom = new SecureRandom();
 
-        public static string GetEncryptedPassword(this IInstaApi api, string password, long? providedTime = null) 
+        public static string GetEncryptedPassword(this IInstaApi api, string password, long? providedTime = null)
         {
             var pubKey = api.GetLoggedUser().PublicKey;
             var pubKeyId = api.GetLoggedUser().PublicKeyId;
@@ -212,7 +211,7 @@ namespace InstagramApiSharp
             byte[] encKeyIdBytes = BitConverter.GetBytes(Convert.ToUInt16(pubKeyId));
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(encKeyIdBytes);
-            encKeyIdBytes[0] = 1; 
+            encKeyIdBytes[0] = 1;
             var payload = Convert.ToBase64String(encKeyIdBytes.Concat(iv).Concat(buffersSize).Concat(encryptedKey).Concat(tag).Concat(ciphertext).ToArray());
 
             return $"#PWD_INSTAGRAM:4:{time}:{payload}";
@@ -272,7 +271,7 @@ namespace InstagramApiSharp
 
         public static string GetRandomQuality()
         {
-            var qualities = new string[] { "95", "90", "85", "88", "97"};
+            var qualities = new string[] { "95", "90", "85", "88", "97" };
 
             return qualities[Rnd.Next(qualities.Length)];
         }
@@ -376,7 +375,7 @@ namespace InstagramApiSharp
 
         public static InstaTVChannelType GetChannelType(this string type)
         {
-            if(string.IsNullOrEmpty(type))
+            if (string.IsNullOrEmpty(type))
                 return InstaTVChannelType.User;
             switch (type.ToLower())
             {
@@ -395,7 +394,7 @@ namespace InstagramApiSharp
         }
         public static string GetRealChannelType(this InstaTVChannelType type)
         {
-            switch(type)
+            switch (type)
             {
                 case InstaTVChannelType.ChronoFollowing:
                     return "chrono_following";
@@ -498,7 +497,7 @@ namespace InstagramApiSharp
         }
         public static string GetChannelDeviceType(this InstaPushChannelType type)
         {
-            switch(type)
+            switch (type)
             {
                 default:
                 case InstaPushChannelType.Mqtt:
@@ -542,7 +541,7 @@ namespace InstagramApiSharp
                 .Select(x => pool[Rnd.Next(0, pool.Length)]);
             return new string(chars.ToArray());
         }
-        
+
         public static void PrintInDebug(this object obj)
         {
             System.Diagnostics.Debug.WriteLine(Convert.ToString(obj));
@@ -565,7 +564,7 @@ namespace InstagramApiSharp
             return new InstaComment
             {
                 ContentType = commentShort.ContentType,
-                User=  commentShort.User,
+                User = commentShort.User,
                 Pk = commentShort.Pk,
                 Text = commentShort.Text,
                 Type = commentShort.Type,
@@ -687,7 +686,7 @@ namespace InstagramApiSharp
                 {"rotation", storyMention.Rotation},
                 {"user_id", storyMention.Pk}
             };
-            if(isNew)
+            if (isNew)
             {
                 jObj.Add("type", "mention");
                 jObj.Add("is_sticker", true);

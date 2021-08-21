@@ -126,7 +126,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Get suggested categories
         /// </summary>
         Task<IResult<InstaBusinessSuggestedCategoryList>> GetSuggestedCategoriesAsync();
-        
+
         /// <summary>
         ///     Get branded content approval settings
         ///     <para>Note: Only approved partners can tag you in branded content when you require approvals.</para>
@@ -161,7 +161,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="threadId">Thread id</param>
         Task<IResult<bool>> StarDirectThreadAsync(string threadId);
-        
+
         /// <summary>
         ///     Unstar direct thread
         /// </summary>

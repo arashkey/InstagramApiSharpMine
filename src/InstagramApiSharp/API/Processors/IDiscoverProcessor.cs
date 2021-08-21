@@ -8,7 +8,6 @@
  */
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Enums;
 using System.Threading;
 using System.Threading.Tasks;
@@ -94,7 +93,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="query">Query to search</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="count">Count</param>
-        Task<IResult<InstaDiscoverSearchResult>> SearchPeopleAsync(string query, 
+        Task<IResult<InstaDiscoverSearchResult>> SearchPeopleAsync(string query,
             PaginationParameters paginationParameters, int count = 30);
 
         /// <summary>

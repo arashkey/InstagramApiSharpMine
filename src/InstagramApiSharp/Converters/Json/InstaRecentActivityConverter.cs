@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using InstagramApiSharp.Classes.ResponseWrappers;
+﻿using InstagramApiSharp.Classes.ResponseWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Converters.Json
 {
@@ -27,7 +27,7 @@ namespace InstagramApiSharp.Converters.Json
             }
             else
             {
-                if(token.SelectToken("friend_request_stories") != null)
+                if (token.SelectToken("friend_request_stories") != null)
                 {
                     var friendRequests = token.SelectToken("friend_request_stories")?.ToObject<List<InstaRecentActivityFeedResponse>>();
                     if (friendRequests?.Count > 0)

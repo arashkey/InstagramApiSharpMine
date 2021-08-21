@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Globalization;
 
 namespace InstagramApiSharp.Classes.Android.DeviceInfo
 {
@@ -110,7 +109,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         private static AndroidDevice LastDevice;
         public static AndroidDevice GetRandomAndroidDevice()
         {
-            TryLabel:
+        TryLabel:
             var randomDeviceIndex = Rnd.Next(0, DevicesNames.Count);
             var device = AndroidAndroidDeviceSets.ElementAt(randomDeviceIndex).Value;
             device.FamilyDeviceGuid = device.PhoneGuid = Guid.NewGuid();

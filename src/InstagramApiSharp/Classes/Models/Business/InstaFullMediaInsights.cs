@@ -7,12 +7,9 @@
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.Enums;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using InstagramApiSharp.Classes.ResponseWrappers.Business;
-using InstagramApiSharp.Enums;
-using Newtonsoft.Json;
 namespace InstagramApiSharp.Classes.Models.Business
 {
     public class InstaFullMediaInsights
