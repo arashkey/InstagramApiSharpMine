@@ -10,7 +10,6 @@
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using System;
-using System.Linq;
 
 namespace InstagramApiSharp.Converters
 {

@@ -6,8 +6,8 @@
  * 
  * IRANIAN DEVELOPERS
  */
-using Newtonsoft.Json;
 using InstagramApiSharp.Classes.Models;
+using Newtonsoft.Json;
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
     public class InstaRUploadResponse : InstaDefaultResponse

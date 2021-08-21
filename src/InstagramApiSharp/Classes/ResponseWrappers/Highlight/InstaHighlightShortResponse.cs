@@ -7,9 +7,9 @@
  * IRANIAN DEVELOPERS
  */
 
-using System.Collections.Generic;
 using InstagramApiSharp.Classes.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
     public class InstaHighlightShortListResponse : InstaDefault

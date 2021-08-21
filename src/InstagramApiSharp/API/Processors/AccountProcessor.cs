@@ -802,7 +802,7 @@ namespace InstagramApiSharp.API.Processors
                 string GetPassword(string pass) => _instaApi.GetEncryptedPassword(pass, time);
 
                 string enc1;
-                string enc2; 
+                string enc2;
                 string enc3;
                 if (_instaApi._encryptedPasswordEncryptor != null)
                 {
@@ -872,7 +872,7 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var editRequest = await GetRequestForEditProfileAsync();
-                if(!editRequest.Succeeded)
+                if (!editRequest.Succeeded)
                     return Result.Fail(editRequest.Info, (InstaUserEdit)null);
                 var user = editRequest.Value.Username;
 
@@ -1134,7 +1134,7 @@ namespace InstagramApiSharp.API.Processors
                 progress?.Invoke(upProgress);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-            
+
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     upProgress.UploadState = InstaUploadState.Error;
@@ -1228,9 +1228,9 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidator.Validate(_userAuthValidate);
             return await _instaApi.HelperProcessor.SendMediaPhotoAsync(null, nametagImage.ConvertToImageUpload(), null, null, true);
         }
-#endregion Profile edit
+        #endregion Profile edit
 
-#region Story settings
+        #region Story settings
         /// <summary>
         ///     Remove trusted device
         /// </summary>        
@@ -1305,7 +1305,7 @@ namespace InstagramApiSharp.API.Processors
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try
-            {            
+            {
                 var instaUri = UriCreator.GetSetReelSettingsUri();
                 var data = new JObject
                 {
@@ -1401,7 +1401,7 @@ namespace InstagramApiSharp.API.Processors
                     return Result.UnExpectedResponse<bool>(response, json);
 
                 var obj = JsonConvert.DeserializeObject<InstaAccountArchiveStory>(json);
-                
+
                 return Result.Success(obj.ReelAutoArchive.ToLower() == "on");
             }
             catch (HttpRequestException httpException)
@@ -1579,10 +1579,10 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaAccountCheck>(exception);
             }
         }
-#endregion Story settings
+        #endregion Story settings
 
-#region two factor authentication enable/disable
-        
+        #region two factor authentication enable/disable
+
         /// <summary>
         ///     Get Security settings (two factor authentication and backup codes).
         /// </summary>
@@ -1683,7 +1683,7 @@ namespace InstagramApiSharp.API.Processors
         public async Task<IResult<InstaTwoFactorTrustedNotification>> ApproveNewLoginRequestAsync(
             string twoFactorIdentifier,
             string requestorDeviceId) =>
-            await Update2FATrustedNotification(Insta2FANotificationReviewStatus.Approved, twoFactorIdentifier, 
+            await Update2FATrustedNotification(Insta2FANotificationReviewStatus.Approved, twoFactorIdentifier,
                 requestorDeviceId).ConfigureAwait(false);
 
         /// <summary>
@@ -2029,9 +2029,9 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<TwoFactorRegenBackupCodes>(exception);
             }
         }
-#endregion two factor authentication enable/disable
+        #endregion two factor authentication enable/disable
 
-#region Other functions
+        #region Other functions
 
         /// <summary>
         ///     Enable presence (people can track your activities and you can see their activies too)
@@ -2058,7 +2058,7 @@ namespace InstagramApiSharp.API.Processors
             try
             {
                 var instaUri = UriCreator.GetPresenceUri(_httpHelper._apiVersion.SignatureKey);
-                
+
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
@@ -2119,7 +2119,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaUser>(exception);
             }
         }
-        
+
         /// <summary>
         ///     Switch to business account
         /// </summary>
@@ -2163,7 +2163,7 @@ namespace InstagramApiSharp.API.Processors
             {
                 //[NOT WORKING]
                 var instaUri = UriCreator.GetCreateBusinessInfoUri();
-                
+
                 var publicPhoneContact = new JObject
                 {
                     {"public_phone_number", phoneNumber},
@@ -2181,7 +2181,7 @@ namespace InstagramApiSharp.API.Processors
                 //  "category_id": "2700"
                 //}
                 var pub = edit.Value.IsPrivate;
-                
+
                 var data = new JObject
                 {
                     {"set_public", pub.ToString().ToLower()},
@@ -2284,7 +2284,7 @@ namespace InstagramApiSharp.API.Processors
                     //{"enabled":true,"status":"ok"} // false
                     return Result.Success(enable == enabled);
                 }
-                else 
+                else
                     return Result.UnExpectedResponse<bool>(response, json);
             }
             catch (HttpRequestException httpException)

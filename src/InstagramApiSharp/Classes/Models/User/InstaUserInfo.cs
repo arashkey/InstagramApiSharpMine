@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using InstagramApiSharp.Enums;
+﻿using InstagramApiSharp.Enums;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace InstagramApiSharp.Classes.Models

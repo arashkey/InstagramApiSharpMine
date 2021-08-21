@@ -1,9 +1,6 @@
-﻿using System;
-using System.Linq;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System;
 
 namespace InstagramApiSharp.Converters
 {
@@ -34,7 +31,7 @@ namespace InstagramApiSharp.Converters
                     //    feed.HashtagStories.Add(ConvertersFabric.Instance
                     //        .GetHashtagStoryConverter(itemResponse.ToObject<InstaHashtagStoryResponse>()).Convert());
                     //else
-                        feed.Items.Add(ConvertersFabric.Instance.GetReelFeedConverter(reel).Convert());
+                    feed.Items.Add(ConvertersFabric.Instance.GetReelFeedConverter(reel).Convert());
                 }
             }
 

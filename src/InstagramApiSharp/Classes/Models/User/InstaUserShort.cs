@@ -17,7 +17,7 @@ namespace InstagramApiSharp.Classes.Models
         public bool HasAnonymousProfilePicture { get; set; }
         public long LatestReelMedia { get; set; }
 
-        public static InstaUserShort Empty => new InstaUserShort {FullName = string.Empty, UserName = string.Empty};
+        public static InstaUserShort Empty => new InstaUserShort { FullName = string.Empty, UserName = string.Empty };
 
         public bool Equals(InstaUserShort user)
         {

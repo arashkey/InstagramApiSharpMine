@@ -7,21 +7,7 @@
  * IRANIAN DEVELOPERS
  */
 
- using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net;
-using System.Net.Http;
-using System.Net.Sockets;
-using System.IO;
-using System.Diagnostics;
-using InstagramApiSharp;
-using InstagramApiSharp.Helpers;
-using InstagramApiSharp.Enums;
-using InstagramApiSharp.Logger;
-using InstagramApiSharp.Classes;
-using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Classes.ResponseWrappers;
+using System;
 //using MQTTnet.Client;
 //using MQTTnet.Client.Connecting;
 //using MQTTnet.Client.Disconnecting;
@@ -36,7 +22,6 @@ using InstagramApiSharp.Classes.ResponseWrappers;
 //using System.Collections.Concurrent;
 //using System.Collections.ObjectModel;
 //using MQTTnet;
-using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API
 {

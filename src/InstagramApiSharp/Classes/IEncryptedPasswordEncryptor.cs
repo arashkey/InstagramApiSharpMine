@@ -1,7 +1,4 @@
 ﻿using InstagramApiSharp.API;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace InstagramApiSharp.Classes
@@ -28,7 +25,7 @@ namespace InstagramApiSharp.Classes
         /// <param name="providedTime">Provided time in unix (optional)</param>
         Task<(string, string, string)> GetEncryptedPassword(IInstaApi api, 
             string oldPassword,
-            string newPassword, 
+            string newPassword,
             long? providedTime = null);
     }
 }

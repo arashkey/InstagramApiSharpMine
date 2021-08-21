@@ -1,7 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -106,7 +106,7 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaPlaceList" />
         /// </returns>
-        Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, PaginationParameters paginationParameters, 
+        Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, PaginationParameters paginationParameters,
             CancellationToken cancellationToken);
 
         /// <summary>

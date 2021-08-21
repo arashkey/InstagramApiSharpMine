@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Text;
 using System;
 using InstagramApiSharp.Classes;
 #if NETFRAMEWORK || NETSTANDARD

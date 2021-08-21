@@ -9,7 +9,6 @@
 
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
-using System.Collections.Generic;
 namespace InstagramApiSharp.Converters
 {
     internal class InstaHighlightConverter : IObjectConverter<InstaHighlightFeeds, InstaHighlightFeedsResponse>
@@ -23,40 +22,40 @@ namespace InstagramApiSharp.Converters
                 ShowEmptyState = SourceObject.ShowEmptyState ?? false,
                 Status = SourceObject.Status
             };
-            if(SourceObject.Items?.Count > 0)
-            foreach (var item in SourceObject.Items)
-            {
-                var hLight = new InstaHighlightFeed
+            if (SourceObject.Items?.Count > 0)
+                foreach (var item in SourceObject.Items)
                 {
-                    CanReply = item.CanReply,
-                    CanReshare = item.CanReshare,
-                    HighlightId = item.Id,
-                    LatestReelMedia = item.LatestReelMedia,
-                    MediaCount = item.MediaCount,
-                    PrefetchCount = item.PrefetchCount,
-                    RankedPosition = item.RankedPosition,
-                    ReelType = item.ReelType,
-                    Seen = item.Seen,
-                    SeenRankedPosition = item.SeenRankedPosition,
-                    Title = item.Title
-                };
-                
-                hLight.CoverMedia = new InstaHighlightCoverMedia
-                {
-                     CropRect = item.CoverMedia.CropRect,
-                     MediaId = item.CoverMedia.MediaId
-                };
-                if(item.CoverMedia.CroppedImageVersion!= null)
-                    hLight.CoverMedia.CroppedImage = new InstaImage(item.CoverMedia.CroppedImageVersion.Url, int.Parse(item.CoverMedia.CroppedImageVersion.Width),int.Parse(item.CoverMedia.CroppedImageVersion.Height));
-                if (item.CoverMedia.FullImageVersion != null)
-                    hLight.CoverMedia.Image = new InstaImage(item.CoverMedia.FullImageVersion.Url, int.Parse(item.CoverMedia.FullImageVersion.Width), int.Parse(item.CoverMedia.FullImageVersion.Height));
-                var userConverter = ConvertersFabric.Instance.GetUserShortConverter(item.User);
-                hLight.User = userConverter.Convert();
+                    var hLight = new InstaHighlightFeed
+                    {
+                        CanReply = item.CanReply,
+                        CanReshare = item.CanReshare,
+                        HighlightId = item.Id,
+                        LatestReelMedia = item.LatestReelMedia,
+                        MediaCount = item.MediaCount,
+                        PrefetchCount = item.PrefetchCount,
+                        RankedPosition = item.RankedPosition,
+                        ReelType = item.ReelType,
+                        Seen = item.Seen,
+                        SeenRankedPosition = item.SeenRankedPosition,
+                        Title = item.Title
+                    };
 
-                highlight.Items.Add(hLight);
-            }
+                    hLight.CoverMedia = new InstaHighlightCoverMedia
+                    {
+                        CropRect = item.CoverMedia.CropRect,
+                        MediaId = item.CoverMedia.MediaId
+                    };
+                    if (item.CoverMedia.CroppedImageVersion != null)
+                        hLight.CoverMedia.CroppedImage = new InstaImage(item.CoverMedia.CroppedImageVersion.Url, int.Parse(item.CoverMedia.CroppedImageVersion.Width), int.Parse(item.CoverMedia.CroppedImageVersion.Height));
+                    if (item.CoverMedia.FullImageVersion != null)
+                        hLight.CoverMedia.Image = new InstaImage(item.CoverMedia.FullImageVersion.Url, int.Parse(item.CoverMedia.FullImageVersion.Width), int.Parse(item.CoverMedia.FullImageVersion.Height));
+                    var userConverter = ConvertersFabric.Instance.GetUserShortConverter(item.User);
+                    hLight.User = userConverter.Convert();
 
-            if(SourceObject.TVChannel != null)
+                    highlight.Items.Add(hLight);
+                }
+
+            if (SourceObject.TVChannel != null)
             {
                 try
                 {

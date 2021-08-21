@@ -7,11 +7,10 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using System;
+using System.Linq;
 
 namespace InstagramApiSharp.Converters
 {
@@ -33,7 +32,7 @@ namespace InstagramApiSharp.Converters
             if (SourceObject.Medias != null && SourceObject.Medias.Any())
                 foreach (var media in SourceObject.Medias)
                     productMedia.Medias.Add(ConvertersFabric.Instance.GetSingleMediaConverter(media).Convert());
-            
+
             return productMedia;
         }
     }

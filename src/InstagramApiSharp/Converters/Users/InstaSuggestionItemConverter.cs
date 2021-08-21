@@ -9,11 +9,6 @@
 
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
-using InstagramApiSharp.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 namespace InstagramApiSharp.Converters
 {
     internal class InstaSuggestionItemConverter : IObjectConverter<InstaSuggestionItem, InstaSuggestionItemResponse>

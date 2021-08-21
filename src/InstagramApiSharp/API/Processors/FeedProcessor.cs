@@ -1,22 +1,21 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Converters;
 using InstagramApiSharp.Converters.Json;
+using InstagramApiSharp.Enums;
 using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
-using InstaRecentActivityConverter = InstagramApiSharp.Converters.Json.InstaRecentActivityConverter;
-using System.Diagnostics;
+using System;
 using System.Collections.Generic;
-using InstagramApiSharp.Enums;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
+using InstaRecentActivityConverter = InstagramApiSharp.Converters.Json.InstaRecentActivityConverter;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -69,7 +68,7 @@ namespace InstagramApiSharp.API.Processors
         /// </returns>
         public async Task<IResult<InstaMediaList>> GetExploreChannelVideosAsync(string channelId, string firstMediaId,
             PaginationParameters paginationParameters, CancellationToken cancellationToken) =>
-            await _instaApi.HelperProcessor.GetChannelVideosAsync(UriCreator.GetExploreChannelVideosUri(channelId), 
+            await _instaApi.HelperProcessor.GetChannelVideosAsync(UriCreator.GetExploreChannelVideosUri(channelId),
                 firstMediaId, paginationParameters, cancellationToken).ConfigureAwait(false);
 
         /// <summary>
@@ -315,7 +314,7 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>
-        public async Task<IResult<InstaMediaList>> GetSavedFeedAsync(PaginationParameters paginationParameters, 
+        public async Task<IResult<InstaMediaList>> GetSavedFeedAsync(PaginationParameters paginationParameters,
             CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -409,7 +408,7 @@ namespace InstagramApiSharp.API.Processors
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
-                
+
                 InstaTagFeed Convert(InstaTagFeedResponse instaTagFeedResponse)
                 {
                     return ConvertersFabric.Instance.GetTagFeedConverter(instaTagFeedResponse).Convert();
@@ -476,7 +475,7 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
-            string[] seenMediaIds = null, 
+            string[] seenMediaIds = null,
             bool refreshRequest = false,
             bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,
@@ -505,7 +504,7 @@ namespace InstagramApiSharp.API.Processors
         ///     <see cref="InstaFeed" />
         /// </returns>
         public async Task<IResult<InstaFeed>> GetUserTimelineFeedAsync(PaginationParameters paginationParameters,
-            CancellationToken cancellationToken, 
+            CancellationToken cancellationToken,
             string[] seenMediaIds = null,
             bool refreshRequest = false,
             bool removeAds = false,
@@ -521,7 +520,7 @@ namespace InstagramApiSharp.API.Processors
             {
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
-                
+
                 if (refreshRequest || string.IsNullOrEmpty(paginationParameters.SessionId))
                     paginationParameters.SessionId = Guid.NewGuid().ToString();
 
@@ -550,7 +549,7 @@ namespace InstagramApiSharp.API.Processors
 
                     var nextFeed = await GetUserTimelineFeed(paginationParameters, null, false, removeAds, paginationSource,
                     batteryLevel, isCharging, isDarkMode, willSoundOn);
-                    
+
                     if (!nextFeed.Succeeded)
                         return Result.Fail(nextFeed.Info, feed);
 
@@ -561,7 +560,7 @@ namespace InstagramApiSharp.API.Processors
                     paginationParameters.NextMaxId = nextFeed.Value.NextMaxId;
                     paginationParameters.PagesLoaded++;
                 }
-                
+
                 return Result.Success(feed);
             }
             catch (HttpRequestException httpException)
@@ -770,7 +769,7 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        private async Task<IResult<InstaFeedResponse>> GetUserTimelineFeed(PaginationParameters paginationParameters, 
+        private async Task<IResult<InstaFeedResponse>> GetUserTimelineFeed(PaginationParameters paginationParameters,
             string[] seenMediaIds = null, bool refreshRequest = false,
             bool removeAds = false,
             InstaFeedPaginationSource paginationSource = InstaFeedPaginationSource.None,
@@ -815,7 +814,7 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("is_pull_to_refresh", "1");
                     data.Add("is_split_head_load", "0");
                 }
-                else 
+                else
                 {
                     if (string.IsNullOrEmpty(paginationParameters.NextMaxId))
                     {
@@ -860,7 +859,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail(exception, default(InstaFeedResponse));
             }
         }
-        
+
         private async Task<IResult<InstaTagFeedResponse>> GetTagFeed(string tag, PaginationParameters paginationParameters)
         {
             try
@@ -900,7 +899,7 @@ namespace InstagramApiSharp.API.Processors
 
                 var mediaResponse = JsonConvert.DeserializeObject<InstaMediaListResponse>(json,
                     new InstaMediaListDataConverter());
-                
+
                 return Result.Success(mediaResponse);
             }
             catch (HttpRequestException httpException)

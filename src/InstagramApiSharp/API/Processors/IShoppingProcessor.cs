@@ -7,23 +7,9 @@
  * IRANIAN DEVELOPERS
  */
 using InstagramApiSharp.Classes;
-using InstagramApiSharp.Classes.Android.DeviceInfo;
-using InstagramApiSharp.Logger;
-using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using InstagramApiSharp.Helpers;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
-using InstagramApiSharp.Converters;
-using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Classes.Models;
-using System.Net;
-using InstagramApiSharp.Converters.Json;
-using InstagramApiSharp.Enums;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {

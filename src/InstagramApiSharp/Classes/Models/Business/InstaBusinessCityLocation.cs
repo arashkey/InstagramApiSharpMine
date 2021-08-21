@@ -7,11 +7,9 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.Models.Business
 {
     public class InstaBusinessCityLocation
@@ -30,6 +28,6 @@ namespace InstagramApiSharp.Classes.Models.Business
         [JsonExtensionData]
         internal IDictionary<string, JToken> Extras { get; set; }
     }
-    
+
 
 }

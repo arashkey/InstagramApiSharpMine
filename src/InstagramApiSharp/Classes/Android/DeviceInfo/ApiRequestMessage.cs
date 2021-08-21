@@ -1,8 +1,7 @@
-﻿using System;
-using InstagramApiSharp.API;
+﻿using InstagramApiSharp.API.Versions;
 using InstagramApiSharp.Helpers;
 using Newtonsoft.Json;
-using InstagramApiSharp.API.Versions;
+using System;
 
 namespace InstagramApiSharp.Classes.Android.DeviceInfo
 {
@@ -90,7 +89,7 @@ namespace InstagramApiSharp.Classes.Android.DeviceInfo
         internal static string GenerateUploadId()
         {
             var timeSpan = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0);
-            var uploadId = (long) timeSpan.TotalSeconds;
+            var uploadId = (long)timeSpan.TotalSeconds;
             return uploadId.ToString();
         }
         //internal static string GenerateRandomUploadIdOLD()

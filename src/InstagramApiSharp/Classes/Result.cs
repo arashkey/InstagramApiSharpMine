@@ -1,7 +1,7 @@
-﻿using System;
-using System.Net.Http;
-using InstagramApiSharp.Classes.ResponseWrappers;
+﻿using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
+using System;
+using System.Net.Http;
 
 namespace InstagramApiSharp.Classes
 {
@@ -123,7 +123,7 @@ namespace InstagramApiSharp.Classes
         static ResponseType GetResponseType(BadStatusResponse status)
         {
             var responseType = ResponseType.UnExpectedResponse;
-            if(!string.IsNullOrWhiteSpace(status.ErrorType))
+            if (!string.IsNullOrWhiteSpace(status.ErrorType))
                 switch (status.ErrorType)
                 {
                     case "checkpoint_logged_out":

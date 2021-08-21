@@ -7,10 +7,8 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
@@ -68,7 +66,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("image_versions2")]
         public InstaImageCandidatesResponse Images { get; set; }
     }
-    
+
 
     public class InstaMerchantResponse
     {

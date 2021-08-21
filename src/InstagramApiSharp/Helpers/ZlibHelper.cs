@@ -28,7 +28,7 @@ namespace InstagramApiSharp.Helpers
                 using (var zlibStream = new ZlibStream(compressedStream, CompressionMode.Decompress, true))
                     zlibStream.Write(bytes, 0, bytes.Length);
                 compressed = new byte[compressedStream.Length];
-                compressedStream.Position = 0;  
+                compressedStream.Position = 0;
                 compressedStream.Read(compressed, 0, compressed.Length);
             }
             return compressed;

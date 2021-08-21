@@ -5,16 +5,15 @@
  */
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
-using InstagramApiSharp.Logger;
-using System;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using InstagramApiSharp.Helpers;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
 using InstagramApiSharp.Classes.Models;
+using InstagramApiSharp.Helpers;
+using InstagramApiSharp.Logger;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Net;
-using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {

@@ -495,7 +495,7 @@ namespace InstagramApiSharp.API
         /// get nearby places
         /// </summary>
         public const string FBSEARCH_PLACES = API_SUFFIX + "/fbsearch/places/";
-        
+
         public const string FBSEARCH_PROFILE_SEARCH = API_SUFFIX + "/fbsearch/profile_link_search/?q={0}&count={1}";
         public const string FBSEARCH_RECENT_SEARCHES = API_SUFFIX + "/fbsearch/recent_searches/";
         public const string FBSEARCH_SUGGESTED_SEARCHS = API_SUFFIX + "/fbsearch/suggested_searches/?type={0}";
@@ -539,7 +539,7 @@ namespace InstagramApiSharp.API
         public const string FRIENDSHIPS_APPROVE = API_SUFFIX + "/friendships/approve/{0}/";
         public const string FRIENDSHIPS_AUTOCOMPLETE_USER_LIST = API_SUFFIX + "/friendships/autocomplete_user_list/";
         public const string FRIENDSHIPS_BLOCK_USER = API_SUFFIX + "/friendships/block/{0}/";
-  
+
         public const string FRIENDSHIPS_FOLLOW_USER = API_SUFFIX + "/friendships/create/{0}/";
         public const string FRIENDSHIPS_IGNORE = API_SUFFIX + "/friendships/ignore/{0}/";
         public const string FRIENDSHIPS_RECENT_FOLLOWERS = API_SUFFIX + "/friendships/recent_followers/";
@@ -605,7 +605,7 @@ namespace InstagramApiSharp.API
         public const string IGTV_SUGGESTED_SEARCHES = API_SUFFIX + "/igtv/suggested_searches/?query=";
         public const string IGTV_TV_GUIDE = API_SUFFIX + "/igtv/tv_guide/";
         public const string MEDIA_CONFIGURE_TO_IGTV = API_SUFFIX + "/media/configure_to_igtv/";
-        public const string MEDIA_CONFIGURE_TO_IGTV_VIDEO = MEDIA_CONFIGURE_TO_IGTV + "?video=1"; 
+        public const string MEDIA_CONFIGURE_TO_IGTV_VIDEO = MEDIA_CONFIGURE_TO_IGTV + "?video=1";
         public const string IGTV_BROWSE_FEED = API_SUFFIX + "/igtv/browse_feed/";
         public const string IGTV_WRITE_SEEN = API_SUFFIX + "/igtv/write_seen_state/";
 

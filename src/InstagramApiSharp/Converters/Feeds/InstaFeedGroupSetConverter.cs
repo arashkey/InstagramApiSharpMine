@@ -3,10 +3,8 @@
  * 
  * IRANIAN DEVELOPERS
  */
-using System;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
-using InstagramApiSharp.Enums;
 
 namespace InstagramApiSharp.Converters
 {

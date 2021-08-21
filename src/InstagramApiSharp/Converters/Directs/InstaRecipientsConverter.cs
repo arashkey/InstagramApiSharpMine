@@ -38,7 +38,7 @@ namespace InstagramApiSharp.Converters
                         fakeThread.VieweId = recipient.Thread.ViewerId.ToString();
                         fakeThread.Title = recipient.Thread.ThreadTitle;
                         foreach (var user in recipient.Thread.Users)
-                        { 
+                        {
                             rankedThread.Users.Add(ConvertersFabric.Instance.GetUserShortConverter(user).Convert());
                             fakeThread.Users.Add(new InstaUserShortFriendship
                             {

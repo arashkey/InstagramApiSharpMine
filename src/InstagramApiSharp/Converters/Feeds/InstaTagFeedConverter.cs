@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using System;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Converters
 {

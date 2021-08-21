@@ -6,9 +6,9 @@
  * IRANIAN DEVELOPERS
  */
 
-using System.Collections.Generic;
 using InstagramApiSharp.Classes.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
@@ -17,6 +17,6 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("items")]
         public List<InstaMediaAlbumResponse> Medias { get; set; } = new List<InstaMediaAlbumResponse>();
         [JsonProperty("paging_info")]
-        public InstaPagingInfoResponse PagingInfo { get; set; } 
+        public InstaPagingInfoResponse PagingInfo { get; set; }
     }
 }

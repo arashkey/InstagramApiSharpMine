@@ -7,11 +7,10 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
 using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Classes.ResponseWrappers.Web;
 using InstagramApiSharp.Helpers;
+using System;
 
 namespace InstagramApiSharp.Converters
 {
@@ -32,7 +31,7 @@ namespace InstagramApiSharp.Converters
                 data.Time = SourceObject.Timestamp.Value.FromUnixTimeSeconds();
             else
                 data.Time = DateTime.MinValue;
-  
+
             return data;
         }
     }

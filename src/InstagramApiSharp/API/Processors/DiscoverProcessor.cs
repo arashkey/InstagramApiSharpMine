@@ -17,13 +17,13 @@ using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -127,7 +127,7 @@ namespace InstagramApiSharp.API.Processors
         }
 
 
-        public async Task<IResult<bool>> DismissSuggestionAsync(string targetIdHashtagIdOrStoryId, string type = "tag") 
+        public async Task<IResult<bool>> DismissSuggestionAsync(string targetIdHashtagIdOrStoryId, string type = "tag")
         {
             UserAuthValidator.Validate(_userAuthValidate);
             try

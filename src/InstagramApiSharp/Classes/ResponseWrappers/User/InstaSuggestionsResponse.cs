@@ -7,9 +7,6 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
@@ -33,5 +30,5 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("suggestions")]
         public InstaSuggestionItemListResponse Suggestions { get; set; } = new InstaSuggestionItemListResponse();
     }
-    
+
 }

@@ -7,17 +7,15 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaSuggestionItem : INotifyPropertyChanged
     {
         private string _followText = "Follow";
-        public string FollowText { get { return _followText; } set { _followText = value; OnPropertyChanged("FollowText"); } } 
+        public string FollowText { get { return _followText; } set { _followText = value; OnPropertyChanged("FollowText"); } }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string memberName)
         {
@@ -35,7 +33,7 @@ namespace InstagramApiSharp.Classes.Models
 
         public List<string> MediaIds { get; set; } = new List<string>();
 
-        public List<string> ThumbnailUrls { get; set; } = new List<string>(); 
+        public List<string> ThumbnailUrls { get; set; } = new List<string>();
 
         public List<string> LargeUrls { get; set; } = new List<string>();
 

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using InstagramApiSharp.Classes.ResponseWrappers.BaseResponse;
+﻿using InstagramApiSharp.Classes.ResponseWrappers.BaseResponse;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
@@ -9,7 +9,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("items")] public List<InstaDirectInboxItemResponse> Items { get; set; } = new List<InstaDirectInboxItemResponse>();
     }
     public class InstaDirectInboxItemResponse : BaseStatusResponse
-    { 
+    {
         [JsonProperty("text")] public string Text { get; set; }
 
         [JsonProperty("like")] public string Like { get; set; }

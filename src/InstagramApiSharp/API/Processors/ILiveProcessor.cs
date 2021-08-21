@@ -8,9 +8,8 @@
  */
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
-using System.Threading.Tasks;
-using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -158,7 +157,7 @@ namespace InstagramApiSharp.API.Processors
         /// </param>
         Task<IResult<InstaBroadcastLiveHeartBeatViewerCount>> GetHeartBeatAndViewerCountAsync(string broadcastId,
             uint offsetToVideoStart = 0);
-        
+
         /// <summary>
         ///     Get broadcast information.
         /// </summary>
@@ -212,7 +211,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="broadcastId"></param>
         /// <param name="commentId"></param>
         /// <returns></returns>
-        Task<IResult<InstaBroadcastPinUnpin>> PinCommentAsync(string broadcastId,string commentId);
+        Task<IResult<InstaBroadcastPinUnpin>> PinCommentAsync(string broadcastId, string commentId);
         /// <summary>
         ///     Start live broadcast. NOTE: YOU MUST CREATE AN BROADCAST FIRST(CreateAsync) AND THEN CALL THIS METHOD. 
         /// </summary>

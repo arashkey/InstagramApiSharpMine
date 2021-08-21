@@ -3,7 +3,6 @@
  * 
  * IRANIAN DEVELOPERS
  */
-using System;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 

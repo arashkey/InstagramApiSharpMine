@@ -6,7 +6,6 @@
  * IRANIAN DEVELOPERS
  */
 
-using System.Collections.Generic;
 using InstagramApiSharp.Classes.Models;
 using Newtonsoft.Json;
 

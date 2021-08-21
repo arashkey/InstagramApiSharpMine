@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Enums;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -40,7 +40,7 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>
-        Task<IResult<InstaMediaList>> GetHashtagChannelVideosAsync(string channelId, string firstMediaId, 
+        Task<IResult<InstaMediaList>> GetHashtagChannelVideosAsync(string channelId, string firstMediaId,
             PaginationParameters paginationParameters, CancellationToken cancellationToken);
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="hashtagSectionType">Section type</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        Task<IResult<InstaSectionMedia>> GetHashtagsSectionsAsync(string tagname, PaginationParameters paginationParameters, 
+        Task<IResult<InstaSectionMedia>> GetHashtagsSectionsAsync(string tagname, PaginationParameters paginationParameters,
             CancellationToken cancellationToken, InstaHashtagSectionType hashtagSectionType = InstaHashtagSectionType.All);
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         /// <param name="cancellationToken">Cancellation token</param>
         Task<IResult<InstaSectionMedia>> GetTopHashtagMediaListAsync(string tagname, PaginationParameters paginationParameters, CancellationToken cancellationToken);
-        
+
         /// <summary>
         ///     Searches for specific hashtag by search query.
         /// </summary>

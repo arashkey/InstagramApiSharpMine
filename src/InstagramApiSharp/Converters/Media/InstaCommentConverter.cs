@@ -1,9 +1,9 @@
-using System;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
-using System.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 namespace InstagramApiSharp.Converters
 {
     internal class InstaCommentConverter
@@ -16,7 +16,7 @@ namespace InstagramApiSharp.Converters
             var comment = new InstaComment
             {
                 BitFlags = SourceObject.BitFlags,
-                ContentType = (InstaContentType) Enum.Parse(typeof(InstaContentType), SourceObject.ContentType, true),
+                ContentType = (InstaContentType)Enum.Parse(typeof(InstaContentType), SourceObject.ContentType, true),
                 CreatedAt = DateTimeHelper.UnixTimestampToDateTime(SourceObject.CreatedAt),
                 CreatedAtUtc = DateTimeHelper.UnixTimestampToDateTime(SourceObject.CreatedAtUtc),
                 LikesCount = SourceObject.LikesCount,

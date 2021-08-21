@@ -7,13 +7,10 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models.Business;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Linq;
+using System;
 
 namespace InstagramApiSharp.Converters.Json
 {

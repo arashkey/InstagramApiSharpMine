@@ -402,8 +402,8 @@ namespace InstagramApiSharp.Classes.ResponseWrappers.Business
         [JsonProperty("graph_name")]
         public string GraphName { get; set; }
     }
-    
-    
+
+
 
     public class InstaStatisticsInsightsChannelResponse
     {

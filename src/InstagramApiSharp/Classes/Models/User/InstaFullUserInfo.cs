@@ -7,7 +7,6 @@
  * IRANIAN DEVELOPERS
  */
 
-using InstagramApiSharp.Classes.ResponseWrappers;
 using System;
 using System.Collections.Generic;
 

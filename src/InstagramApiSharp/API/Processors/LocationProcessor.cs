@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Converters;
+using InstagramApiSharp.Enums;
 using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
-using InstagramApiSharp.Enums;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -247,7 +246,7 @@ namespace InstagramApiSharp.API.Processors
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaUserSearchLocation>(response, json);
                 var obj = JsonConvert.DeserializeObject<InstaUserSearchLocation>(json);
-                return obj.Status.ToLower() =="ok"? Result.Success(obj) : Result.UnExpectedResponse<InstaUserSearchLocation>(response, json);
+                return obj.Status.ToLower() == "ok" ? Result.Success(obj) : Result.UnExpectedResponse<InstaUserSearchLocation>(response, json);
             }
             catch (HttpRequestException httpException)
             {
@@ -285,7 +284,7 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaPlaceList" />
         /// </returns>
-        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude, 
+        public async Task<IResult<InstaPlaceList>> SearchPlacesAsync(double latitude, double longitude,
             PaginationParameters paginationParameters,
             CancellationToken cancellationToken) =>
             await SearchPlacesAsync(latitude, longitude, null, paginationParameters, cancellationToken).ConfigureAwait(false);
@@ -334,7 +333,7 @@ namespace InstagramApiSharp.API.Processors
                 paginationParameters.NextMaxId = placesResponse.RankToken;
                 paginationParameters.ExcludeList = placesResponse.ExcludeList;
                 var pagesLoaded = 1;
-                while (placesResponse.HasMore != null 
+                while (placesResponse.HasMore != null
                       && placesResponse.HasMore.Value
                       && !string.IsNullOrEmpty(placesResponse.RankToken)
                       && pagesLoaded < paginationParameters.MaximumPagesToLoad)
@@ -460,8 +459,8 @@ namespace InstagramApiSharp.API.Processors
         {
             return await SearchPlaces(null, null, query, paginationParameters);
         }
-        private async Task<IResult<InstaPlaceListResponse>> SearchPlaces(double? latitude, 
-            double? longitude, 
+        private async Task<IResult<InstaPlaceListResponse>> SearchPlaces(double? latitude,
+            double? longitude,
             string query,
             PaginationParameters paginationParameters)
         {
@@ -509,10 +508,10 @@ namespace InstagramApiSharp.API.Processors
                 if (paginationParameters == null)
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
-                var mediaResult = await GetSectionMedia(sectionType, 
+                var mediaResult = await GetSectionMedia(sectionType,
                     locationId,
                     paginationParameters.NextMaxId,
-                    paginationParameters.NextPage, 
+                    paginationParameters.NextPage,
                     paginationParameters.NextMediaIds).ConfigureAwait(false);
 
                 mediaResponse = mediaResult.Value;
@@ -531,8 +530,8 @@ namespace InstagramApiSharp.API.Processors
 
                     var moreMedias = await GetSectionMedia(sectionType,
                         locationId,
-                        paginationParameters.NextMaxId, 
-                        mediaResponse.NextPage, 
+                        paginationParameters.NextMaxId,
+                        mediaResponse.NextPage,
                         mediaResponse.NextMediaIds).ConfigureAwait(false);
                     if (!moreMedias.Succeeded)
                     {
@@ -572,7 +571,7 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        private async Task<IResult<InstaSectionMediaListResponse>> GetSectionMedia(InstaSectionType sectionType, 
+        private async Task<IResult<InstaSectionMediaListResponse>> GetSectionMedia(InstaSectionType sectionType,
             long locationId,
             string maxId = null,
             int? page = null,

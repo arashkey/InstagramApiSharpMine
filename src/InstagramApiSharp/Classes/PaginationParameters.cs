@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace InstagramApiSharp
 {
@@ -36,7 +35,7 @@ namespace InstagramApiSharp
         public static PaginationParameters Empty => MaxPagesToLoad(int.MaxValue);
 
         public static PaginationParameters MaxPagesToLoad(int maxPagesToLoad) =>
-            new PaginationParameters {MaximumPagesToLoad = maxPagesToLoad};
+            new PaginationParameters { MaximumPagesToLoad = maxPagesToLoad };
 
         public PaginationParameters StartFromMaxId(string maxId)
         {

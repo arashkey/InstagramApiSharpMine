@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace InstagramApiSharp.Classes.Models
 {
@@ -20,7 +19,7 @@ namespace InstagramApiSharp.Classes.Models
         public long LatestReelMedia { get; set; }
 
         public DateTime ExpiringAt { get; set; }
-        
+
         public bool CanReply { get; set; }
 
         public bool CanReshare { get; set; }

@@ -1,7 +1,6 @@
-﻿using InstagramApiSharp.API;
+﻿using InstagramApiSharp.API.Versions;
 using InstagramApiSharp.Helpers;
 using Newtonsoft.Json;
-using InstagramApiSharp.API.Versions;
 #pragma warning disable IDE1006
 namespace InstagramApiSharp.Classes.Android.DeviceInfo
 {

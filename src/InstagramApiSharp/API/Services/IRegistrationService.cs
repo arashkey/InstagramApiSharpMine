@@ -89,7 +89,7 @@ namespace InstagramApiSharp.API.Services
         /// <param name="isMainAccount">Is this main account ? always set to to false</param>
         /// <param name="loggedInUserId">Logged in user id (pk) if available</param>
         Task<IResult<InstaSignupConsentConfig>> GetSignupConsentConfigAsync(bool isMainAccount = false, long? loggedInUserId = null);
-        
+
         /// <summary>
         ///     Send registration verify email
         /// </summary>
@@ -117,7 +117,7 @@ namespace InstagramApiSharp.API.Services
         ///         Optional for phone registration!
         /// </param>
         Task<IResult<InstaRegistrationSuggestionResponse>> GetUsernameSuggestionsAsync(string name, string email = null);
-        
+
         /// <summary>
         ///     Check age eligibility
         /// </summary>
@@ -217,7 +217,7 @@ namespace InstagramApiSharp.API.Services
         /// <param name="firstName">First name</param>
         /// <param name="verificationCode">Verification code from sms</param>
         /// <param name="birthday">Birthday => Optional</param>
-        Task<IResult<InstaAccountCreation>> CreateNewAccountWithPhoneNumberAsync(string phoneNumber, 
+        Task<IResult<InstaAccountCreation>> CreateNewAccountWithPhoneNumberAsync(string phoneNumber,
             string username, string password, string firstName, string verificationCode, DateTime? birthday = null);
 
         #endregion Phone registration

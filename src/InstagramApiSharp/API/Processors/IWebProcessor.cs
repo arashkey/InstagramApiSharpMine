@@ -8,8 +8,8 @@
  */
 
 using InstagramApiSharp.Classes;
-using System.Threading.Tasks;
 using InstagramApiSharp.Classes.Models;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {

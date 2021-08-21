@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
@@ -106,7 +106,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("auto_expand_chaining")] public bool AutoExpandChaining { get; set; }
 
-        
+
         [JsonProperty("biography_with_entities")] public InstaBiographyEntities BiographyWithEntities { get; set; }
 
         [JsonProperty("is_eligible_for_school")] public bool IsEligibleForSchool { get; set; }

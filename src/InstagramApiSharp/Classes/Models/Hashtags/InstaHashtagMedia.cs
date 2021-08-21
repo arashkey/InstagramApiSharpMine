@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using InstagramApiSharp.Classes.ResponseWrappers;
+﻿using InstagramApiSharp.Classes.ResponseWrappers;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaHashtagMedia

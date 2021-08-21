@@ -7,11 +7,10 @@
  * IRANIAN DEVELOPERS
  */
 
-using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Enums;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaStorySettings
@@ -36,7 +35,7 @@ namespace InstagramApiSharp.Classes.Models
                 }
             }
         }
-    
+
         [JsonProperty("message_prefs")]
         internal string MessagePrefs { get; set; }
         [JsonProperty("blocked_reels")]
