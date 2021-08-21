@@ -134,7 +134,7 @@ namespace InstagramApiSharp.API.Services
         /// <summary>
         ///     New user flow begins consent
         /// </summary>
-        Task<IResult<bool>> NewUserFlowBeginsConsentAsync();
+        Task<IResult<bool>> NewUserFlowBeginsConsentAsync(bool isEmail = false);
 
         /// <summary>
         ///     Create new account via email
@@ -149,6 +149,20 @@ namespace InstagramApiSharp.API.Services
             string password, string firstName = "", string signUpCode = null, DateTime? birthday = null);
 
         /// <summary>
+        ///     Launcher sync [ after registration is done ]
+        /// </summary>
+        Task<IResult<bool>> LauncherSyncAsync();
+
+        /// <summary>
+        ///     Get FB entrypoint info
+        /// </summary>
+        Task<IResult<bool>> GetFBEntryPointInfoAsync();
+
+        /// <summary>
+        ///     Get devices ndx api async get ndx ig steps
+        /// </summary>
+        Task<IResult<bool>> GetDevicesNdxIgStepsAsync();
+        /// <summary>
         ///     Get multiple accounts family
         /// </summary>
         Task<IResult<bool>> GetMultipleAccountsFamilyAsync();
@@ -157,11 +171,6 @@ namespace InstagramApiSharp.API.Services
         ///     Get zr token result
         /// </summary>
         Task<IResult<bool>> GetZrTokenResultAsync();
-
-        /// <summary>
-        ///     Launcher sync [ after registration is done ]
-        /// </summary>
-        Task<IResult<bool>> LauncherSyncAsync();
 
         /// <summary>
         ///     Qe sync [ after registration is done ]
