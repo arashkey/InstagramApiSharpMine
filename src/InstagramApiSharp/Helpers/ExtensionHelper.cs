@@ -21,7 +21,7 @@ using InstagramApiSharp.Helpers;
 using System.Text;
 using InstagramApiSharp.Classes;
 using System.Net.Http;
-#if NETSTANDARD || WINDOWS_UWP
+#if NETSTANDARD || WINDOWS_UWP || NET461_OR_GREATER
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Engines;
@@ -173,7 +173,7 @@ namespace InstagramApiSharp
                 ix += (int)ch;
             return "2" + ix;
         }
-#if NETSTANDARD || WINDOWS_UWP
+#if NETSTANDARD || WINDOWS_UWP || NET461_OR_GREATER
         static private readonly SecureRandom secureRandom = new SecureRandom();
 
         public static string GetEncryptedPassword(this IInstaApi api, string password, long? providedTime = null)
@@ -464,7 +464,17 @@ namespace InstagramApiSharp
                     return "modal_comment_composer_feed_timeline";
             }
         }
-
+        public static string GetContainerModule(this InstaRestrictContainerModule module)
+        {
+            switch (module)
+            {
+                default:
+                case InstaRestrictContainerModule.Profile:
+                    return "profile";
+                case InstaRestrictContainerModule.RestrictHalfSheet:
+                    return "restrict_half_sheet";
+            }
+        }
         public static string GetSurfaceType(this InstaMediaSurfaceType surfaceType)
         {
             switch (surfaceType)

@@ -1,4 +1,12 @@
-﻿using InstagramApiSharp.Classes;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
@@ -9,14 +17,6 @@ using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -45,6 +45,45 @@ namespace InstagramApiSharp.API.Processors
             _httpHelper = httpHelper;
         }
 
+        /// <summary>
+        ///     Get restricted users
+        /// </summary>
+        public async Task<IResult<InstaUserShortFriendshipFullList>> GetRestrictedUsersAsync()
+        {
+            var instaUri = UriCreator.GetRestrictedUsersUri();
+            var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+
+            return await RestrictAction(request).ConfigureAwait(false);
+        }
+        /// <summary>
+        ///     Unrestrict a user
+        /// </summary>
+        /// <param name="userId">User id (pk) to unrestrict</param>
+        public async Task<IResult<InstaUserShortFriendshipFullList>> UnRestrictUserAsync(long userId, InstaRestrictContainerModule containerModule = InstaRestrictContainerModule.Profile)
+        {
+            var data = new Dictionary<string, string>
+            {
+                {"target_user_id", userId.ToString()}
+            };
+
+            return await RestrictUnrestrictUser(UriCreator.GetUnRestrictUserUri(), data, containerModule).ConfigureAwait(false);
+        }
+        /// <summary>
+        ///     Restrict users
+        /// </summary>
+        /// <param name="userIds">User ids (pk) to restrict</param>
+        public async Task<IResult<InstaUserShortFriendshipFullList>> RestrictUserAsync(params long[] userIds)
+        {
+            if (userIds == null || userIds.Length == 0)
+                return Result.Fail<InstaUserShortFriendshipFullList>("At least 1 user id is required");
+            
+            var data = new Dictionary<string, string>
+            {
+                {"user_ids", string.Join(",", userIds)}
+            };
+
+            return await RestrictUnrestrictUser(UriCreator.GetRestrictManyUsersUri(), data, InstaRestrictContainerModule.RestrictHalfSheet).ConfigureAwait(false);
+        }
 
         /// <summary>
         ///     Mark activities news inbox
@@ -280,7 +319,7 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaUserShortList" />
         /// </returns>
-        public async Task<IResult<InstaUserShortList>> GetBestFriendsAsync(PaginationParameters paginationParameters,
+        public async Task<IResult<InstaUserShortList>> GetBestFriendsAsync(PaginationParameters paginationParameters, 
             CancellationToken cancellationToken)
         {
             return await GetBesties(paginationParameters, false, cancellationToken).ConfigureAwait(false);
@@ -331,7 +370,7 @@ namespace InstagramApiSharp.API.Processors
         /// <returns>
         ///     <see cref="InstaUserShortList" />
         /// </returns>
-        public async Task<IResult<InstaBlockedUsers>> GetBlockedUsersAsync(PaginationParameters paginationParameters,
+        public async Task<IResult<InstaBlockedUsers>> GetBlockedUsersAsync(PaginationParameters paginationParameters, 
             CancellationToken cancellationToken)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -1745,9 +1784,9 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<string>(exception);
             }
         }
-        #endregion public parts
+#endregion public parts
 
-        #region private parts
+#region private parts
 
         private async Task<IResult<InstaFriendshipShortStatusList>> AddBestFriends(long[] userIdsToAdd, long[] userIdsToRemove)
         {
@@ -2097,7 +2136,7 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaUserShortList>> GetBesties(PaginationParameters paginationParameters, bool suggested = false,
-            CancellationToken cancellationToken = default(CancellationToken))
+            CancellationToken cancellationToken = default(CancellationToken)) 
         {
             UserAuthValidator.Validate(_userAuthValidate);
             var besties = new InstaUserShortList();
@@ -2107,7 +2146,7 @@ namespace InstagramApiSharp.API.Processors
                     paginationParameters = PaginationParameters.MaxPagesToLoad(1);
 
                 Uri bestiesUri = UriCreator.GetBestFriendsUri(paginationParameters.NextMaxId);
-                if (suggested)
+                if(suggested)
                     bestiesUri = UriCreator.GetBestiesSuggestionUri(paginationParameters.NextMaxId);
 
                 var bestiesResponse = await GetUserListByUriAsync(bestiesUri);
@@ -2429,6 +2468,61 @@ namespace InstagramApiSharp.API.Processors
             catch (Exception exception)
             {
                 return Result.Fail<bool>(exception);
+            }
+        }
+
+        private async Task<IResult<InstaUserShortFriendshipFullList>> RestrictUnrestrictUser(Uri instaUri,
+            Dictionary<string, string> extras, InstaRestrictContainerModule containerModule)
+        {
+            var data = new Dictionary<string, string>
+            {
+                {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                {"container_module",  containerModule.GetContainerModule()}
+            };
+
+            foreach (var item in extras)
+                data.Add(item.Key, item.Value);
+
+            if (!_httpHelper.NewerThan180)
+            {
+                data.Add("_csrftoken", _user.CsrfToken);
+            }
+            var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+
+            return await RestrictAction(request).ConfigureAwait(false);
+        }
+
+        private async Task<IResult<InstaUserShortFriendshipFullList>> RestrictAction(HttpRequestMessage request)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<InstaUserShortFriendshipFullContainerResponse>(json);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaUserShortFriendshipFullList>(response, obj.Message, null);
+
+                var list = new InstaUserShortFriendshipFullList()
+                {
+                    UserCount = obj.UserCount ?? 0
+                };
+
+                if(obj.Users?.Length > 0)
+                    foreach (var item in obj.Users)
+                        list.Add(ConvertersFabric.Instance.GetUserShortFriendshipFullConverter(item).Convert());
+
+                return Result.Success(list);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaUserShortFriendshipFullList), ResponseType.NetworkProblem);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail<InstaUserShortFriendshipFullList>(ex);
             }
         }
 

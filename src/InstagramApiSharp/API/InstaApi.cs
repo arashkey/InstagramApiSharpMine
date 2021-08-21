@@ -3243,7 +3243,7 @@ namespace InstagramApiSharp.API
             _httpHelper = new HttpHelper(_apiVersion, _httpRequestProcessor, this);
 #if WITH_NOTIFICATION
             Task.Run(async () => { await PushClient?.Shutdown(); });
-            PushClient = new FbnsClient(this, stateData.FbnsConnectionData);
+            PushClient = new FbnsClient(this, data.FbnsConnectionData);
 #endif
             IsUserAuthenticated = data.IsAuthenticated;
             TwoFactorLoginInfo = data.TwoFactorLoginInfo;

@@ -13,6 +13,20 @@ namespace InstagramApiSharp.API.Processors
     public interface IUserProcessor
     {
         /// <summary>
+        ///     Get restricted users
+        /// </summary>
+        Task<IResult<InstaUserShortFriendshipFullList>> GetRestrictedUsersAsync();
+        /// <summary>
+        ///     Unrestrict a user
+        /// </summary>
+        /// <param name="userId">User id (pk) to unrestrict</param>
+        Task<IResult<InstaUserShortFriendshipFullList>> UnRestrictUserAsync(long userId, InstaRestrictContainerModule containerModule = InstaRestrictContainerModule.Profile);
+        /// <summary>
+        ///     Restrict users
+        /// </summary>
+        /// <param name="userIds">User ids (pk) to restrict</param>
+        Task<IResult<InstaUserShortFriendshipFullList>> RestrictUserAsync(params long[] userIds);
+        /// <summary>
         ///     Mark activities news inbox
         /// </summary>
         Task<IResult<bool>> MarkNewsInboxSeenAsync();
