@@ -10,7 +10,6 @@
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using System;
-using System.Linq;
 
 namespace InstagramApiSharp.Converters
 {
@@ -24,11 +23,11 @@ namespace InstagramApiSharp.Converters
 
             var voice = new InstaVoice
             {
-               Audio = ConvertersFabric.Instance.GetAudioConverter(SourceObject.Audio).Convert(),
-               Id = SourceObject.Id,
-               MediaType = SourceObject.MediaType,
-               OrganicTrackingToken = SourceObject.OrganicTrackingToken,
-               ProductType = SourceObject.ProductType
+                Audio = ConvertersFabric.Instance.GetAudioConverter(SourceObject.Audio).Convert(),
+                Id = SourceObject.Id,
+                MediaType = SourceObject.MediaType,
+                OrganicTrackingToken = SourceObject.OrganicTrackingToken,
+                ProductType = SourceObject.ProductType
             };
             if (SourceObject.User != null)
                 voice.FriendshipStatus = ConvertersFabric.Instance.GetFriendShipStatusConverter(SourceObject.User.FriendshipStatus).Convert();

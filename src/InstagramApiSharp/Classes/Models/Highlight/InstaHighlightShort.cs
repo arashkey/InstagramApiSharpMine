@@ -9,14 +9,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaHighlightShortList
     {
         public List<InstaHighlightShort> Items { get; set; } = new List<InstaHighlightShort>();
-        
+
         public int ResultsCount { get; set; }
 
         public bool MoreAvailable { get; set; }

@@ -7,14 +7,10 @@
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.API;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using InstagramApiSharp.API;
-using InstagramApiSharp.Classes;
-using InstagramApiSharp.Classes.ResponseWrappers;
 namespace InstagramApiSharp.Helpers
 {
     public class InstaFbHelper

@@ -7,11 +7,8 @@
  * IRANIAN DEVELOPERS
  */
 
-using InstagramApiSharp.Classes.Models;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 
 namespace InstagramApiSharp.Classes.Models
@@ -36,6 +33,6 @@ namespace InstagramApiSharp.Classes.Models
 
         public DateTime UrlExpireAt { get; set; }
 
-        public bool IsExpired => string.IsNullOrEmpty(InstaIdentifier); 
+        public bool IsExpired => string.IsNullOrEmpty(InstaIdentifier);
     }
 }

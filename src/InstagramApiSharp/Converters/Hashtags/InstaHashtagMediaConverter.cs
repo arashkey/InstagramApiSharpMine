@@ -7,9 +7,9 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using System;
 
 
 namespace InstagramApiSharp.Converters.Hashtags
@@ -47,14 +47,14 @@ namespace InstagramApiSharp.Converters.Hashtags
                         {
                             if (section.LayoutContent?.Medias?.Count > 0)
                                 foreach (var item in section.LayoutContent.Medias)
-                            {
-                                try
                                 {
-                                    media.Medias.Add(ConvertersFabric.Instance.GetSingleMediaConverter(item.Media).Convert());
+                                    try
+                                    {
+                                        media.Medias.Add(ConvertersFabric.Instance.GetSingleMediaConverter(item.Media).Convert());
 
+                                    }
+                                    catch { }
                                 }
-                                catch { }
-                            }
                         }
                     }
                     catch { }

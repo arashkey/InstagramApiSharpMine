@@ -1,8 +1,8 @@
-﻿using System;
+﻿using InstagramApiSharp.API;
+using System;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using InstagramApiSharp.API;
 
 namespace InstagramApiSharp.Helpers
 {
@@ -66,8 +66,8 @@ namespace InstagramApiSharp.Helpers
 
             for (var i = 0; i < keyBytes.Length; i++)
             {
-                opadKeySet[i] = (byte) (keyBytes[i] ^ 0x5C);
-                ipadKeySet[i] = (byte) (keyBytes[i] ^ 0x36);
+                opadKeySet[i] = (byte)(keyBytes[i] ^ 0x5C);
+                ipadKeySet[i] = (byte)(keyBytes[i] ^ 0x36);
             }
 
             var hash = GetHash(ByteConcat(opadKeySet,
@@ -107,7 +107,7 @@ namespace InstagramApiSharp.Helpers
             var rnd = new Random(DateTime.Now.Millisecond);
             var msgSize = text.Length;
             var term = rnd.Next(2, 3) * 1000 + msgSize * rnd.Next(15, 20) * 100;
-            var textChangeDeviceEventCount = Math.Round((decimal) msgSize / rnd.Next(2, 3), 0);
+            var textChangeDeviceEventCount = Math.Round((decimal)msgSize / rnd.Next(2, 3), 0);
             if (textChangeDeviceEventCount == 0) textChangeDeviceEventCount = 1;
             var data = $"{msgSize} {term} {textChangeDeviceEventCount} {date}";
 

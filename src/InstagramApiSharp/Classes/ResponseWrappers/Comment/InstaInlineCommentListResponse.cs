@@ -7,9 +7,9 @@
  * IRANIAN DEVELOPERS
  */
 
-using System.Collections.Generic;
 using InstagramApiSharp.Classes.ResponseWrappers.BaseResponse;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
@@ -88,5 +88,5 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("server_cursor")]
         public string ServerCursor { get; set; }
     }
-    
+
 }

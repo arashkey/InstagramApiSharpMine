@@ -1,8 +1,8 @@
-﻿using System;
-using System.Globalization;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
+using System;
+using System.Globalization;
 
 namespace InstagramApiSharp.Converters
 {
@@ -62,7 +62,7 @@ namespace InstagramApiSharp.Converters
                 CarouselMediaCount = SourceObject.CarouselMediaCount ?? 0,
                 CanSeeInsightsAsBrand = SourceObject.CanSeeInsightsAsBrand ?? false,
                 UnifyTagDisplay = SourceObject.UnifyTagDisplay ?? false,
-                InlineComposerDisplayCondition= SourceObject.InlineComposerDisplayCondition ,
+                InlineComposerDisplayCondition = SourceObject.InlineComposerDisplayCondition,
                 InlineComposerImpTriggerTime = SourceObject.InlineComposerImpTriggerTime ?? 0,
                 CarouselShareChildMediaId = SourceObject.CarouselShareChildMediaId,
                 PlayCount = SourceObject.PlayCount ?? 0

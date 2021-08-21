@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
@@ -30,6 +30,6 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
 
         [JsonProperty("reel_type")] public string ReelType { get; set; }
         [JsonProperty("owner")] public InstaHashtagOwnerResponse Owner { get; set; }
-        [JsonProperty("muted")] public bool? Muted { get; set; } 
+        [JsonProperty("muted")] public bool? Muted { get; set; }
     }
 }

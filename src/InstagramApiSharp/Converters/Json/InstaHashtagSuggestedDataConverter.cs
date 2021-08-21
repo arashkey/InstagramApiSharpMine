@@ -7,12 +7,10 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models.Business;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
 
 namespace InstagramApiSharp.Converters.Json
@@ -45,7 +43,7 @@ namespace InstagramApiSharp.Converters.Json
                 }
             }
 
-            if(hashtags != null && hashtags.Any())
+            if (hashtags != null && hashtags.Any())
             {
                 foreach (var item in hashtags)
                 {

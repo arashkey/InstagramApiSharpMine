@@ -10,7 +10,7 @@
 using Newtonsoft.Json;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
-{ 
+{
     public class InstaStoryFriendshipStatusShortResponse
     {
         [JsonProperty("following")]

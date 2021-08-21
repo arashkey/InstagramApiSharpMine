@@ -46,15 +46,15 @@ namespace InstagramApiSharp.Helpers
             ub.Query = q;
             return ub.Uri;
         }
-        internal static void AddHeader(this HttpRequestHeaders headers, 
-            string name, 
+        internal static void AddHeader(this HttpRequestHeaders headers,
+            string name,
             string value,
             IInstaApi instaApi,
             bool removeHeader = false)
         {
             var currentCulture = HttpHelper.GetCurrentCulture();
             System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
-            
+
             if (removeHeader)
                 headers.Remove(name);
 
@@ -67,7 +67,7 @@ namespace InstagramApiSharp.Helpers
         {
             var currentCulture = HttpHelper.GetCurrentCulture();
             System.Globalization.CultureInfo.CurrentCulture = HttpHelper.EnglishCulture;
-            
+
             if (removeHeader)
                 headers.Remove(name);
 

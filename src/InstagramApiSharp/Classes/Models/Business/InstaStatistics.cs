@@ -147,14 +147,14 @@ namespace InstagramApiSharp.Classes.Models.Business
 
 
 
-    
+
     public class InstaStatisticsDataPointItem
     {
         public string Label { get; set; }
 
         public int Value { get; set; } = 0;
     }
-    
+
     public class InstaStatisticsFollowersUnit
     {
         public string FollowersUnitState { get; set; }
@@ -217,7 +217,7 @@ namespace InstagramApiSharp.Classes.Models.Business
         public int LastWeekEmail { get; set; } = 0;
 
         public int WeekOverWeekEmail { get; set; } = 0;
-        
+
         public int LastWeekGetDirection { get; set; } = 0;
 
         public int WeekOverWeekGetDirection { get; set; } = 0;
@@ -240,7 +240,7 @@ namespace InstagramApiSharp.Classes.Models.Business
 
         public InstaStatisticsInsightsChannel InstagramAccountInsightsChannel { get; set; }
     }
-    
+
 
 
 

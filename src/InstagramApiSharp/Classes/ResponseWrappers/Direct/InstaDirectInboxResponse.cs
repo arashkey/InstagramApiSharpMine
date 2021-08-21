@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using InstagramApiSharp.Classes.Models;
 using Newtonsoft.Json;
-
-using InstagramApiSharp.Classes.Models;
+using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
     public class InstaDirectInboxResponse : InstaDirectInboxThreadContainerResponse
@@ -11,7 +10,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("unseen_count_ts")] public long UnseenCountTs { get; set; }
 
         [JsonProperty("unseen_count")] public long UnseenCount { get; set; }
-        
+
         [JsonProperty("oldest_cursor")] public string OldestCursor { get; set; }
 
         [JsonProperty("blended_inbox_enabled")] public bool BlendedInboxEnabled { get; set; }

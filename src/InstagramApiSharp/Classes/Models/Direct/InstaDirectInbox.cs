@@ -15,6 +15,6 @@ namespace InstagramApiSharp.Classes.Models
         public bool BlendedInboxEnabled { get; set; }
 
         public List<InstaDirectInboxThread> Threads { get; set; }
-        
+
     }
 }

@@ -7,7 +7,7 @@
  * IRANIAN DEVELOPERS
  */
 
- namespace InstagramApiSharp.Classes.Models
+namespace InstagramApiSharp.Classes.Models
 {
     public class InstaAnimatedImageMedia
     {

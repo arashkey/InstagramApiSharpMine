@@ -7,11 +7,8 @@
  * IRANIAN DEVELOPERS
  */
 
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using InstagramApiSharp.Classes.ResponseWrappers;
-using InstagramApiSharp.Enums;
 using InstagramApiSharp.Classes.Models;
+using Newtonsoft.Json;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {

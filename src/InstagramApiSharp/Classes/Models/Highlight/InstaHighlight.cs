@@ -37,7 +37,7 @@ namespace InstagramApiSharp.Classes.Models
 
         object _seen = null;
         public object Seen { get { return _seen; } set { _seen = value; OnPropertyChanged("Seen"); } }
-        
+
         public bool CanReply { get; set; }
 
         public object CanReshare { get; set; }

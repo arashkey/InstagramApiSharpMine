@@ -7,9 +7,6 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using InstagramApiSharp.Classes.Models;
 using Newtonsoft.Json;
 namespace InstagramApiSharp.Classes.ResponseWrappers.Business
@@ -62,7 +59,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers.Business
         public bool? HasAnonymousProfilePicture { get; set; }
         [JsonProperty("full_name")]
         public string FullName { get; set; }
-        
+
 
         [JsonProperty("is_business")]
         public bool? IsBusiness { get; set; }

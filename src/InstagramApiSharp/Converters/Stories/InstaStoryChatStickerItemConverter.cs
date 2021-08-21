@@ -5,12 +5,10 @@
  * 
  * IRANIAN DEVELOPERS
  */
- 
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using System;
 
 namespace InstagramApiSharp.Converters
 {
@@ -23,13 +21,13 @@ namespace InstagramApiSharp.Converters
             if (SourceObject == null) throw new ArgumentNullException($"InstaStoryChatStickerItemConverter.Source object");
             return new InstaStoryChatStickerItem
             {
-               EndBackgroundColor = SourceObject.EndBackgroundColor,
-               HasStartedChat = SourceObject.HasStartedChat,
-               StartBackgroundColor = SourceObject.StartBackgroundColor,
-               Status = SourceObject.Status,
-               StoryChatId = SourceObject.StoryChatId,
-               Text = SourceObject.Text,
-               ThreadId = SourceObject.ThreadId
+                EndBackgroundColor = SourceObject.EndBackgroundColor,
+                HasStartedChat = SourceObject.HasStartedChat,
+                StartBackgroundColor = SourceObject.StartBackgroundColor,
+                Status = SourceObject.Status,
+                StoryChatId = SourceObject.StoryChatId,
+                Text = SourceObject.Text,
+                ThreadId = SourceObject.ThreadId
             };
 
         }

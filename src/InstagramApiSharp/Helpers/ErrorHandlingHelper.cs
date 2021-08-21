@@ -1,6 +1,6 @@
-﻿using System;
-using InstagramApiSharp.Classes.ResponseWrappers;
+﻿using InstagramApiSharp.Classes.ResponseWrappers;
 using Newtonsoft.Json;
+using System;
 
 namespace InstagramApiSharp.Helpers
 {

@@ -9,12 +9,12 @@
 
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
-using System;
 using InstagramApiSharp.Enums;
+using System;
 
 namespace InstagramApiSharp.Converters
 {
-    internal class InstaBroadcastLiveHeartBeatViewerCountConverter 
+    internal class InstaBroadcastLiveHeartBeatViewerCountConverter
         : IObjectConverter<InstaBroadcastLiveHeartBeatViewerCount, InstaBroadcastLiveHeartBeatViewerCountResponse>
     {
         public InstaBroadcastLiveHeartBeatViewerCountResponse SourceObject { get; set; }

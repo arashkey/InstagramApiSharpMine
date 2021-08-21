@@ -28,7 +28,7 @@ namespace InstagramApiSharp.Converters
             };
 
             if (SourceObject.Participants?.Count > 0)
-                foreach(var answer in SourceObject.Participants)
+                foreach (var answer in SourceObject.Participants)
                     quizParticipants.Participants.Add(ConvertersFabric.Instance.GetStoryQuizAnswerConverter(answer).Convert());
 
             return quizParticipants;

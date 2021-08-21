@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers.BaseResponse;
 using InstagramApiSharp.Enums;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
@@ -25,7 +24,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("client_session_id")] public string ClientSessionId { get; set; }
         [JsonProperty("client_feed_changelist_applied")] public bool? ClientFeedChangelistApplied { get; set; }
     }
-    public class InstaPostResponse 
+    public class InstaPostResponse
     {
         public InstaFeedsType Type { get; set; }
         public InstaMediaItemResponse Media { get; set; }

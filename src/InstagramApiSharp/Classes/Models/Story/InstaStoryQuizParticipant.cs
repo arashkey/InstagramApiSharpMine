@@ -7,7 +7,6 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
 using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.Models

@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Converters;
 using InstagramApiSharp.Converters.Json;
+using InstagramApiSharp.Enums;
 using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using InstagramApiSharp.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -300,9 +300,9 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaUserShortList>(response, json);
-                
+
                 var obj = JsonConvert.DeserializeObject<InstaBlockedCommentersResponse>(json);
-                
+
                 return Result.Success(ConvertersFabric.Instance.GetBlockedCommentersConverter(obj).Convert());
             }
             catch (HttpRequestException httpException)
@@ -362,7 +362,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="targetCommentId">Target comment id</param>
         public async Task<IResult<InstaCommentList>> GetMediaCommentsAsync(string mediaId,
             PaginationParameters paginationParameters, string targetCommentId = "") =>
-            await GetMediaCommentsAsync(mediaId, paginationParameters, 
+            await GetMediaCommentsAsync(mediaId, paginationParameters,
                 CancellationToken.None, targetCommentId).ConfigureAwait(false);
 
         /// <summary>
@@ -406,9 +406,9 @@ namespace InstagramApiSharp.API.Processors
                     cancellationToken.ThrowIfCancellationRequested();
 
                     IResult<InstaCommentListResponse> nextComments;
-                    if(!string.IsNullOrEmpty(commentListResponse.NextMaxId))
+                    if (!string.IsNullOrEmpty(commentListResponse.NextMaxId))
                         nextComments = await GetCommentListWithMaxIdAsync(mediaId, commentListResponse.NextMaxId, null, targetCommentId);
-                    else 
+                    else
                         nextComments = await GetCommentListWithMaxIdAsync(mediaId, null, commentListResponse.NextMinId, targetCommentId);
 
                     if (!nextComments.Succeeded)
@@ -453,7 +453,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="paginationParameters">Maximum amount of pages to load and start id</param>
         public async Task<IResult<InstaInlineCommentList>> GetMediaRepliesCommentsAsync(string mediaId, string targetCommentId,
             PaginationParameters paginationParameters) =>
-            await GetMediaRepliesCommentsAsync(mediaId, targetCommentId, 
+            await GetMediaRepliesCommentsAsync(mediaId, targetCommentId,
                 paginationParameters, CancellationToken.None).ConfigureAwait(false);
 
         /// <summary>
@@ -482,7 +482,7 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaInlineCommentList>(response, json);
-                
+
                 commentListResponse = JsonConvert.DeserializeObject<InstaInlineCommentListResponse>(json);
 
                 var pagesLoaded = 1;
@@ -501,7 +501,7 @@ namespace InstagramApiSharp.API.Processors
                         nextComments = await GetInlineCommentListWithMaxIdAsync(mediaId, targetCommentId, commentListResponse.NextMaxId, null);
                     else
                         nextComments = await GetInlineCommentListWithMaxIdAsync(mediaId, targetCommentId, null, commentListResponse.NextMinId);
-                    
+
                     if (!nextComments.Succeeded)
                         return Result.Fail(nextComments.Info, GetOrDefault());
 

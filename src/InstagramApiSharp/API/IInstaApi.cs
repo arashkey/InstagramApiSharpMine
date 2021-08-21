@@ -12,24 +12,22 @@
  *  
  */
 
-using System.IO;
-using System.Threading.Tasks;
 using InstagramApiSharp.API.Processors;
-using InstagramApiSharp.Classes;
-using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Classes.Android.DeviceInfo;
-using InstagramApiSharp.Enums;
-using InstagramApiSharp.Classes.SessionHandlers;
-using System.Net.Http;
-using System.Collections.Generic;
-using System;
-using InstagramApiSharp.API.Versions;
 using InstagramApiSharp.API.Services;
+using InstagramApiSharp.API.Versions;
+using InstagramApiSharp.Classes;
+using InstagramApiSharp.Classes.Android.DeviceInfo;
+using InstagramApiSharp.Classes.Models;
+using InstagramApiSharp.Classes.SessionHandlers;
+using InstagramApiSharp.Enums;
 using InstagramApiSharp.Helpers;
-
-using InstagramApiSharp.API.Push;
 using InstagramApiSharp.Logger;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 #if WITH_NOTIFICATION
 using InstagramApiSharp.API.RealTime;
 #endif
@@ -43,7 +41,7 @@ namespace InstagramApiSharp.API
         #region Properties
 
         #region Locale
-        
+
         /// <summary>
         ///     Timezone offset
         ///     <para>This property is using in a lot of different places.</para>
@@ -236,9 +234,9 @@ namespace InstagramApiSharp.API
         IPushClient PushClient { get; set; }
 #endif
 
-#endregion
+        #endregion
 
-#region State data
+        #region State data
 
         /// <summary>
         ///     Get current state info as Memory stream
@@ -265,7 +263,7 @@ namespace InstagramApiSharp.API
         ///     State data object
         /// </returns>
         StateData GetStateDataAsObject();
-            
+
         Task<string> GetStateDataAsStringAsync();
         /// <summary>
         ///     Get current state info as Memory stream asynchronously
@@ -526,8 +524,8 @@ namespace InstagramApiSharp.API
         /// </summary>
         /// <param name="verifyCode">Verification code</param>
         Task<IResult<InstaLoginResult>> VerifyCodeForChallengeRequireAsync(string verifyCode);
-#endregion Challenge part
-        
+        #endregion Challenge part
+
         /// <summary>
         ///     Check email availability
         /// </summary>
@@ -707,9 +705,9 @@ namespace InstagramApiSharp.API
         Task<IResult<bool>> LauncherSyncAsync();
         Task<IResult<InstaBanyanSuggestions>> GetBanyanSuggestionsAsync();
 
-#endregion Authentication, challenge functions
+        #endregion Authentication, challenge functions
 
-#region Giphy
+        #region Giphy
 
         /// <summary>
         ///     Get trending giphy
@@ -724,6 +722,6 @@ namespace InstagramApiSharp.API
         /// <param name="requestType">Request type for Direct or story</param>
         Task<IResult<GiphyList>> SearchGiphyAsync(string query, InstaGiphyRequestType requestType = InstaGiphyRequestType.Direct);
 
-#endregion Giphy
+        #endregion Giphy
     }
 }

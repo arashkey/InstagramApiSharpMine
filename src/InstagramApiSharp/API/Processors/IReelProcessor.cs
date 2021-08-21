@@ -8,7 +8,6 @@
 
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Enums;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -59,7 +58,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="video">Video to upload.<para>Note: Thumbnail is required.</para></param>
         /// <param name="caption">Caption => Optional</param>
         /// <param name="sharePreviewToFeed">Share preview to feed</param>
-        Task<IResult<InstaMedia>> UploadReelVideoAsync(InstaVideoUpload video, 
+        Task<IResult<InstaMedia>> UploadReelVideoAsync(InstaVideoUpload video,
             string caption, bool sharePreviewToFeed = false);
 
         /// <summary>

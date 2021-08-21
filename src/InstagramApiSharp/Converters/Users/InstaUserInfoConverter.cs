@@ -1,7 +1,7 @@
-﻿using System;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Enums;
+using System;
 using System.Linq;
 namespace InstagramApiSharp.Converters
 {
@@ -73,7 +73,7 @@ namespace InstagramApiSharp.Converters
                 IsEligibleForSchool = SourceObject.User.IsEligibleForSchool,
                 IsFavoriteForStories = SourceObject.User.IsFavoriteForStories,
                 FollowingTagCount = SourceObject.User.FollowingTagCount,
-                
+
                 // business account
                 AddressStreet = SourceObject.User.AddressStreet,
                 CanBeReportedAsFraud = SourceObject.User.CanBeReportedAsFraud ?? false,

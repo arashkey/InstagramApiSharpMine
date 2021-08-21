@@ -20,7 +20,7 @@ namespace InstagramApiSharp.Classes.Models
         public double Width { get; set; } = 0.7416667;
         public double Height { get; set; } = 0.08751394;
         public double Rotation { get; set; } = 0.0;
-        
+
         /// <summary>
         ///     Location id (get it from <seealso cref="ILocationProcessor.SearchLocationAsync"/> )
         /// </summary>

@@ -9,18 +9,18 @@
 
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
-using InstagramApiSharp.Logger;
-using System;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using InstagramApiSharp.Helpers;
-using System.Net.Http;
-using System.Net;
-using System.Linq;
 using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Converters;
 using InstagramApiSharp.Classes.ResponseWrappers.Web;
+using InstagramApiSharp.Converters;
 using InstagramApiSharp.Enums;
+using InstagramApiSharp.Helpers;
+using InstagramApiSharp.Logger;
+using Newtonsoft.Json;
+using System;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -205,7 +205,7 @@ namespace InstagramApiSharp.API.Processors
         {
             return await GetFormerAsync(InstaWebType.FormerUsernames, paginationParameters);
         }
-        
+
         #endregion public part
 
         #region private part
@@ -225,7 +225,7 @@ namespace InstagramApiSharp.API.Processors
                 }
                 Uri CreateUri(string cursor = null)
                 {
-                    switch(type)
+                    switch (type)
                     {
                         case InstaWebType.FormerBioTexts:
                             return WebUriCreator.GetFormerBiographyTextsUri(cursor);
@@ -328,7 +328,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail(exception, default(InstaWebSettingsPageResponse));
             }
         }
-        
+
         #endregion private part
     }
 }

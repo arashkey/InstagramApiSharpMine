@@ -7,13 +7,10 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using InstagramApiSharp.Classes.Models;
-using InstagramApiSharp.Classes.ResponseWrappers;
-using InstagramApiSharp.Enums;
-using System.Linq;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.ResponseWrappers.Business;
+using InstagramApiSharp.Enums;
+using System;
 
 namespace InstagramApiSharp.Converters.Business
 {
@@ -73,7 +70,7 @@ namespace InstagramApiSharp.Converters.Business
                 ProfileVisitsCount = SourceObject.User.ProfileVisitsCount ?? 0,
                 ProfileVisitsNumDays = SourceObject.User.ProfileVisitsNumDays ?? 0,
                 ProfilPicUrl = SourceObject.User.ProfilPicUrl,
-                 
+
             };
             if (SourceObject.User.BiographyWithEntities != null && SourceObject.User.BiographyWithEntities.Entities != null)
                 userInfo.BiographyWithEntities = SourceObject.User.BiographyWithEntities;

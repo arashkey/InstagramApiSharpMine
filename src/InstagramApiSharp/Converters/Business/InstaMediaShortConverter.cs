@@ -7,14 +7,10 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.Models.Business;
-using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Classes.ResponseWrappers.Business;
-using InstagramApiSharp.Helpers;
+using System;
 
 namespace InstagramApiSharp.Converters.Business
 {
@@ -26,8 +22,8 @@ namespace InstagramApiSharp.Converters.Business
         {
             var media = new InstaMediaShort
             {
-               Id = SourceObject.Id,
-               MediaIdentifier = SourceObject.MediaIdentifier
+                Id = SourceObject.Id,
+                MediaIdentifier = SourceObject.MediaIdentifier
             };
             if (!string.IsNullOrEmpty(SourceObject.InstagramMediaType))
             {
@@ -45,12 +41,12 @@ namespace InstagramApiSharp.Converters.Business
                 try
                 {
                     media.InsightsState = SourceObject.InlineInsightsNode.State;
-                    media.MetricsImpressionsOrganicValue = 
+                    media.MetricsImpressionsOrganicValue =
                         SourceObject.InlineInsightsNode.Metrics.Impressions.Organic.Value ?? 0;
                 }
                 catch { }
             }
-            
+
             return media;
         }
     }

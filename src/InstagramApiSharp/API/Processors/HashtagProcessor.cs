@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
+﻿using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
@@ -16,6 +9,13 @@ using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -544,7 +544,7 @@ namespace InstagramApiSharp.API.Processors
                     paginationParameters.NextMaxId, paginationParameters.NextPage, paginationParameters.NextMediaIds).ConfigureAwait(false);
                 mediaResponse = mediaResult.Value;
                 if (!mediaResult.Succeeded)
-                    Result.Fail(mediaResult.Info, GetOrDefault());
+                   return Result.Fail(mediaResult.Info, GetOrDefault());
 
                 paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
                 paginationParameters.NextPage = mediaResponse.NextPage;

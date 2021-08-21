@@ -6,11 +6,9 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
+using System;
 
 namespace InstagramApiSharp.Converters
 {
@@ -24,7 +22,7 @@ namespace InstagramApiSharp.Converters
             var storyChatRequestInfoItem = new InstaStoryChatRequestInfoItem
             {
                 Cursor = SourceObject.Cursor,
-                TotalParticipantRequests= SourceObject.TotalParticipantRequests ?? 0,
+                TotalParticipantRequests = SourceObject.TotalParticipantRequests ?? 0,
                 TotalThreadParticipants = SourceObject.TotalThreadParticipants ?? 0
             };
             if (SourceObject.Users?.Count > 0)

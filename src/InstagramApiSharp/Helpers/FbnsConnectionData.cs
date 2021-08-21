@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using InstagramApiSharp.Helpers;
+﻿using InstagramApiSharp.Helpers;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 
-namespace InstagramApiSharp.API.Push 
+namespace InstagramApiSharp.API.Push
 {
     [Serializable]
     public sealed class FbnsConnectionData
@@ -22,10 +22,10 @@ namespace InstagramApiSharp.API.Push
         private const bool FBNS_MAKE_USER_AVAILABLE_IN_FOREGROUND = false;
         private const bool FBNS_IS_INITIALLY_FOREGROUND = false;
         private const string FBNS_CLIENT_TYPE = "device_auth";
-        private static readonly int[] FBNS_SUBSCRIBE_TOPICS = {MESSAGE_TOPIC_ID, REG_RESP_TOPIC_ID};
+        private static readonly int[] FBNS_SUBSCRIBE_TOPICS = { MESSAGE_TOPIC_ID, REG_RESP_TOPIC_ID };
 
         public string ClientId { get; set; } = Guid.NewGuid().ToString().Substring(0, 20);
-        
+
         public string UserAgent { get; set; }
         public long ClientCapabilities { get; } = FBNS_CLIENT_CAPABILITIES;
         public long EndpointCapabilities { get; } = FBNS_ENDPOINT_CAPABILITIES;
@@ -41,14 +41,14 @@ namespace InstagramApiSharp.API.Push
         public long AppId { get; } = FBNS_APP_ID;
         public sbyte ClientStack { get; } = FBNS_CLIENT_STACK;
 
-#region DeviceAuth
+        #region DeviceAuth
 
         public long UserId { get; private set; }
         public string Password { get; private set; }
         public string DeviceId { get; private set; }
         public string DeviceSecret { get; private set; }
 
-#endregion
+        #endregion
 
         private string _fbnsToken;
         public string FbnsToken

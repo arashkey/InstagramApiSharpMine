@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using InstagramApiSharp.Classes.ResponseWrappers.BaseResponse;
+﻿using InstagramApiSharp.Classes.ResponseWrappers.BaseResponse;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {

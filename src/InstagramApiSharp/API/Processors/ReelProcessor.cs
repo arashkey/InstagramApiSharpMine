@@ -6,14 +6,6 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Classes.Models;
@@ -25,6 +17,13 @@ using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -60,7 +59,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="userId">User id (pk)</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
-        public async Task<IResult<InstaReelsMediaList>> GetUserReelsClipsAsync(long userId, 
+        public async Task<IResult<InstaReelsMediaList>> GetUserReelsClipsAsync(long userId,
             PaginationParameters paginationParameters) =>
             await GetReelsClips(paginationParameters, userId).ConfigureAwait(false);
 
@@ -259,7 +258,7 @@ namespace InstagramApiSharp.API.Processors
         }
 
         private async Task<IResult<InstaMedia>> ConfigureVideoAsync(Action<InstaUploaderProgress> progress,
-            InstaUploaderProgress upProgress, InstaVideoUpload video, 
+            InstaUploaderProgress upProgress, InstaVideoUpload video,
             string uploadId, string caption, bool sharePreviewToFeed = false)
         {
             try
@@ -275,7 +274,7 @@ namespace InstagramApiSharp.API.Processors
                 //catch { }
                 var instaUri = UriCreator.GetReelsMediaConfigureUri();
 
-           
+
                 var clipsSegments = new JObject
                 {
                     {"index", 0},
@@ -400,7 +399,7 @@ namespace InstagramApiSharp.API.Processors
             }
         }
 
-        private async Task<IResult<InstaReelsMediaList>> GetReelsClips(PaginationParameters paginationParameters, 
+        private async Task<IResult<InstaReelsMediaList>> GetReelsClips(PaginationParameters paginationParameters,
             long? userId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             UserAuthValidator.Validate(_userAuthValidate);

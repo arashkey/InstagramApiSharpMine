@@ -1,11 +1,11 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using InstagramApiSharp.API;
+﻿using InstagramApiSharp.API;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
 using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.Classes
 {

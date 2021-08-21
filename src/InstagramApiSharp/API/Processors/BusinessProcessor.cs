@@ -8,24 +8,23 @@
  */
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
-using InstagramApiSharp.Logger;
-using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using InstagramApiSharp.Helpers;
-using System.Net.Http;
-using Newtonsoft.Json.Linq;
-using InstagramApiSharp.Converters;
-using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Classes.Models;
-using System.Net;
+using InstagramApiSharp.Classes.Models.Business;
+using InstagramApiSharp.Classes.ResponseWrappers;
+using InstagramApiSharp.Classes.ResponseWrappers.Business;
+using InstagramApiSharp.Converters;
 using InstagramApiSharp.Converters.Json;
 using InstagramApiSharp.Enums;
-using InstagramApiSharp.Classes.ResponseWrappers.Business;
-using InstagramApiSharp.Classes.Models.Business;
+using InstagramApiSharp.Helpers;
+using InstagramApiSharp.Logger;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace InstagramApiSharp.API.Processors
 {
@@ -48,7 +47,7 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidate userAuthValidate, InstaApi instaApi, HttpHelper httpHelper)
         {
             _deviceInfo = deviceInfo;
-            _user = user; 
+            _user = user;
             _httpRequestProcessor = httpRequestProcessor;
             _logger = logger;
             _userAuthValidate = userAuthValidate;
@@ -538,7 +537,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaStatistics>(exception);
             }
         }
-        
+
         #region Direct threads
         /// <summary>
         ///     Star direct thread
@@ -875,7 +874,7 @@ namespace InstagramApiSharp.API.Processors
                 return Result.Fail<InstaBusinessCityLocationList>(exception);
             }
         }
-        
+
         /// <summary>
         ///     Search branded users for adding to your branded whitelist
         /// </summary>
@@ -1012,7 +1011,7 @@ namespace InstagramApiSharp.API.Processors
             UserAuthValidator.Validate(_userAuthValidate);
             try
             {
-                if(desirePartner?.AppId == null)
+                if (desirePartner?.AppId == null)
                     return Result.Fail<bool>("Desire partner cannot be null");
                 if (uri == null)
                     return Result.Fail<bool>("Uri cannot be null");

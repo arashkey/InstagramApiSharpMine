@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using InstagramApiSharp.API;
+﻿using InstagramApiSharp.API;
+using InstagramApiSharp.API.Versions;
+using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Android.DeviceInfo;
+using InstagramApiSharp.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using InstagramApiSharp.Enums;
-using InstagramApiSharp.API.Versions;
-using System.Net;
+using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using System.IO.Compression;
+using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
+using System.Text;
 using System.Threading.Tasks;
-using InstagramApiSharp.Classes;
 
 namespace InstagramApiSharp.Helpers
 {
@@ -92,15 +89,15 @@ namespace InstagramApiSharp.Helpers
 
             if (IsLoggedIn())
                 request.Headers.Add(InstaApiConstants.HEADER_AUTHORIZATION, authorization);
-         
+
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_BLOKS_IS_LAYOUT_RTL, "false");
 
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_BLOKS_ENABLE_RENDERCODE, "false");
 
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_DEVICE_ID, deviceInfo.DeviceGuid.ToString());
-           
+
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_FAMILY_DEVICE_ID, deviceInfo.PhoneGuid.ToString());
-            
+
             request.Headers.Add(InstaApiConstants.HEADER_X_IG_ANDROID_ID, deviceInfo.DeviceId);
 
             request.Headers.Add(InstaApiConstants.HEADER_IG_TIMEZONE_OFFSET, _instaApi.TimezoneOffset.ToString());
@@ -185,7 +182,7 @@ namespace InstagramApiSharp.Helpers
             var bytes = outStream.ToArray();
             var content = new ByteArrayContent(bytes);
             content.Headers.Add("Content-Encoding", "gzip");
-            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded") { CharSet= "UTF-8" };
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded") { CharSet = "UTF-8" };
             content.Headers.ContentLength = bytes.Length;
             request.Content = content;
             return request;

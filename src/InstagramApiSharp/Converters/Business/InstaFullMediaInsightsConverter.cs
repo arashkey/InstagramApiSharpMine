@@ -7,15 +7,11 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.Models.Business;
-using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Classes.ResponseWrappers.Business;
 using InstagramApiSharp.Helpers;
-using InstagramApiSharp.Enums;
+using System;
 namespace InstagramApiSharp.Converters.Business
 {
     internal class InstaFullMediaInsightsConverter : IObjectConverter<InstaFullMediaInsights, InstaFullMediaInsightsResponse>

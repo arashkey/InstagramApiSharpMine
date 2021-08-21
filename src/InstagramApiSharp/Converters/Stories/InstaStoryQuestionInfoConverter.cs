@@ -25,7 +25,7 @@ namespace InstagramApiSharp.Converters
             var questionInfo = new InstaStoryQuestionInfo
             {
                 BackgroundColor = SourceObject.BackgroundColor,
-                LatestQuestionResponseTime = DateTimeHelper.FromUnixTimeSeconds(SourceObject.LatestQuestionResponseTime ?? 
+                LatestQuestionResponseTime = DateTimeHelper.FromUnixTimeSeconds(SourceObject.LatestQuestionResponseTime ??
                 DateTime.UtcNow.ToUnixTime()),
                 MaxId = SourceObject.MaxId,
                 MoreAvailable = SourceObject.MoreAvailable ?? false,

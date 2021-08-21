@@ -25,7 +25,7 @@ namespace InstagramApiSharp.Classes.Models
         public bool ClientFeedChangelistApplied { get; set; }
     }
 
-    
+
     public class InstaPost : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,7 +37,7 @@ namespace InstagramApiSharp.Classes.Models
         public int SelectedIndex { get { return _selectedIndex; } set { _selectedIndex = value; OnPropertyChanged("SelectedIndex"); } }
         public InstaFeedsType Type { get; set; }
         public InstaMedia Media { get; set; }
-        
+
         public ObservableCollection<InstaReelFeed> Stories { get; set; } = new ObservableCollection<InstaReelFeed>();
         //public List<InstaStory> Stories { get; set; } = new List<InstaStory>();
         public List<InstaSuggestionItem> SuggestedUserItems { get; set; } = new List<InstaSuggestionItem>();

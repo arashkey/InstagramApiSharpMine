@@ -7,10 +7,8 @@
  * IRANIAN DEVELOPERS
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.ResponseWrappers
 {
     public class InstaMutualUsersResponse

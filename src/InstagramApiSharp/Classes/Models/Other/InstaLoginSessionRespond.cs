@@ -6,8 +6,8 @@
  * 
  * IRANIAN DEVELOPERS
  */
-using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 namespace InstagramApiSharp.Classes.Models
 {
     public class InstaLoginSessionRespond : InstaDefaultResponse

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using InstagramApiSharp.Classes.Models;
+﻿using InstagramApiSharp.Classes.Models;
 using InstagramApiSharp.Classes.ResponseWrappers;
 using InstagramApiSharp.Helpers;
+using System.Collections.Generic;
 
 namespace InstagramApiSharp.Converters
 {
@@ -30,7 +30,7 @@ namespace InstagramApiSharp.Converters
                 {
                     HasOlder = SourceObject.Inbox.HasOlder,
                     UnseenCount = SourceObject.Inbox.UnseenCount,
-                    UnseenCountTs = SourceObject.Inbox.UnseenCountTs, 
+                    UnseenCountTs = SourceObject.Inbox.UnseenCountTs,
                     OldestCursor = SourceObject.Inbox.OldestCursor,
                     BlendedInboxEnabled = SourceObject.Inbox.BlendedInboxEnabled
                 };
