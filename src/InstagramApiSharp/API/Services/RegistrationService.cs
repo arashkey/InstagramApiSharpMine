@@ -150,8 +150,16 @@ namespace InstagramApiSharp.API.Services
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    _instaApi._user.PublicKey = _user.PublicKey = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY));
-                    _instaApi._user.PublicKeyId = _user.PublicKeyId = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID));
+                    if (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY))
+                    {
+                        _instaApi._user.PublicKey = _user.PublicKey = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY));
+                    }
+                    if (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID))
+                    { 
+                        _instaApi._user.PublicKeyId = _user.PublicKeyId = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID));
+                    }
+
+                    bool ContainsHeader(string head) => response.Headers.Contains(head);
                 }
             }
             catch (Exception exception)
