@@ -3644,19 +3644,17 @@ namespace InstagramApiSharp.API
                 _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor, second);
                 if (!IsUserAuthenticated)
                 {
-                    var pubKey = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY));
-                    var pubKeyId = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID));
-                    if (!string.IsNullOrEmpty(pubKey) && !string.IsNullOrEmpty(pubKeyId))
+                    if (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY) && ContainsHeader(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID))
                     {
-                        _user.PublicKey = pubKey;
-                        _user.PublicKeyId = pubKeyId;
+                        _user.PublicKey = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY));
+                        _user.PublicKeyId = string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID));
                     }
 
                     var cookies = _httpRequestProcessor.HttpHandler.CookieContainer
                         .GetCookies(_httpRequestProcessor.Client.BaseAddress);
 
-                    string mid = cookies[InstaApiConstants.COOKIES_MID]?.Value ?? string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_SET_X_MID));
-                    string rur = cookies[InstaApiConstants.COOKIES_RUR]?.Value ?? string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_X_IG_ORIGIN_REGION));
+                    string mid = cookies[InstaApiConstants.COOKIES_MID]?.Value ?? (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_IG_SET_X_MID) ? string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_SET_X_MID)) : null);
+                    string rur = cookies[InstaApiConstants.COOKIES_RUR]?.Value ?? (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_X_IG_ORIGIN_REGION) ? string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_X_IG_ORIGIN_REGION)) : null);
 
                     if (!string.IsNullOrEmpty(mid))
                     {
@@ -3667,6 +3665,9 @@ namespace InstagramApiSharp.API
                     {
                         _user.RurHeader = rur;
                     }
+
+
+                    bool ContainsHeader(string head) => response.Headers.Contains(head);
                 }
             }
             catch (HttpRequestException httpException)
@@ -3886,32 +3887,42 @@ namespace InstagramApiSharp.API
         {
             try
             {
-                var wwwClaimHeader = response.Headers.GetValues(InstaApiConstants.HEADER_RESPONSE_X_WWW_CLAIM);
-                if (wwwClaimHeader != null &&
-                    string.Join("", wwwClaimHeader) is string wwwClaim && 
-                    !string.IsNullOrEmpty(wwwClaim))
+                if (ContainsHeader(InstaApiConstants.HEADER_RESPONSE_X_WWW_CLAIM))
                 {
-                    _user.WwwClaim = wwwClaim;
+                    var wwwClaimHeader = response.Headers.GetValues(InstaApiConstants.HEADER_RESPONSE_X_WWW_CLAIM);
+                    if (wwwClaimHeader != null &&
+                        string.Join("", wwwClaimHeader) is string wwwClaim &&
+                        !string.IsNullOrEmpty(wwwClaim))
+                    {
+                        _user.WwwClaim = wwwClaim;
+                    }
                 }
 
-                var fbTripIdHeader = response.Headers.GetValues(InstaApiConstants.HEADER_X_FB_TRIP_ID);
-                if (fbTripIdHeader != null && 
-                    string.Join("", fbTripIdHeader) is string fbTripId && 
-                    !string.IsNullOrEmpty(fbTripId))
-                { 
-                    _user.FbTripId = fbTripId; 
-                }
-
-                var authorizationHeader = response.Headers.GetValues(InstaApiConstants.HEADER_RESPONSE_AUTHORIZATION);
-                if (authorizationHeader != null && 
-                    string.Join("", authorizationHeader) is string authorization && 
-                    !string.IsNullOrEmpty(authorization) &&
-                    authorization != InstaApiConstants.HEADER_BEARER_IGT_2_VALUE)
+                if (ContainsHeader(InstaApiConstants.HEADER_X_FB_TRIP_ID))
                 {
-                    _user.Authorization = authorization;
+                    var fbTripIdHeader = response.Headers.GetValues(InstaApiConstants.HEADER_X_FB_TRIP_ID);
+                    if (fbTripIdHeader != null &&
+                        string.Join("", fbTripIdHeader) is string fbTripId &&
+                        !string.IsNullOrEmpty(fbTripId))
+                    {
+                        _user.FbTripId = fbTripId;
+                    }
                 }
 
+                if (ContainsHeader(InstaApiConstants.HEADER_RESPONSE_AUTHORIZATION))
+                {
+                    var authorizationHeader = response.Headers.GetValues(InstaApiConstants.HEADER_RESPONSE_AUTHORIZATION);
+                    if (authorizationHeader != null &&
+                        string.Join("", authorizationHeader) is string authorization &&
+                        !string.IsNullOrEmpty(authorization) &&
+                        authorization != InstaApiConstants.HEADER_BEARER_IGT_2_VALUE)
+                    {
+                        _user.Authorization = authorization;
+                    }
+                }
                 await LauncherSyncPrivate(/*false, true*/).ConfigureAwait(false);
+
+                bool ContainsHeader(string head) => response.Headers.Contains(head);
             }
             catch (Exception exception)
             {
