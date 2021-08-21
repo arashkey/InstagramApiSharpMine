@@ -1115,16 +1115,22 @@ namespace InstagramApiSharp.API
                 {
                     if (string.IsNullOrEmpty(_user.PublicKey))
                         await SendRequestsBeforeLoginAsync();
-                    if (isNewLogin)
-                        _httpRequestProcessor.RequestMessage.CsrfToken = null;
-                    else
-                        _httpRequestProcessor.RequestMessage.CsrfToken = csrftoken;
+                    if (!_httpHelper.NewerThan180)
+                    {
+                        if (isNewLogin)
+                            _httpRequestProcessor.RequestMessage.CsrfToken = null;
+                        else
+                            _httpRequestProcessor.RequestMessage.CsrfToken = csrftoken;
+                    }
                     var encruptedPassword = _encryptedPasswordEncryptor != null ?
                         await _encryptedPasswordEncryptor.GetEncryptedPassword(this, _user.Password).ConfigureAwait(false) :
                         this.GetEncryptedPassword(_user.Password);
                     _httpRequestProcessor.RequestMessage.EncPassword = encruptedPassword;
                 }
-                _httpRequestProcessor.RequestMessage.CsrfToken = csrftoken;
+                if (!_httpHelper.NewerThan180)
+                {
+                    _httpRequestProcessor.RequestMessage.CsrfToken = csrftoken;
+                }
                 var hash = _httpRequestProcessor.RequestMessage.GenerateSignature(_apiVersion, _apiVersion.SignatureKey, _httpHelper.IsNewerApis, out devid);
 
                 signature = $"{(_httpHelper.IsNewerApis ? _apiVersion.SignatureKey : hash)}.{_httpRequestProcessor.RequestMessage.GetMessageString(_httpHelper.IsNewerApis)}";
