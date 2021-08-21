@@ -99,7 +99,7 @@ namespace InstagramApiSharp.API.Services
                     request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                if (setCsrfToken)
+                if (setCsrfToken && !_httpHelper.NewerThan180)
                     _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
                 var obj = JsonConvert.DeserializeObject<InstaDefaultResponse>(json);
 
@@ -124,7 +124,7 @@ namespace InstagramApiSharp.API.Services
                 HttpRequestMessage request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                if (setCsrfToken)
+                if (setCsrfToken && !_httpHelper.NewerThan180)
                     _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
                 SetPubKeyId(response);
 
@@ -255,7 +255,10 @@ namespace InstagramApiSharp.API.Services
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
                 var obj = JsonConvert.DeserializeObject<InstaAccountCheck>(json);
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                if (!_httpHelper.NewerThan180)
+                {
+                    _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                }
                 SetPubKeyId(response);
                 if (!obj.IsSucceed || response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaAccountCheck>(response, json);
@@ -304,7 +307,10 @@ namespace InstagramApiSharp.API.Services
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                if (!_httpHelper.NewerThan180)
+                {
+                    _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                }
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     var obj = JsonConvert.DeserializeObject<InstaCheckEmailRegistration>(json);
@@ -356,7 +362,10 @@ namespace InstagramApiSharp.API.Services
                 var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                if (!_httpHelper.NewerThan180)
+                {
+                    _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                }
                 var obj = JsonConvert.DeserializeObject<InstaSignupConsentConfig>(json);
 
                 return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<InstaSignupConsentConfig>(response, json);
@@ -419,7 +428,10 @@ namespace InstagramApiSharp.API.Services
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                if (!_httpHelper.NewerThan180)
+                {
+                    _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                }
                 var obj = JsonConvert.DeserializeObject<InstaRegistrationConfirmationCode>(json);
                 ForceSignupCode = obj.SignupCode;
                 return obj.IsSucceed ? Result.Success(obj) : Result.UnExpectedResponse<InstaRegistrationConfirmationCode>(response, json);
@@ -472,7 +484,10 @@ namespace InstagramApiSharp.API.Services
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                if (!_httpHelper.NewerThan180)
+                {
+                    _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
+                }
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     var o = JsonConvert.DeserializeObject<InstaAccountRegistrationPhoneNumber>(json);
@@ -605,7 +620,7 @@ namespace InstagramApiSharp.API.Services
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                if (progressState == InstaOnboardingProgressState.Prefetch)
+                if (progressState == InstaOnboardingProgressState.Prefetch && !_httpHelper.NewerThan180)
                     _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor);
                 IResult<bool> FailResponse()
                 {
@@ -715,7 +730,10 @@ namespace InstagramApiSharp.API.Services
                 var request = _httpHelper.GetSignedRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
                 var response = await _httpRequestProcessor.SendAsync(request);
                 var json = await response.Content.ReadAsStringAsync();
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor, true);
+                if (!_httpHelper.NewerThan180)
+                {
+                    _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor, true);
+                }
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     var loginFailReason = JsonConvert.DeserializeObject<InstaLoginBaseResponse>(json);
