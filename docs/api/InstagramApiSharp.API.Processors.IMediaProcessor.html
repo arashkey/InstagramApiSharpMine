@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IMediaProcessor
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IMediaProcessor
+   ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor">
+  
+  
+  <h1 id="InstagramApiSharp_API_Processors_IMediaProcessor" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor" class="text-break">Interface IMediaProcessor
+  </h1>
+  <div class="markdown level0 summary"><p>Media api functions.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="InstagramApiSharp.API.Processors.html">InstagramApiSharp.API.Processors</a></h6>
+  <h6><strong>Assembly</strong>: InstagramApiSharp.dll</h6>
+  <h5 id="InstagramApiSharp_API_Processors_IMediaProcessor_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IMediaProcessor</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_ArchiveMediaAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.ArchiveMediaAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L19">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_ArchiveMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.ArchiveMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_ArchiveMediaAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.ArchiveMediaAsync(System.String)">ArchiveMediaAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Add an post to archive list (this will show the post only for you!)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; ArchiveMediaAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id (<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html#InstagramApiSharp_Classes_Models_InstaMedia_InstaIdentifier">InstaIdentifier</a>)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td><p>Return true if the media is archived</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_DeleteMediaAsync_System_String_InstagramApiSharp_Classes_Models_InstaMediaType_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.DeleteMediaAsync(System.String%2CInstagramApiSharp.Classes.Models.InstaMediaType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L27">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_DeleteMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.DeleteMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_DeleteMediaAsync_System_String_InstagramApiSharp_Classes_Models_InstaMediaType_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.DeleteMediaAsync(System.String,InstagramApiSharp.Classes.Models.InstaMediaType)">DeleteMediaAsync(String, InstaMediaType)</h4>
+  <div class="markdown level1 summary"><p>Delete a media (photo, video or album)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; DeleteMediaAsync(string mediaId, InstaMediaType mediaType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id (<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html#InstagramApiSharp_Classes_Models_InstaMedia_InstaIdentifier">InstaIdentifier</a>)</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaType.html">InstaMediaType</a></td>
+        <td><span class="parametername">mediaType</span></td>
+        <td><p>The type of the media</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td><p>Return true if the media is deleted</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_EditMediaAsync_System_String_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_InstagramApiSharp_Classes_Models_InstaUserTagUpload___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.EditMediaAsync(System.String%2CSystem.String%2CInstagramApiSharp.Classes.Models.InstaLocationShort%2CInstagramApiSharp.Classes.Models.InstaUserTagUpload%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L37">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_EditMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.EditMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_EditMediaAsync_System_String_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_InstagramApiSharp_Classes_Models_InstaUserTagUpload___" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.EditMediaAsync(System.String,System.String,InstagramApiSharp.Classes.Models.InstaLocationShort,InstagramApiSharp.Classes.Models.InstaUserTagUpload[])">EditMediaAsync(String, String, InstaLocationShort, InstaUserTagUpload[])</h4>
+  <div class="markdown level1 summary"><p>Edit the caption/location of the media (photo/video/album)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; EditMediaAsync(string mediaId, string caption, InstaLocationShort location = null, InstaUserTagUpload[] userTags = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>The media ID</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td><p>The new caption</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaLocationShort.html">InstaLocationShort</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>Location =&gt; Optional (get it from <span class="xref">InstagramApiSharp.API.Processors.LocationProcessor.SearchLocationAsync(System.Double,System.Double,System.String)</span></p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaUserTagUpload.html">InstaUserTagUpload</a>[]</td>
+        <td><span class="parametername">userTags</span></td>
+        <td><p>User tags =&gt; Optional (ONLY FOR PHOTO POSTS!!!)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td><p>Return true if everything is ok</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_GetArchivedMediaAsync_InstagramApiSharp_PaginationParameters_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.GetArchivedMediaAsync(InstagramApiSharp.PaginationParameters)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L46">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_GetArchivedMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetArchivedMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_GetArchivedMediaAsync_InstagramApiSharp_PaginationParameters_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetArchivedMediaAsync(InstagramApiSharp.PaginationParameters)">GetArchivedMediaAsync(PaginationParameters)</h4>
+  <div class="markdown level1 summary"><p>Get archived medias</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMediaList&gt;&gt; GetArchivedMediaAsync(PaginationParameters paginationParameters)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.PaginationParameters.html">PaginationParameters</a></td>
+        <td><span class="parametername">paginationParameters</span></td>
+        <td><p>Pagination parameters: next id and max amount of pages to load</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaList.html">InstaMediaList</a>&gt;&gt;</td>
+        <td><p><a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaList.html">InstaMediaList</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_GetArchivedMediaAsync_InstagramApiSharp_PaginationParameters_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.GetArchivedMediaAsync(InstagramApiSharp.PaginationParameters%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L56">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_GetArchivedMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetArchivedMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_GetArchivedMediaAsync_InstagramApiSharp_PaginationParameters_System_Threading_CancellationToken_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetArchivedMediaAsync(InstagramApiSharp.PaginationParameters,System.Threading.CancellationToken)">GetArchivedMediaAsync(PaginationParameters, CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Get archived medias</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMediaList&gt;&gt; GetArchivedMediaAsync(PaginationParameters paginationParameters, CancellationToken cancellationToken)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.PaginationParameters.html">PaginationParameters</a></td>
+        <td><span class="parametername">paginationParameters</span></td>
+        <td><p>Pagination parameters: next id and max amount of pages to load</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td><p>Cancellation token</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaList.html">InstaMediaList</a>&gt;&gt;</td>
+        <td><p><a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaList.html">InstaMediaList</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_GetBlockedMediasAsync.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.GetBlockedMediasAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L62">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_GetBlockedMediasAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetBlockedMediasAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_GetBlockedMediasAsync" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetBlockedMediasAsync">GetBlockedMediasAsync()</h4>
+  <div class="markdown level1 summary"><p>Get blocked medias</p>
+<p>Note: returns media ids!</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMediaIdList&gt;&gt; GetBlockedMediasAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaIdList.html">InstaMediaIdList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaByIdAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaByIdAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L80">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaByIdAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaByIdAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaByIdAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaByIdAsync(System.String)">GetMediaByIdAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get media by its id asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; GetMediaByIdAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id (<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html#InstagramApiSharp_Classes_Models_InstaMedia_InstaIdentifier">InstaIdentifier</a>)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td><p><a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaByIdsAsync_System_String___.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaByIdsAsync(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L71">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaByIdsAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaByIdsAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaByIdsAsync_System_String___" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaByIdsAsync(System.String[])">GetMediaByIdsAsync(String[])</h4>
+  <div class="markdown level1 summary"><p>Get multiple media by its multiple ids asynchronously</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMediaList&gt;&gt; GetMediaByIdsAsync(params string[] mediaIds)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">mediaIds</span></td>
+        <td><p>Media ids</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaList.html">InstaMediaList</a>&gt;&gt;</td>
+        <td><p><a class="xref" href="InstagramApiSharp.Classes.Models.InstaMediaList.html">InstaMediaList</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaIdFromUrlAsync_System_Uri_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaIdFromUrlAsync(System.Uri)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L87">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaIdFromUrlAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaIdFromUrlAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaIdFromUrlAsync_System_Uri_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaIdFromUrlAsync(System.Uri)">GetMediaIdFromUrlAsync(Uri)</h4>
+  <div class="markdown level1 summary"><p>Get media ID from an url (got from &quot;share link&quot;)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;string&gt;&gt; GetMediaIdFromUrlAsync(Uri uri)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Uri</span></td>
+        <td><span class="parametername">uri</span></td>
+        <td><p>Uri to get media ID</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.String</span>&gt;&gt;</td>
+        <td><p>Media ID</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaLikersAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaLikersAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L92">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaLikersAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaLikersAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_GetMediaLikersAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetMediaLikersAsync(System.String)">GetMediaLikersAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get users (short) who liked certain media. Normaly it return around 1000 last users.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaLikersList&gt;&gt; GetMediaLikersAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaLikersList.html">InstaLikersList</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_GetShareLinkFromMediaIdAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.GetShareLinkFromMediaIdAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L99">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_GetShareLinkFromMediaIdAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetShareLinkFromMediaIdAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_GetShareLinkFromMediaIdAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.GetShareLinkFromMediaIdAsync(System.String)">GetShareLinkFromMediaIdAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Get share link from media Id</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;Uri&gt;&gt; GetShareLinkFromMediaIdAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>media ID</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Uri</span>&gt;&gt;</td>
+        <td><p>Share link as Uri</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_LikeMediaAsync_System_String_InstagramApiSharp_Enums_InstaMediaContainerModuleType_System_UInt32_InstagramApiSharp_Enums_InstaMediaInventorySource_System_Nullable_System_Boolean__System_Nullable_System_Int32__System_String_System_String_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.LikeMediaAsync(System.String%2CInstagramApiSharp.Enums.InstaMediaContainerModuleType%2CSystem.UInt32%2CInstagramApiSharp.Enums.InstaMediaInventorySource%2CSystem.Nullable%7BSystem.Boolean%7D%2CSystem.Nullable%7BSystem.Int32%7D%2CSystem.String%2CSystem.String%2CSystem.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L115">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_LikeMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.LikeMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_LikeMediaAsync_System_String_InstagramApiSharp_Enums_InstaMediaContainerModuleType_System_UInt32_InstagramApiSharp_Enums_InstaMediaInventorySource_System_Nullable_System_Boolean__System_Nullable_System_Int32__System_String_System_String_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.LikeMediaAsync(System.String,InstagramApiSharp.Enums.InstaMediaContainerModuleType,System.UInt32,InstagramApiSharp.Enums.InstaMediaInventorySource,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String,System.String,System.String,System.String)">LikeMediaAsync(String, InstaMediaContainerModuleType, UInt32, InstaMediaInventorySource, Nullable&lt;Boolean&gt;, Nullable&lt;Int32&gt;, String, String, String, String)</h4>
+  <div class="markdown level1 summary"><p>Like media (photo or video)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; LikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline, uint feedPosition = 0U, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None, bool? isCarouselBumpedPost, int? carouselIndex = default(int? ), string exploreSourceToken = null, string parentMediaPK = null, string chainingSessionId = null, string navChain = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Enums.InstaMediaContainerModuleType.html">InstaMediaContainerModuleType</a></td>
+        <td><span class="parametername">containerModule</span></td>
+        <td><p>Container model (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">feedPosition</span></td>
+        <td><p>Feed position (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Enums.InstaMediaInventorySource.html">InstaMediaInventorySource</a></td>
+        <td><span class="parametername">inventorySource</span></td>
+        <td><p>Inventory source (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">isCarouselBumpedPost</span></td>
+        <td><p>Is carousel post? (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">carouselIndex</span></td>
+        <td><p>Carousel index (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">exploreSourceToken</span></td>
+        <td><p>ExploreSourceToken (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">parentMediaPK</span></td>
+        <td><p>ParentMediaPk (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">chainingSessionId</span></td>
+        <td><p>ChainingSessionId</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">navChain</span></td>
+        <td><p>Navigation chain</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td><p>Returns True, if succeeded</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_ReportMediaAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.ReportMediaAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L124">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_ReportMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.ReportMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_ReportMediaAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.ReportMediaAsync(System.String)">ReportMediaAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Report media</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; ReportMediaAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_SaveMediaAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.SaveMediaAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L130">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_SaveMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.SaveMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_SaveMediaAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.SaveMediaAsync(System.String)">SaveMediaAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Save media</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; SaveMediaAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UnArchiveMediaAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UnArchiveMediaAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L137">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UnArchiveMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UnArchiveMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UnArchiveMediaAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UnArchiveMediaAsync(System.String)">UnArchiveMediaAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Remove an post from archive list (this will show the post for everyone!)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; UnArchiveMediaAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id (<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html#InstagramApiSharp_Classes_Models_InstaMedia_InstaIdentifier">InstaIdentifier</a>)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td><p>Return true if the media is unarchived</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UnLikeMediaAsync_System_String_InstagramApiSharp_Enums_InstaMediaContainerModuleType_System_UInt32_InstagramApiSharp_Enums_InstaMediaInventorySource_System_Nullable_System_Boolean__System_Nullable_System_Int32__System_String_System_String_System_String_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UnLikeMediaAsync(System.String%2CInstagramApiSharp.Enums.InstaMediaContainerModuleType%2CSystem.UInt32%2CInstagramApiSharp.Enums.InstaMediaInventorySource%2CSystem.Nullable%7BSystem.Boolean%7D%2CSystem.Nullable%7BSystem.Int32%7D%2CSystem.String%2CSystem.String%2CSystem.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L153">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UnLikeMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UnLikeMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UnLikeMediaAsync_System_String_InstagramApiSharp_Enums_InstaMediaContainerModuleType_System_UInt32_InstagramApiSharp_Enums_InstaMediaInventorySource_System_Nullable_System_Boolean__System_Nullable_System_Int32__System_String_System_String_System_String_System_String_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UnLikeMediaAsync(System.String,InstagramApiSharp.Enums.InstaMediaContainerModuleType,System.UInt32,InstagramApiSharp.Enums.InstaMediaInventorySource,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.String,System.String,System.String,System.String)">UnLikeMediaAsync(String, InstaMediaContainerModuleType, UInt32, InstaMediaInventorySource, Nullable&lt;Boolean&gt;, Nullable&lt;Int32&gt;, String, String, String, String)</h4>
+  <div class="markdown level1 summary"><p>Remove like from media (photo or video)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; UnLikeMediaAsync(string mediaId, InstaMediaContainerModuleType containerModule = InstaMediaContainerModuleType.FeedTimeline, uint feedPosition = 0U, InstaMediaInventorySource inventorySource = InstaMediaInventorySource.None, bool? isCarouselBumpedPost, int? carouselIndex = default(int? ), string exploreSourceToken = null, string parentMediaPK = null, string chainingSessionId = null, string navChain = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Enums.InstaMediaContainerModuleType.html">InstaMediaContainerModuleType</a></td>
+        <td><span class="parametername">containerModule</span></td>
+        <td><p>Container model (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">feedPosition</span></td>
+        <td><p>Feed position (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Enums.InstaMediaInventorySource.html">InstaMediaInventorySource</a></td>
+        <td><span class="parametername">inventorySource</span></td>
+        <td><p>Inventory source (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Boolean</span>&gt;</td>
+        <td><span class="parametername">isCarouselBumpedPost</span></td>
+        <td><p>Is carousel post? (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">carouselIndex</span></td>
+        <td><p>Carousel index (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">exploreSourceToken</span></td>
+        <td><p>ExploreSourceToken (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">parentMediaPK</span></td>
+        <td><p>ParentMediaPk (optional)</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">chainingSessionId</span></td>
+        <td><p>ChainingSessionId</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">navChain</span></td>
+        <td><p>Navigation chain</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td><p>Returns True, if succeeded</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UnSaveMediaAsync_System_String_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UnSaveMediaAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L162">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UnSaveMediaAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UnSaveMediaAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UnSaveMediaAsync_System_String_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UnSaveMediaAsync(System.String)">UnSaveMediaAsync(String)</h4>
+  <div class="markdown level1 summary"><p>Unsave media</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;bool&gt;&gt; UnSaveMediaAsync(string mediaId)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">mediaId</span></td>
+        <td><p>Media id</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_InstagramApiSharp_Classes_Models_InstaAlbumUpload___System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync(InstagramApiSharp.Classes.Models.InstaAlbumUpload%5B%5D%2CSystem.String%2CInstagramApiSharp.Classes.Models.InstaLocationShort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L189">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_InstagramApiSharp_Classes_Models_InstaAlbumUpload___System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync(InstagramApiSharp.Classes.Models.InstaAlbumUpload[],System.String,InstagramApiSharp.Classes.Models.InstaLocationShort)">UploadAlbumAsync(InstaAlbumUpload[], String, InstaLocationShort)</h4>
+  <div class="markdown level1 summary"><p>Upload album (videos and photos)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; UploadAlbumAsync(InstaAlbumUpload[] album, string caption, InstaLocationShort location = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaAlbumUpload.html">InstaAlbumUpload</a>[]</td>
+        <td><span class="parametername">album</span></td>
+        <td><p>Array of photos or videos to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td><p>Caption</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaLocationShort.html">InstaLocationShort</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>Location =&gt; Optional (get it from <span class="xref">InstagramApiSharp.API.Processors.LocationProcessor.SearchLocationAsync(System.Double,System.Double,System.String)</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_InstagramApiSharp_Classes_Models_InstaImageUpload___InstagramApiSharp_Classes_Models_InstaVideoUpload___System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync(InstagramApiSharp.Classes.Models.InstaImageUpload%5B%5D%2CInstagramApiSharp.Classes.Models.InstaVideoUpload%5B%5D%2CSystem.String%2CInstagramApiSharp.Classes.Models.InstaLocationShort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L171">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_InstagramApiSharp_Classes_Models_InstaImageUpload___InstagramApiSharp_Classes_Models_InstaVideoUpload___System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync(InstagramApiSharp.Classes.Models.InstaImageUpload[],InstagramApiSharp.Classes.Models.InstaVideoUpload[],System.String,InstagramApiSharp.Classes.Models.InstaLocationShort)">UploadAlbumAsync(InstaImageUpload[], InstaVideoUpload[], String, InstaLocationShort)</h4>
+  <div class="markdown level1 summary"><p>Upload album (videos and photos)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; UploadAlbumAsync(InstaImageUpload[] images, InstaVideoUpload[] videos, string caption, InstaLocationShort location = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaImageUpload.html">InstaImageUpload</a>[]</td>
+        <td><span class="parametername">images</span></td>
+        <td><p>Array of photos to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaVideoUpload.html">InstaVideoUpload</a>[]</td>
+        <td><span class="parametername">videos</span></td>
+        <td><p>Array of videos to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td><p>Caption</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaLocationShort.html">InstaLocationShort</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>Location =&gt; Optional (get it from <span class="xref">InstagramApiSharp.API.Processors.LocationProcessor.SearchLocationAsync(System.Double,System.Double,System.String)</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_System_Action_InstagramApiSharp_Classes_InstaUploaderProgress__InstagramApiSharp_Classes_Models_InstaAlbumUpload___System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync(System.Action%7BInstagramApiSharp.Classes.InstaUploaderProgress%7D%2CInstagramApiSharp.Classes.Models.InstaAlbumUpload%5B%5D%2CSystem.String%2CInstagramApiSharp.Classes.Models.InstaLocationShort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L198">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_System_Action_InstagramApiSharp_Classes_InstaUploaderProgress__InstagramApiSharp_Classes_Models_InstaAlbumUpload___System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync(System.Action{InstagramApiSharp.Classes.InstaUploaderProgress},InstagramApiSharp.Classes.Models.InstaAlbumUpload[],System.String,InstagramApiSharp.Classes.Models.InstaLocationShort)">UploadAlbumAsync(Action&lt;InstaUploaderProgress&gt;, InstaAlbumUpload[], String, InstaLocationShort)</h4>
+  <div class="markdown level1 summary"><p>Upload album (videos and photos) with progress</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; UploadAlbumAsync(Action&lt;InstaUploaderProgress&gt; progress, InstaAlbumUpload[] album, string caption, InstaLocationShort location = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.InstaUploaderProgress.html">InstaUploaderProgress</a>&gt;</td>
+        <td><span class="parametername">progress</span></td>
+        <td><p>Progress action</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaAlbumUpload.html">InstaAlbumUpload</a>[]</td>
+        <td><span class="parametername">album</span></td>
+        <td><p>Array of photos or videos to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td><p>Caption</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaLocationShort.html">InstaLocationShort</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>Location =&gt; Optional (get it from <span class="xref">InstagramApiSharp.API.Processors.LocationProcessor.SearchLocationAsync(System.Double,System.Double,System.String)</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_System_Action_InstagramApiSharp_Classes_InstaUploaderProgress__InstagramApiSharp_Classes_Models_InstaImageUpload___InstagramApiSharp_Classes_Models_InstaVideoUpload___System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync(System.Action%7BInstagramApiSharp.Classes.InstaUploaderProgress%7D%2CInstagramApiSharp.Classes.Models.InstaImageUpload%5B%5D%2CInstagramApiSharp.Classes.Models.InstaVideoUpload%5B%5D%2CSystem.String%2CInstagramApiSharp.Classes.Models.InstaLocationShort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L181">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadAlbumAsync_System_Action_InstagramApiSharp_Classes_InstaUploaderProgress__InstagramApiSharp_Classes_Models_InstaImageUpload___InstagramApiSharp_Classes_Models_InstaVideoUpload___System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadAlbumAsync(System.Action{InstagramApiSharp.Classes.InstaUploaderProgress},InstagramApiSharp.Classes.Models.InstaImageUpload[],InstagramApiSharp.Classes.Models.InstaVideoUpload[],System.String,InstagramApiSharp.Classes.Models.InstaLocationShort)">UploadAlbumAsync(Action&lt;InstaUploaderProgress&gt;, InstaImageUpload[], InstaVideoUpload[], String, InstaLocationShort)</h4>
+  <div class="markdown level1 summary"><p>Upload album (videos and photos) with progress</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; UploadAlbumAsync(Action&lt;InstaUploaderProgress&gt; progress, InstaImageUpload[] images, InstaVideoUpload[] videos, string caption, InstaLocationShort location = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.InstaUploaderProgress.html">InstaUploaderProgress</a>&gt;</td>
+        <td><span class="parametername">progress</span></td>
+        <td><p>Progress action</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaImageUpload.html">InstaImageUpload</a>[]</td>
+        <td><span class="parametername">images</span></td>
+        <td><p>Array of photos to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaVideoUpload.html">InstaVideoUpload</a>[]</td>
+        <td><span class="parametername">videos</span></td>
+        <td><p>Array of videos to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td><p>Caption</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaLocationShort.html">InstaLocationShort</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>Location =&gt; Optional (get it from <span class="xref">InstagramApiSharp.API.Processors.LocationProcessor.SearchLocationAsync(System.Double,System.Double,System.String)</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UploadPhotoAsync_InstagramApiSharp_Classes_Models_InstaImageUpload_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UploadPhotoAsync(InstagramApiSharp.Classes.Models.InstaImageUpload%2CSystem.String%2CInstagramApiSharp.Classes.Models.InstaLocationShort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L206">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadPhotoAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadPhotoAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadPhotoAsync_InstagramApiSharp_Classes_Models_InstaImageUpload_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadPhotoAsync(InstagramApiSharp.Classes.Models.InstaImageUpload,System.String,InstagramApiSharp.Classes.Models.InstaLocationShort)">UploadPhotoAsync(InstaImageUpload, String, InstaLocationShort)</h4>
+  <div class="markdown level1 summary"><p>Upload photo [Supports user tags]</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; UploadPhotoAsync(InstaImageUpload image, string caption, InstaLocationShort location = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaImageUpload.html">InstaImageUpload</a></td>
+        <td><span class="parametername">image</span></td>
+        <td><p>Photo to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td><p>Caption</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaLocationShort.html">InstaLocationShort</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>Location =&gt; Optional (get it from <span class="xref">InstagramApiSharp.API.Processors.LocationProcessor.SearchLocationAsync(System.Double,System.Double,System.String)</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UploadPhotoAsync_System_Action_InstagramApiSharp_Classes_InstaUploaderProgress__InstagramApiSharp_Classes_Models_InstaImageUpload_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UploadPhotoAsync(System.Action%7BInstagramApiSharp.Classes.InstaUploaderProgress%7D%2CInstagramApiSharp.Classes.Models.InstaImageUpload%2CSystem.String%2CInstagramApiSharp.Classes.Models.InstaLocationShort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L215">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadPhotoAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadPhotoAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadPhotoAsync_System_Action_InstagramApiSharp_Classes_InstaUploaderProgress__InstagramApiSharp_Classes_Models_InstaImageUpload_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadPhotoAsync(System.Action{InstagramApiSharp.Classes.InstaUploaderProgress},InstagramApiSharp.Classes.Models.InstaImageUpload,System.String,InstagramApiSharp.Classes.Models.InstaLocationShort)">UploadPhotoAsync(Action&lt;InstaUploaderProgress&gt;, InstaImageUpload, String, InstaLocationShort)</h4>
+  <div class="markdown level1 summary"><p>Upload photo with progress [Supports user tags]</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; UploadPhotoAsync(Action&lt;InstaUploaderProgress&gt; progress, InstaImageUpload image, string caption, InstaLocationShort location = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.InstaUploaderProgress.html">InstaUploaderProgress</a>&gt;</td>
+        <td><span class="parametername">progress</span></td>
+        <td><p>Progress action</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaImageUpload.html">InstaImageUpload</a></td>
+        <td><span class="parametername">image</span></td>
+        <td><p>Photo to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td><p>Caption</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaLocationShort.html">InstaLocationShort</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>Location =&gt; Optional (get it from <span class="xref">InstagramApiSharp.API.Processors.LocationProcessor.SearchLocationAsync(System.Double,System.Double,System.String)</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UploadSegmentedVideoAsync_InstagramApiSharp_Classes_Models_InstaSegmentedVideoUpload_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UploadSegmentedVideoAsync(InstagramApiSharp.Classes.Models.InstaSegmentedVideoUpload%2CSystem.String%2CInstagramApiSharp.Classes.Models.InstaLocationShort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L239">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadSegmentedVideoAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadSegmentedVideoAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadSegmentedVideoAsync_InstagramApiSharp_Classes_Models_InstaSegmentedVideoUpload_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadSegmentedVideoAsync(InstagramApiSharp.Classes.Models.InstaSegmentedVideoUpload,System.String,InstagramApiSharp.Classes.Models.InstaLocationShort)">UploadSegmentedVideoAsync(InstaSegmentedVideoUpload, String, InstaLocationShort)</h4>
+  <div class="markdown level1 summary"><p>Upload segmented video to timeline</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; UploadSegmentedVideoAsync(InstaSegmentedVideoUpload video, string caption, InstaLocationShort location = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaSegmentedVideoUpload.html">InstaSegmentedVideoUpload</a></td>
+        <td><span class="parametername">video</span></td>
+        <td><p>Video to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td><p>Caption</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaLocationShort.html">InstaLocationShort</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>Location =&gt; Optional (get it from <span class="xref">InstagramApiSharp.API.Processors.LocationProcessor.SearchLocationAsync(System.Double,System.Double,System.String)</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UploadVideoAsync_InstagramApiSharp_Classes_Models_InstaVideoUpload_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UploadVideoAsync(InstagramApiSharp.Classes.Models.InstaVideoUpload%2CSystem.String%2CInstagramApiSharp.Classes.Models.InstaLocationShort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L223">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadVideoAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadVideoAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadVideoAsync_InstagramApiSharp_Classes_Models_InstaVideoUpload_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadVideoAsync(InstagramApiSharp.Classes.Models.InstaVideoUpload,System.String,InstagramApiSharp.Classes.Models.InstaLocationShort)">UploadVideoAsync(InstaVideoUpload, String, InstaLocationShort)</h4>
+  <div class="markdown level1 summary"><p>Upload video</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; UploadVideoAsync(InstaVideoUpload video, string caption, InstaLocationShort location = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaVideoUpload.html">InstaVideoUpload</a></td>
+        <td><span class="parametername">video</span></td>
+        <td><p>Video and thumbnail to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td><p>Caption</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaLocationShort.html">InstaLocationShort</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>Location =&gt; Optional (get it from <span class="xref">InstagramApiSharp.API.Processors.LocationProcessor.SearchLocationAsync(System.Double,System.Double,System.String)</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor_UploadVideoAsync_System_Action_InstagramApiSharp_Classes_InstaUploaderProgress__InstagramApiSharp_Classes_Models_InstaVideoUpload_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor.UploadVideoAsync(System.Action%7BInstagramApiSharp.Classes.InstaUploaderProgress%7D%2CInstagramApiSharp.Classes.Models.InstaVideoUpload%2CSystem.String%2CInstagramApiSharp.Classes.Models.InstaLocationShort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L231">View Source</a>
+  </span>
+  <a id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadVideoAsync_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadVideoAsync*"></a>
+  <h4 id="InstagramApiSharp_API_Processors_IMediaProcessor_UploadVideoAsync_System_Action_InstagramApiSharp_Classes_InstaUploaderProgress__InstagramApiSharp_Classes_Models_InstaVideoUpload_System_String_InstagramApiSharp_Classes_Models_InstaLocationShort_" data-uid="InstagramApiSharp.API.Processors.IMediaProcessor.UploadVideoAsync(System.Action{InstagramApiSharp.Classes.InstaUploaderProgress},InstagramApiSharp.Classes.Models.InstaVideoUpload,System.String,InstagramApiSharp.Classes.Models.InstaLocationShort)">UploadVideoAsync(Action&lt;InstaUploaderProgress&gt;, InstaVideoUpload, String, InstaLocationShort)</h4>
+  <div class="markdown level1 summary"><p>Upload video with progress</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;IResult&lt;InstaMedia&gt;&gt; UploadVideoAsync(Action&lt;InstaUploaderProgress&gt; progress, InstaVideoUpload video, string caption, InstaLocationShort location = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Action</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.InstaUploaderProgress.html">InstaUploaderProgress</a>&gt;</td>
+        <td><span class="parametername">progress</span></td>
+        <td><p>Progress action</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaVideoUpload.html">InstaVideoUpload</a></td>
+        <td><span class="parametername">video</span></td>
+        <td><p>Video and thumbnail to upload</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">caption</span></td>
+        <td><p>Caption</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="InstagramApiSharp.Classes.Models.InstaLocationShort.html">InstaLocationShort</a></td>
+        <td><span class="parametername">location</span></td>
+        <td><p>Location =&gt; Optional (get it from <span class="xref">InstagramApiSharp.API.Processors.LocationProcessor.SearchLocationAsync(System.Double,System.Double,System.String)</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="InstagramApiSharp.Classes.IResult-1.html">IResult</a>&lt;<a class="xref" href="InstagramApiSharp.Classes.Models.InstaMedia.html">InstaMedia</a>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="InstagramApiSharp.ExtensionHelper.html#InstagramApiSharp_ExtensionHelper_PrintInDebug_System_Object_">ExtensionHelper.PrintInDebug(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/ramtinak/InstagramApiSharpMine/new/master/apiSpec/new?filename=InstagramApiSharp_API_Processors_IMediaProcessor.md&amp;value=---%0Auid%3A%20InstagramApiSharp.API.Processors.IMediaProcessor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/ramtinak/InstagramApiSharpMine/blob/master/src/InstagramApiSharp/API/Processors/IMediaProcessor.cs/#L12" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Ramtin Jokar [ <a href="mailto:ramtinak@live.com">Ramtinak@live.com</a> ] (c) 2021 | <a href="https://github.com/ramtinak/InstagramApiSharp/issues/243">InstagramApiSharp</a></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

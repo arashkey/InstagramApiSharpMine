@@ -35,6 +35,10 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="mediaId">Media id</param>
         /// <param name="text">Comment text</param>
+        /// <param name="containerModule">Container module</param>
+        /// <param name="feedPosition">Feed position</param>
+        /// <param name="isCarouselBumpedPost">Is carousel post?</param>
+        /// <param name="carouselIndex">Carousel index</param>
         Task<IResult<InstaComment>> CommentMediaAsync(string mediaId, string text,
             InstaCommentContainerModuleType containerModule = InstaCommentContainerModuleType.FeedTimeline,
             uint feedPosition = 0, bool isCarouselBumpedPost = false, int? carouselIndex = null);
@@ -128,6 +132,11 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaId">Media id</param>
         /// <param name="targetCommentId">Target comment id</param>
         /// <param name="text">Comment text</param>
+        /// <param name="containerModule">Container module</param>
+        /// <param name="feedPosition">Feed position</param>
+        /// <param name="isCarouselBumpedPost">Is carousel post?</param>
+        /// <param name="carouselIndex">Carousel index</param>
+        /// <param name="inventorySource">Inventory source</param>
         Task<IResult<InstaComment>> ReplyCommentMediaAsync(string mediaId, string targetCommentId, string text,
             InstaCommentContainerModuleType containerModule = InstaCommentContainerModuleType.FeedTimeline,
             uint feedPosition = 0, bool isCarouselBumpedPost = false, int? carouselIndex = null,

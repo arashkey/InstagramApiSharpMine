@@ -816,6 +816,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Delete self message in direct
         /// </summary>
         /// <param name="threadId">Thread id</param>
+        /// <param name="itemId">Item (message) id</param>
         public async Task<IResult<bool>> DeleteSelfMessageAsync(string threadId, string itemId)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -936,6 +937,8 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="threadId">Thread id</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="seqId">SeqId from <see cref="GetDirectInboxAsync(PaginationParameters)"/></param>
+        /// <param name="itemIds">Item (message) ids</param>
         /// <returns>
         ///     <see cref="InstaDirectInboxThread" />
         /// </returns>
@@ -949,6 +952,9 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="threadId">Thread id</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="seqId">SeqId from <see cref="GetDirectInboxAsync(PaginationParameters)"/></param>
+        /// <param name="itemIds">Item (message) ids</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>
         ///     <see cref="InstaDirectInboxThread" />
         /// </returns>
@@ -1539,6 +1545,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Send felix share (ig tv) to direct thread
         /// </summary>
         /// <param name="mediaId">Media identifier to send</param>
+        /// <param name="text">Text</param>
         /// <param name="threadIds">Thread ids</param>
         /// <param name="recipients">Recipients ids</param>
         /// <returns>Returns True if felix share sent</returns>
@@ -1613,7 +1620,6 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="text">Text to send</param>
         /// <param name="hashtag">Hashtag to send</param>
-        /// <param name="threadIds">Thread ids</param>
         /// <param name="recipients">Recipients ids</param>
         /// <returns>Returns True if hashtag sent</returns>
         public async Task<IResult<InstaDirectRespondPayload>> SendDirectHashtagToRecipientsAsync(string text, string hashtag, params string[] recipients)
@@ -1921,7 +1927,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Send profile to direct thrad
         /// </summary>
         /// <param name="userIdToSend">User id to send</param>
-        /// <param name="threadIds">Thread ids</param>
+        /// <param name="recipients">Recipients (user ids/pk)</param>
         public async Task<IResult<bool>> SendDirectProfileToRecipientsAsync(long userIdToSend, string recipients)
         {
             UserAuthValidator.Validate(_userAuthValidate);
@@ -2073,6 +2079,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaType">Media type</param>
         /// <param name="text">Text to send</param>
         /// <param name="threadIds">Thread ids</param>
+        /// <param name="carouselChildMediaId">Carousel child media id</param>
         public async Task<IResult<bool>> ShareMediaToThreadAsync(string mediaId, InstaMediaType mediaType, string text, string carouselChildMediaId = null, params string[] threadIds)
         {
             try
@@ -2101,6 +2108,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaType">Media type</param>
         /// <param name="text">Text to send</param>
         /// <param name="userIds">User ids (pk)</param>
+        /// <param name="carouselChildMediaId">Carousel child media id</param>
         public async Task<IResult<bool>> ShareMediaToUserAsync(string mediaId, InstaMediaType mediaType, string text, string carouselChildMediaId = null, params long[] userIds)
         {
             try

@@ -64,6 +64,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Get pending user tags asynchronously
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>
@@ -374,9 +375,6 @@ namespace InstagramApiSharp.API.Processors
         #endregion Other functions
 
         #region NOT COMPLETE FUNCTIONS
-        /// <summary>
-        ///     NOT COMPLETE dastrasi last activity
-        /// </summary>
         //Task<IResult<object>> GetCommentFilterAsync();
         #endregion NOT COMPLETE FUNCTIONS
     }

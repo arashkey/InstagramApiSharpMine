@@ -497,6 +497,11 @@ v2.0.0
     <DefineConstants Condition=" '$(HasNotificationsSupport)' == 'true' ">$(DefineConstants);WITH_NOTIFICATION</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DocumentationFile>bin\InstagramApiSharp.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="API\Push\**" />
     <Compile Remove="API\RealTime\**" />

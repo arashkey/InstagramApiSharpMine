@@ -13,6 +13,7 @@ namespace InstagramApiSharp.Enums
     {
         Mqtt,
         Gcm,
-        Iris
+        Iris,
+        Fcm
     }
 }

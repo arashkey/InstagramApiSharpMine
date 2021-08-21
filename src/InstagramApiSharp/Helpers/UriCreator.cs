@@ -3126,5 +3126,17 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for get restricted users");
             return instaUri;
         }
+        public static Uri GetFBEntryPointInfoUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.FB_ENTRYPOINT_INFO, out var instaUri))
+                throw new Exception("Cant create URI for fb entrypoint info");
+            return instaUri;
+        }
+        public static Uri GetDevicesNdxIgStepsUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.DEVICES_NDX_API_ASYNC_GET_NDX_IG_STEPS, out var instaUri))
+                throw new Exception("Cant create URI for devices ndx api async get ndx ig steps");
+            return instaUri;
+        }
     }
 }

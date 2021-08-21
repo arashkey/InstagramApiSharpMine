@@ -399,6 +399,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Get media insights
         /// </summary>
         /// <param name="mediaId">Media Id (<see cref="InstaMedia.InstaIdentifier"/>)</param>
+        /// <param name="surfaceType">Surface type</param>
         public async Task<IResult<InstaMediaInsightsX>> GetMediaInsightsAsync(string mediaId, InstaInsightSurfaceType surfaceType)
         {
             UserAuthValidator.Validate(_userAuthValidate);

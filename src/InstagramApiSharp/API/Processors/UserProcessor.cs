@@ -59,6 +59,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Unrestrict a user
         /// </summary>
         /// <param name="userId">User id (pk) to unrestrict</param>
+        /// <param name="containerModule">Container module (optional)</param>
         public async Task<IResult<InstaUserShortFriendshipFullList>> UnRestrictUserAsync(long userId, InstaRestrictContainerModule containerModule = InstaRestrictContainerModule.Profile)
         {
             var data = new Dictionary<string, string>
@@ -292,6 +293,8 @@ namespace InstagramApiSharp.API.Processors
         ///     Follow user
         /// </summary>
         /// <param name="userId">User id</param>
+        /// <param name="surfaceType">Surface type (optional)</param>
+        /// <param name="mediaIdAttribution">Media id attribution (optional)</param>
         public async Task<IResult<InstaFriendshipFullStatus>> FollowUserAsync(long userId,
             InstaMediaSurfaceType surfaceType = InstaMediaSurfaceType.None, string mediaIdAttribution = null)
         {
@@ -482,6 +485,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Get followers list for currently logged in user asynchronously
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>
         ///     <see cref="InstaUserShortList" />
         /// </returns>
@@ -974,6 +978,7 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="userId">User id (pk)</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <param name="searchQuery">Search string to locate specific followers</param>
         /// <param name="mutualsfirst">Mutual followers</param>
         /// <param name="rankToken">Rank token (random guid)</param>
@@ -1593,10 +1598,10 @@ namespace InstagramApiSharp.API.Processors
         ///     Mute user media (story, post or all)
         /// </summary>
         /// <param name="userId">User id (pk)</param>
-        /// <param name="unmuteOption">Unmute option</param>
-        public async Task<IResult<InstaStoryFriendshipStatus>> MuteUserMediaAsync(long userId, InstaMuteOption unmuteOption)
+        /// <param name="muteOption">Mute option</param>
+        public async Task<IResult<InstaStoryFriendshipStatus>> MuteUserMediaAsync(long userId, InstaMuteOption muteOption)
         {
-            return await MuteUnMuteUserMedia(UriCreator.GetMuteUserMediaStoryUri(userId), userId, unmuteOption);
+            return await MuteUnMuteUserMedia(UriCreator.GetMuteUserMediaStoryUri(userId), userId, muteOption);
         }
         /// <summary>
         ///     Report user
@@ -1673,6 +1678,8 @@ namespace InstagramApiSharp.API.Processors
         ///     Stop follow user
         /// </summary>
         /// <param name="userId">User id</param>
+        /// <param name="surfaceType">Surface type (optional)</param>
+        /// <param name="mediaIdAttribution">Media id attribution (optional)</param>
         public async Task<IResult<InstaFriendshipFullStatus>> UnFollowUserAsync(long userId,
             InstaMediaSurfaceType surfaceType = InstaMediaSurfaceType.None, string mediaIdAttribution = null)
         {

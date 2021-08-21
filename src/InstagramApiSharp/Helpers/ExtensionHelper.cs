@@ -514,6 +514,8 @@ namespace InstagramApiSharp
                     return "android_mqtt";
                 case InstaPushChannelType.Gcm:
                     return "android_gcm";
+                case InstaPushChannelType.Fcm:
+                    return "android_fcm";
             }
         }
         public static string GetRequestSurface(this InstaGiphyRequestType type)

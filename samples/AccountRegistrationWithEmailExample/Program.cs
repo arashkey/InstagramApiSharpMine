@@ -37,7 +37,6 @@ namespace AccountRegistrationWithEmailExample
             var email = "ramtinjokar@outlook.com";
             var firstName = "my name"; // optional, but don't pass null, put string.Empty or ""
 
-
             var userSession = new UserSessionData
             {
                 UserName = username,
@@ -71,9 +70,10 @@ namespace AccountRegistrationWithEmailExample
             email = email.ToLower();
             username = username.ToLower();
 
-            await InstaApi.RegistrationService.FirstLauncherSyncAsync();
-            await InstaApi.RegistrationService.FirstLauncherSyncAsync();
-            await InstaApi.RegistrationService.FirstQeSyncAsync();
+            await Task.WhenAll(
+                InstaApi.RegistrationService.GetFirstContactPointPrefillAsync(),
+                InstaApi.RegistrationService.FirstLauncherSyncAsync()
+                );
 
             // check email address
             var checkEmailResult = await InstaApi.RegistrationService.CheckEmailAsync(email);
@@ -95,14 +95,19 @@ namespace AccountRegistrationWithEmailExample
 
                 if (checkRegistrationConfirmationResult.Succeeded)
                 {
-
-                    await InstaApi.RegistrationService.GetSiFetchHeadersAsync();
-
-                    await Delay(1.5);
                     if (firstName?.Length > 0)
                     {
+                        await InstaApi.RegistrationService.GetUsernameSuggestionsAsync("", email);
+                        await InstaApi.RegistrationService.GetSiFetchHeadersAsync();
+                        await Delay(3.5);
+
                         await InstaApi.RegistrationService.GetUsernameSuggestionsAsync(firstName.Substring(0, 1), email);
+                        await InstaApi.RegistrationService.GetSiFetchHeadersAsync();
+                        await Delay(1);
+
                         await InstaApi.RegistrationService.GetUsernameSuggestionsAsync(firstName.Substring(0, 3), email);
+                        await InstaApi.RegistrationService.GetSiFetchHeadersAsync();
+                        await Delay(1.5);
 
                         await InstaApi.RegistrationService.GetUsernameSuggestionsAsync(firstName, email);
                     }
@@ -114,13 +119,15 @@ namespace AccountRegistrationWithEmailExample
                     if (signupConsent.Value?.AgeRequired ?? false)
                         await InstaApi.RegistrationService.CheckAgeEligibilityAsync();
 
+                    await InstaApi.RegistrationService.NewUserFlowBeginsConsentAsync();
+
                     await Delay(3.5);
                     // onboarding steps is prefetch
                     await InstaApi.RegistrationService.GetOnboardingStepsAsync(InstaOnboardingProgressState.Prefetch);
 
                     // call it twice !
                     await InstaApi.RegistrationService.NewUserFlowBeginsConsentAsync();
-                    await InstaApi.RegistrationService.NewUserFlowBeginsConsentAsync();
+                    //await InstaApi.RegistrationService.NewUserFlowBeginsConsentAsync();
 
                     await Delay(3.5);
                     // check username
@@ -143,12 +150,14 @@ namespace AccountRegistrationWithEmailExample
                         // await InstaApi.RegistrationService.CreateNewAccountWithEmailAsync(email, username, password, firstName);
 
 
+                        await InstaApi.RegistrationService.LauncherSyncAsync();
                         // no information about this one
                         await InstaApi.RegistrationService.GetMultipleAccountsFamilyAsync();
                         // no information about this one
                         await InstaApi.RegistrationService.GetZrTokenResultAsync();
-                        // no information about this one
-                        await InstaApi.RegistrationService.LauncherSyncAsync();
+
+                        //// no information about this one
+                        //await InstaApi.RegistrationService.LauncherSyncAsync();
                         // no information about this one
                         await InstaApi.RegistrationService.QeSyncAsync();
                         // no information about this one
@@ -157,6 +166,13 @@ namespace AccountRegistrationWithEmailExample
                         await InstaApi.RegistrationService.GetOnboardingStepsAsync(InstaOnboardingProgressState.Start);
                         // no information about this one
                         await InstaApi.RegistrationService.GetContactPointPrefillAsync();
+
+                        await InstaApi.PushProcessor.RegisterPushAsync();
+                        await InstaApi.PushProcessor.RegisterPushAsync(InstaPushChannelType.Fcm);
+                        await InstaApi.UserProcessor.GetSuggestionUsersAsync(PaginationParameters.MaxPagesToLoad(1));
+                        await InstaApi.RegistrationService.GetFBEntryPointInfoAsync();
+
+
                         // onboarding steps is finished
                         await InstaApi.RegistrationService.GetOnboardingStepsAsync(InstaOnboardingProgressState.Finish);
 

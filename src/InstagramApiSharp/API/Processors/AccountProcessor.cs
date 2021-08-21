@@ -266,6 +266,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Get pending user tags asynchronously
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>
         ///     <see cref="InstaMediaList" />
         /// </returns>

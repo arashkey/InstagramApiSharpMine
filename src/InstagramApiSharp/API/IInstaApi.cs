@@ -466,11 +466,11 @@ namespace InstagramApiSharp.API
         //////////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////// Challenge for logged in user /////////////////////////////////
 
-        [Obsolete("Deprecated. Please use IInstaApi.ChallengeLoginInfo property instead.")]
         /// <summary>
         ///     Set Challenge Info when server asks for a challenge on calling functions
         /// </summary>
         /// <param name="Challenge">Challenge info</param>
+        [Obsolete("Deprecated. Please use IInstaApi.ChallengeLoginInfo property instead.")]
         void SetChallengeInfo(InstaChallengeLoginInfo Challenge);
 
         /// <summary>
@@ -512,6 +512,7 @@ namespace InstagramApiSharp.API
         ///     <see cref="InstaChallengeRequireVerifyMethod.SubmitPhoneRequired"/> property is true.</para>
         /// </summary>
         /// <param name="phoneNumber">Phone number</param>
+        /// <param name="replayChallenge">Replay challenge</param>
         Task<IResult<InstaChallengeRequireSMSVerify>> SubmitPhoneNumberForChallengeRequireAsync(string phoneNumber, bool replayChallenge = false);
         /// <summary>
         ///     Request verification code email for challenge require (checkpoint required)
@@ -579,7 +580,6 @@ namespace InstagramApiSharp.API
         /// <param name="password">Password</param>
         /// <param name="email">Email</param>
         /// <param name="firstName">First name (optional)</param>
-        /// <param name="delay">Delay between requests. null = 2.5 seconds</param>
         [Obsolete("CreateNewAccountAsync is deprecated. Use the one from RegistrationService property instead.\r\nThis function will be deleted.")]
         Task<IResult<InstaAccountCreation>> CreateNewAccountAsync(string username, string password, string email, string firstName = ""/*, TimeSpan? delay = null*/);
         /// <summary>

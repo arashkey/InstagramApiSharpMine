@@ -124,6 +124,9 @@ namespace InstagramApiSharp.Classes.Models
 
         public InstaStoryFriendshipStatus FriendshipStatus { get; set; }
 
+        private int _profileVisitCount = 0;
+        public int ProfileVisitCount { get { return _profileVisitCount; } set { _profileVisitCount = value; OnPropertyChanged("ProfileVisitCount"); } }
+        public int ProfileVisitNumDays { get; set; }
         // Business accounts
 
         /// <summary>

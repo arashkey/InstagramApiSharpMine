@@ -99,7 +99,9 @@ namespace InstagramApiSharp.Converters
                 PageId = SourceObject.User.PageId ?? 0,
                 PageName = SourceObject.User.PageName,
                 ProfilePicture = SourceObject.User.ProfilePicUrl,
-                LatestReelMedia = SourceObject.User.LatestReelMedia ?? 0
+                LatestReelMedia = SourceObject.User.LatestReelMedia ?? 0,
+                ProfileVisitNumDays = SourceObject.User.ProfileVisitNumDays ?? 0,
+                ProfileVisitCount = SourceObject.User.ProfileVisitCount ?? 0
             };
             try
             {

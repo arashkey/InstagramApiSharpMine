@@ -156,6 +156,11 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="seenMediaIds">Id of the posts seen till now</param>
         /// <param name="refreshRequest">Request refresh feeds</param>
         /// <param name="paginationSource">Pagination source</param>
+        /// <param name="removeAds">Remove ads</param>
+        /// <param name="batteryLevel">Battery level</param>
+        /// <param name="isCharging">Is phone charging?</param>
+        /// <param name="isDarkMode">Is dark mode?</param>
+        /// <param name="willSoundOn">Will sound on?</param>
         /// <returns>
         ///     <see cref="InstaFeed" />
         /// </returns>
@@ -177,6 +182,11 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="refreshRequest">Request refresh feeds</param>
         /// <param name="paginationSource">Pagination source</param>
         /// <param name="cancellationToken">Cancellation token</param>
+        /// <param name="removeAds">Remove ads</param>
+        /// <param name="batteryLevel">Battery level</param>
+        /// <param name="isCharging">Is phone charging?</param>
+        /// <param name="isDarkMode">Is dark mode?</param>
+        /// <param name="willSoundOn">Will sound on?</param>
         /// <returns>
         ///     <see cref="InstaFeed" />
         /// </returns>

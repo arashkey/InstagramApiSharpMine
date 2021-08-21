@@ -153,7 +153,7 @@ namespace InstagramApiSharp.API.Processors
         /// <summary>
         ///     Approve direct pending request
         /// </summary>
-        /// <param name="threadId">Thread ids</param>
+        /// <param name="threadIds">Thread ids</param>
         Task<IResult<bool>> ApproveDirectPendingRequestAsync(params string[] threadIds);
 
         /// <summary>
@@ -177,6 +177,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Delete self message in direct
         /// </summary>
         /// <param name="threadId">Thread id</param>
+        /// <param name="itemId">Item (message) id</param>
         Task<IResult<bool>> DeleteSelfMessageAsync(string threadId, string itemId);
 
         /// <summary>
@@ -203,6 +204,8 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="threadId">Thread id</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="seqId">SeqId from <see cref="GetDirectInboxAsync(PaginationParameters)"/></param>
+        /// <param name="itemIds">Item (message) ids</param>
         /// <returns>
         ///     <see cref="InstaDirectInboxThread" />
         /// </returns>
@@ -214,6 +217,8 @@ namespace InstagramApiSharp.API.Processors
         /// </summary>
         /// <param name="threadId">Thread id</param>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="seqId">SeqId from <see cref="GetDirectInboxAsync(PaginationParameters)"/></param>
+        /// <param name="itemIds">Item (message) ids</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>
         ///     <see cref="InstaDirectInboxThread" />
@@ -369,6 +374,7 @@ namespace InstagramApiSharp.API.Processors
         ///     Send felix share (ig tv) to direct thread
         /// </summary>
         /// <param name="mediaId">Media identifier to send</param>
+        /// <param name="text">Text</param>
         /// <param name="threadIds">Thread ids</param>
         /// <param name="recipients">Recipients ids</param>
         /// <returns>Returns True if felix share sent</returns>
@@ -583,6 +589,7 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaType">Media type</param>
         /// <param name="text">Text to send</param>
         /// <param name="threadIds">Thread ids</param>
+        /// <param name="carouselChildMediaId">Carousel child media id</param>
         Task<IResult<bool>> ShareMediaToThreadAsync(string mediaId, InstaMediaType mediaType, string text, string carouselChildMediaId = null, params string[] threadIds);
 
         /// <summary>
@@ -592,14 +599,15 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="mediaType">Media type</param>
         /// <param name="text">Text to send</param>
         /// <param name="userIds">User ids (pk)</param>
+        /// <param name="carouselChildMediaId">Carousel child media id</param>
         Task<IResult<bool>> ShareMediaToUserAsync(string mediaId, InstaMediaType mediaType, string text, string carouselChildMediaId = null, params long[] userIds);
 
-        [Obsolete("ShareUserAsync is deprecated. Use SendDirectProfileAsync instead.")]
         /// <summary>
         ///     Share an user
         /// </summary>
         /// <param name="userIdToSend">User id(PK)</param>
         /// <param name="threadId">Thread id</param>
+        [Obsolete("ShareUserAsync is deprecated. Use SendDirectProfileAsync instead.")]
         Task<IResult<InstaSharing>> ShareUserAsync(string userIdToSend, string threadId);
 
         /// <summary>
