@@ -3641,7 +3641,10 @@ namespace InstagramApiSharp.API
                 }
                 var response = await _httpRequestProcessor.SendAsync(request);
 
-                _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor, second);
+                if (!_httpHelper.NewerThan180)
+                {
+                    _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor, second);
+                }
                 if (!IsUserAuthenticated)
                 {
                     if (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY) && ContainsHeader(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID))
@@ -3665,7 +3668,6 @@ namespace InstagramApiSharp.API
                     {
                         _user.RurHeader = rur;
                     }
-
 
                     bool ContainsHeader(string head) => response.Headers.Contains(head);
                 }
