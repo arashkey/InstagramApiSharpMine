@@ -1102,6 +1102,15 @@ namespace InstagramApiSharp.API
             try
             {
                 bool needsRelogin = false;
+                if (isNewLogin)
+                {
+                    _user.Authorization = 
+                        _user.RurHeader = 
+                        _user.XMidHeader = 
+                        _user.WwwClaim = null;
+
+                    _user.LoggedInUser = null;
+                }
             ReloginLabel:
 
                 var csrftoken = GetCsrfTokenFromCookies();
