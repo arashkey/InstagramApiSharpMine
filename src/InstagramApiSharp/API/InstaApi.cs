@@ -1246,24 +1246,33 @@ namespace InstagramApiSharp.API
                     .Select(xx => xx.Trim().Split('='))
                     .Select(xx => new { Name = xx.First(), Value = xx.Last() });
 
+                if (_user == null)
+                    _user = UserSessionData.Empty;
+
                 var user = parts.FirstOrDefault(u => u.Name.ToLower() == "ds_user")?.Value?.ToLower();
                 var userId = parts.FirstOrDefault(u => u.Name.ToLower() == "ds_user_id")?.Value;
                 var csrfToken = parts.FirstOrDefault(u => u.Name.ToLower() == "csrftoken")?.Value;
+                var sessionId = parts.FirstOrDefault(u => u.Name.ToLower() == "sessionid")?.Value;
+                if (!_httpHelper.NewerThan180)
+                {
+                    if (string.IsNullOrEmpty(csrfToken))
+                        return Result.Fail<bool>("Cannot find 'csrftoken' in cookies!");
 
-                if (string.IsNullOrEmpty(csrfToken))
-                    return Result.Fail<bool>("Cannot find 'csrftoken' in cookies!");
+                    if (string.IsNullOrEmpty(userId))
+                        return Result.Fail<bool>("Cannot find 'ds_user_id' in cookies!");
 
-                if (string.IsNullOrEmpty(userId))
-                    return Result.Fail<bool>("Cannot find 'ds_user_id' in cookies!");
-
-                var uri = new Uri(InstaApiConstants.INSTAGRAM_URL);
-                cookies = cookies.Replace(';', ',');
-                _httpRequestProcessor.HttpHandler.CookieContainer.SetCookies(uri, cookies);
-                if (_user == null)
-                    _user = UserSessionData.Empty;
-                user = _user.UserName ?? (user ?? "AlakiMasalan");
+                    var uri = new Uri(InstaApiConstants.INSTAGRAM_URL);
+                    cookies = cookies.Replace(';', ',');
+                    _httpRequestProcessor.HttpHandler.CookieContainer.SetCookies(uri, cookies);
+                }
+                else
+                {
+                    _user.Authorization = InstaCookiesToAuthorizationHelper.ConvertToAuthorization(userId, sessionId);
+                }
+                
+                user = _user.UserName.IsNotEmpty() ? _user.UserName : user.IsEmpty() ? "AlakiMasalan" : user;
                 _user.UserName = _httpRequestProcessor.RequestMessage.Username = user;
-                _user.Password = _user.Password ?? "AlakiMasalan";
+                _user.Password = _user.Password.IsNotEmpty() ? _user.Password : "AlakiMasalan";
                 _user.LoggedInUser = new InstaUserShort
                 {
                     UserName = user
@@ -1275,6 +1284,8 @@ namespace InstagramApiSharp.API
                 catch { }
                 _user.CsrfToken = csrfToken;
                 _user.RankToken = $"{_deviceInfo.RankToken}_{userId}";
+
+                await LauncherSyncPrivate();
 
                 IsUserAuthenticated = true;
                 InvalidateProcessors();
@@ -3650,6 +3661,7 @@ namespace InstagramApiSharp.API
                 {
                     _user.SetCsrfTokenIfAvailable(response, _httpRequestProcessor, second);
                 }
+                await AfterLoginAsync(response, true).ConfigureAwait(false);
                 if (!IsUserAuthenticated)
                 {
                     if (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY) && ContainsHeader(InstaApiConstants.RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID))
@@ -3890,7 +3902,7 @@ namespace InstagramApiSharp.API
             }
         }
 
-        internal async Task AfterLoginAsync(HttpResponseMessage response)
+        internal async Task AfterLoginAsync(HttpResponseMessage response, bool dontCallLauncherSync = false)
         {
             try
             {
@@ -3927,7 +3939,11 @@ namespace InstagramApiSharp.API
                         _user.Authorization = authorization;
                     }
                 }
-                await LauncherSyncPrivate(/*false, true*/).ConfigureAwait(false);
+
+                if (!dontCallLauncherSync)
+                {
+                    await LauncherSyncPrivate(/*false, true*/).ConfigureAwait(false);
+                }
 
                 bool ContainsHeader(string head) => response.Headers.Contains(head);
             }
