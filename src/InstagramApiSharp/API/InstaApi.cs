@@ -2228,10 +2228,28 @@ namespace InstagramApiSharp.API
                     .BaseAddress);
                 var csrftoken = cookies[InstaApiConstants.CSRFTOKEN]?.Value ?? string.Empty;
                 var uri = new Uri(InstaApiConstants.INSTAGRAM_URL);
+               
+                if (cookiesContainer.Contains("Cookie:"))
+                    cookiesContainer = cookiesContainer.Substring(8);
 
-                cookiesContainer = cookiesContainer.Replace(';', ',');
-                _httpRequestProcessor.HttpHandler.CookieContainer.SetCookies(uri, cookiesContainer);
+                var parts = cookiesContainer.Split(';')
+                    .Where(xx => xx.Contains("="))
+                    .Select(xx => xx.Trim().Split('='))
+                    .Select(xx => new { Name = xx.First(), Value = xx.Last() });
 
+                var userId = parts.FirstOrDefault(u => u.Name.ToLower() == "ds_user_id")?.Value;
+                var sessionId = parts.FirstOrDefault(u => u.Name.ToLower() == "sessionid")?.Value;
+
+                if (!_httpHelper.NewerThan180)
+                {
+                    cookiesContainer = cookiesContainer.Replace(';', ',');
+                    _httpRequestProcessor.HttpHandler.CookieContainer.SetCookies(uri, cookiesContainer);
+                }
+                _user.Authorization = InstaCookiesToAuthorizationHelper.ConvertToAuthorization(userId, sessionId);
+                if (_user.Authorization.IsEmpty())
+                {
+                    throw new ArgumentNullException("Can't find `ds_user_id` or `sessionid` in the cookies.");
+                }
                 if (adId.IsEmpty())
                     adId = Guid.NewGuid().ToString();
 
@@ -2251,9 +2269,12 @@ namespace InstagramApiSharp.API
                     {"waterfall_id", waterfallId},
                     {"fb_access_token", fbAccessToken},
                 };
-                if (!_httpHelper.NewerThan180 || csrftoken.IsNotEmpty())
+                if (!_httpHelper.NewerThan180)
                 {
-                    data.Add("_csrftoken", _user.CsrfToken);
+                    if (csrftoken.IsNotEmpty())
+                    {
+                        data.Add("_csrftoken", _user.CsrfToken);
+                    }
                 }
                 if (username.IsNotEmpty())
                     data.Add("username", username);
@@ -2329,6 +2350,8 @@ namespace InstagramApiSharp.API
                     fbUserId = obj?.FbUserId;
                     loginInfoUser = obj?.LoggedInUser;
                 }
+               
+                await LauncherSyncPrivate();
 
                 IsUserAuthenticated = true;
                 var converter = ConvertersFabric.Instance.GetUserShortConverter(loginInfoUser);
