@@ -1268,6 +1268,11 @@ namespace InstagramApiSharp.API
                 else
                 {
                     _user.Authorization = InstaCookiesToAuthorizationHelper.ConvertToAuthorization(userId, sessionId);
+
+                    if (_user.Authorization.IsEmpty())
+                    {
+                        throw new ArgumentNullException("Can't find `ds_user_id` or `sessionid` in the cookies.");
+                    }
                 }
                 
                 user = _user.UserName.IsNotEmpty() ? _user.UserName : user.IsEmpty() ? "AlakiMasalan" : user;
