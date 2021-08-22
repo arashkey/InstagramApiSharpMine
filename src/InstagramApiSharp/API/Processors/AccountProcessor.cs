@@ -1195,9 +1195,13 @@ namespace InstagramApiSharp.API.Processors
                     data.Add("_csrftoken", _user.CsrfToken);
                 }
 
-                if (string.IsNullOrEmpty(_user.PublicKey))
-                    await _instaApi.SendRequestsBeforeLoginAsync();
-                string encryptedPassword = _instaApi.GetEncryptedPassword(password);
+                //if (string.IsNullOrEmpty(_user.PublicKey))
+                //    await _instaApi.SendRequestsBeforeLoginAsync();
+                
+                string encryptedPassword = _instaApi._encryptedPasswordEncryptor != null ?
+                        await _instaApi._encryptedPasswordEncryptor.GetEncryptedPassword(_instaApi, _user.Password).ConfigureAwait(false) :
+                        _instaApi.GetEncryptedPassword(password);
+
                 if (!_httpHelper.IsNewerApis)
                     data.Add("password", password);
                 data.Add("enc_password", encryptedPassword);
