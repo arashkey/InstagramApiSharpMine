@@ -1853,7 +1853,7 @@ namespace InstagramApiSharp.API
                     return Result.UnExpectedResponse<bool>(response, json);
 
                 var obj = JsonConvert.DeserializeObject<InstaChallengeRequireVerifyCode>(json);
-                return obj.Action.ToLower() == "close" ? Result.Success(true) : Result.Success(false);
+                return obj.Action?.ToLower() == "close" ? Result.Success(true) : Result.Success(false);
             }
             catch (HttpRequestException httpException)
             {
