@@ -14,6 +14,13 @@ namespace InstagramApiSharp.API.Processors
     {
 
         /// <summary>
+        ///     Activity notification click (when happens that you clicked on a login activity)
+        /// </summary>
+        /// <param name="pk">Activity PK ( from <see cref="InstaRecentActivityFeed.Pk"/> )</param>
+        /// <param name="tuuid">Activity Tuuid ( from <see cref="InstaRecentActivityFeed.Tuuid"/> )</param>
+        Task<IResult<bool>> ActivityNotificationClickAsync(string pk, string tuuid);
+
+        /// <summary>
         ///     Delete activity notification
         /// </summary>
         /// <param name="pk">Activity PK ( from <see cref="InstaRecentActivityFeed.Pk"/> )</param>
