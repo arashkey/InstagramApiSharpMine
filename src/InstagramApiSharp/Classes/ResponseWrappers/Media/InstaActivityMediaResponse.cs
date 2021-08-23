@@ -6,5 +6,6 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
     {
         [JsonProperty("id")] public string Id { get; set; }
         [JsonProperty("image")] public string Image { get; set; }
+        [JsonProperty("comment_threading_enabled")] public bool? CommentThreadingEnabled { get; set; }
     }
 }

@@ -59,11 +59,21 @@ namespace InstagramApiSharp.Classes.Models
         public long LatestReelMedia { get; set; }
         public List<InstaActivityMedia> Images { get; set; } = new List<InstaActivityMedia>();
         public bool IsRestricted { get; set; }
+        public string AfCandidateId { get; set; }
+        public bool ShouldIconApplyFilter { get; set; }
+        public bool IconShouldApplyFilter { get; set; }
+        public InstaActivityStoryItemExtra Extra { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string memberName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(memberName));
         }
+    }
+
+    public class InstaActivityStoryItemExtra
+    {
+        public long? Latitude { get; set; }
+        public long? Longitude { get; set; }
     }
 }
