@@ -14,6 +14,13 @@ namespace InstagramApiSharp.API.Processors
     {
 
         /// <summary>
+        ///     Delete activity notification
+        /// </summary>
+        /// <param name="pk">Activity PK ( from <see cref="InstaRecentActivityFeed.Pk"/> )</param>
+        /// <param name="tuuid">Activity Tuuid ( from <see cref="InstaRecentActivityFeed.Tuuid"/> )</param>
+        Task<IResult<bool>> DeleteActivityNotificationAsync(string pk, string tuuid);
+
+        /// <summary>
         ///     Get medias for explore channel
         /// </summary>
         /// <param name="channelId">Channel id</param>

@@ -8,6 +8,7 @@ using InstagramApiSharp.Enums;
 using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,53 @@ namespace InstagramApiSharp.API.Processors
             _userAuthValidate = userAuthValidate;
             _instaApi = instaApi;
             _httpHelper = httpHelper;
+        }
+
+        /// <summary>
+        ///     Delete activity notification
+        /// </summary>
+        /// <param name="pk">Activity PK ( from <see cref="InstaRecentActivityFeed.Pk"/> )</param>
+        /// <param name="tuuid">Activity Tuuid ( from <see cref="InstaRecentActivityFeed.Tuuid"/> )</param>
+        public async Task<IResult<bool>> DeleteActivityNotificationAsync(string pk, string tuuid)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetActivityLogUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"action", "hide"},
+                    {"pk", pk},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"tuuid", tuuid},
+                };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<JObject>(json);
+                var status = obj["status"];
+                if (status.Value<string>() == "ok")
+                {
+                    return Result.Success(obj["success"].Value<bool>());
+                }
+                else
+                {
+                    return Result.UnExpectedResponse<bool>(response, json);
+                }
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail<bool>(ex);
+            }
         }
 
         /// <summary>
