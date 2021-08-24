@@ -4,5 +4,6 @@
     {
         public string Id { get; set; }
         public string Image { get; set; }
+        public bool CommentThreadingEnabled { get; set; }
     }
 }

@@ -20,6 +20,7 @@ namespace InstagramApiSharp.Enums
         TaggedYou = 102,
         FriendRequest = 6,
         FollowPeople = 45,
-        Mentions = 66
+        Mentions = 66,
+        LoginActivity = 159
     }
 }

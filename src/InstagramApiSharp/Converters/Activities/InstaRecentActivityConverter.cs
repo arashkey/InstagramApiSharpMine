@@ -30,7 +30,18 @@ namespace InstagramApiSharp.Converters
                 SecondProfileImage = SourceObject.Args.SecondProfileImage,
                 SubText = SourceObject.Args.SubText,
                 RequestCount = SourceObject.Args.RequestCount,
-                IconUrl = SourceObject.Args.IconUrl
+                IconUrl = SourceObject.Args.IconUrl,
+                AfCandidateId = SourceObject.Args.AfCandidateId,
+                HasLikedComment = SourceObject.Args.HasLikedComment ?? false,
+                DisplayUfi = SourceObject.Args.DisplayUfi ?? false,
+                ShouldIconApplyFilter = SourceObject.Args.ShouldIconApplyFilter ?? false,
+                IconShouldApplyFilter = SourceObject.Args.IconShouldApplyFilter ?? false,
+                Clicked = SourceObject.Args.Clicked ?? false,
+                CommentNotifType = SourceObject.Args.CommentNotifType,
+                Tuuid = SourceObject.Args.Tuuid,
+                LatestReelMedia = SourceObject.Args.LatestReelMedia ?? 0,
+                IsRestricted = (SourceObject.Args.FriendshipStatus != null && (SourceObject.Args.FriendshipStatus.IsRestricted ?? false)),
+                Actions = SourceObject.Args.Actions,
             };
             if (!string.IsNullOrEmpty(SourceObject.Args.IconUrl))
                 activityStory.ProfileImage = SourceObject.Args.IconUrl;
@@ -38,24 +49,29 @@ namespace InstagramApiSharp.Converters
                 activityStory.Text = SourceObject.Args.SubText;
             if (!string.IsNullOrEmpty(SourceObject.Args.RichText))
                 activityStory.Text = SourceObject.Args.RichText;
-            try
-            {
-                activityStory.Type = (Enums.InstaActivityFeedType)SourceObject.Type;
-            }
-            catch { }
+
+            activityStory.Type = (Enums.InstaActivityFeedType)SourceObject.Type;
+ 
             try
             {
                 if (SourceObject.Args.HashtagFollow != null)
                     activityStory.HashtagFollow = ConvertersFabric.Instance.GetHashTagConverter(SourceObject.Args.HashtagFollow).Convert();
             }
             catch { }
-            try
-            {
-                activityStory.StoryType = (Enums.InstaActivityFeedStoryType)SourceObject.StoryType;
-            }
-            catch { }
+
+            activityStory.StoryType = (Enums.InstaActivityFeedStoryType)SourceObject.StoryType;
+     
             if (activityStory.Type == Enums.InstaActivityFeedType.FriendRequest)
                 activityStory.StoryType = Enums.InstaActivityFeedStoryType.FriendRequest;
+            
+            if (SourceObject.Args.Extra != null)
+            {
+                activityStory.Extra = new InstaActivityStoryItemExtra
+                {
+                    Latitude = SourceObject.Args.Extra.Latitude,
+                    Longitude = SourceObject.Args.Extra.Longitude
+                };
+            }
 
             if (SourceObject.Args.Links != null)
                 foreach (var instaLinkResponse in SourceObject.Args.Links)
@@ -75,6 +91,7 @@ namespace InstagramApiSharp.Converters
                         Type = type
                     });
                 }
+
             if (SourceObject.Args.InlineFollow != null)
             {
                 activityStory.InlineFollow = new InstaInlineFollow
@@ -87,13 +104,24 @@ namespace InstagramApiSharp.Converters
                         ConvertersFabric.Instance.GetUserShortConverter(SourceObject.Args.InlineFollow.UserInfo)
                             .Convert();
             }
-            if (SourceObject.Args.Media != null)
+
+            if (SourceObject.Args.Media?.Count > 0)
                 foreach (var media in SourceObject.Args.Media)
                     activityStory.Medias.Add(new InstaActivityMedia
                     {
                         Id = media.Id,
                         Image = media.Image
                     });
+            
+            if (SourceObject.Args.Images?.Count > 0)
+                foreach (var media in SourceObject.Args.Images)
+                    activityStory.Images.Add(new InstaActivityMedia
+                    {
+                        Id = media.Id,
+                        Image = media.Image,
+                        CommentThreadingEnabled = media.CommentThreadingEnabled ?? false
+                    });
+
             return activityStory;
         }
     }

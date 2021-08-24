@@ -8,6 +8,7 @@ using InstagramApiSharp.Enums;
 using InstagramApiSharp.Helpers;
 using InstagramApiSharp.Logger;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +43,22 @@ namespace InstagramApiSharp.API.Processors
             _instaApi = instaApi;
             _httpHelper = httpHelper;
         }
+
+        /// <summary>
+        ///     Activity notification click (when happens that you clicked on a login activity)
+        /// </summary>
+        /// <param name="pk">Activity PK ( from <see cref="InstaRecentActivityFeed.Pk"/> )</param>
+        /// <param name="tuuid">Activity Tuuid ( from <see cref="InstaRecentActivityFeed.Tuuid"/> )</param>
+        public async Task<IResult<bool>> ActivityNotificationClickAsync(string pk, string tuuid) =>
+            await ActivityNotificationActionAsync(pk, tuuid, "click").ConfigureAwait(false);
+
+        /// <summary>
+        ///     Delete activity notification
+        /// </summary>
+        /// <param name="pk">Activity PK ( from <see cref="InstaRecentActivityFeed.Pk"/> )</param>
+        /// <param name="tuuid">Activity Tuuid ( from <see cref="InstaRecentActivityFeed.Tuuid"/> )</param>
+        public async Task<IResult<bool>> DeleteActivityNotificationAsync(string pk, string tuuid) =>
+            await ActivityNotificationActionAsync(pk, tuuid).ConfigureAwait(false);
 
         /// <summary>
         ///     Get medias for explore channel
@@ -946,6 +963,47 @@ namespace InstagramApiSharp.API.Processors
             {
                 _logger?.LogException(exception);
                 return Result.Fail<InstaTopicalExploreFeedResponse>(exception);
+            }
+        }
+        private async Task<IResult<bool>> ActivityNotificationActionAsync(string pk, string tuuid, string action = "hide")
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                var instaUri = UriCreator.GetActivityLogUri();
+                var data = new Dictionary<string, string>
+                {
+                    {"action", action},
+                    {"pk", pk},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"tuuid", tuuid},
+                };
+                if (!_httpHelper.NewerThan180)
+                {
+                    data.Add("_csrftoken", _user.CsrfToken);
+                }
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<JObject>(json);
+                var status = obj["status"];
+                if (status.Value<string>() == "ok")
+                {
+                    return Result.Success(obj["success"].Value<bool>());
+                }
+                else
+                {
+                    return Result.UnExpectedResponse<bool>(response, json);
+                }
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(bool), ResponseType.NetworkProblem);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail<bool>(ex);
             }
         }
     }

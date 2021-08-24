@@ -3138,5 +3138,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI for devices ndx api async get ndx ig steps");
             return instaUri;
         }
+        public static Uri GetActivityLogUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.NEWS_LOG, out var instaUri))
+                throw new Exception("Cant create URI get activity log");
+            return instaUri;
+        }
     }
 }
