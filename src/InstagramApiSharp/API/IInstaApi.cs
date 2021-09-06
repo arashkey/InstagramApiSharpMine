@@ -535,7 +535,13 @@ namespace InstagramApiSharp.API
         /// <summary>
         ///     Get delta (bloks) challenge [ new challenge required ]
         /// </summary>
-        Task<IResult<bool>> GetDeltaChallengeAsync();
+        /// <param name="rewindChallenge">
+        ///     Rewind the challenge to select another choice ( way )
+        ///     <para>
+        ///         Note: Resetting the challenge
+        ///     </para>
+        /// </param>
+        Task<IResult<bool>> GetDeltaChallengeAsync(bool rewindChallenge = false);
 
         /// <summary>
         ///     Set delta challenge choice

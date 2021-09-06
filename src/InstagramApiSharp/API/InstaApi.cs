@@ -2206,8 +2206,19 @@ namespace InstagramApiSharp.API
         /// <summary>
         ///     Get delta (bloks) challenge [ new challenge required ]
         /// </summary>
-        public async Task<IResult<bool>> GetDeltaChallengeAsync() =>
-            await GetBloksChallengeAsync(UriCreator.GetBloksChallengeNavigationTakeChallengeUri());
+        /// <param name="rewindChallenge">
+        ///     Rewind the challenge to select another choice ( way )
+        ///     <para>
+        ///         Note: Resetting the challenge
+        ///     </para>
+        /// </param>
+        public async Task<IResult<bool>> GetDeltaChallengeAsync(bool rewindChallenge = false) =>
+            await GetBloksChallengeAsync
+            (
+                !rewindChallenge ? 
+                UriCreator.GetBloksChallengeNavigationTakeChallengeUri() :
+                UriCreator.GetBloksChallengeNavigationRewindChallengeUri()
+            );
 
         /// <summary>
         ///     Set delta challenge choice

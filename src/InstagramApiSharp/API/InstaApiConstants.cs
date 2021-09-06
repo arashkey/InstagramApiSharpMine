@@ -311,6 +311,7 @@ namespace InstagramApiSharp.API
         public const string BLOKS_APPS = API_SUFFIX + "/bloks/apps";
         public const string BLOKS_APPS_RESTRICT_NUX_ACTION = BLOKS_APPS + "/com.instagram.bullying.restrict_nux_action/";
         public const string BLOKS_APPS_CHALLENGE_NAVIGATION_TAKE_CHALLENGE = BLOKS_APPS + "/com.instagram.challenge.navigation.take_challenge/";
+        public const string BLOKS_APPS_CHALLENGE_NAVIGATION_REWIND_CHALLENGE = BLOKS_APPS + "/com.instagram.challenge.navigation.rewind_challenge/"; 
 
         #endregion
 

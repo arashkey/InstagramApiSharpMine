@@ -3153,5 +3153,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI get bloks challenge navigation take challenge");
             return instaUri;
         }
+        public static Uri GetBloksChallengeNavigationRewindChallengeUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.BLOKS_APPS_CHALLENGE_NAVIGATION_REWIND_CHALLENGE, out var instaUri))
+                throw new Exception("Cant create URI get bloks challenge navigation rewind challenge");
+            return instaUri;
+        }
     }
 }
