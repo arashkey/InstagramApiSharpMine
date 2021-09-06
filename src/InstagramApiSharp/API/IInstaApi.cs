@@ -30,6 +30,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 #if WITH_NOTIFICATION
 using InstagramApiSharp.API.RealTime;
+using InstagramApiSharp.API.Push;
 #endif
 namespace InstagramApiSharp.API
 {

@@ -22,6 +22,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 #if WITH_NOTIFICATION
 using InstagramApiSharp.API.RealTime;
+using InstagramApiSharp.API.Push;
 #endif
 #pragma warning disable IDE1006
 #pragma warning disable IDE0044
