@@ -286,13 +286,16 @@ namespace InstagramApiSharp.Helpers
         {
             if (!apiPath.EndsWith("/"))
                 apiPath += "/";
+
             string context = "";
             if (!string.IsNullOrEmpty(challengeContext))
                 context = "&challenge_context=" + challengeContext;
+
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.API_SUFFIX + apiPath +
-                $"?guid={device.PhoneGuid.ToString()}&device_id={device.DeviceGuid.ToString()}" +
-                $"&android_device_id={device.DeviceId.ToString()}&phone_id={device.PhoneGuid.ToString()}" +
-                $"&_uuid={device.DeviceGuid.ToString()}{context}", out var instaUri))
+                $"?guid={device.DeviceGuid}" +
+                $"&device_id={device.DeviceId}" +
+                context
+                , out var instaUri))
                 throw new Exception("Cant create URI for challenge require url");
             return instaUri;
         }
