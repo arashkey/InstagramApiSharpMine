@@ -107,7 +107,7 @@ namespace InstagramApiSharp.API
         /// </summary>
         public IRegistrationService RegistrationService { get; }
 #if WINDOWS_UWP
-        public IPushClient PushClient { get; set; }
+        public Push.IPushClient PushClient { get; set; }
 #endif
 
         public bool LoadProxyFromSessionFile { get; set; } = false;
@@ -3188,8 +3188,10 @@ namespace InstagramApiSharp.API
             if (_httpRequestProcessor.HttpHandler?.Proxy is WebProxy proxy)
             {
                 state.ProxyAddress = proxy.Address;
+#if !WINDOWS_UWP
                 state.ProxyUseDefaultCredentials = proxy.UseDefaultCredentials;
                 state.ProxyBypassProxyOnLocal = proxy.BypassProxyOnLocal;
+#endif
                 if (proxy.Credentials is NetworkCredential credential)
                 {
                     state.ProxyCredentialUsername = credential.UserName;
@@ -3311,8 +3313,10 @@ namespace InstagramApiSharp.API
                     var webProxy = new WebProxy
                     {
                         Address = data.ProxyAddress,
+#if !WINDOWS_UWP
                         BypassProxyOnLocal = data.ProxyBypassProxyOnLocal,
                         UseDefaultCredentials = data.ProxyUseDefaultCredentials
+#endif
                     };
                     if (!string.IsNullOrEmpty(data.ProxyCredentialUsername) && !string.IsNullOrEmpty(data.ProxyCredentialPassword))
                     {
@@ -3354,9 +3358,9 @@ namespace InstagramApiSharp.API
             });
         }
 
-        #endregion State data
+#endregion State data
 
-        #region private part
+#region private part
 
         private void InvalidateProcessors()
         {
@@ -3432,9 +3436,9 @@ namespace InstagramApiSharp.API
             _logger?.LogException(exception);
         }
 
-        #endregion
+#endregion
 
-        #region internal calls
+#region internal calls
         /// <summary>
         ///     Send requests for login flows (contact prefill, read msisdn header, launcher sync and qe sync)
         ///     <para>Note 1: You should call this function before you calling <see cref="IInstaApi.LoginAsync(bool)"/>, if you want your account act like original instagram app.</para>
@@ -3996,6 +4000,6 @@ namespace InstagramApiSharp.API
             var csrfToken = cookies[InstaApiConstants.CSRFTOKEN]?.Value;
             return !string.IsNullOrEmpty(csrfToken) ? csrfToken : _user.CsrfToken;
         }
-        #endregion
+#endregion
     }
 }

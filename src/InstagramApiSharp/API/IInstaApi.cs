@@ -231,7 +231,7 @@ namespace InstagramApiSharp.API
 
 
 #if WINDOWS_UWP
-        IPushClient PushClient { get; set; }
+        Push.IPushClient PushClient { get; set; }
 #endif
 
         #endregion

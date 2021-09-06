@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!--;uap10.0-->
-    <TargetFrameworks>netstandard2.0;uap10.0</TargetFrameworks>
+    <TargetFrameworks>uap10.0</TargetFrameworks>
     <VersionPrefix>2.0.0</VersionPrefix>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <AssemblyName>InstagramApiSharp</AssemblyName>
@@ -492,12 +492,9 @@ v2.0.0
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  
-   <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
-        <TargetFramework>netstandard2.0</TargetFramework>
-    </PropertyGroup>
+
     <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-      <TargetFrameworks>netstandard2.0;uap10.0</TargetFrameworks>
+      <TargetFrameworks>uap10.0</TargetFrameworks>
     </PropertyGroup>
   
   <PropertyGroup>
@@ -520,8 +517,8 @@ v2.0.0
     <NugetTargetMoniker>UAP,Version=v10.0</NugetTargetMoniker>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
-    <!--<TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>-->
+    <!--<TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>-->
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <DefineConstants>$(DefineConstants);WINDOWS_UWP</DefineConstants>
@@ -547,9 +544,10 @@ v2.0.0
   
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Iconic.Zlib.NetstandardUwp" Version="1.0.1" />
-    <PackageReference Include="Portable.BouncyCastle" Version="1.8.6.7" />
+    <!--<PackageReference Include="Portable.BouncyCastle" Version="1.8.6.7" Condition="'$(TargetFramework)' == 'netstandard2.0'" />-->
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.0" Condition="'$(TargetFramework)' == 'uap10.0'" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.12" Condition="'$(TargetFramework)' == 'uap10.0'" />
   </ItemGroup>
