@@ -2323,7 +2323,38 @@ namespace InstagramApiSharp.API
                         {
                             return Result.Fail<bool>("Please check the code we sent you and try again");
                         }
+                        else if (Exists(_challengeRequireVerifyMethod.UserId.ToString()) ||
+                            Exists(_user.UserName))
+                        {
+                            // logged in:|
+                            var userId = _challengeRequireVerifyMethod.UserId;
+                            _httpRequestProcessor.RequestMessage.Username = _user.UserName;
+                            _user.LoggedInUser = new InstaUserShort
+                            {
+                                UserName = _user.UserName,
+                                Pk = _challengeRequireVerifyMethod.UserId,
+                            };
+                            _user.RankToken = $"{_deviceInfo.RankToken}_{userId}";
+                            
+                            await AfterLoginAsync(response).ConfigureAwait(false);
 
+
+                            IsUserAuthenticated = true;
+                            InvalidateProcessors();
+
+                            var us = await UserProcessor.GetUserInfoByIdAsync(userId);
+                            if (!us.Succeeded)
+                            {
+                                IsUserAuthenticated = false;
+                                return Result.Fail(us.Info, false);
+                            }
+                            _user.UserName = _httpRequestProcessor.RequestMessage.Username = _user.LoggedInUser.UserName = us.Value.UserName;
+                            _user.LoggedInUser.FullName = us.Value.FullName;
+                            _user.LoggedInUser.IsPrivate = us.Value.IsPrivate;
+                            _user.LoggedInUser.IsVerified = us.Value.IsVerified;
+                            _user.LoggedInUser.ProfilePicture = us.Value.ProfilePicUrl;
+                            _user.LoggedInUser.ProfilePicUrl = us.Value.ProfilePicUrl;
+                        }
 
                         bool Exists(string str) => json.IndexOf(str, StringComparison.OrdinalIgnoreCase) != -1;
                     }
