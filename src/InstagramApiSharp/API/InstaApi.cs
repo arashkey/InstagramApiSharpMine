@@ -1920,6 +1920,7 @@ namespace InstagramApiSharp.API
                 }
 
                 var obj = JsonConvert.DeserializeObject<InstaChallengeRequireVerifyMethod>(json);
+                _challengeRequireVerifyMethod = obj;
                 return Result.Success(obj);
             }
             catch (HttpRequestException httpException)
@@ -1968,6 +1969,8 @@ namespace InstagramApiSharp.API
                 }
 
                 var obj = JsonConvert.DeserializeObject<InstaChallengeRequireVerifyMethod>(json);
+
+                _challengeRequireVerifyMethod = obj;
                 return Result.Success(obj);
             }
             catch (HttpRequestException httpException)
@@ -3332,7 +3335,8 @@ namespace InstagramApiSharp.API
                 AppLocale = AppLocale,
                 DeviceLocale = DeviceLocale,
                 MappedLocale = MappedLocale,
-                TimezoneOffset = TimezoneOffset
+                TimezoneOffset = TimezoneOffset,
+                ChallengeVerifyMethod = ChallengeVerifyMethod
             };
 
             if (_httpRequestProcessor.HttpHandler?.Proxy is WebProxy proxy)
@@ -3455,6 +3459,7 @@ namespace InstagramApiSharp.API
             IsUserAuthenticated = data.IsAuthenticated;
             TwoFactorLoginInfo = data.TwoFactorLoginInfo;
             ChallengeLoginInfo = data.ChallengeLoginInfo;
+            ChallengeVerifyMethod = data.ChallengeVerifyMethod;
 
             if (data.ProxyAddress != null && LoadProxyFromSessionFile)// proxy is available
             {
