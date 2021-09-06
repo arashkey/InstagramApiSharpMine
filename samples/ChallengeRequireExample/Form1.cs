@@ -196,6 +196,14 @@ namespace ChallengeRequireExample
                             {
                                 if (challenge.Value.StepData != null)
                                 {
+                                    // is delat challenge (new challenge)
+                                    if (challenge.Value.IsUnvettedDelta || challenge.Value.StepData.IsNewDeltaUI())
+                                    {
+                                        // if yes we need to call this:
+                                        await InstaApi.GetDeltaChallengeAsync();
+                                        // in some point, if you want to reset the challenge, set it to true:
+                                        //await InstaApi.GetDeltaChallengeAsync(true);
+                                    }
                                     if (!string.IsNullOrEmpty(challenge.Value.StepData.PhoneNumber))
                                     {
                                         RadioVerifyWithPhoneNumber.Checked = false;
@@ -381,34 +389,67 @@ namespace ChallengeRequireExample
                 // Note: every request to this endpoint is limited to 60 seconds                 
                 if (isEmail)
                 {
-                    // send verification code to email
-                    var email = await InstaApi.RequestVerifyCodeToEmailForChallengeRequireAsync();
-                    if (email.Succeeded)
+                    if (IsDeltaChallenge())
                     {
-                        LblForSmsEmail.Text = $"We sent verify code to this email:\n{email.Value.StepData.ContactPoint}";
-                        VerifyCodeGroupBox.Visible = true;
-                        SelectMethodGroupBox.Visible = false;
+                        var email = await InstaApi.SetDeltaChallengeChoiceAsync(InstaDeltaChallengeChoice.Email);
+                        if (email.Succeeded)
+                        {
+                            LblForSmsEmail.Text = $"We sent verify code to this email:\n{InstaApi.ChallengeVerifyMethod.StepData.Email}";
+                            VerifyCodeGroupBox.Visible = true;
+                            SelectMethodGroupBox.Visible = false;
+                        }
+                        else
+                            MessageBox.Show(email.Info.Message, "ERR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
-                        MessageBox.Show(email.Info.Message, "ERR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    {
+                        // send verification code to email
+                        var email = await InstaApi.RequestVerifyCodeToEmailForChallengeRequireAsync();
+                        if (email.Succeeded)
+                        {
+                            LblForSmsEmail.Text = $"We sent verify code to this email:\n{email.Value.StepData.ContactPoint}";
+                            VerifyCodeGroupBox.Visible = true;
+                            SelectMethodGroupBox.Visible = false;
+                        }
+                        else
+                            MessageBox.Show(email.Info.Message, "ERR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {
-                    // send verification code to phone number
-                    var phoneNumber = await InstaApi.RequestVerifyCodeToSMSForChallengeRequireAsync();
-                    if (phoneNumber.Succeeded)
+                    if (IsDeltaChallenge())
                     {
-                        LblForSmsEmail.Text = $"We sent verify code to this phone number(it's end with this):\n{phoneNumber.Value.StepData.ContactPoint}";
-                        VerifyCodeGroupBox.Visible = true;
-                        SelectMethodGroupBox.Visible = false;
+                        var phoneNumber = await InstaApi.SetDeltaChallengeChoiceAsync(InstaDeltaChallengeChoice.Phone);
+                        if (phoneNumber.Succeeded)
+                        {
+                            LblForSmsEmail.Text = $"We sent verify code to this phone number(it's end with this):\n{InstaApi.ChallengeVerifyMethod.StepData.PhoneNumber}";
+                            VerifyCodeGroupBox.Visible = true;
+                            SelectMethodGroupBox.Visible = false;
+                        }
+                        else
+                            MessageBox.Show(phoneNumber.Info.Message, "ERR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
-                        MessageBox.Show(phoneNumber.Info.Message, "ERR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    {
+                        // send verification code to phone number
+                        var phoneNumber = await InstaApi.RequestVerifyCodeToSMSForChallengeRequireAsync();
+                        if (phoneNumber.Succeeded)
+                        {
+                            LblForSmsEmail.Text = $"We sent verify code to this phone number(it's end with this):\n{phoneNumber.Value.StepData.ContactPoint}";
+                            VerifyCodeGroupBox.Visible = true;
+                            SelectMethodGroupBox.Visible = false;
+                        }
+                        else
+                            MessageBox.Show(phoneNumber.Info.Message, "ERR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message, "EX", MessageBoxButtons.OK, MessageBoxIcon.Error); }
 
         }
+       
+        private bool IsDeltaChallenge() => InstaApi.ChallengeVerifyMethod?.IsUnvettedDelta ?? false ||
+                    (InstaApi.ChallengeVerifyMethod?.StepData != null && InstaApi.ChallengeVerifyMethod.StepData.IsNewDeltaUI());
 
         private async void ResendButton_Click(object sender, EventArgs e)
         {
