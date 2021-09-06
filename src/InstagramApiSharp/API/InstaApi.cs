@@ -55,6 +55,7 @@ namespace InstagramApiSharp.API
         private AndroidDevice _deviceInfo;
         private InstaTwoFactorLoginInfo _twoFactorInfo;
         private InstaChallengeLoginInfo _challengeinfo;
+        private InstaChallengeRequireVerifyMethod _challengeRequireVerifyMethod;
         private UserSessionData _userSession;
         public HttpHelper HttpHelper => _httpHelper;
         public InstaApiVersionType InstaApiVersionType => ApiVersionType;
@@ -2195,16 +2196,19 @@ namespace InstagramApiSharp.API
         }
 
 
-        private async Task<IResult<object>> GetBloksChallengeAsync(Uri instaUri, 
-            InstaChallengeRequireVerifyMethod challengeRequireVerifyMethod,
+        #region Delta Challenge
+        
+
+        private async Task<IResult<bool>> GetBloksChallengeAsync(Uri instaUri, 
             InstaDeltaChallengeStep step,
-            string choice, string code)
+            string choice, 
+            string securityCode)
         {
             if (_challengeinfo == null)
-                return Result.Fail<object>("challenge require info is empty.\r\ntry to call LoginAsync function first.", default);
+                return Result.Fail<bool>("challenge require info is empty.\r\ntry to call LoginAsync function first.", default);
 
-            if (challengeRequireVerifyMethod == null)
-                return Result.Fail<object>("`challengeRequireVerifyMethod` cannot be null.", default);
+            if (_challengeRequireVerifyMethod == null)
+                return Result.Fail<bool>("`challengeRequireVerifyMethod` cannot be null.", default);
 
             try
             {
@@ -2217,16 +2221,16 @@ namespace InstagramApiSharp.API
                 var data = new Dictionary<string, string>
                 {
                     {"bk_client_context", clientContext.ToString(Formatting.None)},
-                    {"challenge_context", challengeRequireVerifyMethod.ChallengeContext},
+                    {"challenge_context", _challengeRequireVerifyMethod.ChallengeContext},
                     {"bloks_versioning_id", _apiVersion.BloksVersionId},
                 };
 
                 switch (step)
                 {
                     case InstaDeltaChallengeStep.One:
-                        data.Add("user_id", challengeRequireVerifyMethod.UserId.ToString());
-                        data.Add("cni", challengeRequireVerifyMethod.Cni);
-                        data.Add("nonce_code", challengeRequireVerifyMethod.NonceCode);
+                        data.Add("user_id", _challengeRequireVerifyMethod.UserId.ToString());
+                        data.Add("cni", _challengeRequireVerifyMethod.Cni);
+                        data.Add("nonce_code", _challengeRequireVerifyMethod.NonceCode);
                         data.Add("fb_family_device_id", _deviceInfo.PhoneGuid.ToString());
                         data.Add("get_challenge", "true");
                         break;
@@ -2234,8 +2238,8 @@ namespace InstagramApiSharp.API
                         data.Add("choice", choice);
                         break;
                     case InstaDeltaChallengeStep.Three:
-                        data.Add("security_code", code);
-                        data.Add("perf_logging_id", challengeRequireVerifyMethod.PerfLoggingId);
+                        data.Add("security_code", securityCode);
+                        data.Add("perf_logging_id", _challengeRequireVerifyMethod.PerfLoggingId);
                         break;
                 }
                 
@@ -2262,28 +2266,29 @@ namespace InstagramApiSharp.API
                                 perfLoggingIdText = perfLoggingIdText.Substring(perfLoggingIdText.IndexOf(",") + 1).Trim();
                                 if (long.TryParse(perfLoggingIdText, out long perfLoggingId) && perfLoggingId > 1245)
                                 {
-                                    challengeRequireVerifyMethod.PerfLoggingId = perfLoggingId.ToString();
+                                    _challengeRequireVerifyMethod.PerfLoggingId = perfLoggingId.ToString();
                                 }
                             }
                         }
                         catch { }
                     }
-                    //{"enabled":true,"status":"ok"} // false
-                    return Result.Success(new object());
+                    return Result.Success(true);
                 }
                 else
-                    return Result.UnExpectedResponse<object>(response, json);
+                    return Result.UnExpectedResponse<bool>(response, json);
             }
             catch (HttpRequestException httpException)
             {
                 _logger?.LogException(httpException);
-                return Result.Fail(httpException, default(InstaChallengeRequireEmailVerify), ResponseType.NetworkProblem);
+                return Result.Fail<bool>(httpException, default, ResponseType.NetworkProblem);
             }
             catch (Exception ex)
             {
-                return Result.Fail(ex, (InstaChallengeRequireEmailVerify)null);
+                return Result.Fail<bool>(ex);
             }
         }
+
+        #endregion Delta Challenge
 
         #endregion Challenge part
 
