@@ -110,6 +110,10 @@ namespace InstagramApiSharp.API
         /// </summary>
         InstaChallengeLoginInfo ChallengeLoginInfo { get; set; }
         /// <summary>
+        ///     Gets or sets challenge verify method
+        /// </summary>
+        InstaChallengeRequireVerifyMethod ChallengeVerifyMethod { get; set; }
+        /// <summary>
         ///     Get HttpHelper class
         /// </summary>
         HttpHelper HttpHelper { get; }

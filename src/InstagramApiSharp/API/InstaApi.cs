@@ -79,6 +79,11 @@ namespace InstagramApiSharp.API
         ///     Gets or sets two factor login info
         /// </summary>
         public InstaTwoFactorLoginInfo TwoFactorLoginInfo { get { return _twoFactorInfo; } set { _twoFactorInfo = value; } }
+        /// <summary>
+        ///     Gets or sets challenge verify method
+        /// </summary>
+        public InstaChallengeRequireVerifyMethod ChallengeVerifyMethod { get => _challengeRequireVerifyMethod; set => _challengeRequireVerifyMethod = value; }
+
         public bool DontGenerateToken { get; set; }
 
         private bool _isUserAuthenticated;
