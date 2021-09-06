@@ -537,6 +537,12 @@ namespace InstagramApiSharp.API
         /// </summary>
         Task<IResult<bool>> GetDeltaChallengeAsync();
 
+        /// <summary>
+        ///     Set delta challenge choice
+        /// </summary>
+        /// <param name="deltaChallengeChoice">Delta challenge choice</param>
+        Task<IResult<bool>> SetDeltaChallengeChoiceAsync(InstaDeltaChallengeChoice deltaChallengeChoice);
+
         #endregion Delta Challenge
 
         #endregion Challenge part
