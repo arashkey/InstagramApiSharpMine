@@ -2311,6 +2311,19 @@ namespace InstagramApiSharp.API
                         }
                         catch { }
                     }
+                    else if (step == InstaDeltaChallengeStep.Three)
+                    {
+                        // ake, \"Wait a Moment\", \"Please check the code we sent you and try again.\"
+                        if (Exists("wait a Moment") ||
+                            Exists("please check the code we sent you and try again") ||
+                            Exists("check the code"))
+                        {
+                            return Result.Fail<bool>("Please check the code we sent you and try again");
+                        }
+
+
+                        bool Exists(string str) => json.IndexOf(str, StringComparison.OrdinalIgnoreCase) != -1;
+                    }
                     return Result.Success(true);
                 }
                 else
