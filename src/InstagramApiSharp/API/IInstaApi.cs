@@ -554,6 +554,11 @@ namespace InstagramApiSharp.API
         /// </summary>
         Task<IResult<bool>> VerifyDeltaChallengeAsync(string verificationCode);
 
+        /// <summary>
+        ///     Resend delta challenge code
+        /// </summary>
+        Task<IResult<bool>> ResendDeltaChallengeCodeAsync();
+
         #endregion Delta Challenge
 
         #endregion Challenge part

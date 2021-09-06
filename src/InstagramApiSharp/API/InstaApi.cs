@@ -2241,6 +2241,15 @@ namespace InstagramApiSharp.API
                 null,
                 verificationCode);
 
+        /// <summary>
+        ///     Resend delta challenge code
+        /// </summary>
+        public async Task<IResult<bool>> ResendDeltaChallengeCodeAsync() =>
+            await GetBloksChallengeAsync
+            (
+                UriCreator.GetBloksChallengeNavigationRewindChallengeUri(),
+                InstaDeltaChallengeStep.Replay
+            );
         private async Task<IResult<bool>> GetBloksChallengeAsync(Uri instaUri, 
             InstaDeltaChallengeStep step = InstaDeltaChallengeStep.One,
             string choice = null, 
@@ -2291,7 +2300,7 @@ namespace InstagramApiSharp.API
                 var obj = JsonConvert.DeserializeObject<InstaBloksDeltaChallengeResponse>(json);
                 if (obj.IsSucceed)
                 {
-                    if(step == InstaDeltaChallengeStep.One)
+                    if(step == InstaDeltaChallengeStep.One || step == InstaDeltaChallengeStep.Replay)
                     {
                         return Result.Success(true);
                     }

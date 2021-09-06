@@ -11,6 +11,7 @@ namespace InstagramApiSharp.Enums
     {
         One,
         Two,
-        Three
+        Three,
+        Replay
     }
 }
