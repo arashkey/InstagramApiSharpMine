@@ -2291,7 +2291,11 @@ namespace InstagramApiSharp.API
                 var obj = JsonConvert.DeserializeObject<InstaBloksDeltaChallengeResponse>(json);
                 if (obj.IsSucceed)
                 {
-                    if (step == InstaDeltaChallengeStep.Two)
+                    if(step == InstaDeltaChallengeStep.One)
+                    {
+                        return Result.Success(true);
+                    }
+                    else if (step == InstaDeltaChallengeStep.Two)
                     {
                         try
                         {
@@ -2354,11 +2358,14 @@ namespace InstagramApiSharp.API
                             _user.LoggedInUser.IsVerified = us.Value.IsVerified;
                             _user.LoggedInUser.ProfilePicture = us.Value.ProfilePicUrl;
                             _user.LoggedInUser.ProfilePicUrl = us.Value.ProfilePicUrl;
+
+                            return Result.Success(true);
                         }
 
                         bool Exists(string str) => json.IndexOf(str, StringComparison.OrdinalIgnoreCase) != -1;
                     }
-                    return Result.Success(true);
+
+                    return Result.UnExpectedResponse<bool>(response, json);
                 }
                 else
                     return Result.UnExpectedResponse<bool>(response, json);
