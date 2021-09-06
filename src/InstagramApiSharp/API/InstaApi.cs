@@ -2217,7 +2217,15 @@ namespace InstagramApiSharp.API
             await GetBloksChallengeAsync(UriCreator.GetBloksChallengeNavigationTakeChallengeUri(), 
                 InstaDeltaChallengeStep.Two,
                 ((int)deltaChallengeChoice).ToString());
-
+        
+        /// <summary>
+        ///     Verify delta challenge
+        /// </summary>
+        public async Task<IResult<bool>> VerifyDeltaChallengeAsync(string verificationCode) =>
+            await GetBloksChallengeAsync(UriCreator.GetBloksChallengeNavigationTakeChallengeUri(), 
+                InstaDeltaChallengeStep.Three,
+                null,
+                verificationCode);
 
         private async Task<IResult<bool>> GetBloksChallengeAsync(Uri instaUri, 
             InstaDeltaChallengeStep step = InstaDeltaChallengeStep.One,
