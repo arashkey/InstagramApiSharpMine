@@ -529,6 +529,16 @@ namespace InstagramApiSharp.API
         /// </summary>
         /// <param name="verifyCode">Verification code</param>
         Task<IResult<InstaLoginResult>> VerifyCodeForChallengeRequireAsync(string verifyCode);
+
+        #region Delta Challenge
+
+        /// <summary>
+        ///     Get delta (bloks) challenge [ new challenge required ]
+        /// </summary>
+        Task<IResult<bool>> GetDeltaChallengeAsync();
+
+        #endregion Delta Challenge
+
         #endregion Challenge part
 
         /// <summary>

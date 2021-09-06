@@ -2202,12 +2202,20 @@ namespace InstagramApiSharp.API
 
 
         #region Delta Challenge
-        
+
+        /// <summary>
+        ///     Get delta (bloks) challenge [ new challenge required ]
+        /// </summary>
+        public async Task<IResult<bool>> GetDeltaChallengeAsync() =>
+            await GetBloksChallengeAsync(UriCreator.GetBloksChallengeNavigationTakeChallengeUri());
+
+
+
 
         private async Task<IResult<bool>> GetBloksChallengeAsync(Uri instaUri, 
-            InstaDeltaChallengeStep step,
-            string choice, 
-            string securityCode)
+            InstaDeltaChallengeStep step = InstaDeltaChallengeStep.One,
+            string choice = null, 
+            string securityCode = null)
         {
             if (_challengeinfo == null)
                 return Result.Fail<bool>("challenge require info is empty.\r\ntry to call LoginAsync function first.", default);
