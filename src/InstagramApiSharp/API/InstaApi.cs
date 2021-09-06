@@ -2193,6 +2193,98 @@ namespace InstagramApiSharp.API
                 return Result.Fail(ex, InstaLoginResult.Exception);
             }
         }
+
+
+        private async Task<IResult<object>> GetBloksChallengeAsync(Uri instaUri, 
+            InstaChallengeRequireVerifyMethod challengeRequireVerifyMethod,
+            InstaDeltaChallengeStep step,
+            string choice, string code)
+        {
+            if (_challengeinfo == null)
+                return Result.Fail<object>("challenge require info is empty.\r\ntry to call LoginAsync function first.", default);
+
+            if (challengeRequireVerifyMethod == null)
+                return Result.Fail<object>("`challengeRequireVerifyMethod` cannot be null.", default);
+
+            try
+            {
+                var clientContext = new JObject
+                {
+                    new JProperty("bloks_version", _apiVersion.BloksVersionId),
+                    new JProperty("styles_id", "instagram")
+                };
+
+                var data = new Dictionary<string, string>
+                {
+                    {"bk_client_context", clientContext.ToString(Formatting.None)},
+                    {"challenge_context", challengeRequireVerifyMethod.ChallengeContext},
+                    {"bloks_versioning_id", _apiVersion.BloksVersionId},
+                };
+
+                switch (step)
+                {
+                    case InstaDeltaChallengeStep.One:
+                        data.Add("user_id", challengeRequireVerifyMethod.UserId.ToString());
+                        data.Add("cni", challengeRequireVerifyMethod.Cni);
+                        data.Add("nonce_code", challengeRequireVerifyMethod.NonceCode);
+                        data.Add("fb_family_device_id", _deviceInfo.PhoneGuid.ToString());
+                        data.Add("get_challenge", "true");
+                        break;
+                    case InstaDeltaChallengeStep.Two:
+                        data.Add("choice", choice);
+                        break;
+                    case InstaDeltaChallengeStep.Three:
+                        data.Add("security_code", code);
+                        data.Add("perf_logging_id", challengeRequireVerifyMethod.PerfLoggingId);
+                        break;
+                }
+                
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<InstaBloksDeltaChallengeResponse>(json);
+                if (obj.IsSucceed)
+                {
+                    if (step == InstaDeltaChallengeStep.Two)
+                    {
+                        try
+                        {
+                            var t = obj.Layout.BloksPayload.Tree.First.First["#"].ToObject<string>();
+                            var findIndex = t.IndexOf("\"step_name");
+
+                            if (findIndex != -1 && findIndex - 35 >= 0)
+                            {
+                                // (bk.action.i32.Const, 1436888497), 
+                                findIndex -= 35;
+                                var substring = t.Substring(findIndex);
+                                //perf_logging_id
+                                var perfLoggingIdText = substring.Substring(0, substring.IndexOf(")"));
+                                perfLoggingIdText = perfLoggingIdText.Substring(perfLoggingIdText.IndexOf(",") + 1).Trim();
+                                if (long.TryParse(perfLoggingIdText, out long perfLoggingId) && perfLoggingId > 1245)
+                                {
+                                    challengeRequireVerifyMethod.PerfLoggingId = perfLoggingId.ToString();
+                                }
+                            }
+                        }
+                        catch { }
+                    }
+                    //{"enabled":true,"status":"ok"} // false
+                    return Result.Success(new object());
+                }
+                else
+                    return Result.UnExpectedResponse<object>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaChallengeRequireEmailVerify), ResponseType.NetworkProblem);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex, (InstaChallengeRequireEmailVerify)null);
+            }
+        }
+
         #endregion Challenge part
 
         internal async Task GetToken()
