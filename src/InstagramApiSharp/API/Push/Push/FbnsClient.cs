@@ -106,11 +106,11 @@ namespace InstagramApiSharp.API.Push
         internal async Task RegisterClient(string token)
         {
             if (string.IsNullOrEmpty(token)) throw new ArgumentNullException(nameof(token));
-            if (ConnectionData.FbnsToken == token)
-            {
-                ConnectionData.FbnsToken = token;
-                return;
-            }
+            //if (ConnectionData.FbnsToken == token)
+            //{
+            //    ConnectionData.FbnsToken = token;
+            //    return;
+            //}
             var deviceInfo = _instaApi.GetCurrentDevice();
             var user = _instaApi.GetLoggedUser();
             var uri = UriCreator.GetPushRegisterUri();
@@ -120,11 +120,14 @@ namespace InstagramApiSharp.API.Push
                 {"is_main_push_channel", "true"},
                 {"phone_id", deviceInfo.PhoneGuid.ToString()},
                 {"device_token", token},
-                {"_csrftoken", user.CsrfToken },
-                {"guid", deviceInfo.PhoneGuid.ToString() },
-                {"_uuid", deviceInfo.DeviceGuid.ToString() },
-                {"users", user.LoggedInUser.Pk.ToString() }
+                {"guid", deviceInfo.PhoneGuid.ToString()},
+                {"_uuid", deviceInfo.DeviceGuid.ToString()},
+                {"users", user.LoggedInUser.Pk.ToString()}
             };
+            if (_instaApi.HttpHelper.NewerThan180)
+            {
+                fields.Add("_csrftoken", user.CsrfToken);
+            }
             var request = _instaApi.HttpHelper.GetDefaultRequest(HttpMethod.Post, uri, deviceInfo, fields);
             await _instaApi.HttpRequestProcessor.SendAsync(request);
 

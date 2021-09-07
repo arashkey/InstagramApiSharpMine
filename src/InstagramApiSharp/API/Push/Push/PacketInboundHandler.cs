@@ -30,7 +30,7 @@ namespace InstagramApiSharp.API.Push
         private const int TIMEOUT = 5;
         private CancellationTokenSource _timerResetToken;
 
-        public PacketInboundHandler(FbnsClient client, int keepAlive = 900)
+        public PacketInboundHandler(FbnsClient client, int keepAlive = 240/*900*/)
         {
             _client = client;
             _keepAliveDuration = keepAlive;
@@ -166,31 +166,37 @@ namespace InstagramApiSharp.API.Push
         {
             _timerResetToken?.Cancel();
             _timerResetToken = new CancellationTokenSource();
-
             var cancellationToken = _timerResetToken.Token;
 
-            Task.Delay(TimeSpan.FromSeconds(_keepAliveDuration - 60),
-                    cancellationToken) 
-                .ContinueWith(async task =>
+            Task.Run(async ()=>
+            {
+                try
                 {
-                    var packet = PingReqPacket.Instance;
-                    await ctx.WriteAndFlushAsync(packet);
-                    Debug.WriteLine("PingReq sent");
-                }, cancellationToken)
-                .ContinueWith(async task =>
-                {
-                    try
+                    while (cancellationToken.IsCancellationRequested)
                     {
-                        await Task.Delay(TimeSpan.FromSeconds(60), cancellationToken); 
-                        if(!cancellationToken.IsCancellationRequested)
-                            ChannelInactive(ctx);  
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        Debug.WriteLine("Keep alive timer reset.");
-                    }
-                }, cancellationToken);
+                        var packet = PingReqPacket.Instance;
+                        await ctx.WriteAndFlushAsync(packet);
+                        Debug.WriteLine("PingReq sent");
 
+                        try
+                        {
+                            await Task.Delay(TimeSpan.FromSeconds(60), cancellationToken);
+                            if (!cancellationToken.IsCancellationRequested)
+                                ChannelInactive(ctx);
+                        }
+                        catch (TaskCanceledException)
+                        {
+                            Debug.WriteLine("Keep alive timer reset.");
+                        }
+
+                        await Task.Delay(TimeSpan.FromSeconds(_keepAliveDuration - 60), cancellationToken);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("PacketInboundHandler.ResetTimer exception: " + ex.ToString());
+                }
+            });
         }
 
         private byte[] DecompressPayload(IByteBuffer payload)
