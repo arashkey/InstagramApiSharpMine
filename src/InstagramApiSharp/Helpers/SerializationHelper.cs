@@ -5,6 +5,8 @@ using System;
 using InstagramApiSharp.Classes;
 #if NETFRAMEWORK || NETSTANDARD
 using System.Runtime.Serialization.Formatters.Binary;
+#else
+using System.Text;
 #endif
 namespace InstagramApiSharp.Helpers
 {

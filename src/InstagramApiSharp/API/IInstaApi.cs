@@ -30,6 +30,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 #if WITH_NOTIFICATION
 using InstagramApiSharp.API.RealTime;
+using InstagramApiSharp.API.Push;
 #endif
 namespace InstagramApiSharp.API
 {
@@ -108,6 +109,10 @@ namespace InstagramApiSharp.API
         ///     Gets or sets challenge login info
         /// </summary>
         InstaChallengeLoginInfo ChallengeLoginInfo { get; set; }
+        /// <summary>
+        ///     Gets or sets challenge verify method
+        /// </summary>
+        InstaChallengeRequireVerifyMethod ChallengeVerifyMethod { get; set; }
         /// <summary>
         ///     Get HttpHelper class
         /// </summary>
@@ -231,7 +236,7 @@ namespace InstagramApiSharp.API
 
 
 #if WINDOWS_UWP
-        IPushClient PushClient { get; set; }
+        Push.IPushClient PushClient { get; set; }
 #endif
 
         #endregion
@@ -524,6 +529,38 @@ namespace InstagramApiSharp.API
         /// </summary>
         /// <param name="verifyCode">Verification code</param>
         Task<IResult<InstaLoginResult>> VerifyCodeForChallengeRequireAsync(string verifyCode);
+
+        #region Delta Challenge
+
+        /// <summary>
+        ///     Get delta (bloks) challenge [ new challenge required ]
+        /// </summary>
+        /// <param name="rewindChallenge">
+        ///     Rewind the challenge to select another choice ( way )
+        ///     <para>
+        ///         Note: Resetting the challenge
+        ///     </para>
+        /// </param>
+        Task<IResult<bool>> GetDeltaChallengeAsync(bool rewindChallenge = false);
+
+        /// <summary>
+        ///     Set delta challenge choice
+        /// </summary>
+        /// <param name="deltaChallengeChoice">Delta challenge choice</param>
+        Task<IResult<bool>> SetDeltaChallengeChoiceAsync(InstaDeltaChallengeChoice deltaChallengeChoice);
+        
+        /// <summary>
+        ///     Verify delta challenge
+        /// </summary>
+        Task<IResult<bool>> VerifyDeltaChallengeAsync(string verificationCode);
+
+        /// <summary>
+        ///     Resend delta challenge code
+        /// </summary>
+        Task<IResult<bool>> ResendDeltaChallengeCodeAsync();
+
+        #endregion Delta Challenge
+
         #endregion Challenge part
 
         /// <summary>

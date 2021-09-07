@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!--;uap10.0-->
-    <TargetFrameworks>netstandard2.0;uap10.0</TargetFrameworks>
+    <TargetFrameworks>uap10.0</TargetFrameworks>
     <VersionPrefix>2.0.0</VersionPrefix>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <AssemblyName>InstagramApiSharp</AssemblyName>
@@ -12,9 +12,9 @@
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Version>2.8.5.0</Version>
-    <AssemblyVersion>2.8.5.0</AssemblyVersion>
-    <FileVersion>2.8.5.0</FileVersion>
+    <Version>2.8.6.0</Version>
+    <AssemblyVersion>2.8.6.0</AssemblyVersion>
+    <FileVersion>2.8.6.0</FileVersion>
     <Description>A complete Private Instagram API for .NET.
 
 
@@ -39,7 +39,113 @@ See example projects and wiki pages to find out how this library works.</Descrip
     <RepositoryType></RepositoryType>
     <RepositoryUrl>https://github.com/ramtinak/InstagramApiSharp/</RepositoryUrl>
     <PackageProjectUrl>https://github.com/ramtinak/InstagramApiSharp/</PackageProjectUrl>
-    <PackageReleaseNotes>v2.8.5
+    <PackageReleaseNotes>v2.8.6
+- [Update] api version and headers to v191.1.0.41.124
+- [Update] LoginWithCookiesAsync to recent changes in Instagram
+- [Update] LoginAsync to recent changes in Instagram
+- [Update] LoginWithFacebookAsync to recent changes in Instagram
+- [Refactor] csrftoken usage
+- [Deprecated] following functions in IInstaApi: CheckPhoneNumberAsync, CheckUsernameAsync, SendSignUpSmsCodeAsync, VerifySignUpSmsCodeAsync, GetUsernameSuggestionsAsync, ValidateNewAccountWithPhoneNumberAsync, CreateNewAccountAsync,
+- [Deprecated] GetTimezoneOffset, SetTimezoneOffset
+- [Deprecated] GetAcceptLanguage, SetAcceptLanguage
+- [Delete] AddToPostLiveAsync, since it's deprecated
+- [Delete] DeletePostLiveAsync, since it's [Deprecated] by Instagram
+- [Bugfix] for SendTwoFactorLoginSMSAsync
+- [Bugfix] for TwoFactorLoginAsync
+- [Bugfix] for GetChallengeRequireVerifyMethodAsync UriCreator
+- [Bugfix] for GenerateUnknownUploadId
+- [Bugfix] for login issue, related to sessionid and other stuffs
+- [Bugfix] TwoFactorLoginAsync, VerifyCodeForChallengeRequireAsync, LoginWithFacebookAsync [ Fixes Logout problem ]
+- [Bugfix] for CreateNewAccountWithPhoneNumberAsync
+- [Tiny fix] for GetUserTimelineFeedAsync
+- [Tiny fix] for InstaAccountRegistrationPhoneNumber
+- [Tiny fix] for InstaDefaultResponse
+- [Tiny fix] for SetPubKeyId
+- [Update] uploadId in HelperProcessor, MediaProcessor, StoryProcessor
+- [Update] headers to use IInstaApi properties (language, locale, timezoneoffset)
+- [Update] some parameter for login
+- [Update] GetStoryPollVotersAsync
+- [Update] GetDirectInboxThreadAsync [ StoryProcessor ]
+- [Update] SendDirectFelixShareAsync [ MessagingProcessor ]
+- [Update] ShareMediaToThreadAsync [ MessagingProcessor ]
+- [Update] ShareMediaToUserAsync [ MessagingProcessor ]
+- [Update] GetUserTimelineFeedAsync [ FeedProcessor ]
+- [Update] GetMediaInsightsAsync [ BusinessProcessor ]
+- [Update] GetStoryFeedWithPostMethodAsync
+- [Update] SendRequestsBeforeLoginAsync, QeSync, LauncherSyncPrivate, 
+- [Update] SendRequestsAfterLoginAsync
+- [Update] GetHighlightFeedsAsync
+- [Update] GetTopicalExploreFeedAsync
+- [Update] LikeUnlikeMediaInternal
+- [Update] CommentMediaAsync
+- [Update] LikeMediaAsync
+- [Update] MediaProcessor.UploadVideoAsync
+- [Update] TVProcessor.UploadSegmentedVideoToTVAsync
+- [Update] MediaProcessor.UploadSegmentedVideoAsync
+- [Update] GetRequestForDownloadAccountDataAsync
+- [Force] LoginAsync to reset it's loaded data
+- [Tiny update] for TryParseAndSetUserAgent
+- [Tiny Update] for HttpRequestProcessor
+- [Tiny update] for some headers
+- [Add] ChallengeVerifyMethod property to IInstaApi
+- [Add] GetDeltaChallengeAsync to IInstaApi
+- [Add] SetDeltaChallengeChoiceAsync to IInstaApi
+- [Add] VerifyDeltaChallengeAsync, SetDeltaChallengeChoiceAsync to IInstaApi
+- [Add] ResendDeltaChallengeCodeAsync to IInstaApi
+- [Add] RestrictUserAsync to UserProcessor
+- [Add] UnRestrictUserAsync to UserProcessor
+- [Add] GetRestrictedUsersAsync to UserProcessor
+- [Add] Check2FATrustedNotificationAsync to IInstaApi
+- [Add] some new properties to InstaTwoFactorLoginInfo class
+- [Add] Insta2FANotificationReviewStatus to InstaTwoFactorTrustedNotification
+- [Add] Notification to InstaTwoFactorVerifyOptions
+- [Add] EnableLoginRequestNotificationAsync to AccountProcessor
+- [Add] DisableLoginRequestNotificationAsync to AccountProcessor
+- [Add] ApproveNewLoginRequestAsync to AccountProcessor
+- [Add] DenyNewLoginRequestAsync to AccountProcessor
+- [Add] CheckNewLoginRequestNotificationAsync to AccountProcessor
+- [Add] ReelId property to InstaStoryShare
+- [Add] title parameter to LiveProcessor.CreateAsync
+- [Add] offsetToVideoStart to LiveProcessor.GetHeartBeatAndViewerCountAsync
+- [Add] SetQuestionStatusAsync to LiveProcessor
+- [Add] EnableJoinToLiveRequestAsync, DisableJoinToLiveRequestAsync to LiveProcessor
+- [Add] ActivityNotificationClickAsync to FeedProcessor
+- [Add] DeleteActivityNotificationAsync to FeedProcessor
+- [Add] FileDebugLogger
+- [Add] retry logic to IGTV configure media operation
+- [Add] IsRestricted property to InstaFriendshipFullStatus
+- [Add] new properties to PushNotification class
+- [Add] GetRequestDelay to IInstaApi
+- [Add] SetEncryptedPasswordEncryptor to IInstaApi
+- [Add] MarkNewsInboxSeenAsync to UserProcessor
+- [Add] GetStorySliderVotersAsync to StoryProcessor
+- [Add] GetUserShoppableMediaAsync to BusinessProcessor
+- [Add] GetUserShoppableMediaByIdAsync to BusinessProcessor
+- [Add] following properties to IInstaApi: AcceptLanguage, StartupCountry, StartupCountryCode, DeviceLocale, AppLocale, MappedLocale, TimeZoneOffset
+- [Add] CheckOffensiveCaptionAsync to CommentProcessor
+- [Add] CancellationToken to GetSingleCollectionAsync, GetCollectionsAsync [ CollectionProcessor ]
+- [Add] CancellationToken to GetPendingUserTagsAsync [ Overload ]
+- [Add] CancellationToken to GetMediaCommentsAsync, GetMediaRepliesCommentsAsync [ Overload ]
+- [Add] CancellationToken to SearchPeopleAsync [ Overload ]
+- [Add] CancellationToken to GetUserReelsClipsAsync, GetReelsClipsAsync [ Overload ]
+- [Add] CancellationToken to GetUserShoppableMediaAsync, GetUserShoppableMediaByIdAsync [ Overload ]
+- [Add] CancellationToken to GetStoryFeedWithPostMethodAsync [ Overload ]
+- [Add] CancellationToken to BrowseFeedAsync [ Overload ]
+- [Add] CancellationToken to GetBestFriendsAsync, GetBestFriendsSuggestionsAsync, GetBlockedUsersAsync, GetUserFollowersByIdAsync, GetUserFollowersAsync, GetSuggestionUsersAsync, GetCurrentUserFollowersAsync, GetRecentActivityFeedAsync, GetFollowingRecentActivityFeedAsync, GetUserFollowingAsync, GetUserFollowingByIdAsync, GetUserMediaAsync, GetUserMediaByIdAsync, GetUserShoppableMediaAsync, GetUserTagsAsync [ Overload ]
+- [Add] CancellationToken to GetDirectInboxAsync, GetDirectInboxThreadAsync, GetPendingDirectAsync [ Overload ]
+- [Add] CancellationToken to GetArchivedMediaAsync [ Overload ]
+- [Add] CancellationToken to GetHashtagsSectionsAsync, GetHashtagChannelVideosAsync, GetRecentHashtagMediaListAsync, GetTopHashtagMediaListAsync [ Overload ]
+- [Add] CancellationToken to GetRecentLocationFeedsAsync, GetTopLocationFeedsAsync, SearchPlacesAsync [ Overload ]
+- [Add] CancellationToken to GetExploreChannelVideosAsync, GetExploreFeedAsync, GetLikedFeedAsync, GetRecentActivityFeedAsync, GetSavedFeedAsync, GetTagFeedAsync, GetUserTimelineFeedAsync, GetTopicalExploreFeedAsync [ Overload ]
+Example updates:
+- [Update] ChallengeRequireExample for new TwoFactor authentication
+- [Update] Challenge Example to support Login notification as well
+- [Update] Challenge Example to support delta challenge
+- [Update] TwoFactorExample to support Notification Login
+- [Update] VBExample to support Notification Login
+- [Add] documentation
+
+v2.8.5
 - [Tiny fix] for TVProcessor.MarkAsSeenAsync
 - [Update] InstaCommentContainerModuleType, InstaMediaContainerModuleType
 - [Add] new Reels APIs support!
@@ -492,12 +598,9 @@ v2.0.0
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
-  
-   <PropertyGroup Condition=" '$(OS)' != 'Windows_NT' ">
-        <TargetFramework>netstandard2.0</TargetFramework>
-    </PropertyGroup>
+
     <PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">
-      <TargetFrameworks>netstandard2.0;uap10.0</TargetFrameworks>
+      <TargetFrameworks>uap10.0</TargetFrameworks>
     </PropertyGroup>
   
   <PropertyGroup>
@@ -520,8 +623,8 @@ v2.0.0
     <NugetTargetMoniker>UAP,Version=v10.0</NugetTargetMoniker>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.19041.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
-    <!--<TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>-->
+    <!--<TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>-->
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <TargetFrameworkIdentifier>.NETCore</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <DefineConstants>$(DefineConstants);WINDOWS_UWP</DefineConstants>
@@ -547,9 +650,10 @@ v2.0.0
   
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="Iconic.Zlib.NetstandardUwp" Version="1.0.1" />
-    <PackageReference Include="Portable.BouncyCastle" Version="1.8.6.7" />
+    <!--<PackageReference Include="Portable.BouncyCastle" Version="1.8.6.7" Condition="'$(TargetFramework)' == 'netstandard2.0'" />-->
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.0" Condition="'$(TargetFramework)' == 'uap10.0'" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.12" Condition="'$(TargetFramework)' == 'uap10.0'" />
   </ItemGroup>

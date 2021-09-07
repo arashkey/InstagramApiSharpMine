@@ -26,6 +26,8 @@ using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Parameters;
+#elif NET || NETCOREAPP3_1
+using System.Security.Cryptography;
 #endif
 namespace InstagramApiSharp
 {

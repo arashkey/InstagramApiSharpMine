@@ -286,13 +286,16 @@ namespace InstagramApiSharp.Helpers
         {
             if (!apiPath.EndsWith("/"))
                 apiPath += "/";
+
             string context = "";
             if (!string.IsNullOrEmpty(challengeContext))
                 context = "&challenge_context=" + challengeContext;
+
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.API_SUFFIX + apiPath +
-                $"?guid={device.PhoneGuid.ToString()}&device_id={device.DeviceGuid.ToString()}" +
-                $"&android_device_id={device.DeviceId.ToString()}&phone_id={device.PhoneGuid.ToString()}" +
-                $"&_uuid={device.DeviceGuid.ToString()}{context}", out var instaUri))
+                $"?guid={device.DeviceGuid}" +
+                $"&device_id={device.DeviceId}" +
+                context
+                , out var instaUri))
                 throw new Exception("Cant create URI for challenge require url");
             return instaUri;
         }
@@ -3142,6 +3145,24 @@ namespace InstagramApiSharp.Helpers
         {
             if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.NEWS_LOG, out var instaUri))
                 throw new Exception("Cant create URI get activity log");
+            return instaUri;
+        }
+        public static Uri GetBloksChallengeNavigationTakeChallengeUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.BLOKS_APPS_CHALLENGE_NAVIGATION_TAKE_CHALLENGE, out var instaUri))
+                throw new Exception("Cant create URI get bloks challenge navigation take challenge");
+            return instaUri;
+        }
+        public static Uri GetBloksChallengeNavigationRewindChallengeUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.BLOKS_APPS_CHALLENGE_NAVIGATION_REWIND_CHALLENGE, out var instaUri))
+                throw new Exception("Cant create URI get bloks challenge navigation rewind challenge");
+            return instaUri;
+        }
+        public static Uri GetBloksChallengeNavigationReplayChallengeUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.BLOKS_APPS_CHALLENGE_NAVIGATION_REPLAY_CHALLENGE, out var instaUri))
+                throw new Exception("Cant create URI get bloks challenge navigation replay challenge");
             return instaUri;
         }
     }

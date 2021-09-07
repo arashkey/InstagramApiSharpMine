@@ -18,6 +18,7 @@ namespace InstagramApiSharp.Classes
         public FbnsConnectionData FbnsConnectionData { get; set; }
         public InstaTwoFactorLoginInfo TwoFactorLoginInfo { get; set; }
         public InstaChallengeLoginInfo ChallengeLoginInfo { get; set; }
+        public InstaChallengeRequireVerifyMethod ChallengeVerifyMethod { get; set; }
 
         #region Locale
 

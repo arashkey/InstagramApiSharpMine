@@ -22,6 +22,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 #if WITH_NOTIFICATION
 using InstagramApiSharp.API.RealTime;
+using InstagramApiSharp.API.Push;
 #endif
 #pragma warning disable IDE1006
 #pragma warning disable IDE0044
@@ -54,6 +55,7 @@ namespace InstagramApiSharp.API
         private AndroidDevice _deviceInfo;
         private InstaTwoFactorLoginInfo _twoFactorInfo;
         private InstaChallengeLoginInfo _challengeinfo;
+        private InstaChallengeRequireVerifyMethod _challengeRequireVerifyMethod;
         private UserSessionData _userSession;
         public HttpHelper HttpHelper => _httpHelper;
         public InstaApiVersionType InstaApiVersionType => ApiVersionType;
@@ -77,6 +79,11 @@ namespace InstagramApiSharp.API
         ///     Gets or sets two factor login info
         /// </summary>
         public InstaTwoFactorLoginInfo TwoFactorLoginInfo { get { return _twoFactorInfo; } set { _twoFactorInfo = value; } }
+        /// <summary>
+        ///     Gets or sets challenge verify method
+        /// </summary>
+        public InstaChallengeRequireVerifyMethod ChallengeVerifyMethod { get => _challengeRequireVerifyMethod; set => _challengeRequireVerifyMethod = value; }
+
         public bool DontGenerateToken { get; set; }
 
         private bool _isUserAuthenticated;
@@ -107,7 +114,7 @@ namespace InstagramApiSharp.API
         /// </summary>
         public IRegistrationService RegistrationService { get; }
 #if WINDOWS_UWP
-        public IPushClient PushClient { get; set; }
+        public Push.IPushClient PushClient { get; set; }
 #endif
 
         public bool LoadProxyFromSessionFile { get; set; } = false;
@@ -1913,6 +1920,7 @@ namespace InstagramApiSharp.API
                 }
 
                 var obj = JsonConvert.DeserializeObject<InstaChallengeRequireVerifyMethod>(json);
+                _challengeRequireVerifyMethod = obj;
                 return Result.Success(obj);
             }
             catch (HttpRequestException httpException)
@@ -1961,6 +1969,8 @@ namespace InstagramApiSharp.API
                 }
 
                 var obj = JsonConvert.DeserializeObject<InstaChallengeRequireVerifyMethod>(json);
+
+                _challengeRequireVerifyMethod = obj;
                 return Result.Success(obj);
             }
             catch (HttpRequestException httpException)
@@ -2192,6 +2202,196 @@ namespace InstagramApiSharp.API
                 return Result.Fail(ex, InstaLoginResult.Exception);
             }
         }
+
+
+        #region Delta Challenge
+
+        /// <summary>
+        ///     Get delta (bloks) challenge [ new challenge required ]
+        /// </summary>
+        /// <param name="rewindChallenge">
+        ///     Rewind the challenge to select another choice ( way )
+        ///     <para>
+        ///         Note: Resetting the challenge
+        ///     </para>
+        /// </param>
+        public async Task<IResult<bool>> GetDeltaChallengeAsync(bool rewindChallenge = false) =>
+            await GetBloksChallengeAsync
+            (
+                !rewindChallenge ? 
+                UriCreator.GetBloksChallengeNavigationTakeChallengeUri() :
+                UriCreator.GetBloksChallengeNavigationRewindChallengeUri()
+            );
+
+        /// <summary>
+        ///     Set delta challenge choice
+        /// </summary>
+        /// <param name="deltaChallengeChoice">Delta challenge choice</param>
+        public async Task<IResult<bool>> SetDeltaChallengeChoiceAsync(InstaDeltaChallengeChoice deltaChallengeChoice) =>
+            await GetBloksChallengeAsync(UriCreator.GetBloksChallengeNavigationTakeChallengeUri(), 
+                InstaDeltaChallengeStep.Two,
+                ((int)deltaChallengeChoice).ToString());
+        
+        /// <summary>
+        ///     Verify delta challenge
+        /// </summary>
+        public async Task<IResult<bool>> VerifyDeltaChallengeAsync(string verificationCode) =>
+            await GetBloksChallengeAsync(UriCreator.GetBloksChallengeNavigationTakeChallengeUri(), 
+                InstaDeltaChallengeStep.Three,
+                null,
+                verificationCode);
+
+        /// <summary>
+        ///     Resend delta challenge code
+        /// </summary>
+        public async Task<IResult<bool>> ResendDeltaChallengeCodeAsync() =>
+            await GetBloksChallengeAsync
+            (
+                UriCreator.GetBloksChallengeNavigationRewindChallengeUri(),
+                InstaDeltaChallengeStep.Replay
+            );
+        private async Task<IResult<bool>> GetBloksChallengeAsync(Uri instaUri, 
+            InstaDeltaChallengeStep step = InstaDeltaChallengeStep.One,
+            string choice = null, 
+            string securityCode = null)
+        {
+            if (_challengeinfo == null)
+                return Result.Fail<bool>("challenge require info is empty.\r\ntry to call LoginAsync function first.", default);
+
+            if (_challengeRequireVerifyMethod == null)
+                return Result.Fail<bool>("`challengeRequireVerifyMethod` cannot be null.", default);
+
+            try
+            {
+                var clientContext = new JObject
+                {
+                    new JProperty("bloks_version", _apiVersion.BloksVersionId),
+                    new JProperty("styles_id", "instagram")
+                };
+
+                var data = new Dictionary<string, string>
+                {
+                    {"bk_client_context", clientContext.ToString(Formatting.None)},
+                    {"challenge_context", _challengeRequireVerifyMethod.ChallengeContext},
+                    {"bloks_versioning_id", _apiVersion.BloksVersionId},
+                };
+
+                switch (step)
+                {
+                    case InstaDeltaChallengeStep.One:
+                        data.Add("user_id", _challengeRequireVerifyMethod.UserId.ToString());
+                        data.Add("cni", _challengeRequireVerifyMethod.Cni);
+                        data.Add("nonce_code", _challengeRequireVerifyMethod.NonceCode);
+                        data.Add("fb_family_device_id", _deviceInfo.PhoneGuid.ToString());
+                        data.Add("get_challenge", "true");
+                        break;
+                    case InstaDeltaChallengeStep.Two:
+                        data.Add("choice", choice);
+                        break;
+                    case InstaDeltaChallengeStep.Three:
+                        data.Add("security_code", securityCode);
+                        data.Add("perf_logging_id", _challengeRequireVerifyMethod.PerfLoggingId);
+                        break;
+                }
+                
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+                var obj = JsonConvert.DeserializeObject<InstaBloksDeltaChallengeResponse>(json);
+                if (obj.IsSucceed)
+                {
+                    if(step == InstaDeltaChallengeStep.One || step == InstaDeltaChallengeStep.Replay)
+                    {
+                        return Result.Success(true);
+                    }
+                    else if (step == InstaDeltaChallengeStep.Two)
+                    {
+                        try
+                        {
+                            var t = obj.Layout.BloksPayload.Tree.First.First["#"].ToObject<string>();
+                            var findIndex = t.IndexOf("\"step_name");
+
+                            if (findIndex != -1 && findIndex - 35 >= 0)
+                            {
+                                // (bk.action.i32.Const, 1436888497), 
+                                findIndex -= 35;
+                                var substring = t.Substring(findIndex);
+                                //perf_logging_id
+                                var perfLoggingIdText = substring.Substring(0, substring.IndexOf(")"));
+                                perfLoggingIdText = perfLoggingIdText.Substring(perfLoggingIdText.IndexOf(",") + 1).Trim();
+                                if (long.TryParse(perfLoggingIdText, out long perfLoggingId) && perfLoggingId > 1245)
+                                {
+                                    _challengeRequireVerifyMethod.PerfLoggingId = perfLoggingId.ToString();
+                                }
+                            }
+                        }
+                        catch { }
+                    }
+                    else if (step == InstaDeltaChallengeStep.Three)
+                    {
+                        // ake, \"Wait a Moment\", \"Please check the code we sent you and try again.\"
+                        if (Exists("wait a Moment") ||
+                            Exists("please check the code we sent you and try again") ||
+                            Exists("check the code"))
+                        {
+                            return Result.Fail<bool>("Please check the code we sent you and try again");
+                        }
+                        else if (Exists(_challengeRequireVerifyMethod.UserId.ToString()) ||
+                            Exists(_user.UserName))
+                        {
+                            // logged in:|
+                            var userId = _challengeRequireVerifyMethod.UserId;
+                            _httpRequestProcessor.RequestMessage.Username = _user.UserName;
+                            _user.LoggedInUser = new InstaUserShort
+                            {
+                                UserName = _user.UserName,
+                                Pk = _challengeRequireVerifyMethod.UserId,
+                            };
+                            _user.RankToken = $"{_deviceInfo.RankToken}_{userId}";
+                            
+                            await AfterLoginAsync(response).ConfigureAwait(false);
+
+
+                            IsUserAuthenticated = true;
+                            InvalidateProcessors();
+
+                            var us = await UserProcessor.GetUserInfoByIdAsync(userId);
+                            if (!us.Succeeded)
+                            {
+                                IsUserAuthenticated = false;
+                                return Result.Fail(us.Info, false);
+                            }
+                            _user.UserName = _httpRequestProcessor.RequestMessage.Username = _user.LoggedInUser.UserName = us.Value.UserName;
+                            _user.LoggedInUser.FullName = us.Value.FullName;
+                            _user.LoggedInUser.IsPrivate = us.Value.IsPrivate;
+                            _user.LoggedInUser.IsVerified = us.Value.IsVerified;
+                            _user.LoggedInUser.ProfilePicture = us.Value.ProfilePicUrl;
+                            _user.LoggedInUser.ProfilePicUrl = us.Value.ProfilePicUrl;
+
+                            return Result.Success(true);
+                        }
+
+                        bool Exists(string str) => json.IndexOf(str, StringComparison.OrdinalIgnoreCase) != -1;
+                    }
+
+                    return Result.UnExpectedResponse<bool>(response, json);
+                }
+                else
+                    return Result.UnExpectedResponse<bool>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail<bool>(httpException, default, ResponseType.NetworkProblem);
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail<bool>(ex);
+            }
+        }
+
+        #endregion Delta Challenge
+
         #endregion Challenge part
 
         internal async Task GetToken()
@@ -3182,14 +3382,17 @@ namespace InstagramApiSharp.API
                 AppLocale = AppLocale,
                 DeviceLocale = DeviceLocale,
                 MappedLocale = MappedLocale,
-                TimezoneOffset = TimezoneOffset
+                TimezoneOffset = TimezoneOffset,
+                ChallengeVerifyMethod = ChallengeVerifyMethod
             };
 
             if (_httpRequestProcessor.HttpHandler?.Proxy is WebProxy proxy)
             {
                 state.ProxyAddress = proxy.Address;
+#if !WINDOWS_UWP
                 state.ProxyUseDefaultCredentials = proxy.UseDefaultCredentials;
                 state.ProxyBypassProxyOnLocal = proxy.BypassProxyOnLocal;
+#endif
                 if (proxy.Credentials is NetworkCredential credential)
                 {
                     state.ProxyCredentialUsername = credential.UserName;
@@ -3303,6 +3506,7 @@ namespace InstagramApiSharp.API
             IsUserAuthenticated = data.IsAuthenticated;
             TwoFactorLoginInfo = data.TwoFactorLoginInfo;
             ChallengeLoginInfo = data.ChallengeLoginInfo;
+            ChallengeVerifyMethod = data.ChallengeVerifyMethod;
 
             if (data.ProxyAddress != null && LoadProxyFromSessionFile)// proxy is available
             {
@@ -3311,8 +3515,10 @@ namespace InstagramApiSharp.API
                     var webProxy = new WebProxy
                     {
                         Address = data.ProxyAddress,
+#if !WINDOWS_UWP
                         BypassProxyOnLocal = data.ProxyBypassProxyOnLocal,
                         UseDefaultCredentials = data.ProxyUseDefaultCredentials
+#endif
                     };
                     if (!string.IsNullOrEmpty(data.ProxyCredentialUsername) && !string.IsNullOrEmpty(data.ProxyCredentialPassword))
                     {
@@ -3354,9 +3560,9 @@ namespace InstagramApiSharp.API
             });
         }
 
-        #endregion State data
+#endregion State data
 
-        #region private part
+#region private part
 
         private void InvalidateProcessors()
         {
@@ -3432,9 +3638,9 @@ namespace InstagramApiSharp.API
             _logger?.LogException(exception);
         }
 
-        #endregion
+#endregion
 
-        #region internal calls
+#region internal calls
         /// <summary>
         ///     Send requests for login flows (contact prefill, read msisdn header, launcher sync and qe sync)
         ///     <para>Note 1: You should call this function before you calling <see cref="IInstaApi.LoginAsync(bool)"/>, if you want your account act like original instagram app.</para>
@@ -3996,6 +4202,6 @@ namespace InstagramApiSharp.API
             var csrfToken = cookies[InstaApiConstants.CSRFTOKEN]?.Value;
             return !string.IsNullOrEmpty(csrfToken) ? csrfToken : _user.CsrfToken;
         }
-        #endregion
+#endregion
     }
 }
