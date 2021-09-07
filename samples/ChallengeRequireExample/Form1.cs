@@ -86,8 +86,18 @@ namespace ChallengeRequireExample
 
         const string AppName = "Challenge Required";
         const string StateFile = "state.bin";
-        readonly Size NormalSize = new Size(432, 164);
-        readonly Size ChallengeSize = new Size(432, 604);
+        readonly Size NormalSize =
+#if NET
+            new(573, 240);
+#else
+            new Size(432, 164);
+#endif
+        readonly Size ChallengeSize =
+#if NET
+            new(573, 685);
+#else
+            new Size(432, 604);
+#endif
         private static IInstaApi InstaApi;
         private bool FreshLoginFromTwoFactor = false;
         public Form1()
