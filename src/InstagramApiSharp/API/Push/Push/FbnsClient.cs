@@ -124,7 +124,7 @@ namespace InstagramApiSharp.API.Push
                 {"_uuid", deviceInfo.DeviceGuid.ToString()},
                 {"users", user.LoggedInUser.Pk.ToString()}
             };
-            if (_instaApi.HttpHelper.NewerThan180)
+            if (!_instaApi.HttpHelper.NewerThan180)
             {
                 fields.Add("_csrftoken", user.CsrfToken);
             }
