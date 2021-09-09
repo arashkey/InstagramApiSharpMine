@@ -158,7 +158,7 @@ namespace InstagramApiSharp.API.Processors
                    hashtagSectionType,
                     paginationParameters.NextMaxId, paginationParameters.NextPage).ConfigureAwait(false);
                 mediaResponse = mediaResult.Value;
-                if (!mediaResult.Succeeded)
+                if (!mediaResult.Succeeded || mediaResponse == null)
                     Result.Fail(mediaResult.Info, GetOrDefault());
 
                 paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
@@ -424,7 +424,7 @@ namespace InstagramApiSharp.API.Processors
                     _deviceInfo.DeviceGuid.ToString(),
                     paginationParameters.NextMaxId, paginationParameters.NextPage, paginationParameters.NextMediaIds);
                 mediaResponse = mediaResult.Value;
-                if (!mediaResult.Succeeded)
+                if (!mediaResult.Succeeded || mediaResponse == null)
                     Result.Fail(mediaResult.Info, GetOrDefault());
 
                 paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
@@ -543,7 +543,7 @@ namespace InstagramApiSharp.API.Processors
                     _deviceInfo.DeviceGuid.ToString(),
                     paginationParameters.NextMaxId, paginationParameters.NextPage, paginationParameters.NextMediaIds).ConfigureAwait(false);
                 mediaResponse = mediaResult.Value;
-                if (!mediaResult.Succeeded)
+                if (!mediaResult.Succeeded || mediaResponse == null)
                    return Result.Fail(mediaResult.Info, GetOrDefault());
 
                 paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
