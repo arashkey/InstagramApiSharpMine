@@ -93,12 +93,12 @@ namespace InstagramApiSharp.API.Push
             try
             {
                 if (cancellationToken.IsCancellationRequested) return;
-                Debug.WriteLine(DateTime.Now + " Push starting");
+                //Debug.WriteLine(DateTime.Now + " Push starting");
 
                 //FbnsChannel = await Bootstrap.ConnectAsync(IPAddress.Parse("69.171.250.34"), 443);
                 FbnsChannel = await Bootstrap.ConnectAsync(new DnsEndPoint(DEFAULT_HOST, 443));
                 await FbnsChannel.WriteAndFlushAsync(connectPacket);
-                Debug.WriteLine(DateTime.Now + " Push started");
+                //Debug.WriteLine(DateTime.Now + " Push started");
             }
             catch (Exception ex)
             {

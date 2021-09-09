@@ -32,12 +32,10 @@ namespace InstagramApiSharp.API.Push
         private bool _waitingForPubAck;
         private const int TIMEOUT = 5;
         private CancellationTokenSource _timerResetToken;
-        private DateTimeOffset _dateTimeOffset;
-        public PacketInboundHandler(FbnsClient client, int keepAlive = 240/*900*/)
+        public PacketInboundHandler(FbnsClient client, int keepAlive = 780/*900*/)
         {
             _client = client;
             _keepAliveDuration = keepAlive;
-            _dateTimeOffset = DateTimeOffset.Now.AddSeconds(-keepAlive + 25);
             NetworkChange.NetworkAvailabilityChanged += OnNetworkAvailabilityChanged;
         }
         ~PacketInboundHandler()
@@ -98,7 +96,6 @@ namespace InstagramApiSharp.API.Push
                             break;
                         case TopicIds.RegResp:
                             OnRegisterResponse(json);
-                            _dateTimeOffset = DateTimeOffset.Now;
                             ResetTimer(ctx);
                             break;
                         default:
@@ -112,7 +109,6 @@ namespace InstagramApiSharp.API.Push
                     break;
 
                 case PacketType.PINGRESP:
-                    _dateTimeOffset = DateTimeOffset.Now;
                     ResetTimer(ctx);
                     break;
                 // Todo: Handle other packet types
@@ -184,7 +180,6 @@ namespace InstagramApiSharp.API.Push
                 }
             });
         }
-        //bool bo = true; 
         private  void ResetTimer(IChannelHandlerContext ctx)
         {
             _timerResetToken?.Cancel();
@@ -194,34 +189,10 @@ namespace InstagramApiSharp.API.Push
             {
                 try
                 {
-                    while (!cancellationToken.IsCancellationRequested)
-                    {
-                        if (_dateTimeOffset.AddSeconds(_keepAliveDuration) < DateTimeOffset.Now)
-                        {
-                            //Debug.WriteLine("RetryConnection invoked from ResetTimer");
-                            RetryConnection?.Invoke(this, null);
-                            _timerResetToken?.Cancel();
-                            break;
-                        }
+                    await Task.Delay(TimeSpan.FromSeconds(_keepAliveDuration - 60), cancellationToken);
+                    RetryConnection?.Invoke(this, null);
+                    _timerResetToken?.Cancel();
 
-                        // don't delete these
-                        //var packet = PingReqPacket.Instance;
-                        //await ctx.WriteAndFlushAsync(packet);
-                        //Debug.WriteLine($"{DateTime.Now:G} PingReq sent");
-
-                        //try
-                        //{
-                        //    await Task.Delay(TimeSpan.FromSeconds(60), cancellationToken);
-                        //    if (!cancellationToken.IsCancellationRequested)
-                        //        ChannelInactive(ctx);
-                        //}
-                        //catch (TaskCanceledException)
-                        //{
-                        //    Debug.WriteLine($"{DateTime.Now:G} Keep alive timer reset.");
-                        //}
-
-                        await Task.Delay(TimeSpan.FromSeconds(_keepAliveDuration - 60), cancellationToken);
-                    }
                 }
                 catch (Exception ex)
                 {
