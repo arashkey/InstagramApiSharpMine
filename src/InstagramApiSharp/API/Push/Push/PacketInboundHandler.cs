@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,27 +24,47 @@ namespace InstagramApiSharp.API.Push
             RegResp = 80    // "/fbns_reg_resp"
         }
         public IChannelHandlerContext ChannelHandlerContext { get; private set; }
+        public event EventHandler RetryConnection;
+        public CancellationTokenSource TimerResetToken => _timerResetToken;
         private readonly FbnsClient _client;
         private readonly int _keepAliveDuration;    // seconds
         private int _publishId;
         private bool _waitingForPubAck;
         private const int TIMEOUT = 5;
         private CancellationTokenSource _timerResetToken;
-
+        private DateTimeOffset _dateTimeOffset;
         public PacketInboundHandler(FbnsClient client, int keepAlive = 240/*900*/)
         {
             _client = client;
             _keepAliveDuration = keepAlive;
+            _dateTimeOffset = DateTimeOffset.Now.AddSeconds(-keepAlive + 25);
+            NetworkChange.NetworkAvailabilityChanged += OnNetworkAvailabilityChanged;
+        }
+        ~PacketInboundHandler()
+        {
+            NetworkChange.NetworkAvailabilityChanged -= OnNetworkAvailabilityChanged;
+        }
+
+        private void OnNetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
+        {
+            if (!e.IsAvailable)
+            {
+                //Debug.WriteLine($"{DateTime.Now:G} RetryConnection invoked from OnNetworkAvailabilityChanged");
+                RetryConnection?.Invoke(this, null);
+            }
         }
 
         public override void ChannelInactive(IChannelHandlerContext context)
         {
             // If connection is closed, reconnect
-            Task.Delay(TimeSpan.FromSeconds(TIMEOUT)).ContinueWith(async task =>
+            Task.Delay(TimeSpan.FromSeconds(TIMEOUT)).ContinueWith(/*async*/ task =>
             {
                 _timerResetToken?.Cancel();
                 if (!_client.IsShutdown)
-                    await _client.Start();
+                {
+                    //Debug.WriteLine($"{DateTime.Now:G} ChannelInactive");
+                    RetryConnection?.Invoke(this, null);  //await _client.Start();
+                }
             });
 
         }
@@ -77,6 +98,7 @@ namespace InstagramApiSharp.API.Push
                             break;
                         case TopicIds.RegResp:
                             OnRegisterResponse(json);
+                            _dateTimeOffset = DateTimeOffset.Now;
                             ResetTimer(ctx);
                             break;
                         default:
@@ -90,6 +112,7 @@ namespace InstagramApiSharp.API.Push
                     break;
 
                 case PacketType.PINGRESP:
+                    _dateTimeOffset = DateTimeOffset.Now;
                     ResetTimer(ctx);
                     break;
                 // Todo: Handle other packet types
@@ -161,40 +184,48 @@ namespace InstagramApiSharp.API.Push
                 }
             });
         }
-
-        private void ResetTimer(IChannelHandlerContext ctx)
+        //bool bo = true; 
+        private  void ResetTimer(IChannelHandlerContext ctx)
         {
             _timerResetToken?.Cancel();
             _timerResetToken = new CancellationTokenSource();
             var cancellationToken = _timerResetToken.Token;
-
-            Task.Run(async ()=>
+            Task.Run(async () =>
             {
                 try
                 {
-                    while (cancellationToken.IsCancellationRequested)
+                    while (!cancellationToken.IsCancellationRequested)
                     {
-                        var packet = PingReqPacket.Instance;
-                        await ctx.WriteAndFlushAsync(packet);
-                        Debug.WriteLine("PingReq sent");
+                        if (_dateTimeOffset.AddSeconds(_keepAliveDuration) < DateTimeOffset.Now)
+                        {
+                            //Debug.WriteLine("RetryConnection invoked from ResetTimer");
+                            RetryConnection?.Invoke(this, null);
+                            _timerResetToken?.Cancel();
+                            break;
+                        }
 
-                        try
-                        {
-                            await Task.Delay(TimeSpan.FromSeconds(60), cancellationToken);
-                            if (!cancellationToken.IsCancellationRequested)
-                                ChannelInactive(ctx);
-                        }
-                        catch (TaskCanceledException)
-                        {
-                            Debug.WriteLine("Keep alive timer reset.");
-                        }
+                        // don't delete these
+                        //var packet = PingReqPacket.Instance;
+                        //await ctx.WriteAndFlushAsync(packet);
+                        //Debug.WriteLine($"{DateTime.Now:G} PingReq sent");
+
+                        //try
+                        //{
+                        //    await Task.Delay(TimeSpan.FromSeconds(60), cancellationToken);
+                        //    if (!cancellationToken.IsCancellationRequested)
+                        //        ChannelInactive(ctx);
+                        //}
+                        //catch (TaskCanceledException)
+                        //{
+                        //    Debug.WriteLine($"{DateTime.Now:G} Keep alive timer reset.");
+                        //}
 
                         await Task.Delay(TimeSpan.FromSeconds(_keepAliveDuration - 60), cancellationToken);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("PacketInboundHandler.ResetTimer exception: " + ex.ToString());
+                    Debug.WriteLine($"{DateTime.Now:G} PacketInboundHandler.ResetTimer exception: " + ex.ToString());
                 }
             });
         }

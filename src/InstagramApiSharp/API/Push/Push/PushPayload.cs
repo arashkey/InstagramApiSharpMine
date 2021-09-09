@@ -50,6 +50,16 @@ namespace InstagramApiSharp.API.Push
         /// <returns>Payload</returns>
         public static async Task<IByteBuffer> BuildPayload(FbnsConnectionData data)
         {
+            if (_memoryBufferTransport != null)
+            {
+                _memoryBufferTransport.Dispose();
+                _memoryBufferTransport = null;
+            }
+            if (_thrift != null)
+            {
+                _thrift.Dispose();
+                _thrift = null;
+            }
             _memoryBufferTransport = new TMemoryBufferTransport(new TConfiguration());
             _thrift = new TCompactProtocol(_memoryBufferTransport);
             _payloadData = data;
@@ -61,7 +71,8 @@ namespace InstagramApiSharp.API.Push
             var dataStream = new MemoryStream(512);
             using (var zlibStream = new ZlibStream(dataStream, CompressionMode.Compress, CompressionLevel.Level9, true))
             {
-                await zlibStream.WriteAsync(rawPayload, 0, rawPayload.Length);
+                zlibStream.Write(rawPayload, 0, rawPayload.Length);
+                //await zlibStream.WriteAsync(rawPayload, 0, rawPayload.Length);
             }
 
             var readData = new byte[dataStream.Length];

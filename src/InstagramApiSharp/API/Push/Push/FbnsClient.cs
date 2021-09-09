@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Net.Security;
 using System.Text;
 using System.Threading;
@@ -30,14 +31,15 @@ namespace InstagramApiSharp.API.Push
     {
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         private readonly IInstaApi _instaApi;
-        private SingleThreadEventLoop _loopGroup;
+        private MultithreadEventLoopGroup _loopGroup;
         private const string DEFAULT_HOST = "mqtt-mini.facebook.com";
         private int _secondsToNextRetry = 5;
+        private bool _retrying = false;
         private CancellationTokenSource _connectRetryCancellationToken;
 
         public bool IsShutdown => _loopGroup?.IsShutdown ?? false;
 
-        internal FbnsConnectionData ConnectionData { get; }
+        internal FbnsConnectionData ConnectionData { get; set; }
 
         internal FbnsClient(IInstaApi instaApi, FbnsConnectionData connectionData = null)
         {
@@ -51,22 +53,25 @@ namespace InstagramApiSharp.API.Push
             if (string.IsNullOrEmpty(ConnectionData.UserAgent))
                 ConnectionData.UserAgent = FbnsUserAgent.BuildFbUserAgent(instaApi);
         }
-        Bootstrap Bootstrap;
-        IChannel FbnsChannel;
+        internal Bootstrap Bootstrap;
+        internal IChannel FbnsChannel;
         PacketInboundHandler PacketInboundHandler;
         public async Task Start()
         {
+            ConnectionData = new FbnsConnectionData();
             _connectRetryCancellationToken?.Cancel();
             _connectRetryCancellationToken = new CancellationTokenSource();
             if (_loopGroup != null) await _loopGroup.ShutdownGracefullyAsync();
-            _loopGroup = new SingleThreadEventLoop();
+            _loopGroup = new MultithreadEventLoopGroup/*SingleThreadEventLoop*/(); /*var group = new MultithreadEventLoopGroup();*/
+
             var cancellationToken = _connectRetryCancellationToken.Token;
 
             var connectPacket = new FbnsConnectPacket
             {
-                Payload = await PushPayload.BuildPayload(ConnectionData)
+                Payload = await PushPayload.BuildPayload(ConnectionData).ConfigureAwait(false)
             };
             PacketInboundHandler = new PacketInboundHandler(this);
+            PacketInboundHandler.RetryConnection += OnRetryConnection;
             Bootstrap = new Bootstrap();
             Bootstrap
                 .Group(_loopGroup)
@@ -88,9 +93,12 @@ namespace InstagramApiSharp.API.Push
             try
             {
                 if (cancellationToken.IsCancellationRequested) return;
+                Debug.WriteLine(DateTime.Now + " Push starting");
+
                 //FbnsChannel = await Bootstrap.ConnectAsync(IPAddress.Parse("69.171.250.34"), 443);
                 FbnsChannel = await Bootstrap.ConnectAsync(new DnsEndPoint(DEFAULT_HOST, 443));
                 await FbnsChannel.WriteAndFlushAsync(connectPacket);
+                Debug.WriteLine(DateTime.Now + " Push started");
             }
             catch (Exception ex)
             {
@@ -103,9 +111,41 @@ namespace InstagramApiSharp.API.Push
             }
         }
 
+        private async void OnRetryConnection(object sender, EventArgs e)
+        {
+            if (!IsShutdown && !_retrying)
+            {
+                var shutdown = IsShutdown;
+                _retrying = true;
+                int retryCount = 0;
+                while (!NetworkInterface.GetIsNetworkAvailable() || IsShutdown)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(_secondsToNextRetry));
+                    _secondsToNextRetry = _secondsToNextRetry < 300 ? _secondsToNextRetry * 2 : 300;    // Maximum wait time is 5 mins
+                    Debug.WriteLine($"{DateTime.Now:G} _secondsToNextRetry: " + _secondsToNextRetry);
+                    if (retryCount > 6)
+                        break;
+                }
+                if(!shutdown)
+                await Restart();
+            }
+        }
+        internal async Task Restart()
+        {
+            try
+            {
+                await Shutdown();
+            }
+            catch { }
+            finally
+            {
+                await Start();
+            }
+
+        }
         internal async Task RegisterClient(string token)
         {
-            if (string.IsNullOrEmpty(token)) throw new ArgumentNullException(nameof(token));
+            if (string.IsNullOrEmpty(token)) return; /*throw new ArgumentNullException(nameof(token));*/
             //if (ConnectionData.FbnsToken == token)
             //{
             //    ConnectionData.FbnsToken = token;
@@ -137,7 +177,17 @@ namespace InstagramApiSharp.API.Push
         public async Task Shutdown()
         {
             _connectRetryCancellationToken?.Cancel();
-            if (_loopGroup != null) await _loopGroup.ShutdownGracefullyAsync();
+            if (PacketInboundHandler != null)
+            {
+                PacketInboundHandler.RetryConnection -= OnRetryConnection;
+                PacketInboundHandler.TimerResetToken?.Cancel();
+            }
+            if (_loopGroup != null)
+            {
+                await _loopGroup.ShutdownGracefullyAsync();
+                _loopGroup = null;
+            }
+            Bootstrap = null;
         }
 
         internal void OnMessageReceived(MessageReceivedEventArgs args)
