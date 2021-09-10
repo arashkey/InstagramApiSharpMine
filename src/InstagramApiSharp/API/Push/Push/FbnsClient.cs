@@ -48,8 +48,8 @@ namespace InstagramApiSharp.API.Push
         internal Bootstrap Bootstrap;
         internal IChannel FbnsChannel;
         internal FbnsConnectionData ConnectionData { get; set; }
-        internal string UserCheckingId = null;
-        internal int? UserCheckingDelay = null;
+        internal string[] KeepingAliveUserIds = null;
+        internal int? KeepingAliveUserMessageDelay = null;
         internal FbnsClient(IInstaApi instaApi, FbnsConnectionData connectionData = null)
         {
             _instaApi = instaApi;
@@ -60,22 +60,24 @@ namespace InstagramApiSharp.API.Push
                 ConnectionData.UserAgent = FbnsUserAgent.BuildFbUserAgent(instaApi);
         }
         /// <summary>
-        ///     Keep-alive connection by checking a specific user's messages in amount of time
+        ///     Keep-alive connection by checking a specific users messages in amount of time
         /// </summary>
-        /// <param name="userId">User id (pk)</param>
         /// <param name="delayInSeconds">Delay between checking time</param>
-        public void KeepAliveByCheckingUserMessages(string userId, int delayInSeconds)
+        /// <param name="userIds">Users id (pk)</param>
+        public void KeepAliveByCheckingUserMessages(int delayInSeconds, params string[] userIds)
         {
-            UserCheckingId = userId;
-            UserCheckingDelay = delayInSeconds;
+            if (userIds == null || userIds?.Length == 0) return;
+
+            KeepingAliveUserIds = userIds;
+            KeepingAliveUserMessageDelay = delayInSeconds;
         }
         /// <summary>
         ///     Disable keeping alive the connection by checking user message
         /// </summary>
         public void DisableKeepAliveByCheckingUserMessages()
         {
-            UserCheckingId = null;
-            UserCheckingDelay = null;
+            KeepingAliveUserIds = null;
+            KeepingAliveUserMessageDelay = null;
         }
         public async Task Start()
         {
@@ -240,7 +242,7 @@ namespace InstagramApiSharp.API.Push
                 args.NotificationContent.IntendedRecipientUserName = _instaApi.GetLoggedUser().UserName;
             MessageReceived?.Invoke(this, args);
 
-            if (UserCheckingDelay.HasValue && UserCheckingId.IsNotEmpty())
+            if (KeepingAliveUserMessageDelay.HasValue && KeepingAliveUserIds?.Length > 0)
             {
                 var notification = args.NotificationContent;
 
@@ -253,7 +255,7 @@ namespace InstagramApiSharp.API.Push
                 if ((type == "direct_v2" && pushCategory.IsEmpty()) || 
                     (type == "direct_v2" && pushCategory == "direct_v2_message"))
                 {
-                    if (sourceUserId?.Trim() == UserCheckingId)
+                    if (sourceUserId.IsNotEmpty() && KeepingAliveUserIds.Contains(sourceUserId.Trim()))
                     {
                         KeepingAliveMessageReceived?.Invoke(this, notification);
 

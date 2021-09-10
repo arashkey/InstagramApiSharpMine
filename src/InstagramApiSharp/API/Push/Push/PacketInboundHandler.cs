@@ -190,12 +190,12 @@ namespace InstagramApiSharp.API.Push
                 LastCheckedTime = DateTime.Now;
                 while (!_timerResetToken.IsCancellationRequested)
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(_client.UserCheckingDelay ?? (_keepAliveDuration - 60)), _timerResetToken.Token);
-                    if (!_client.UserCheckingDelay.HasValue)
+                    await Task.Delay(TimeSpan.FromSeconds(_client.KeepingAliveUserMessageDelay ?? (_keepAliveDuration - 60)), _timerResetToken.Token);
+                    if (!_client.KeepingAliveUserMessageDelay.HasValue)
                         RetryConnection?.Invoke(this, null);
                     else
                     {
-                        if (LastCheckedTime.AddSeconds(_client.UserCheckingDelay.Value) < DateTime.Now)
+                        if (LastCheckedTime.AddSeconds(_client.KeepingAliveUserMessageDelay.Value) < DateTime.Now)
                         {
                             RetryConnection?.Invoke(this, null);
                         }
