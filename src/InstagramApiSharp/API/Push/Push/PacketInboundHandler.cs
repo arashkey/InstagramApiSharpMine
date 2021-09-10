@@ -26,14 +26,16 @@ namespace InstagramApiSharp.API.Push
         public IChannelHandlerContext ChannelHandlerContext { get; private set; }
         public event EventHandler RetryConnection;
         public CancellationTokenSource TimerResetToken => _timerResetToken;
+        public DateTime LastCheckedTime;
         private readonly FbnsClient _client;
         private readonly int _keepAliveDuration;    // seconds
         private int _publishId;
         private bool _waitingForPubAck;
         private const int TIMEOUT = 5;
         private CancellationTokenSource _timerResetToken;
-        public PacketInboundHandler(FbnsClient client, int keepAlive = 780/*900*/)
+        public PacketInboundHandler(FbnsClient client, int keepAlive = 680/*900*/)
         {
+            _timerResetToken = new CancellationTokenSource();
             _client = client;
             _keepAliveDuration = keepAlive;
             NetworkChange.NetworkAvailabilityChanged += OnNetworkAvailabilityChanged;
@@ -96,7 +98,7 @@ namespace InstagramApiSharp.API.Push
                             break;
                         case TopicIds.RegResp:
                             OnRegisterResponse(json);
-                            ResetTimer(ctx);
+                            //ResetTimer(ctx);
                             break;
                         default:
                             Debug.WriteLine($"Unknown topic received: {publishPacket.TopicName}", "Warning");
@@ -109,7 +111,7 @@ namespace InstagramApiSharp.API.Push
                     break;
 
                 case PacketType.PINGRESP:
-                    ResetTimer(ctx);
+                    //ResetTimer(ctx);
                     break;
                 // Todo: Handle other packet types
             }
@@ -180,25 +182,30 @@ namespace InstagramApiSharp.API.Push
                 }
             });
         }
-        private  void ResetTimer(IChannelHandlerContext ctx)
+        internal async void StartKeepingAlive()
         {
-            _timerResetToken?.Cancel();
-            _timerResetToken = new CancellationTokenSource();
-            var cancellationToken = _timerResetToken.Token;
-            Task.Run(async () =>
+            try
             {
-                try
+                await Task.Delay(3000);
+                LastCheckedTime = DateTime.Now;
+                while (!_timerResetToken.IsCancellationRequested)
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(_keepAliveDuration - 60), cancellationToken);
-                    RetryConnection?.Invoke(this, null);
-                    _timerResetToken?.Cancel();
-
+                    await Task.Delay(TimeSpan.FromSeconds(_client.UserCheckingDelay ?? (_keepAliveDuration - 60)), _timerResetToken.Token);
+                    if (!_client.UserCheckingDelay.HasValue)
+                        RetryConnection?.Invoke(this, null);
+                    else
+                    {
+                        if (LastCheckedTime.AddSeconds(_client.UserCheckingDelay.Value) < DateTime.Now)
+                        {
+                            RetryConnection?.Invoke(this, null);
+                        }
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"{DateTime.Now:G} PacketInboundHandler.ResetTimer exception: " + ex.ToString());
-                }
-            });
+            }
+            catch (TaskCanceledException ex) 
+            {
+                Debug.WriteLine($"{DateTime.Now:G} PacketInboundHandler.ResetTimer exception: " + ex.ToString());
+            }
         }
 
         private byte[] DecompressPayload(IByteBuffer payload)

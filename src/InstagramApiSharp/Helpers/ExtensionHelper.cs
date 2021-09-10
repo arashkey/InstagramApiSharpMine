@@ -100,6 +100,13 @@ namespace InstagramApiSharp
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(str));
         }
 
+        internal static string GetValueIfPossible(this Dictionary<string, string> keyValuePairs, string key)
+        {
+            if (keyValuePairs.Any(x => x.Key == key))
+                return keyValuePairs[key];
+            else
+                return null;
+        }
         public static DateTime GenerateRandomBirthday()
         {
             int day = Rnd.Next(1, 29);
