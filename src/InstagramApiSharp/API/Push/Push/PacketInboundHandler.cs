@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,27 +24,45 @@ namespace InstagramApiSharp.API.Push
             RegResp = 80    // "/fbns_reg_resp"
         }
         public IChannelHandlerContext ChannelHandlerContext { get; private set; }
+        public event EventHandler RetryConnection;
+        public CancellationTokenSource TimerResetToken => _timerResetToken;
         private readonly FbnsClient _client;
         private readonly int _keepAliveDuration;    // seconds
         private int _publishId;
         private bool _waitingForPubAck;
         private const int TIMEOUT = 5;
         private CancellationTokenSource _timerResetToken;
-
-        public PacketInboundHandler(FbnsClient client, int keepAlive = 900)
+        public PacketInboundHandler(FbnsClient client, int keepAlive = 780/*900*/)
         {
             _client = client;
             _keepAliveDuration = keepAlive;
+            NetworkChange.NetworkAvailabilityChanged += OnNetworkAvailabilityChanged;
+        }
+        ~PacketInboundHandler()
+        {
+            NetworkChange.NetworkAvailabilityChanged -= OnNetworkAvailabilityChanged;
+        }
+
+        private void OnNetworkAvailabilityChanged(object sender, NetworkAvailabilityEventArgs e)
+        {
+            if (!e.IsAvailable)
+            {
+                //Debug.WriteLine($"{DateTime.Now:G} RetryConnection invoked from OnNetworkAvailabilityChanged");
+                RetryConnection?.Invoke(this, null);
+            }
         }
 
         public override void ChannelInactive(IChannelHandlerContext context)
         {
             // If connection is closed, reconnect
-            Task.Delay(TimeSpan.FromSeconds(TIMEOUT)).ContinueWith(async task =>
+            Task.Delay(TimeSpan.FromSeconds(TIMEOUT)).ContinueWith(/*async*/ task =>
             {
                 _timerResetToken?.Cancel();
                 if (!_client.IsShutdown)
-                    await _client.Start();
+                {
+                    //Debug.WriteLine($"{DateTime.Now:G} ChannelInactive");
+                    RetryConnection?.Invoke(this, null);  //await _client.Start();
+                }
             });
 
         }
@@ -161,36 +180,25 @@ namespace InstagramApiSharp.API.Push
                 }
             });
         }
-
-        private void ResetTimer(IChannelHandlerContext ctx)
+        private  void ResetTimer(IChannelHandlerContext ctx)
         {
             _timerResetToken?.Cancel();
             _timerResetToken = new CancellationTokenSource();
-
             var cancellationToken = _timerResetToken.Token;
-
-            Task.Delay(TimeSpan.FromSeconds(_keepAliveDuration - 60),
-                    cancellationToken) 
-                .ContinueWith(async task =>
+            Task.Run(async () =>
+            {
+                try
                 {
-                    var packet = PingReqPacket.Instance;
-                    await ctx.WriteAndFlushAsync(packet);
-                    Debug.WriteLine("PingReq sent");
-                }, cancellationToken)
-                .ContinueWith(async task =>
-                {
-                    try
-                    {
-                        await Task.Delay(TimeSpan.FromSeconds(60), cancellationToken); 
-                        if(!cancellationToken.IsCancellationRequested)
-                            ChannelInactive(ctx);  
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        Debug.WriteLine("Keep alive timer reset.");
-                    }
-                }, cancellationToken);
+                    await Task.Delay(TimeSpan.FromSeconds(_keepAliveDuration - 60), cancellationToken);
+                    RetryConnection?.Invoke(this, null);
+                    _timerResetToken?.Cancel();
 
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"{DateTime.Now:G} PacketInboundHandler.ResetTimer exception: " + ex.ToString());
+                }
+            });
         }
 
         private byte[] DecompressPayload(IByteBuffer payload)

@@ -24,7 +24,7 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         [JsonProperty("next_page")]
         public int? NextPage { get; set; }
         [JsonProperty("next_media_ids")]
-        public List<long> NextMediaIds { get; set; }
+        public List<long> NextMediaIds { get; set; } = new List<long>();
         [JsonProperty("auto_load_more_enabled")]
         public bool? AutoLoadMoreEnabled { get; set; }
         [JsonProperty("status")]
