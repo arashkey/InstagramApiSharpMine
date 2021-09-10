@@ -68,5 +68,11 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\InstagramApiSharp\InstagramApiSharp.NET5.csproj">
+      <Project>{50568721-4a1b-4295-8288-fe0298fc3fcd}</Project>
+      <Name>InstagramApiSharp.NET5</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

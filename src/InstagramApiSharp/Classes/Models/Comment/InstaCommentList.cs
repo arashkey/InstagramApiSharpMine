@@ -28,7 +28,7 @@ namespace InstagramApiSharp.Classes.Models
 
         public bool InsertNewCommentToTop { get; set; }
 
-        public List<InstaComment> PreviewComments { get; set; }
+        public List<InstaComment> PreviewComments { get; set; } = new List<InstaComment>();
 
         public bool CanViewMorePreviewComments { get; set; }
 
