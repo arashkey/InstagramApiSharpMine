@@ -107,6 +107,12 @@ public class ExtendedProgram
         // PUSH NOTIFICATIONS
         // - Configurations>
         InstaApi.PushClient.MessageReceived += PushClientMessageReceived;
+
+        //// Keep-alive connection by checking a specific user's messages in amount of time
+        //InstaApi.PushClient.KeepAliveByCheckingUserMessages(60, "USERID1", "USERID2 and etc.");
+        //// for disabling this option
+        //InstaApi.PushClient.DisableKeepAliveByCheckingUserMessages();
+        //InstaApi.PushClient.KeepingAliveMessageReceived += PushClientKeepingAliveMessageReceived;
         // Starting push notifications listener
         await InstaApi.PushClient.Start();
         Console.WriteLine($"Push notifications listener started");
@@ -135,6 +141,7 @@ public class ExtendedProgram
         if (user.Succeeded)
             await InstaApi.RealTimeClient.SendDirectTextToRecipientAsync(user.Value.Pk.ToString(), "Hello from IRAN");
     }
+
 
     //////////////////////////////////////////////////////////
     /////////////////////// NOTIFICATIONS ////////////////////
@@ -284,6 +291,16 @@ public class ExtendedProgram
         }
     }
 
+    private async static void PushClientKeepingAliveMessageReceived(object sender, InstagramApiSharp.API.Push.PushNotification notification)
+    {
+        // respond to a specific users that you setted up in KeepAliveByCheckingUserMessages
+        var action = notification.IgAction;
+        var queries = HttpUtility.ParseQueryString(action, out string type);
+        var sourceUserId = notification.SourceUserId;                 // user id of sender
+        var threadId = queries.GetValueIfPossible("id")?.Trim();      // thread id (if available)
+
+        await InstaApi.MessagingProcessor.SendDirectTextAsync(null, threadId, "Hello from keeping alive notification");
+    }
 
 
     //////////////////////////////////////////////////////////
