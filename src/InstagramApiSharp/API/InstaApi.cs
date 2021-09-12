@@ -2323,6 +2323,8 @@ namespace InstagramApiSharp.API
                                 if (long.TryParse(perfLoggingIdText, out long perfLoggingId) && perfLoggingId > 1245)
                                 {
                                     _challengeRequireVerifyMethod.PerfLoggingId = perfLoggingId.ToString();
+
+                                    return Result.Success(true);
                                 }
                             }
                         }
