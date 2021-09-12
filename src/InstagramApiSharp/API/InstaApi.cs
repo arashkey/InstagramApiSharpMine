@@ -1170,6 +1170,7 @@ namespace InstagramApiSharp.API
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
+                    AddXMidHeader(response);
                     var loginFailReason = JsonConvert.DeserializeObject<InstaLoginBaseResponse>(json);
 
                     if (loginFailReason.InvalidCredentials)
@@ -4193,6 +4194,15 @@ namespace InstagramApiSharp.API
             catch (Exception exception)
             {
                 LogException(exception);
+            }
+        }
+        internal void AddXMidHeader(HttpResponseMessage response)
+        {
+            string mid = response.Headers.Contains(InstaApiConstants.RESPONSE_HEADER_IG_SET_X_MID) ? string.Join("", response.Headers.GetValues(InstaApiConstants.RESPONSE_HEADER_IG_SET_X_MID)) : null;
+
+            if (!string.IsNullOrEmpty(mid))
+            {
+                _user.XMidHeader = mid;
             }
         }
         string GetCsrfTokenFromCookies()
