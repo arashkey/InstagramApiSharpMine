@@ -229,7 +229,7 @@ namespace ChallengeRequireExample
                                     var userAgent = $"{browswerUserAgent} {currentUserAgent}";
 
                                     // url to open
-                                    var url = challenge.Value.Url;
+                                    var url = InstaApi.ChallengeLoginInfo.Url;
 
                                 }
                                 else
