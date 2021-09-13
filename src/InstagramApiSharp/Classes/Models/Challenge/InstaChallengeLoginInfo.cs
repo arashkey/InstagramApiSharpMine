@@ -6,6 +6,7 @@
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.Enums;
 using Newtonsoft.Json;
 using System;
 
@@ -29,7 +30,8 @@ namespace InstagramApiSharp.Classes
         [JsonProperty("challenge_context")]
         public string ChallengeContext { get; set; }
         [JsonProperty("flow_render_type")]
-        public long? FlowRenderTypeText { get; set; }
+        public int? FlowRenderTypeText { get; set; }
+        public InstaChallengeFlowRenderType FlowRenderType => (InstaChallengeFlowRenderType)FlowRenderTypeText;
 
         public InstaChallengeContext ChallengeContextAsObject
         {
