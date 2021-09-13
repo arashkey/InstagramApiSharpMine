@@ -1,8 +1,7 @@
 ﻿/*
  * Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https://t.me/ramtinak ]
  * 
- * Github source: https://github.com/ramtinak/InstagramApiSharp
- * Nuget package: https://www.nuget.org/packages/InstagramApiSharp
+ * Github source: https://github.com/ramtinak/InstagramApiSharpMine
  * 
  * IRANIAN DEVELOPERS
  */
@@ -32,5 +31,16 @@ namespace InstagramApiSharp.Classes
         [JsonProperty("flow_render_type")]
         public long? FlowRenderType { get; set; }
 
+        public InstaChallengeContext ChallengeContextAsObject
+        {
+            get
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<InstaChallengeContext>(ChallengeContext);
+                }
+                catch { return null; }
+            }
+        }
     }
 }
