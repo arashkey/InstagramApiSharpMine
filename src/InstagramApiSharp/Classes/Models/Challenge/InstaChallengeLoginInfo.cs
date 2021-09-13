@@ -30,8 +30,8 @@ namespace InstagramApiSharp.Classes
         [JsonProperty("challenge_context")]
         public string ChallengeContext { get; set; }
         [JsonProperty("flow_render_type")]
-        public int? FlowRenderTypeText { get; set; }
-        public InstaChallengeFlowRenderType FlowRenderType => (InstaChallengeFlowRenderType)FlowRenderTypeText;
+        public int? FlowRender { get; set; }
+        public InstaChallengeFlowRenderType FlowRenderType => (InstaChallengeFlowRenderType)FlowRender;
 
         public InstaChallengeContext ChallengeContextAsObject
         {
