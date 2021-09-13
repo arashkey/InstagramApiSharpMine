@@ -29,6 +29,8 @@ namespace InstagramApiSharp.Classes
         public bool NativeFlow { get; set; }
         [JsonProperty("challenge_context")]
         public string ChallengeContext { get; set; }
+        [JsonProperty("flow_render_type")]
+        public long? FlowRenderType { get; set; }
 
     }
 }
