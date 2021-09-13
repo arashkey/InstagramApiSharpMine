@@ -1183,6 +1183,7 @@ namespace InstagramApiSharp.API
                         if (!string.IsNullOrEmpty(loginFailReason.TwoFactorLoginInfo?.Username))
                             _httpRequestProcessor.RequestMessage.Username = loginFailReason.TwoFactorLoginInfo.Username;
                         _twoFactorInfo = loginFailReason.TwoFactorLoginInfo;
+                        AddXMidHeader(response);
                         //2FA is required!
                         return Result.Fail("Two Factor Authentication is required", InstaLoginResult.TwoFactorRequired);
                     }
@@ -1190,7 +1191,7 @@ namespace InstagramApiSharp.API
                        /* || !string.IsNullOrEmpty(loginFailReason.Message) && loginFailReason.Message == "challenge_required"*/)
                     {
                         _challengeinfo = loginFailReason.Challenge;
-
+                        AddXMidHeader(response);
                         return Result.Fail("Challenge is required", InstaLoginResult.ChallengeRequired);
                     }
                     if (loginFailReason.ErrorType == "rate_limit_error")
