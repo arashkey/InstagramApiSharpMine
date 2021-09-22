@@ -94,6 +94,7 @@ namespace InstagramApiSharp.Classes.Models
         public string RealtimePath { get; set; }
         public string RealtimeOp { get; set; } = "add";
 
+        public InstaMedia Clip { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
