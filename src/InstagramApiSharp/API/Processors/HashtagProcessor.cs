@@ -425,7 +425,7 @@ namespace InstagramApiSharp.API.Processors
                     paginationParameters.NextMaxId, paginationParameters.NextPage, paginationParameters.NextMediaIds);
                 mediaResponse = mediaResult.Value;
                 if (!mediaResult.Succeeded || mediaResponse == null)
-                    Result.Fail(mediaResult.Info, GetOrDefault());
+                    return Result.Fail(mediaResult.Info, GetOrDefault());
 
                 paginationParameters.NextMediaIds = mediaResponse.NextMediaIds;
                 paginationParameters.NextPage = mediaResponse.NextPage;
