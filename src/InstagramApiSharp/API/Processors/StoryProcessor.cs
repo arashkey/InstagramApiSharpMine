@@ -924,6 +924,9 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK) return Result.UnExpectedResponse<InstaStoryFeed>(response, json);
+                
+                _instaApi.AppendOtherHeadersAsync(response);
+
                 var storyFeedResponse = JsonConvert.DeserializeObject<InstaStoryFeedResponse>(json);
                 var instaStoryFeed = ConvertersFabric.Instance.GetStoryFeedConverter(storyFeedResponse).Convert();
                 return Result.Success(instaStoryFeed);
@@ -3106,6 +3109,7 @@ namespace InstagramApiSharp.API.Processors
                 var json = await response.Content.ReadAsStringAsync();
 
                 if (response.StatusCode != HttpStatusCode.OK) return Result.UnExpectedResponse<InstaStoryFeedResponse>(response, json);
+                _instaApi.AppendOtherHeadersAsync(response);
                 var storyFeedResponse = JsonConvert.DeserializeObject<InstaStoryFeedResponse>(json);
                 if (storyFeedResponse.RemainingReelIdsToFetch?.Count > 0)
                     pagination.NextIdsToFetch = storyFeedResponse.RemainingReelIdsToFetch;

@@ -4186,7 +4186,7 @@ namespace InstagramApiSharp.API
                         _user.Authorization = authorization;
                     }
                 }
-
+                AppendOtherHeadersAsync(response);
                 if (!dontCallLauncherSync)
                 {
                     await LauncherSyncPrivate(/*false, true*/).ConfigureAwait(false);
@@ -4208,6 +4208,52 @@ namespace InstagramApiSharp.API
                 _user.XMidHeader = mid;
             }
         }
+        internal void AppendOtherHeadersAsync(HttpResponseMessage response)
+        {
+            try
+            {
+                if (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_U_DIRECT_REGION_HINT))
+                {
+                    var value = GetHeader(InstaApiConstants.RESPONSE_HEADER_U_DIRECT_REGION_HINT);
+                    if (value.IsNotEmpty())
+                    {
+                        _user.RespondUDirectRegionHint = GetHeader(InstaApiConstants.RESPONSE_HEADER_U_DIRECT_REGION_HINT);
+                    }
+                }
+                if (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_U_SHBID))
+                {
+                    var value = GetHeader(InstaApiConstants.RESPONSE_HEADER_U_SHBID);
+                    if (value.IsNotEmpty())
+                    {
+                        _user.RespondUShbid = GetHeader(InstaApiConstants.RESPONSE_HEADER_U_SHBID);
+                    }
+                }
+                if (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_U_SHBTS))
+                {
+                    var value = GetHeader(InstaApiConstants.RESPONSE_HEADER_U_SHBTS);
+                    if (value.IsNotEmpty())
+                    {
+                        _user.RespondUShbts = GetHeader(InstaApiConstants.RESPONSE_HEADER_U_SHBTS);
+                    }
+                }
+                if (ContainsHeader(InstaApiConstants.RESPONSE_HEADER_U_RUR))
+                {
+                    var value = GetHeader(InstaApiConstants.RESPONSE_HEADER_U_RUR);
+                    if (value.IsNotEmpty())
+                    {
+                        _user.RespondURur = GetHeader(InstaApiConstants.RESPONSE_HEADER_U_RUR);
+                    }
+                }
+
+                string GetHeader(string head) => string.Join("", response.Headers.GetValues(head));
+                bool ContainsHeader(string head) => response.Headers.Contains(head);
+            }
+            catch (Exception exception)
+            {
+                LogException(exception);
+            }
+        }
+
         string GetCsrfTokenFromCookies()
         {
             var cookies = _httpRequestProcessor.HttpHandler.CookieContainer
