@@ -204,31 +204,62 @@ namespace ChallengeRequireExample
                             }
                             else
                             {
-                                if (challenge.Value.StepData != null)
+                                if (challenge.Value.FlowRenderType == InstaChallengeFlowRenderType.Unknown)
                                 {
-                                    // is delat challenge (new challenge)
-                                    if (challenge.Value.IsUnvettedDelta || challenge.Value.StepData.IsNewDeltaUI())
-                                    {
-                                        // if yes we need to call this:
-                                        await InstaApi.GetDeltaChallengeAsync();
-                                        // in some point, if you want to reset the challenge, set it to true:
-                                        //await InstaApi.GetDeltaChallengeAsync(true);
-                                    }
-                                    if (!string.IsNullOrEmpty(challenge.Value.StepData.PhoneNumber))
-                                    {
-                                        RadioVerifyWithPhoneNumber.Checked = false;
-                                        RadioVerifyWithPhoneNumber.Visible = true;
-                                        RadioVerifyWithPhoneNumber.Text = challenge.Value.StepData.PhoneNumber;
-                                    }
-                                    if (!string.IsNullOrEmpty(challenge.Value.StepData.Email))
-                                    {
-                                        RadioVerifyWithEmail.Checked = false;
-                                        RadioVerifyWithEmail.Visible = true;
-                                        RadioVerifyWithEmail.Text = challenge.Value.StepData.Email;
-                                    }
+                                    var xMidHeader = InstaApi.GetLoggedUser().XMidHeader;
+                                    // Unsolvable challenge, open it in browser.
+                                    // Add this cookie: x-mid= value came from xMidHeader string
+                                    // Headers:
+                                    //Cookie: x-mid=YTPmaQABAAEcPlbP92Hcmrrq1E3c
+                                    //X-Requested-With: com.instagram.android
+                                    //Sec-Fetch-Site: none
+                                    //Sec-Fetch-Mode: navigate
+                                    //Sec-Fetch-User: ?1
+                                    //Sec-Fetch-Dest: document
+                                    //Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+                                    //Upgrade-Insecure-Requests: 1
+                                    //Mozilla/5.0 (Linux; Android 10; Redmi Note 7 Build/QKQ1.190910.002; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.120 Mobile Safari/537.36
+                                    //User-Agent: 
 
-                                    SelectMethodGroupBox.Visible = true;
-                                    Size = ChallengeSize;
+                                    // User agent is a combination of browser's user-agent and Instagram's user-agent
+                                    var currentDevice = InstaApi.GetCurrentDevice();
+                                    var currentUserAgent = InstaApi.GetUserAgent();
+                                    var browswerUserAgent = $"Mozilla/5.0 (Linux; Android {currentDevice.AndroidVer.APILevel}; {currentDevice.AndroidBoardName} {currentDevice.DeviceModel} Build/{currentDevice.HardwareModel}; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/91.0.4472.120 Mobile Safari/537.36";
+
+                                    var userAgent = $"{browswerUserAgent} {currentUserAgent}";
+
+                                    // url to open
+                                    var url = InstaApi.ChallengeLoginInfo.Url;
+
+                                }
+                                else
+                                {
+                                    if (challenge.Value.StepData != null)
+                                    {
+                                        // is delat challenge (new challenge)
+                                        if (challenge.Value.IsUnvettedDelta || challenge.Value.StepData.IsNewDeltaUI())
+                                        {
+                                            // if yes we need to call this:
+                                            await InstaApi.GetDeltaChallengeAsync();
+                                            // in some point, if you want to reset the challenge, set it to true:
+                                            //await InstaApi.GetDeltaChallengeAsync(true);
+                                        }
+                                        if (!string.IsNullOrEmpty(challenge.Value.StepData.PhoneNumber))
+                                        {
+                                            RadioVerifyWithPhoneNumber.Checked = false;
+                                            RadioVerifyWithPhoneNumber.Visible = true;
+                                            RadioVerifyWithPhoneNumber.Text = challenge.Value.StepData.PhoneNumber;
+                                        }
+                                        if (!string.IsNullOrEmpty(challenge.Value.StepData.Email))
+                                        {
+                                            RadioVerifyWithEmail.Checked = false;
+                                            RadioVerifyWithEmail.Visible = true;
+                                            RadioVerifyWithEmail.Text = challenge.Value.StepData.Email;
+                                        }
+
+                                        SelectMethodGroupBox.Visible = true;
+                                        Size = ChallengeSize;
+                                    }
                                 }
                             }
                         }

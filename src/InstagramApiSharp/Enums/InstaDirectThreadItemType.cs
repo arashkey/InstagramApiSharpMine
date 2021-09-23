@@ -25,5 +25,6 @@
         VideoCallEvent = 17,
         ProductShare = 18,
         ArEffect = 19,
+        Clip = 20
     }
 }

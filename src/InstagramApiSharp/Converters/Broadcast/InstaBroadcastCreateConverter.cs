@@ -51,7 +51,9 @@ namespace InstagramApiSharp.Converters
                 StreamVideoBitRate = SourceObject.StreamVideoBitRate,
                 StreamVideoFps = SourceObject.StreamVideoFps,
                 StreamVideoWidth = SourceObject.StreamVideoWidth,
-                UploadUrl = SourceObject.UploadUrl
+                UploadUrl = SourceObject.UploadUrl,
+                FbvpTcpUploadUrl = SourceObject.FbvpTcpUploadUrl,
+                FbvpQuicUploadUrl = SourceObject.FbvpQuicUploadUrl
             };
             return createBroadcast;
         }

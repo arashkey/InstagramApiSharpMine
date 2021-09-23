@@ -16,6 +16,10 @@ namespace InstagramApiSharp.Classes.ResponseWrappers
         public long BroadcastId { get; set; }
         [JsonProperty("upload_url")]
         public string UploadUrl { get; set; }
+        [JsonProperty("fbvp_tcp_upload_url")]
+        public string FbvpTcpUploadUrl { get; set; }
+        [JsonProperty("fbvp_quic_upload_url")]
+        public string FbvpQuicUploadUrl { get; set; }
         [JsonProperty("max_time_in_seconds")]
         public int MaxTimeInSeconds { get; set; }
         [JsonProperty("speed_test_ui_timeout")]

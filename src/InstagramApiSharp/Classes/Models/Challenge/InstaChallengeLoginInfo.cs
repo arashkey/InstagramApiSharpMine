@@ -1,12 +1,12 @@
 ﻿/*
  * Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https://t.me/ramtinak ]
  * 
- * Github source: https://github.com/ramtinak/InstagramApiSharp
- * Nuget package: https://www.nuget.org/packages/InstagramApiSharp
+ * Github source: https://github.com/ramtinak/InstagramApiSharpMine
  * 
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.Enums;
 using Newtonsoft.Json;
 using System;
 
@@ -29,6 +29,20 @@ namespace InstagramApiSharp.Classes
         public bool NativeFlow { get; set; }
         [JsonProperty("challenge_context")]
         public string ChallengeContext { get; set; }
+        [JsonProperty("flow_render_type")]
+        public int? FlowRender { get; set; }
+        public InstaChallengeFlowRenderType FlowRenderType => (InstaChallengeFlowRenderType)FlowRender;
 
+        public InstaChallengeContext ChallengeContextAsObject
+        {
+            get
+            {
+                try
+                {
+                    return JsonConvert.DeserializeObject<InstaChallengeContext>(ChallengeContext);
+                }
+                catch { return null; }
+            }
+        }
     }
 }

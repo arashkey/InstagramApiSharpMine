@@ -6,6 +6,7 @@
  * IRANIAN DEVELOPERS
  */
 
+using InstagramApiSharp.Enums;
 using Newtonsoft.Json;
 namespace InstagramApiSharp.Classes
 {
@@ -21,7 +22,7 @@ namespace InstagramApiSharp.Classes
         [JsonProperty("nonce_code")]
         public string NonceCode { get; set; }
         [JsonProperty("flow_render_type")]
-        public string FlowRenderType { get; set; }  // int
+        public string FlowRender { get; set; }  // int
         [JsonProperty("bloks_action")]
         public string BloksAction { get; set; }
         [JsonProperty("cni")]
@@ -40,6 +41,7 @@ namespace InstagramApiSharp.Classes
         
         public bool IsUnvettedDelta => ChallengeTypeEnumStr == "UNVETTED_DELTA";
 
+        public InstaChallengeFlowRenderType FlowRenderType => (InstaChallengeFlowRenderType)int.Parse(FlowRender.IsEmpty() ? "0": FlowRender);
         // FAKE DATA>
 
         [JsonProperty("PerfLoggingId")]

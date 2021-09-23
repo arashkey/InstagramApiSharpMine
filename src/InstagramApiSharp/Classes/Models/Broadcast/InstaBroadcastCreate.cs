@@ -15,6 +15,10 @@ namespace InstagramApiSharp.Classes.Models
 
         public string UploadUrl { get; set; }
 
+        public string FbvpTcpUploadUrl { get; set; }
+
+        public string FbvpQuicUploadUrl { get; set; }
+
         public int MaxTimeInSeconds { get; set; }
 
         public int SpeedTestUiTimeout { get; set; }

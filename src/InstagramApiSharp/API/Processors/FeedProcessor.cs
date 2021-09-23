@@ -860,6 +860,8 @@ namespace InstagramApiSharp.API.Processors
 
                 if (response.StatusCode != HttpStatusCode.OK)
                     return Result.UnExpectedResponse<InstaFeedResponse>(response, json);
+                
+                _instaApi.AppendOtherHeadersAsync(response);
 
                 var feedResponse = JsonConvert.DeserializeObject<InstaFeedResponse>(json,
                     new InstaFeedResponseDataConverter(_user.LoggedInUser.Pk, removeAds));

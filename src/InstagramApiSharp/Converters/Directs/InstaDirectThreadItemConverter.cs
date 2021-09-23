@@ -272,6 +272,14 @@ namespace InstagramApiSharp.Converters
                 }
                 catch { }
             }
+            else if (threadItem.ItemType == InstaDirectThreadItemType.Clip && SourceObject.Clip?.Clip != null)
+            {
+                try
+                {
+                    threadItem.Clip = ConvertersFabric.Instance.GetSingleMediaConverter(SourceObject.Clip.Clip).Convert();
+                }
+                catch { }
+            }
             return threadItem;
         }
     }
