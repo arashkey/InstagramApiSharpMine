@@ -211,7 +211,10 @@ namespace InstagramApiSharp.API.RealTime
                     await _thrift.ReadFieldEndAsync(CancellationToken.None);
                 }
             }
-            catch { }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
             return Encoding.UTF8.GetString(bytes);
 
         }
