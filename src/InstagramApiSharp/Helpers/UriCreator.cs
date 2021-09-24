@@ -3165,5 +3165,12 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI get bloks challenge navigation replay challenge");
             return instaUri;
         }
+        public static Uri GetTrendingMusicUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.MUSIC_TRENDING,
+                out var instaUri))
+                throw new Exception("Can't create URI for trending music");
+            return instaUri;
+        }
     }
 }

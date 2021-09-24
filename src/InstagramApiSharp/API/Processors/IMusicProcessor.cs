@@ -6,6 +6,7 @@
  * IRANIAN DEVELOPERS
  */
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using InstagramApiSharp.Classes;
 using InstagramApiSharp.Classes.Models;
@@ -18,5 +19,19 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IMusicProcessor
     {
+
+        /// <summary>
+        ///     Get trending musics
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        Task<IResult<InstaTrendingMusic>> GetTrendingMusicAsync(PaginationParameters paginationParameters);
+        
+        /// <summary>
+        ///     Get trending musics
+        /// </summary>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaTrendingMusic>> GetTrendingMusicAsync(PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
     }
 }
