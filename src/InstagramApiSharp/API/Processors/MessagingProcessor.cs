@@ -922,7 +922,7 @@ namespace InstagramApiSharp.API.Processors
             catch (Exception exception)
             {
                 _logger?.LogException(exception);
-                return Result.Fail<InstaDirectInboxContainer>(exception);
+                return Result.Fail(exception, GetOrDefault());
             }
 
             InstaDirectInboxContainer GetOrDefault() => inboxResponse != null ? Convert(inboxResponse) : default(InstaDirectInboxContainer);
