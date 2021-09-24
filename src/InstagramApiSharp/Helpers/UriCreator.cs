@@ -3172,5 +3172,17 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Can't create URI for trending music");
             return instaUri;
         }
+        public static Uri GetMusicKeywordSearchUri(string query, uint num, string searchSessionId,
+            string product, string browseSessionId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.MUSIC_KEYWORD_SEARCH,
+                    out var instaUri)) throw new Exception("Can't create URI for music playlist");
+            return instaUri
+                .AddQueryParameter("num_keywords", num.ToString())
+                .AddQueryParameter("search_session_id", searchSessionId)
+                .AddQueryParameter("product", product)
+                .AddQueryParameter("q", query)
+                .AddQueryParameter("browse_session_id", browseSessionId);
+        }
     }
 }

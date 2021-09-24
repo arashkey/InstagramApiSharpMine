@@ -62,11 +62,50 @@ namespace InstagramApiSharp.API.Processors
 
 
         /// <summary>
+        ///     Music keyword search
+        /// </summary>
+        /// <param name="query">Query to search</param>
+        /// <param name="count">Count of results</param>
+        public async Task<IResult<List<string>>> SearchKeywordAsync(string query, uint count = 3)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                if (string.IsNullOrEmpty(SearchSessionId))
+                    SearchSessionId = Guid.NewGuid().ToString();
+
+                if (string.IsNullOrEmpty(BrowseSessionId))
+                    BrowseSessionId = Guid.NewGuid().ToString();
+
+                var instaUri = UriCreator.GetMusicKeywordSearchUri(query, count, SearchSessionId, "story_camera_music_overlay_post_capture", BrowseSessionId);
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Get, instaUri, _deviceInfo);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<List<string>>(response, json);
+                var respObj = JsonConvert.DeserializeObject<InstaMusicKeywordSearchResponse>(json);
+                return respObj.IsSucceed ? Result.Success(respObj.Keywords) : Result.UnExpectedResponse<List<string>>(response, json);
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(List<string>), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(List<string>));
+            }
+        }
+
+        /// <summary>
         ///     Get trending musics
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
         public async Task<IResult<InstaTrendingMusic>> GetTrendingMusicAsync(PaginationParameters paginationParameters)
-            => await GetTrendingMusicAsync(paginationParameters, CancellationToken.None).ConfigureAwait(false);
+            => await GetTrendingMusicAsync(paginationParameters,
+                CancellationToken.None).ConfigureAwait(false);
 
         /// <summary>
         ///     Get trending musics
@@ -75,11 +114,14 @@ namespace InstagramApiSharp.API.Processors
         /// <param name="cancellationToken">Cancellation token</param>
         public async Task<IResult<InstaTrendingMusic>> GetTrendingMusicAsync(PaginationParameters paginationParameters,
             CancellationToken cancellationToken)
-            => await GetMusicAsync(UriCreator.GetTrendingMusicUri(), paginationParameters, cancellationToken).ConfigureAwait(false);
+            => await GetMusicAsync(UriCreator.GetTrendingMusicUri(),
+                paginationParameters,
+                cancellationToken).ConfigureAwait(false);
 
         private async Task<IResult<InstaTrendingMusic>> GetMusicAsync(Uri instaUri, 
             PaginationParameters paginationParameters,
-            CancellationToken cancellationToken, string query = null)
+            CancellationToken cancellationToken,
+            string query = null)
         {
             UserAuthValidator.Validate(_userAuthValidate);
             InstaTrendingMusicResponse musicResponse = null;
@@ -131,7 +173,7 @@ namespace InstagramApiSharp.API.Processors
                     paginationParameters.PagesLoaded++;
                 }
 
-                return Result.Success(Convert(musicResponse));
+                return Result.Success(GetOrDefault());
             }
             catch (HttpRequestException httpException)
             {

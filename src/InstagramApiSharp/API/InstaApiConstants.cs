@@ -107,6 +107,7 @@ namespace InstagramApiSharp.API
         #region Music endpoints constants
 
         public const string MUSIC_TRENDING = API_SUFFIX + "/music/trending/";
+        public const string MUSIC_KEYWORD_SEARCH = API_SUFFIX + "/music/keyword_search/";
 
         #endregion Music endpoints constants
 

@@ -21,6 +21,13 @@ namespace InstagramApiSharp.API.Processors
     {
 
         /// <summary>
+        ///     Music keyword search
+        /// </summary>
+        /// <param name="query">Query to search</param>
+        /// <param name="count">Count of results</param>
+        Task<IResult<List<string>>> SearchKeywordAsync(string query, uint count = 3);
+
+        /// <summary>
         ///     Get trending musics
         /// </summary>
         /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
