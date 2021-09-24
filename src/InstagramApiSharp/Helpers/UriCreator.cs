@@ -3191,5 +3191,11 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Can't create URI for browsing music");
             return instaUri;
         }
+        public static Uri GetMusicPlaylistUri(string playlistId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.MUSIC_PLAYLIST, playlistId),
+                    out var instaUri)) throw new Exception("Can't create URI for music playlist");
+            return instaUri;
+        }
     }
 }

@@ -61,6 +61,30 @@ namespace InstagramApiSharp.API.Processors
         #endregion Properties and constructor
 
         /// <summary>
+        ///     Get specific playlist
+        /// </summary>
+        /// <param name="playlistId">Playlist identifier</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        public async Task<IResult<InstaTrendingMusic>> GetPlaylistAsync(string playlistId,
+            PaginationParameters paginationParameters) 
+            => await GetPlaylistAsync(playlistId,
+                paginationParameters,
+                CancellationToken.None).ConfigureAwait(false);
+
+        /// <summary>
+        ///     Get specific playlist
+        /// </summary>
+        /// <param name="playlistId">Playlist identifier</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaTrendingMusic>> GetPlaylistAsync(string playlistId,
+            PaginationParameters paginationParameters,
+            CancellationToken cancellationToken)
+            => await GetMusicAsync(UriCreator.GetMusicPlaylistUri(playlistId),
+                paginationParameters,
+                cancellationToken).ConfigureAwait(false);
+
+        /// <summary>
         ///     Browse musics
         /// </summary>
         /// <param name="cursor">Cursor => 0 means don't add it, if you want to paginate it, you should set to 30 or 60 or 90 or 120 and etc.</param>
