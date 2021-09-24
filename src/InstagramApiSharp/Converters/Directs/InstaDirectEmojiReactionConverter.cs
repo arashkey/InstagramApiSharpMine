@@ -25,7 +25,7 @@ namespace InstagramApiSharp.Converters
             {
                 SenderId = SourceObject.SenderId,
                 ClientContext = SourceObject.ClientContext,
-                Timestamp = SourceObject.Timestamp.FromUnixTimeSeconds(),
+                Timestamp = DateTimeHelper.UnixTimestampToDateTime(SourceObject.Timestamp.ToString()),
                 Emoji = SourceObject.Emoji,
                 SuperReactType = SourceObject.SuperReactType
             };
