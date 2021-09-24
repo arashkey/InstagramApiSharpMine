@@ -19,7 +19,24 @@ namespace InstagramApiSharp.API.Processors
     /// </summary>
     public interface IMusicProcessor
     {
-        
+        /// <summary>
+        ///     Search musics
+        /// </summary>
+        /// <param name="query">Query to search</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        Task<IResult<InstaTrendingMusic>> SearchMusicAsync(string query,
+            PaginationParameters paginationParameters);
+
+        /// <summary>
+        ///     Search musics
+        /// </summary>
+        /// <param name="query">Query to search</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task<IResult<InstaTrendingMusic>> SearchMusicAsync(string query,
+            PaginationParameters paginationParameters,
+            CancellationToken cancellationToken);
+
         /// <summary>
         ///     Get specific playlist
         /// </summary>

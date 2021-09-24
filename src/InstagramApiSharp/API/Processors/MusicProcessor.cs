@@ -61,6 +61,31 @@ namespace InstagramApiSharp.API.Processors
         #endregion Properties and constructor
 
         /// <summary>
+        ///     Search musics
+        /// </summary>
+        /// <param name="query">Query to search</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        public async Task<IResult<InstaTrendingMusic>> SearchMusicAsync(string query,
+            PaginationParameters paginationParameters)
+            => await SearchMusicAsync(query,
+                paginationParameters,
+                CancellationToken.None);
+
+        /// <summary>
+        ///     Search musics
+        /// </summary>
+        /// <param name="query">Query to search</param>
+        /// <param name="paginationParameters">Pagination parameters: next id and max amount of pages to load</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        public async Task<IResult<InstaTrendingMusic>> SearchMusicAsync(string query,
+            PaginationParameters paginationParameters,
+            CancellationToken cancellationToken) 
+            => await GetMusicAsync(UriCreator.GetMusicSearchUri(),
+                paginationParameters, 
+                cancellationToken, 
+                query).ConfigureAwait(false);
+
+        /// <summary>
         ///     Get specific playlist
         /// </summary>
         /// <param name="playlistId">Playlist identifier</param>
@@ -69,7 +94,7 @@ namespace InstagramApiSharp.API.Processors
             PaginationParameters paginationParameters) 
             => await GetPlaylistAsync(playlistId,
                 paginationParameters,
-                CancellationToken.None).ConfigureAwait(false);
+                CancellationToken.None);
 
         /// <summary>
         ///     Get specific playlist
