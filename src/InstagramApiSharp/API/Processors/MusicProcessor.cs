@@ -60,6 +60,47 @@ namespace InstagramApiSharp.API.Processors
 
         #endregion Properties and constructor
 
+        /// <summary>
+        ///     Browse musics
+        /// </summary>
+        /// <param name="cursor">Cursor => 0 means don't add it, if you want to paginate it, you should set to 30 or 60 or 90 or 120 and etc.</param>
+        public async Task<IResult<InstaBrowseMusic>> BrowseMusicAsync(int cursor = 0)
+        {
+            UserAuthValidator.Validate(_userAuthValidate);
+            try
+            {
+                if (string.IsNullOrEmpty(BrowseSessionId))
+                    BrowseSessionId = Guid.NewGuid().ToString();
+                var instaUri = UriCreator.GetBrowseMusicUri();
+                var data = new Dictionary<string, string>()
+                {
+                    {"_csrftoken", _user.CsrfToken},
+                    {"product", "story_camera_music_overlay_post_capture"},
+                    {"_uuid", _deviceInfo.DeviceGuid.ToString()},
+                    {"browse_session_id", BrowseSessionId},
+                };
+                if (cursor != 0)
+                    data.Add("cursor", cursor.ToString());
+                var request = _httpHelper.GetDefaultRequest(HttpMethod.Post, instaUri, _deviceInfo, data);
+                var response = await _httpRequestProcessor.SendAsync(request);
+                var json = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                    return Result.UnExpectedResponse<InstaBrowseMusic>(response, json);
+                var respObj = JsonConvert.DeserializeObject<InstaBrowseMusicResponse>(json);
+                return Result.Success(ConvertersFabric.Instance.GetBrowseMusicConverter(respObj).Convert());
+            }
+            catch (HttpRequestException httpException)
+            {
+                _logger?.LogException(httpException);
+                return Result.Fail(httpException, default(InstaBrowseMusic), ResponseType.NetworkProblem);
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogException(exception);
+                return Result.Fail(exception, default(InstaBrowseMusic));
+            }
+        }
 
         /// <summary>
         ///     Music keyword search

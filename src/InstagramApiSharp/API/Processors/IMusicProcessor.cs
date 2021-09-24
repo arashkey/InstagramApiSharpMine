@@ -21,6 +21,12 @@ namespace InstagramApiSharp.API.Processors
     {
 
         /// <summary>
+        ///     Browse musics
+        /// </summary>
+        /// <param name="cursor">Cursor => 0 means don't add it, if you want to paginate it, you should set to 30 or 60 or 90 or 120 and etc.</param>
+        Task<IResult<InstaBrowseMusic>> BrowseMusicAsync(int cursor = 0);
+
+        /// <summary>
         ///     Music keyword search
         /// </summary>
         /// <param name="query">Query to search</param>

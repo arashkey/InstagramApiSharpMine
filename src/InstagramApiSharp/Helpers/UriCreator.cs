@@ -3184,5 +3184,12 @@ namespace InstagramApiSharp.Helpers
                 .AddQueryParameter("q", query)
                 .AddQueryParameter("browse_session_id", browseSessionId);
         }
+        public static Uri GetBrowseMusicUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.MUSIC_BROWSE,
+                out var instaUri))
+                throw new Exception("Can't create URI for browsing music");
+            return instaUri;
+        }
     }
 }

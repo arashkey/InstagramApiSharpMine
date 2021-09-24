@@ -1152,5 +1152,16 @@ namespace InstagramApiSharp.Converters
             return new InstaTrendingMusicConverter { SourceObject = response };
         }
 
+        public IObjectConverter<InstaMusicPlaylist, InstaMusicPlaylistResponse> GetMusicPlaylistConverter(
+                    InstaMusicPlaylistResponse response)
+        {
+            return new InstaMusicPlaylistConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaBrowseMusic, InstaBrowseMusicResponse> GetBrowseMusicConverter(
+                    InstaBrowseMusicResponse response)
+        {
+            return new InstaBrowseMusicConverter { SourceObject = response };
+        }
     }
 }

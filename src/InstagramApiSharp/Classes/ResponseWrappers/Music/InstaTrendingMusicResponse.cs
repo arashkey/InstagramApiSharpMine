@@ -1,7 +1,7 @@
 ﻿/*
  * Developer: Ramtin Jokar [ Ramtinak@live.com ] [ My Telegram Account: https://t.me/ramtinak ]
  * 
- * Github source: https://github.com/rmt4006/InstagramApiSharpMine
+ * Github source: https://github.com/ramtinak/InstagramApiSharpMine
  * 
  * IRANIAN DEVELOPERS
  */
