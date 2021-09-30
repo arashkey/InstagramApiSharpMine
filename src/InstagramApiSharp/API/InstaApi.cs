@@ -306,6 +306,11 @@ namespace InstagramApiSharp.API
         /// </summary>
         public IReelProcessor ReelProcessor { get; private set; }
 
+        /// <summary>
+        ///     Music api functions
+        /// </summary>
+        public IMusicProcessor MusicProcessor { get; private set; }
+
         public InstaApiVersionType ApiVersionType { get; set; }
 
         #endregion Processors
@@ -3592,6 +3597,7 @@ namespace InstagramApiSharp.API
             _pushProcessor = new PushProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
             CreativeProcessor = new CreativeProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
             ReelProcessor = new ReelProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
+            MusicProcessor = new MusicProcessor(_deviceInfo, _user, _httpRequestProcessor, _logger, _userAuthValidate, this, _httpHelper);
 
         }
 

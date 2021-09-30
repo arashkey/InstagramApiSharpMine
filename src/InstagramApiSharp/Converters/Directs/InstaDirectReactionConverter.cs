@@ -33,7 +33,7 @@ namespace InstagramApiSharp.Converters
             catch { }
             try
             {
-                if (SourceObject.Likes?.Count > 0)
+                if (SourceObject.Emojis?.Count > 0)
                     foreach (var item in SourceObject.Emojis)
                         reaction.Emojis.Add(ConvertersFabric.Instance.GetDirectEmojiReactionConverter(item).Convert());
             }

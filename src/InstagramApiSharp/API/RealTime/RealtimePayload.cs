@@ -58,16 +58,15 @@ namespace InstagramApiSharp.API.RealTime
         }
         private static async Task<byte[]> ToThrift()
         {
-            var cookies = InstaApi.HttpRequestProcessor.HttpHandler.CookieContainer.GetCookies(InstaApi.HttpRequestProcessor.Client.BaseAddress);
-            var sessionId = cookies["sessionid"]?.Value ?? string.Empty;
             var device = InstaApi.GetCurrentDevice();
-
+            var currentUser = InstaApi.GetLoggedUser();
+            var sessionId = InstaCookiesToAuthorizationHelper.ConvertFromAuthorization(currentUser.Authorization);
 
             await WriteString(CLIENT_ID, device.DeviceGuid.ToString().Substring(0, 20));
 
             #region Write struct ClientInfo
             await WriteStructBegin(CLIENT_INFO);
-            await WriteInt64(USER_ID, InstaApi.GetLoggedUser().LoggedInUser.Pk);
+            await WriteInt64(USER_ID, currentUser.LoggedInUser.Pk);
             await WriteString(USER_AGENT, FbnsUserAgent.BuildFbUserAgent(InstaApi));
             await WriteInt64(CLIENT_CAPABILITIES, 183);
             await WriteInt64(ENDPOINT_CAPABILITIES, _payloadData.EndpointCapabilities);
@@ -168,7 +167,7 @@ namespace InstagramApiSharp.API.RealTime
                 {"X-IG-Capabilities", apiVersion.Capabilities},
                 {"everclear_subscriptions", "{\"inapp_notification_subscribe_comment\":\"17899377895239777\",\"inapp_notification_subscribe_comment_mention_and_reply\":\"17899377895239777\",\"video_call_participant_state_delivery\":\"17977239895057311\",\"presence_subscribe\":\"17846944882223835\"}"},
                 {"User-Agent", FbnsUserAgent.BuildRTUserAgent(InstaApi)},
-                {"Accept-Language", InstaApiConstants.ACCEPT_LANGUAGE.Replace("-","_")},
+                {"Accept-Language", InstaApi.AcceptLanguage.Replace("-","_")},
                 {"platform", "android"},
                 {"ig_mqtt_route", "django"},
                 //{"pubsub_msg_type_blacklist","direct, typing_type"},

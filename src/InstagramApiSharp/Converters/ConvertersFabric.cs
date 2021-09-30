@@ -1121,21 +1121,47 @@ namespace InstagramApiSharp.Converters
         {
             return new InstaMediaInsightsConverter { SourceObject = response };
         }
+
         public IObjectConverter<InstaAllCatchedUp, InstaAllCatchedUpResponse> GetFeedAllCatchedUpConverter(
                     InstaAllCatchedUpResponse response)
         {
             return new InstaAllCatchedUpConverter { SourceObject = response };
         }
+
         public IObjectConverter<InstaFeedGroupSet, InstaFeedGroupSetResponse> GetFeedGroupSetConverter(
                     InstaFeedGroupSetResponse response)
         {
             return new InstaFeedGroupSetConverter { SourceObject = response };
         }
+
         public IObjectConverter<InstaFeedGroup, InstaFeedGroupResponse> GetFeedGroupConverter(
                     InstaFeedGroupResponse response)
         {
             return new InstaFeedGroupConverter { SourceObject = response };
         }
 
+        public IObjectConverter<InstaMusic, InstaMusicResponse> GetMusicConverter(
+                    InstaMusicResponse response)
+        {
+            return new InstaMusicConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaTrendingMusic, InstaTrendingMusicResponse> GetMusicTrendingConverter(
+                    InstaTrendingMusicResponse response)
+        {
+            return new InstaTrendingMusicConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaMusicPlaylist, InstaMusicPlaylistResponse> GetMusicPlaylistConverter(
+                    InstaMusicPlaylistResponse response)
+        {
+            return new InstaMusicPlaylistConverter { SourceObject = response };
+        }
+
+        public IObjectConverter<InstaBrowseMusic, InstaBrowseMusicResponse> GetBrowseMusicConverter(
+                    InstaBrowseMusicResponse response)
+        {
+            return new InstaBrowseMusicConverter { SourceObject = response };
+        }
     }
 }

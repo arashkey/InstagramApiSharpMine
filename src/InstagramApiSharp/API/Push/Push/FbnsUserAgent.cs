@@ -9,8 +9,7 @@ namespace InstagramApiSharp.API.Push
         const string FBNS_APPLICATION_NAME = "MQTT";
         //const string INSTAGRAM_APPLICATION_NAME = "Instagram";  // for Realtime features
 
-        // todo: implement Realtime status like "message seen"
-        public static string BuildFbUserAgent(IInstaApi insta, string appName = FBNS_APPLICATION_NAME, string userLocale = "en_US")
+        public static string BuildFbUserAgent(IInstaApi insta, string appName = FBNS_APPLICATION_NAME)
         {
             var device = insta.GetCurrentDevice();
             var dpi = int.Parse(device.Dpi.Replace("dpi", ""));
@@ -18,16 +17,15 @@ namespace InstagramApiSharp.API.Push
             var width = res[0];
             var height = res[1];
 
-
             var fields = new Dictionary<string, string>
             {
                 {"FBAN", appName},
                 {"FBAV", insta.GetApiVersionInfo().AppVersion},
-                {"FBBV", "567310203415052" /*insta.GetApiVersionInfo().AppApiVersionCode*/},
+                {"FBBV", "567310203415052"},
                 {"FBDM",
                     $"{{density={Math.Round(dpi/ 160f, 1):F1},width={width},height={height}}}"
                 },
-                {"FBLC", userLocale},
+                {"FBLC", insta.AcceptLanguage.Replace("-","_")},
                 {"FBCR", ""},   // We don't have cellular
                 {"FBMF", device.HardwareManufacturer},
                 {"FBBD", device.HardwareManufacturer},
@@ -53,8 +51,6 @@ namespace InstagramApiSharp.API.Push
             return '[' + userAgent + ']';
         }
 
-
-
         public static string BuildRTUserAgent(IInstaApi insta)
         {
             var device = insta.GetCurrentDevice();
@@ -63,16 +59,15 @@ namespace InstagramApiSharp.API.Push
             var width = res[0];
             var height = res[1];
 
-
             var dic = new Dictionary<string, string>
             {
                 {"FBAN", "MQTT"},
                 {"FBAV", insta.GetApiVersionInfo().AppVersion},
-                {"FBBV", "567310203415052" /*insta.GetApiVersionInfo().AppApiVersionCode*/},
+                {"FBBV", "567310203415052"},
                 {"FBDM",
                     $"{{density={Math.Round(dpi/ 160f, 1):F1},width={width},height={height}}}"
                 },
-                {"FBLC", InstaApiConstants.ACCEPT_LANGUAGE.Replace("-","_")},
+                {"FBLC", insta.AcceptLanguage.Replace("-","_")},
                 {"FBCR", ""},   // We don't have cellular
                 {"FBMF", device.HardwareManufacturer},
                 {"FBBD", device.HardwareManufacturer},

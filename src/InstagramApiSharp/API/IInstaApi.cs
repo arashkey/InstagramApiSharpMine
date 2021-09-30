@@ -225,10 +225,17 @@ namespace InstagramApiSharp.API
         ///     Reels api functions
         /// </summary>
         IReelProcessor ReelProcessor { get; }
+
+        /// <summary>
+        ///     Music api functions
+        /// </summary>
+        IMusicProcessor MusicProcessor { get; }
+
         /// <summary>
         ///     Session handler
         /// </summary>
         ISessionHandler SessionHandler { get; set; }
+
         /// <summary>
         ///     Registration Service
         /// </summary>

@@ -104,6 +104,16 @@ namespace InstagramApiSharp.API
 
         #endregion B Url endpoints
 
+        #region Music endpoints constants
+
+        public const string MUSIC_TRENDING = API_SUFFIX + "/music/trending/";
+        public const string MUSIC_BROWSE = API_SUFFIX + "/music/browse/";
+        public const string MUSIC_SEARCH = API_SUFFIX + "/music/search/";
+        public const string MUSIC_KEYWORD_SEARCH = API_SUFFIX + "/music/keyword_search/";
+        public const string MUSIC_PLAYLIST = API_SUFFIX + "/music/playlist/{0}/";
+
+        #endregion Music endpoints constants
+
         #region Main
         public const string RESPONSE_HEADER_IG_PASSWORD_ENC_PUB_KEY = "ig-set-password-encryption-pub-key";
         public const string RESPONSE_HEADER_IG_PASSWORD_ENC_KEY_ID = "ig-set-password-encryption-key-id";

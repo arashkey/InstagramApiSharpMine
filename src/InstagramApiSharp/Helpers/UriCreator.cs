@@ -3165,5 +3165,44 @@ namespace InstagramApiSharp.Helpers
                 throw new Exception("Cant create URI get bloks challenge navigation replay challenge");
             return instaUri;
         }
+        public static Uri GetTrendingMusicUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.MUSIC_TRENDING,
+                out var instaUri))
+                throw new Exception("Can't create URI for trending music");
+            return instaUri;
+        }
+        public static Uri GetMusicKeywordSearchUri(string query, uint num, string searchSessionId,
+            string product, string browseSessionId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.MUSIC_KEYWORD_SEARCH,
+                    out var instaUri)) throw new Exception("Can't create URI for music playlist");
+            return instaUri
+                .AddQueryParameter("num_keywords", num.ToString())
+                .AddQueryParameter("search_session_id", searchSessionId)
+                .AddQueryParameter("product", product)
+                .AddQueryParameter("q", query)
+                .AddQueryParameter("browse_session_id", browseSessionId);
+        }
+        public static Uri GetBrowseMusicUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.MUSIC_BROWSE,
+                out var instaUri))
+                throw new Exception("Can't create URI for browsing music");
+            return instaUri;
+        }
+        public static Uri GetMusicPlaylistUri(string playlistId)
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, string.Format(InstaApiConstants.MUSIC_PLAYLIST, playlistId),
+                    out var instaUri)) throw new Exception("Can't create URI for music playlist");
+            return instaUri;
+        }
+        public static Uri GetMusicSearchUri()
+        {
+            if (!Uri.TryCreate(BaseInstagramUri, InstaApiConstants.MUSIC_SEARCH,
+                out var instaUri))
+                throw new Exception("Can't create URI for search music");
+            return instaUri;
+        }
     }
 }
